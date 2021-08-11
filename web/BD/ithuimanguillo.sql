@@ -11,7 +11,7 @@
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 11/08/2021 14:07:08
+ Date: 11/08/2021 16:34:44
 */
 
 SET NAMES utf8mb4;
@@ -2385,22 +2385,6 @@ INSERT INTO `grupos_estudiantes` VALUES (54, '191240063', 1, NULL, NULL, NULL, N
 INSERT INTO `grupos_estudiantes` VALUES (54, 'B156P1225', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG');
 
 -- ----------------------------
--- Table structure for libros
--- ----------------------------
-DROP TABLE IF EXISTS `libros`;
-CREATE TABLE `libros`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `imagen` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of libros
--- ----------------------------
-INSERT INTO `libros` VALUES (11, 'asd', 'uploads/1628552295_1628428190770.jpg');
-
--- ----------------------------
 -- Table structure for migracion_actas
 -- ----------------------------
 DROP TABLE IF EXISTS `migracion_actas`;
@@ -3461,7 +3445,14 @@ grupos.idmateria = cat_materias.idmateria ;
 -- View structure for boleta_encabezado_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_encabezado_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS select `a`.`idestudiante` AS `idestudiante`,`a`.`nombre_estudiante` AS `nombre_estudiante`,`b`.`desc_carrera` AS `desc_carrera`,`b`.`plan_estudios` AS `plan_estudios`,`a`.`num_semestre` AS `num_semestre` from (`estudiantes` `a` join `cat_carreras` `b`) ; ;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS SELECT
+	`a`.`idestudiante` AS `idestudiante`,
+	`a`.`nombre_estudiante` AS `nombre_estudiante`,
+	`b`.`desc_carrera` AS `desc_carrera`,
+	`b`.`plan_estudios` AS `plan_estudios`,
+	`a`.`num_semestre` AS `num_semestre` 
+FROM
+	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -3478,6 +3469,6 @@ FROM
 	estudiantes
 	INNER JOIN cat_carreras	ON 	estudiantes.idcarrera = cat_carreras.idcarrera
 	INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
-	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo ;
+	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo;
 
 SET FOREIGN_KEY_CHECKS = 1;

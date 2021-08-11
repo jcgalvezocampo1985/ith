@@ -15,10 +15,10 @@ class EstudianteSearch extends model
         ];
     }
 
-    public function attributesLabels()
+    public function attributeLabels()
     {
         return [
-            'q' => "Buscar"
+            'q' => 'No. Control'
         ];
     }
 }

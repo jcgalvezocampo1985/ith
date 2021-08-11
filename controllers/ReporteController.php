@@ -12,7 +12,7 @@ class PDF extends FPDF
 {
     function Header()
     {
-        $url_header= Yii::$app->basePath."/web/img/header.png";   
+        $url_header= Yii::$app->basePath."/web/img/header.png";
         $this->Image($url_header,10, 5, 150);
         $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $this->SetFont('Montserrat-Bold', '', 9);
@@ -147,17 +147,23 @@ class ReporteController extends Controller
             $pdf->Cell(20, 10, $promedio, 1, 0, 'C');
 
             $pdf->SetFont('Montserrat-Bold', '', 10);
-            $pdf->Text(12, 190, 'A T E N T A M E N T E');
+            $pdf->Text(12, 185, 'A T E N T A M E N T E');
             $pdf->SetFont('Montserrat-MediumItalic', '', 8);
-            $pdf->Text(12, 194, utf8_decode('Excelencia en Educación Tecnológica®'));
+            $pdf->Text(12, 189, utf8_decode('Excelencia en Educación Tecnológica®'));
             $pdf->SetFont('Montserrat-LightItalic', '', 8);
-            $pdf->Text(12, 198, utf8_decode('"DONDE MORA EL SABER MORA LA PATRIA"®'));
+            $pdf->Text(12, 193, utf8_decode('"DONDE MORA EL SABER MORA LA PATRIA"®'));
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->Text(12, 230, utf8_decode('MANUEL ERNESTO VILLALOBOS LÓPEZ'));
             $pdf->Text(12, 234, utf8_decode('JEFE DEL DEPARTAMENTO DE SERVICIOS ESCOLARES'));
             $pdf->SetFont('Montserrat-Regular', '', 7);
             $pdf->Text(12, 238, utf8_decode('C.c.p. SE'));
             $pdf->Text(12, 242, utf8_decode('L.I. MEVL/'));
+
+            $url_firma = Yii::$app->basePath."/web/img/firma.png";
+            $pdf->Image($url_firma, 40, 190, 45);
+
+            $url_firma = Yii::$app->basePath."/web/img/sello.png";
+            $pdf->Image($url_firma, 130, 190, 45);
 
             $pdf->Output('D',$idestudiante.'_'.date('d-m-Y_h_is').'.pdf');
             exit;
