@@ -11,6 +11,7 @@ class EstudianteSearch extends model
     public function rules()
     {
         return [
+            ["q", "required", "message" => "Requerido"],
             ["q", "match", "pattern" => "/^[0-9]+$/i", "message" => "Solo números"]
         ];
     }

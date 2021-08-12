@@ -22,6 +22,8 @@ class EstudianteController extends Controller
         $form = new EstudianteSearch;
         $search = null;
 
+        $status = 0;
+
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
@@ -46,6 +48,7 @@ class EstudianteController extends Controller
                 $model = Yii::$app->db->createCommand($query)
                                    ->bindValue(':idestudiante', $search)
                                    ->queryAll();
+                $status = 1;
             }
             else
             {
@@ -53,7 +56,7 @@ class EstudianteController extends Controller
             }
         }
 
-        return $this->render('index', ['model' => $model, 'form' => $form]);
+        return $this->render('index', ['model' => $model, 'form' => $form, 'status' => $status]);
     }
 
     public function actionCreate()

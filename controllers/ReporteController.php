@@ -165,7 +165,7 @@ class ReporteController extends Controller
             $url_firma = Yii::$app->basePath."/web/img/sello.png";
             $pdf->Image($url_firma, 130, 190, 45);
 
-            $pdf->Output('D',$idestudiante.'_'.date('d-m-Y_h_is').'.pdf');
+            $pdf->Output('D',$idestudiante.'_'.$periodo.'.pdf');
             exit;
     }
 }

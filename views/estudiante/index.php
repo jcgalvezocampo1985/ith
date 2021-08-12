@@ -36,7 +36,7 @@ $f = ActiveForm::begin([
                     <th>No. Control</th>
                     <th>Nombre</th>
                     <th>Carrera</th>
-                    <th>Ciclo</th>
+                    <th>Periodo</th>
                     <th>Boleta</th>
                 </tr>
             </thead>
@@ -54,3 +54,11 @@ $f = ActiveForm::begin([
         </table>
     </div>
 </div>
+
+<?php if(count($model) == 0 && $status == 1): ?>
+    <div class="alert alert-warning" role="warning">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        No se encontró información relacionada al No. Control <?= $form->q ?>
+    </div>
+<?php endif ?>
