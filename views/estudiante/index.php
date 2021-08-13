@@ -8,6 +8,7 @@ $this->title = 'ITH';
 
 ?>
 
+<h3><?php $search ?></h3>
 <?php
 $f = ActiveForm::begin([
     "method" => "get",
@@ -16,44 +17,44 @@ $f = ActiveForm::begin([
 ]);
 ?>
 
-<div class="form-group">
-    <?= $f->field($form, "q")->input("search") ?>
-</div>
 
-<?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-
-<?php $f->end() ?>
-
-<h3><?php $search ?></h3>
 
 <div class="panel panel-primary">
     <div class="panel-heading">Boleta de calificación</div>
     <div class="panel-body">
+        <div class="col-md-4">
+            <?= $f->field($form, "q")->input("search", ["class" => "form-control", "placeholder" => "No. Control"]) ?>
+            <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+        </div>
+        <div class="col-md-12">
         <hr width="100%">
-        <table class="table table-striped" id="tabla">
-            <thead>
-                <tr>
-                    <th>No. Control</th>
-                    <th>Nombre</th>
-                    <th>Carrera</th>
-                    <th>Periodo</th>
-                    <th>Boleta</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($model as $row): ?>
-                <tr>
-                    <td><?= $row['idestudiante'] ?></td>
-                    <td><?= $row['nombre_estudiante'] ?></td>
-                    <td><?= $row['desc_carrera'] ?></td>
-                    <td><?= $row['desc_ciclo'] ?></td>
-                    <td><a href="<?= Url::toRoute(['reporte/boleta/', 'id' => $row['idestudiante']]) ?>" class="btn btn-success" href="#" role="button">Descargar</a></td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+            <table class="table table-striped" id="tabla">
+                <thead>
+                    <tr>
+                        <th>No. Control</th>
+                        <th>Nombre</th>
+                        <th>Carrera</th>
+                        <th>Periodo</th>
+                        <th>Boleta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($model as $row): ?>
+                    <tr>
+                        <td><?= $row['idestudiante'] ?></td>
+                        <td><?= $row['nombre_estudiante'] ?></td>
+                        <td><?= $row['desc_carrera'] ?></td>
+                        <td><?= $row['desc_ciclo'] ?></td>
+                        <td><a href="<?= Url::toRoute(['reporte/boleta/', 'id' => $row['idestudiante']]) ?>" class="btn btn-success" href="#" role="button">Descargar</a></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<?php $f->end() ?>
 
 <?php if(count($model) == 0 && $status == 1): ?>
     <div class="alert alert-warning" role="warning">

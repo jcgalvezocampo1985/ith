@@ -22,6 +22,11 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style>
+        .container{
+            width: auto;
+        }
+    </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
