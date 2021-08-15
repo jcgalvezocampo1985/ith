@@ -4,21 +4,18 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
-$this->title = 'ITH';
+$this->title = 'Boleta';
 
 ?>
-
+<?php $this->params['breadcrumbs'][] = $this->title; ?>
 <h3><?php $search ?></h3>
 <?php
 $f = ActiveForm::begin([
     "method" => "get",
-    "action" => Url::toRoute("estudiante/index"),
+    "action" => Url::toRoute("estudiante/boleta"),
     "enableClientValidation" => true
 ]);
 ?>
-
-
-
 <div class="panel panel-primary">
     <div class="panel-heading">Boleta de calificación</div>
     <div class="panel-body">

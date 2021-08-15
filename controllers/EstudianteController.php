@@ -15,49 +15,10 @@ class EstudianteController extends Controller
 {
     public function actionIndex()
     {
-        $table = new Estudiante;
-        //$model = $table->find()->orderBy('nombre_estudiante')->all();
-        $model = $table->find()->where(['idestudiante' => 1])->orderBy('nombre_estudiante')->all();
-
-        $form = new EstudianteSearch;
-        $search = null;
-
-        $status = 0;
-
-        if($form->load(Yii::$app->request->get()))
-        {
-            if($form->validate())
-            {
-                $search = Html::encode($form->q);
-                //$query = "SELECT * FROM estudiantes WHERE idestudiante LIKE '%$search%'";
-                $query = "SELECT
-	                        estudiantes.idestudiante, 
-	                        estudiantes.nombre_estudiante, 
-	                        cat_carreras.desc_carrera, 
-	                        ciclo.desc_ciclo
-                          FROM
-	                        estudiantes
-	                      INNER JOIN cat_carreras ON estudiantes.idcarrera = cat_carreras.idcarrera
-	                      INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
-	                      INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo
-                          WHERE
-                            estudiantes.idestudiante =:idestudiante
-                          GROUP BY
-                            estudiantes.idestudiante";
-                //$model = $table->findBySql($query)->all();
-                $model = Yii::$app->db->createCommand($query)
-                                   ->bindValue(':idestudiante', $search)
-                                   ->queryAll();
-                $status = 1;
-            }
-            else
-            {
-                $form->getErrors();
-            }
-        }
-
-        return $this->render('index', ['model' => $model, 'form' => $form, 'status' => $status]);
+      return $this->redirect('../site/index');
     }
+
+    
 
     public function actionCreate()
     {
@@ -104,5 +65,113 @@ class EstudianteController extends Controller
         }
 
         return $this->render("create", ['model' => $model, 'msg' => $msg]);
+    }
+
+    public function actionHorario()
+    {
+        $table = new Estudiante;
+        $model = $table->find()->where(['idestudiante' => 1])->orderBy('nombre_estudiante')->all();
+
+        $form = new EstudianteSearch;
+        $search = null;
+
+        $status = 0;
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $search = Html::encode($form->q);
+                $query = "SELECT
+                            *
+                          FROM
+                            boleta_estudiante_encabezado
+                          WHERE
+                            idestudiante=:idestudiante
+                          GROUP BY idestudiante";
+                $model = Yii::$app->db->createCommand($query)
+                                      ->bindValue(':idestudiante', $search)
+                                      ->queryAll();
+/*
+                $query = "SELECT
+	                        estudiantes.idestudiante, 
+	                        estudiantes.nombre_estudiante, 
+	                        cat_carreras.desc_carrera, 
+	                        ciclo.desc_ciclo
+                          FROM
+	                        estudiantes
+	                      INNER JOIN cat_carreras ON estudiantes.idcarrera = cat_carreras.idcarrera
+	                      INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
+	                      INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo
+                          WHERE
+                            estudiantes.idestudiante =:idestudiante
+                          GROUP BY
+                            estudiantes.idestudiante";
+                $model = Yii::$app->db->createCommand($query)
+                                   ->bindValue(':idestudiante', $search)
+                                   ->queryAll();*/
+                $status = 1;
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+
+        return $this->render('horario', ['model' => $model, 'form' => $form, 'status' => $status]);
+    }
+
+    public function actionBoleta()
+    {
+        $table = new Estudiante;
+        $model = $table->find()->where(['idestudiante' => 1])->orderBy('nombre_estudiante')->all();
+
+        $form = new EstudianteSearch;
+        $search = null;
+
+        $status = 0;
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $search = Html::encode($form->q);
+                $query = "SELECT
+                            *
+                          FROM
+                            boleta_estudiante_encabezado
+                          WHERE
+                            idestudiante=:idestudiante
+                          GROUP BY idestudiante";
+                $model = Yii::$app->db->createCommand($query)
+                                      ->bindValue(':idestudiante', $search)
+                                      ->queryAll();
+/*
+                $query = "SELECT
+	                        estudiantes.idestudiante, 
+	                        estudiantes.nombre_estudiante, 
+	                        cat_carreras.desc_carrera, 
+	                        ciclo.desc_ciclo
+                          FROM
+	                        estudiantes
+	                      INNER JOIN cat_carreras ON estudiantes.idcarrera = cat_carreras.idcarrera
+	                      INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
+	                      INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo
+                          WHERE
+                            estudiantes.idestudiante =:idestudiante
+                          GROUP BY
+                            estudiantes.idestudiante";
+                $model = Yii::$app->db->createCommand($query)
+                                   ->bindValue(':idestudiante', $search)
+                                   ->queryAll();*/
+                $status = 1;
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+
+        return $this->render('boleta', ['model' => $model, 'form' => $form, 'status' => $status]);
     }
 }
