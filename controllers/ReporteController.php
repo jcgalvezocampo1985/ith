@@ -5,11 +5,13 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessController;
 use yii\web\Controller;
-use app\vendor\setasign\fpdf\FPDF;
+//use app\vendor\setasign\fpdf\FPDF;
 use yii\helpers\Html;
+use Fpdf\fpdf;
 
 class PDF extends FPDF
 {
+  
     function Header()
     {
         $url_header= Yii::$app->basePath."/web/img/header.png";
