@@ -42,7 +42,7 @@ $f = ActiveForm::begin([
                         <td><?= $row['nombre_estudiante'] ?></td>
                         <td><?= $row['desc_carrera'] ?></td>
                         <td><?= $row['desc_ciclo'] ?></td>
-                        <td><a href="<?= Url::toRoute(['reporte/boleta/', 'id' => $row['idestudiante']]) ?>" class="btn btn-success" href="#" role="button">Descargar</a></td>
+                        <td><a href="<?= Url::toRoute(['reporte/horario/', 'id' => $row['idestudiante']]) ?>" class="btn btn-success" role="button">Descargar</a></td>
                     </tr>
                     <?php endforeach ?>
                 </tbody>
