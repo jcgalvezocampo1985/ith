@@ -11,7 +11,7 @@
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 15/08/2021 20:02:16
+ Date: 16/08/2021 16:34:18
 */
 
 SET NAMES utf8mb4;
@@ -3461,9 +3461,9 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 	a.nombre_estudiante AS nombre_estudiante,
 	b.desc_carrera AS desc_carrera,
 	b.plan_estudios AS plan_estudios,
-	a.num_semestre AS num_semestre 
+	a.num_semestre AS num_semestre
 FROM
-	(estudiantes a JOIN cat_carreras b) ;
+	(estudiantes a JOIN cat_carreras b);
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -3480,21 +3480,39 @@ FROM
 	estudiantes
 	INNER JOIN cat_carreras	ON 	estudiantes.idcarrera = cat_carreras.idcarrera
 	INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
-	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo; ;
+	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
 -- ----------------------------
 DROP VIEW IF EXISTS `horario_estudiante_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS SELECT a.idestudiante, b.idciclo, b.num_semestre, b.idmateria, c.desc_materia, c.cve_materia, b.desc_grupo_corto, b.aula, a.idopcion_curso, 
-  CASE
-            WHEN `a`.`idopcion_curso` = 2 THEN 'R'
-            WHEN `a`.`idopcion_curso` = 3 THEN 'E'
-	END AS `desc_opcion_curso_corto`,
-  c.creditos, lunes, martes, miercoles, jueves, viernes, sabado
- FROM ithuimanguillo.grupos_estudiantes a, grupos b, cat_materias c
-where a.idgrupo = b.idgrupo
-and b.idmateria = c.idmateria
-order by lunes, viernes, sabado ;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS SELECT
+	a.idestudiante,
+	b.idciclo,
+	b.num_semestre,
+	b.idmateria,
+	c.desc_materia,
+	c.cve_materia,
+	b.desc_grupo_corto,
+	b.aula,
+	a.idopcion_curso,
+	CASE
+		WHEN a.idopcion_curso = 2 THEN 'R'
+    WHEN a.idopcion_curso = 3 THEN 'E'
+	END AS desc_opcion_curso_corto,
+  c.creditos, 
+	b.lunes,
+	b.martes,
+	b.miercoles,
+	b.jueves,
+	b.viernes,
+	b.sabado,
+	CONCAT(d.nombre_profesor," ",d.apaterno," ",d.amaterno) AS profesor
+FROM
+	grupos_estudiantes a, grupos b, cat_materias c, profesores d
+WHERE
+	a.idgrupo = b.idgrupo
+AND
+	b.idmateria = c.idmateria;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -191,9 +191,11 @@ class ReporteController extends Controller
             $sql_materias = "SELECT
                                 *
                             FROM
-                                boleta_detalle_v
-                             WHERE
-                                idestudiante =:idestudiante";
+                                horario_estudiante_v, cat_materias
+                            WHERE
+                                idestudiante =:idestudiante
+                            GROUP BY
+	                            cat_materias.idmateria";
             $cuerpo = Yii::$app->db->createCommand($sql_materias)
                                    ->bindValue(':idestudiante', $idestudiante)
                                    ->queryAll();
@@ -217,7 +219,7 @@ class ReporteController extends Controller
             $pdf->AddFont('Montserrat-LightItalic', '', 'Montserrat-LightItalic.php');
             $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
             $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
-        
+
             $pdf->SetFont('Montserrat-SemiBold', '', 8);
             $pdf->SettextColor(0, 0, 0);
             $pdf->Text(12, 60, utf8_decode('BOLETA DE CALIFICACIONES AL PERIODO:'));
@@ -261,14 +263,14 @@ class ReporteController extends Controller
             {
                 $pdf->SetX(8);
                 $pdf->SetFont('Montserrat-Regular', '', 6);
-                $pdf->MultiCell(75, 5, utf8_decode($row['desc_materia'])."\n-M.C. RAQUEL JIMENEZ RAMIREZ", 1, 'L', 0);
+                $pdf->MultiCell(75, 5, utf8_decode($row['desc_materia'])."\n".utf8_decode($row['profesor']), 1, 'L', 0);
 
                 $y = $pdf->GetY() - 10;
                 $pdf->SetXY(83, $y);
 
                 $pdf->Cell(13, 10, utf8_decode($row['cve_materia']), 1, 0, 'C');
                 $pdf->Cell(12, 10, utf8_decode(""), 1, 0, 'C');
-                $pdf->Cell(9, 10, utf8_decode($row['opc_curso']), 1, 0, 'C');
+                $pdf->Cell(9, 10, utf8_decode($row['desc_grupo_corto']), 1, 0, 'C');
                 $pdf->Cell(7, 10, utf8_decode($row['creditos']), 1, 0, 'C');
                 $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
                 $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
