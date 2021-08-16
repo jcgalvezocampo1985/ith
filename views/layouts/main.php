@@ -22,6 +22,11 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style>
+        .container{
+            width: auto;
+        }
+    </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -38,7 +43,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            //['label' => 'Estudiante', 'url' => ['/estudiante/index']],
+            ['label' => 'Boleta', 'url' => ['/estudiante/boleta']],
+            ['label' => 'Horario', 'url' => ['/estudiante/horario']],
             /*['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],

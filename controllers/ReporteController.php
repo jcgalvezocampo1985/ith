@@ -5,11 +5,13 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessController;
 use yii\web\Controller;
-use app\vendor\setasign\fpdf\FPDF;
+//use app\vendor\setasign\fpdf\FPDF;
 use yii\helpers\Html;
+use Fpdf\fpdf;
 
 class PDF extends FPDF
 {
+  
     function Header()
     {
         $url_header= Yii::$app->basePath."/web/img/header.png";
@@ -94,17 +96,21 @@ class ReporteController extends Controller
             $pdf->Text(50, 70, utf8_decode($no_control));
             $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
             $pdf->Text(35, 75, utf8_decode($estudiante));
-            $pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
-            $pdf->Text(32, 80, utf8_decode($semestre));
-            $pdf->Text(12, 85, utf8_decode('CARRERA:'));
-            $pdf->Text(30, 85, utf8_decode($carrera));
-            $pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
-            $pdf->Text(38, 90, utf8_decode($especialidad));
-            $pdf->Text(12, 95, utf8_decode('PLAN:'));
-            $pdf->Text(24, 95, utf8_decode($plan));
+            //$pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
+            //$pdf->Text(32, 80, utf8_decode($semestre));
+            //$pdf->Text(12, 85, utf8_decode('CARRERA:'));
+            //$pdf->Text(30, 85, utf8_decode($carrera));
+            $pdf->Text(12, 80, utf8_decode('CARRERA:'));
+            $pdf->Text(32, 80, utf8_decode($carrera));
+            //$pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
+            //$pdf->Text(38, 90, utf8_decode($especialidad));
+            //$pdf->Text(12, 95, utf8_decode('PLAN:'));
+            //$pdf->Text(24, 95, utf8_decode($plan));
+            $pdf->Text(12, 85, utf8_decode('PLAN:'));
+            $pdf->Text(30, 85, utf8_decode($plan));
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
-            $pdf->SetXY(12, 100);
+            $pdf->SetXY(12, 90);
             $pdf->Cell(95, 5, "MATERIA", 1, 0, 'C');
             $pdf->Cell(20, 5, "CLAVE", 1, 0, 'C');
             $pdf->Cell(15, 5, "GRUPO", 1, 0, 'C');

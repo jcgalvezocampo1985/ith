@@ -5,13 +5,13 @@
  Source Server Type    : MariaDB
  Source Server Version : 100510
  Source Host           : localhost:3306
- Source Schema         : escuela
+ Source Schema         : ithuimanguillo
 
  Target Server Type    : MariaDB
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 11/08/2021 16:34:44
+ Date: 15/08/2021 20:02:16
 */
 
 SET NAMES utf8mb4;
@@ -1073,16 +1073,17 @@ DROP TABLE IF EXISTS `cat_opcion_curso`;
 CREATE TABLE `cat_opcion_curso`  (
   `idopcion_curso` int(11) NOT NULL AUTO_INCREMENT,
   `desc_opcion_curso` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `desc_opcion_curso_corto` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idopcion_curso`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cat_opcion_curso
 -- ----------------------------
-INSERT INTO `cat_opcion_curso` VALUES (1, 'ORDINARIO');
-INSERT INTO `cat_opcion_curso` VALUES (2, 'REPETICION');
-INSERT INTO `cat_opcion_curso` VALUES (3, 'ESPECIAL');
-INSERT INTO `cat_opcion_curso` VALUES (4, 'DUAL');
+INSERT INTO `cat_opcion_curso` VALUES (1, 'ORDINARIO', NULL);
+INSERT INTO `cat_opcion_curso` VALUES (2, 'REPETICION', NULL);
+INSERT INTO `cat_opcion_curso` VALUES (3, 'ESPECIAL', NULL);
+INSERT INTO `cat_opcion_curso` VALUES (4, 'DUAL', NULL);
 
 -- ----------------------------
 -- Table structure for ciclo
@@ -1097,12 +1098,13 @@ CREATE TABLE `ciclo`  (
   `fecha_actualizacion` datetime NULL DEFAULT current_timestamp,
   `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'VIG',
   PRIMARY KEY (`idciclo`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of ciclo
 -- ----------------------------
 INSERT INTO `ciclo` VALUES (1, 'MAR - JUL 2021', 1, 2021, NULL, NULL, NULL);
+INSERT INTO `ciclo` VALUES (2, 'AGO - DIC 2021', 2, 2021, '2021-08-13 21:13:38', '2021-08-13 21:13:38', 'VIG');
 
 -- ----------------------------
 -- Table structure for estudiantes
@@ -1333,12 +1335,21 @@ DROP TABLE IF EXISTS `grupos`;
 CREATE TABLE `grupos`  (
   `idgrupo` int(11) NOT NULL AUTO_INCREMENT,
   `idciclo` int(11) NOT NULL,
+  `num_semestre` int(11) NULL DEFAULT NULL,
   `idcarrera` int(11) NOT NULL,
   `idmateria` int(11) NOT NULL,
   `idprofesor` int(11) NOT NULL,
+  `desc_grupo_corto` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `desc_grupo` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `aula` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `fecha_envio_acta` datetime NULL DEFAULT NULL,
   `horario` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `lunes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `martes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `miercoles` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `jueves` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `viernes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sabado` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idgrupo`) USING BTREE,
   INDEX `fk_grupos_ciclo1_idx`(`idciclo`) USING BTREE,
   INDEX `fk_grupos_profesores1_idx`(`idprofesor`) USING BTREE,
@@ -1353,60 +1364,60 @@ CREATE TABLE `grupos`  (
 -- ----------------------------
 -- Records of grupos
 -- ----------------------------
-INSERT INTO `grupos` VALUES (1, 1, 3, 1, 16, 'VI A IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (2, 1, 3, 2, 16, 'II A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (3, 1, 2, 3, 9, 'IV A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (4, 1, 3, 4, 7, 'VIII A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (5, 1, 3, 5, 7, 'VIII A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (6, 1, 3, 6, 7, 'VI A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (7, 1, 1, 7, 8, 'IV A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (8, 1, 3, 8, 8, 'II A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (9, 1, 3, 9, 7, 'IV A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (10, 1, 3, 10, 7, 'IV A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (11, 1, 3, 11, 16, 'II A IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (12, 1, 3, 12, 16, 'VI A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (13, 1, 3, 13, 21, 'VIII A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (14, 1, 3, 14, 21, 'VIII A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (15, 1, 2, 15, 15, 'IV A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (16, 1, 2, 16, 15, 'VI A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (17, 1, 4, 17, 15, 'II A IPET MIXTA', NULL, NULL);
-INSERT INTO `grupos` VALUES (18, 1, 4, 18, 15, 'II A IPET MIXTA', NULL, NULL);
-INSERT INTO `grupos` VALUES (19, 1, 3, 18, 2, 'II A   IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (20, 1, 2, 19, 2, 'IV A   ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (21, 1, 1, 20, 25, 'IV A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (22, 1, 3, 21, 19, 'IV A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (23, 1, 1, 22, 19, 'II A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (24, 1, 2, 23, 19, 'II A  ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (25, 1, 3, 23, 19, 'II A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (26, 1, 4, 24, 5, 'II A IPET MIXTA', NULL, NULL);
-INSERT INTO `grupos` VALUES (27, 1, 2, 25, 5, 'VIII A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (28, 1, 2, 26, 5, 'VIII A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (29, 1, 3, 24, 5, 'II A IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (30, 1, 2, 27, 25, 'VI A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (31, 1, 2, 28, 25, 'V A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (32, 1, 3, 29, 25, 'IV A IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (33, 1, 2, 30, 11, 'II A  ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (34, 1, 2, 31, 3, 'IV A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (35, 1, 2, 32, 3, 'IV A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (36, 1, 2, 33, 3, 'VI A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (37, 1, 2, 34, 3, 'VIII A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (38, 1, 1, 35, 18, 'VI A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (39, 1, 1, 36, 18, 'II A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (40, 1, 1, 37, 18, 'VI A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (41, 1, 2, 38, 13, 'IV A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (42, 1, 2, 39, 13, 'VIII A ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (43, 1, 1, 12, 13, 'VIII A IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (44, 1, 1, 40, 12, 'II A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (45, 1, 1, 41, 12, 'II A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (46, 1, 1, 42, 12, 'VI A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (47, 1, 3, 43, 17, 'IV A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (48, 1, 1, 44, 17, 'VI A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (49, 1, 2, 45, 4, 'II A  ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (50, 1, 3, 46, 17, 'IV A  IPET', NULL, NULL);
-INSERT INTO `grupos` VALUES (51, 1, 1, 47, 17, 'II A  IIAS', NULL, NULL);
-INSERT INTO `grupos` VALUES (52, 1, 2, 48, 4, 'IIA  ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (53, 1, 2, 49, 4, 'VI A  ILOG', NULL, NULL);
-INSERT INTO `grupos` VALUES (54, 1, 3, 50, 4, 'VI A  IPET', NULL, NULL);
+INSERT INTO `grupos` VALUES (1, 1, NULL, 3, 1, 16, NULL, 'VI A IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (2, 1, NULL, 3, 2, 16, NULL, 'II A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (3, 1, NULL, 2, 3, 9, NULL, 'IV A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (4, 1, NULL, 3, 4, 7, NULL, 'VIII A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (5, 1, NULL, 3, 5, 7, NULL, 'VIII A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (6, 1, NULL, 3, 6, 7, NULL, 'VI A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (7, 1, NULL, 1, 7, 8, NULL, 'IV A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (8, 1, NULL, 3, 8, 8, NULL, 'II A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (9, 1, NULL, 3, 9, 7, NULL, 'IV A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (10, 1, NULL, 3, 10, 7, NULL, 'IV A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (11, 1, NULL, 3, 11, 16, NULL, 'II A IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (12, 1, NULL, 3, 12, 16, NULL, 'VI A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (13, 1, NULL, 3, 13, 21, NULL, 'VIII A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (14, 1, NULL, 3, 14, 21, NULL, 'VIII A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (15, 1, NULL, 2, 15, 15, NULL, 'IV A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (16, 1, NULL, 2, 16, 15, NULL, 'VI A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (17, 1, NULL, 4, 17, 15, NULL, 'II A IPET MIXTA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (18, 1, NULL, 4, 18, 15, NULL, 'II A IPET MIXTA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (19, 1, NULL, 3, 18, 2, NULL, 'II A   IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (20, 1, NULL, 2, 19, 2, NULL, 'IV A   ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (21, 1, NULL, 1, 20, 25, NULL, 'IV A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (22, 1, NULL, 3, 21, 19, NULL, 'IV A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (23, 1, NULL, 1, 22, 19, NULL, 'II A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (24, 1, NULL, 2, 23, 19, NULL, 'II A  ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (25, 1, NULL, 3, 23, 19, NULL, 'II A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (26, 1, NULL, 4, 24, 5, NULL, 'II A IPET MIXTA', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (27, 1, NULL, 2, 25, 5, NULL, 'VIII A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (28, 1, NULL, 2, 26, 5, NULL, 'VIII A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (29, 1, NULL, 3, 24, 5, NULL, 'II A IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (30, 1, NULL, 2, 27, 25, NULL, 'VI A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (31, 1, NULL, 2, 28, 25, NULL, 'V A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (32, 1, NULL, 3, 29, 25, NULL, 'IV A IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (33, 1, NULL, 2, 30, 11, NULL, 'II A  ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (34, 1, NULL, 2, 31, 3, NULL, 'IV A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (35, 1, NULL, 2, 32, 3, NULL, 'IV A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (36, 1, NULL, 2, 33, 3, NULL, 'VI A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (37, 1, NULL, 2, 34, 3, NULL, 'VIII A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (38, 1, NULL, 1, 35, 18, NULL, 'VI A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (39, 1, NULL, 1, 36, 18, NULL, 'II A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (40, 1, NULL, 1, 37, 18, NULL, 'VI A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (41, 1, NULL, 2, 38, 13, NULL, 'IV A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (42, 1, NULL, 2, 39, 13, NULL, 'VIII A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (43, 1, NULL, 1, 12, 13, NULL, 'VIII A IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (44, 1, NULL, 1, 40, 12, NULL, 'II A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (45, 1, NULL, 1, 41, 12, NULL, 'II A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (46, 1, NULL, 1, 42, 12, NULL, 'VI A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (47, 1, NULL, 3, 43, 17, NULL, 'IV A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (48, 1, NULL, 1, 44, 17, NULL, 'VI A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (49, 1, NULL, 2, 45, 4, NULL, 'II A  ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (50, 1, NULL, 3, 46, 17, NULL, 'IV A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (51, 1, NULL, 1, 47, 17, NULL, 'II A  IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (52, 1, NULL, 2, 48, 4, NULL, 'IIA  ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (53, 1, NULL, 2, 49, 4, NULL, 'VI A  ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (54, 1, NULL, 3, 50, 4, NULL, 'VI A  IPET', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for grupos_estudiantes
@@ -3402,7 +3413,7 @@ DROP TABLE IF EXISTS `semestres`;
 CREATE TABLE `semestres`  (
   `idcarrera` int(11) NOT NULL,
   `idmateria` int(11) NOT NULL,
-  `idsemestre` int(11) NOT NULL,
+  `num_semestre` int(11) NOT NULL,
   PRIMARY KEY (`idcarrera`, `idmateria`) USING BTREE,
   INDEX `fk_semestre_carrera_idx`(`idcarrera`) USING BTREE,
   INDEX `fk_semestre_materia1_idx`(`idmateria`) USING BTREE,
@@ -3439,20 +3450,20 @@ FROM
 WHERE
 	actas_calificaciones.idgrupo = grupos.idgrupo 
 AND
-grupos.idmateria = cat_materias.idmateria ;
+grupos.idmateria = cat_materias.idmateria ; ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_encabezado_v`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS SELECT
-	`a`.`idestudiante` AS `idestudiante`,
-	`a`.`nombre_estudiante` AS `nombre_estudiante`,
-	`b`.`desc_carrera` AS `desc_carrera`,
-	`b`.`plan_estudios` AS `plan_estudios`,
-	`a`.`num_semestre` AS `num_semestre` 
+	a.idestudiante AS idestudiante,
+	a.nombre_estudiante AS nombre_estudiante,
+	b.desc_carrera AS desc_carrera,
+	b.plan_estudios AS plan_estudios,
+	a.num_semestre AS num_semestre 
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
+	(estudiantes a JOIN cat_carreras b) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -3469,6 +3480,21 @@ FROM
 	estudiantes
 	INNER JOIN cat_carreras	ON 	estudiantes.idcarrera = cat_carreras.idcarrera
 	INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
-	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo;
+	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo; ;
+
+-- ----------------------------
+-- View structure for horario_estudiante_v
+-- ----------------------------
+DROP VIEW IF EXISTS `horario_estudiante_v`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS SELECT a.idestudiante, b.idciclo, b.num_semestre, b.idmateria, c.desc_materia, c.cve_materia, b.desc_grupo_corto, b.aula, a.idopcion_curso, 
+  CASE
+            WHEN `a`.`idopcion_curso` = 2 THEN 'R'
+            WHEN `a`.`idopcion_curso` = 3 THEN 'E'
+	END AS `desc_opcion_curso_corto`,
+  c.creditos, lunes, martes, miercoles, jueves, viernes, sabado
+ FROM ithuimanguillo.grupos_estudiantes a, grupos b, cat_materias c
+where a.idgrupo = b.idgrupo
+and b.idmateria = c.idmateria
+order by lunes, viernes, sabado ;
 
 SET FOREIGN_KEY_CHECKS = 1;

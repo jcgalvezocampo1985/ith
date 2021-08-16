@@ -20,7 +20,7 @@ class EstudianteForm extends model
     {
         return [
             ['idestudiante', 'required', 'message' => 'Requerido'],
-            ['idestudiante', 'match', 'pattern' => "/^.[0-9]+$/i", 'message' => 'Sólo se aceptan valores numericos'],
+            ['idestudiante', 'match', 'pattern' => "/^.[0-9a-z]+$/i", 'message' => 'Sólo se aceptan valores numericos'],
             ['nombre_estudiante', 'required', 'message' => 'Requerido'],
             ['email', 'required', 'message' => 'Campo requerido'],
             ['email', 'match', 'pattern' => "/^.{5,80}$/", 'message' => 'Caracteres mínimo 5 y máximo 80'],

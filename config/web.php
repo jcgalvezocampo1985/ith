@@ -47,10 +47,9 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            //'enableStrictParsing' => true,
             'rules' => [
-                //'posts' => 'post/index', 
-                //'post/<id:\d+>' => 'post/view',
+                //'/b' => '/estudiante/boleta', 
+                //'post/<id:\d+>' => 'post/view',*/
             ],
         ],
     ],
