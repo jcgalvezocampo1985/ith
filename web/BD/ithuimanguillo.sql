@@ -5,13 +5,13 @@
  Source Server Type    : MariaDB
  Source Server Version : 100510
  Source Host           : localhost:3306
- Source Schema         : escuela
+ Source Schema         : ithuimanguillo
 
  Target Server Type    : MariaDB
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 13/08/2021 21:07:45
+ Date: 15/08/2021 20:02:16
 */
 
 SET NAMES utf8mb4;
@@ -1104,7 +1104,7 @@ CREATE TABLE `ciclo`  (
 -- Records of ciclo
 -- ----------------------------
 INSERT INTO `ciclo` VALUES (1, 'MAR - JUL 2021', 1, 2021, NULL, NULL, NULL);
-INSERT INTO `ciclo` VALUES (2, 'AGO - DIC 2021', 2, 2021, '2021-08-13 20:29:58', '2021-08-13 20:29:58', 'VIG');
+INSERT INTO `ciclo` VALUES (2, 'AGO - DIC 2021', 2, 2021, '2021-08-13 21:13:38', '2021-08-13 21:13:38', 'VIG');
 
 -- ----------------------------
 -- Table structure for estudiantes
@@ -3450,20 +3450,20 @@ FROM
 WHERE
 	actas_calificaciones.idgrupo = grupos.idgrupo 
 AND
-grupos.idmateria = cat_materias.idmateria ;
+grupos.idmateria = cat_materias.idmateria ; ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_encabezado_v`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS SELECT
-	`a`.`idestudiante` AS `idestudiante`,
-	`a`.`nombre_estudiante` AS `nombre_estudiante`,
-	`b`.`desc_carrera` AS `desc_carrera`,
-	`b`.`plan_estudios` AS `plan_estudios`,
-	`a`.`num_semestre` AS `num_semestre` 
+	a.idestudiante AS idestudiante,
+	a.nombre_estudiante AS nombre_estudiante,
+	b.desc_carrera AS desc_carrera,
+	b.plan_estudios AS plan_estudios,
+	a.num_semestre AS num_semestre 
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
+	(estudiantes a JOIN cat_carreras b) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -3480,7 +3480,7 @@ FROM
 	estudiantes
 	INNER JOIN cat_carreras	ON 	estudiantes.idcarrera = cat_carreras.idcarrera
 	INNER JOIN grupos	ON cat_carreras.idcarrera = grupos.idcarrera
-	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo ;
+	INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo; ;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
@@ -3492,7 +3492,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS
             WHEN `a`.`idopcion_curso` = 3 THEN 'E'
 	END AS `desc_opcion_curso_corto`,
   c.creditos, lunes, martes, miercoles, jueves, viernes, sabado
- FROM escuela.grupos_estudiantes a, grupos b, cat_materias c
+ FROM ithuimanguillo.grupos_estudiantes a, grupos b, cat_materias c
 where a.idgrupo = b.idgrupo
 and b.idmateria = c.idmateria
 order by lunes, viernes, sabado ;
