@@ -93,21 +93,21 @@ class ReporteController extends Controller
             $pdf->Text(125, 60, 'FECHA:');
             $pdf->Text(138, 60, $fecha);
             $pdf->Text(12, 70, utf8_decode('NÚMERO DE CONTROL:'));
-            $pdf->Text(50, 70, utf8_decode($no_control));
+            $pdf->Text(49, 70, utf8_decode($no_control));
             $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
-            $pdf->Text(35, 75, utf8_decode($estudiante));
+            $pdf->Text(34, 75, utf8_decode($estudiante));
             //$pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
             //$pdf->Text(32, 80, utf8_decode($semestre));
             //$pdf->Text(12, 85, utf8_decode('CARRERA:'));
             //$pdf->Text(30, 85, utf8_decode($carrera));
             $pdf->Text(12, 80, utf8_decode('CARRERA:'));
-            $pdf->Text(32, 80, utf8_decode($carrera));
+            $pdf->Text(29, 80, utf8_decode($carrera));
             //$pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
             //$pdf->Text(38, 90, utf8_decode($especialidad));
             //$pdf->Text(12, 95, utf8_decode('PLAN:'));
             //$pdf->Text(24, 95, utf8_decode($plan));
             $pdf->Text(12, 85, utf8_decode('PLAN:'));
-            $pdf->Text(30, 85, utf8_decode($plan));
+            $pdf->Text(23, 85, utf8_decode($plan));
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY(12, 90);
@@ -191,11 +191,9 @@ class ReporteController extends Controller
             $sql_materias = "SELECT
                                 *
                             FROM
-                                horario_estudiante_v, cat_materias
+                                horario_estudiante_v
                             WHERE
-                                idestudiante =:idestudiante
-                            GROUP BY
-	                            cat_materias.idmateria";
+                                idestudiante =:idestudiante";
             $cuerpo = Yii::$app->db->createCommand($sql_materias)
                                    ->bindValue(':idestudiante', $idestudiante)
                                    ->queryAll();
@@ -222,26 +220,28 @@ class ReporteController extends Controller
 
             $pdf->SetFont('Montserrat-SemiBold', '', 8);
             $pdf->SettextColor(0, 0, 0);
-            $pdf->Text(12, 60, utf8_decode('BOLETA DE CALIFICACIONES AL PERIODO:'));
-            $pdf->Text(78, 60, $periodo);
+            $pdf->Text(12, 60, utf8_decode('CARGA ACADÉMICA AL PERIODO:'));
+            $pdf->Text(65, 60, $periodo);
             $pdf->Text(125, 60, 'FECHA:');
             $pdf->Text(138, 60, $fecha);
             $pdf->Text(12, 70, utf8_decode('NÚMERO DE CONTROL:'));
-            $pdf->Text(50, 70, utf8_decode($no_control));
+            $pdf->Text(49, 70, utf8_decode($no_control));
             $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
-            $pdf->Text(35, 75, utf8_decode($estudiante));
+            $pdf->Text(34, 75, utf8_decode($estudiante));
             //$pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
             //$pdf->Text(32, 80, utf8_decode($semestre));
             //$pdf->Text(12, 85, utf8_decode('CARRERA:'));
             //$pdf->Text(30, 85, utf8_decode($carrera));
             $pdf->Text(12, 80, utf8_decode('CARRERA:'));
-            $pdf->Text(32, 80, utf8_decode($carrera));
+            $pdf->Text(29, 80, utf8_decode($carrera));
             //$pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
             //$pdf->Text(38, 90, utf8_decode($especialidad));
             //$pdf->Text(12, 95, utf8_decode('PLAN:'));
             //$pdf->Text(24, 95, utf8_decode($plan));
             $pdf->Text(12, 85, utf8_decode('PLAN:'));
-            $pdf->Text(30, 85, utf8_decode($plan));
+            $pdf->Text(23, 85, utf8_decode($plan));
+            $pdf->Text(120, 85, utf8_decode('CRÉDITOS:'));
+            $pdf->Text(138, 85, utf8_decode($plan));
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY(8, 90);
@@ -261,6 +261,13 @@ class ReporteController extends Controller
 
             foreach($cuerpo as $row)
             {
+                $lunes = $row["lunes"] != "" ? $row["lunes"] : "---";
+                $martes = $row["martes"] != "" ? $row["martes"] : "---";
+                $miercoles = $row["miercoles"] != "" ? $row["miercoles"] : "---";
+                $jueves = $row["jueves"] != "" ? $row["jueves"] : "---";
+                $viernes = $row["viernes"] != "" ? $row["viernes"] : "---";
+                $sabado = $row["sabado"] != "" ? $row["sabado"] : "---";
+
                 $pdf->SetX(8);
                 $pdf->SetFont('Montserrat-Regular', '', 6);
                 $pdf->MultiCell(75, 5, utf8_decode($row['desc_materia'])."\n".utf8_decode($row['profesor']), 1, 'L', 0);
@@ -269,15 +276,15 @@ class ReporteController extends Controller
                 $pdf->SetXY(83, $y);
 
                 $pdf->Cell(13, 10, utf8_decode($row['cve_materia']), 1, 0, 'C');
-                $pdf->Cell(12, 10, utf8_decode(""), 1, 0, 'C');
-                $pdf->Cell(9, 10, utf8_decode($row['desc_grupo_corto']), 1, 0, 'C');
+                $pdf->Cell(12, 10, utf8_decode($row["desc_grupo_corto"]), 1, 0, 'C');
+                $pdf->Cell(9, 10, utf8_decode($row['desc_opcion_curso_corto']), 1, 0, 'C');
                 $pdf->Cell(7, 10, utf8_decode($row['creditos']), 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
-                $pdf->Cell(14, 10, "8:00-11:00", 1, 0, 'C');
+                $pdf->Cell(14, 10, $lunes, 1, 0, 'C');
+                $pdf->Cell(14, 10, $martes, 1, 0, 'C');
+                $pdf->Cell(14, 10, $miercoles, 1, 0, 'C');
+                $pdf->Cell(14, 10, $jueves, 1, 0, 'C');
+                $pdf->Cell(14, 10, $viernes, 1, 0, 'C');
+                $pdf->Cell(14, 10, $sabado, 1, 0, 'C');
 
                 $pdf->Ln();
             }
