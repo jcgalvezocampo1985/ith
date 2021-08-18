@@ -7,7 +7,7 @@ use yii\filters\AccessController;
 use yii\web\Controller;
 //use app\vendor\setasign\fpdf\FPDF;
 use yii\helpers\Html;
-use Fpdf\fpdf;
+use Fpdf\Fpdf;
 
 class PDF extends FPDF
 {
