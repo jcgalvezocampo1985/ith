@@ -11,17 +11,32 @@ use Fpdf\Fpdf;
 
 class PDF extends FPDF
 {
-  
-    function Header()
+    public $reporte;
+
+    public function setReporte($reporte){
+        $this->reporte = $reporte;
+    }
+    
+    public function getReporte(){
+        return $this->reporte;
+    }
+
+    public function Header()
     {
-        $url_header= Yii::$app->basePath."/web/img/header.png";
-        $this->Image($url_header,10, 5, 150);
-        $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
-        $this->SetFont('Montserrat-Bold', '', 9);
-        $this->SettextColor(125, 125, 125);
-        $this->Text(130, 35, utf8_decode('Instituto Tecnológico de Huimanguillo'));
-        $this->SetFontSize(8);
-        $this->Text(80, 42, utf8_decode('"2021: Año de la Independencia"'));
+        if($this->getReporte() == "Boleta"){
+            $url_header= Yii::$app->basePath."/web/img/header.png";
+            $this->Image($url_header,10, 5, 150);
+            $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+            $this->SetFont('Montserrat-Bold', '', 9);
+            $this->SetTextColor(125, 125, 125);
+            $this->Text(130, 35, utf8_decode('Instituto Tecnológico de Huimanguillo'));
+            $this->SetFontSize(8);
+            $this->Text(80, 42, utf8_decode('"2021: Año de la Independencia"'));
+        }else if($this->getReporte() == "Horario"){
+            $url_header= Yii::$app->basePath."/web/img/header_horario.png";
+            $this->Image($url_header, 10, 5, 197);
+        }
+        
         $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
         $this->SetFont('Montserrat-SemiBold', '', 8);
         $this->SettextColor(76, 76, 76);
@@ -31,13 +46,33 @@ class PDF extends FPDF
         $this->Text(155, 50, utf8_decode('TNM'));
     }
 
-    function Footer()
+    public function Footer()
     {
         //$this->SetXY(100,100);
         //$this->SetFont('Arial','I',8);
         //$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
-        $url_footer = Yii::$app->basePath."/web/img/footer.png";   
-        $this->Image($url_footer, 12, 245, 185);
+        if($this->getReporte() == "Boleta"){
+            $url_footer = Yii::$app->basePath."/web/img/footer.png";
+            $this->Image($url_footer, 12, 245, 185);
+        }else if($this->getReporte() == "Horario"){
+
+            $url_firma = Yii::$app->basePath."/web/img/firma_horario.png";
+            $this->Image($url_firma, 30, 185, 45);
+            $url_sello = Yii::$app->basePath."/web/img/sello_horario.png";
+            $this->Image($url_sello, 80, 185, 60);
+
+            $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+            $this->SetFont('Montserrat-SemiBold', '', 8);
+            $this->Line(30, 235, 80, 235);
+            $this->Text(37, 240, utf8_decode("DIVISIÓN DE ESTUDIOS"));
+            $this->Text(41, 245, "PROFESIONALES");
+            $this->Line(130, 235, 180, 235);
+            $this->Text(147, 240, "ESTUDIANTE");
+            $this->SetTextColor(125, 125, 125);
+            $this->Text(12, 265, "181240065");
+            $this->Text(190, 265, "Rev. O");
+        }
+        
     }
 }
 
@@ -77,6 +112,7 @@ class ReporteController extends Controller
 
             header('Content-type: application/pdf');
             $pdf = new PDF();
+            $pdf->setReporte("Boleta");
             $pdf->AliasNbPages();
             $pdf->AddPage('P', 'Letter');
             $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
@@ -95,19 +131,19 @@ class ReporteController extends Controller
             $pdf->Text(12, 70, utf8_decode('NÚMERO DE CONTROL:'));
             $pdf->Text(49, 70, utf8_decode($no_control));
             $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
-            $pdf->Text(34, 75, utf8_decode($estudiante));
+            $pdf->Text(49, 75, utf8_decode($estudiante));
             //$pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
             //$pdf->Text(32, 80, utf8_decode($semestre));
             //$pdf->Text(12, 85, utf8_decode('CARRERA:'));
             //$pdf->Text(30, 85, utf8_decode($carrera));
             $pdf->Text(12, 80, utf8_decode('CARRERA:'));
-            $pdf->Text(29, 80, utf8_decode($carrera));
+            $pdf->Text(49, 80, utf8_decode($carrera));
             //$pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
             //$pdf->Text(38, 90, utf8_decode($especialidad));
             //$pdf->Text(12, 95, utf8_decode('PLAN:'));
             //$pdf->Text(24, 95, utf8_decode($plan));
             $pdf->Text(12, 85, utf8_decode('PLAN:'));
-            $pdf->Text(23, 85, utf8_decode($plan));
+            $pdf->Text(49, 85, utf8_decode($plan));
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY(12, 90);
@@ -165,14 +201,13 @@ class ReporteController extends Controller
             $pdf->Text(12, 238, utf8_decode('C.c.p. SE'));
             $pdf->Text(12, 242, utf8_decode('L.I. MEVL/'));
 
-            $url_firma = Yii::$app->basePath."/web/img/firma.png";
+            $url_firma = Yii::$app->basePath."/web/img/firma_boleta.png";
             $pdf->Image($url_firma, 40, 190, 45);
 
-            $url_firma = Yii::$app->basePath."/web/img/sello.png";
+            $url_firma = Yii::$app->basePath."/web/img/sello_boleta.png";
             $pdf->Image($url_firma, 130, 190, 45);
 
             $pdf->Output('D',$idestudiante.'_'.$periodo.'.pdf');
-            exit;
     }
 
     public function actionHorario()
@@ -209,6 +244,7 @@ class ReporteController extends Controller
 
             header('Content-type: application/pdf');
             $pdf = new PDF();
+            $pdf->setReporte("Horario");
             $pdf->AliasNbPages();
             $pdf->AddPage('P', 'Letter');
             $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
@@ -220,28 +256,19 @@ class ReporteController extends Controller
 
             $pdf->SetFont('Montserrat-SemiBold', '', 8);
             $pdf->SettextColor(0, 0, 0);
-            $pdf->Text(12, 60, utf8_decode('CARGA ACADÉMICA AL PERIODO:'));
-            $pdf->Text(65, 60, $periodo);
-            $pdf->Text(125, 60, 'FECHA:');
-            $pdf->Text(138, 60, $fecha);
+            $pdf->Text(60, 58, utf8_decode('CARGA ACADÉMICA AL PERIODO:'));
+            $pdf->Text(115, 58, $periodo);
+            $pdf->Text(12, 65, 'FECHA:');
+            $pdf->Text(49, 65, $fecha);
             $pdf->Text(12, 70, utf8_decode('NÚMERO DE CONTROL:'));
             $pdf->Text(49, 70, utf8_decode($no_control));
             $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
-            $pdf->Text(34, 75, utf8_decode($estudiante));
-            //$pdf->Text(12, 80, utf8_decode('SEMESTRE:'));
-            //$pdf->Text(32, 80, utf8_decode($semestre));
-            //$pdf->Text(12, 85, utf8_decode('CARRERA:'));
-            //$pdf->Text(30, 85, utf8_decode($carrera));
+            $pdf->Text(49, 75, utf8_decode($estudiante));
             $pdf->Text(12, 80, utf8_decode('CARRERA:'));
-            $pdf->Text(29, 80, utf8_decode($carrera));
-            //$pdf->Text(12, 90, utf8_decode('ESPECIALIDAD:'));
-            //$pdf->Text(38, 90, utf8_decode($especialidad));
-            //$pdf->Text(12, 95, utf8_decode('PLAN:'));
-            //$pdf->Text(24, 95, utf8_decode($plan));
+            $pdf->Text(49, 80, utf8_decode($carrera));
             $pdf->Text(12, 85, utf8_decode('PLAN:'));
-            $pdf->Text(23, 85, utf8_decode($plan));
+            $pdf->Text(49, 85, utf8_decode($plan));
             $pdf->Text(120, 85, utf8_decode('CRÉDITOS:'));
-            $pdf->Text(138, 85, utf8_decode($plan));
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY(8, 90);
@@ -259,6 +286,7 @@ class ReporteController extends Controller
             $pdf->Cell(14, 7, utf8_decode("SÁBADO"), 1, 0, 'C');
             $pdf->Ln();
 
+            $creditos_acumulados = 0;
             foreach($cuerpo as $row)
             {
                 $lunes = $row["lunes"] != "" ? $row["lunes"] : "---";
@@ -267,6 +295,8 @@ class ReporteController extends Controller
                 $jueves = $row["jueves"] != "" ? $row["jueves"] : "---";
                 $viernes = $row["viernes"] != "" ? $row["viernes"] : "---";
                 $sabado = $row["sabado"] != "" ? $row["sabado"] : "---";
+
+                $creditos_acumulados = $creditos_acumulados + $row["creditos"];
 
                 $pdf->SetX(8);
                 $pdf->SetFont('Montserrat-Regular', '', 6);
@@ -288,27 +318,9 @@ class ReporteController extends Controller
 
                 $pdf->Ln();
             }
+            $pdf->SetFont('Montserrat-SemiBold', '', 8);
+            $pdf->Text(138, 85, utf8_decode($creditos_acumulados));
 
-            $pdf->SetFont('Montserrat-Bold', '', 10);
-            $pdf->Text(12, 185, 'A T E N T A M E N T E');
-            $pdf->SetFont('Montserrat-MediumItalic', '', 8);
-            $pdf->Text(12, 189, utf8_decode('Excelencia en Educación Tecnológica®'));
-            $pdf->SetFont('Montserrat-LightItalic', '', 8);
-            $pdf->Text(12, 193, utf8_decode('"DONDE MORA EL SABER MORA LA PATRIA"®'));
-            $pdf->SetFont('Montserrat-Bold', '', 8);
-            $pdf->Text(12, 230, utf8_decode('MANUEL ERNESTO VILLALOBOS LÓPEZ'));
-            $pdf->Text(12, 234, utf8_decode('JEFE DEL DEPARTAMENTO DE SERVICIOS ESCOLARES'));
-            $pdf->SetFont('Montserrat-Regular', '', 7);
-            $pdf->Text(12, 238, utf8_decode('C.c.p. SE'));
-            $pdf->Text(12, 242, utf8_decode('L.I. MEVL/'));
-
-            $url_firma = Yii::$app->basePath."/web/img/firma.png";
-            $pdf->Image($url_firma, 40, 190, 45);
-
-            $url_firma = Yii::$app->basePath."/web/img/sello.png";
-            $pdf->Image($url_firma, 130, 190, 45);
-
-            $pdf->Output('I',$idestudiante.'_'.$periodo.'.pdf');
-            //exit;
+            $pdf->Output('D',$idestudiante.'_'.$periodo.'.pdf');
     }
 }

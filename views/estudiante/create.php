@@ -15,55 +15,61 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="row">
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "idestudiante")->input("text") ?>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "idestudiante")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "nombre_estudiante")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "email")->input("email") ?>
+        </div>
     </div>
 </div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "nombre_estudiante")->input("text") ?>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "sexo")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "num_semestre")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "fecha_registro")->input("text") ?>
+        </div>
     </div>
 </div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "email")->input("email") ?>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "fecha_actualizacion")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "idcarrera")->input("text") ?>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <?= $form->field($model, "cve_estatus")->input("text") ?>
+        </div>
     </div>
 </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "sexo")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "num_semestre")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "fecha_registro")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "fecha_actualizacion")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "idcarrera")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="form-group">
-        <?= $form->field($model, "cve_estatus")->input("text") ?>
-    </div>
-</div>
-<div class="col-md-12">
-    <div class="form-group">
-        <?= Html::submitInput("Guardar", ["class" => "btn btn-primary"]) ?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <?= Html::submitInput("Guardar", ["class" => "btn btn-primary"]) ?>
+        </div>
     </div>
 </div>
 <?php $form->end() ?>
