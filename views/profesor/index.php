@@ -6,26 +6,26 @@ use yii\helpers\Url;
 use yii\data\Pagination;
 use yii\widgets\LinkPager;
 
-$this->title = 'Estudiantes';
+$this->title = 'Profesores';
 
 ?>
 <?php $this->params['breadcrumbs'][] = $this->title; ?>
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Estudiantes</div>
+    <div class="panel-heading">Profesores</div>
     <div class="panel-body">
         <div class="col-md-4">
             <?php
-                $f = ActiveForm::begin([
-                        "method" => "get",
-                        "action" => Url::toRoute("estudiante/index"),
-                        "enableClientValidation" => true
+            $f = ActiveForm::begin([
+                    "method" => "get",
+                    "action" => Url::toRoute("profesor/index"),
+                    "enableClientValidation" => true
                 ]);
             ?>
                 <?= $f->field($form, "q")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-                <?= Html::a('Refrescar', ['estudiante/index'], ['class' => 'btn btn-info']) ?>
-                <?= Html::a('Nuevo Estudiante', ['estudiante/create'], ['class' => 'btn btn-info']) ?>
+                <?= Html::a('Refrescar', ['profesor/index'], ['class' => 'btn btn-info']) ?>
+                <?= Html::a('Nuevo Profesor', ['profesor/create'], ['class' => 'btn btn-info']) ?>
             <?php $f->end() ?>
         </div>
         <div class="col-md-12">
@@ -33,24 +33,22 @@ $this->title = 'Estudiantes';
             <table class="table table-striped" id="tabla">
                 <thead>
                     <tr>
-                        <th>No. Control</th>
+                        <th>CURP</th>
                         <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Sexo</th>
-                        <th>Carrera</th>
-                        <th>Semestre</th>
+                        <th>Apellidp Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach($model as $row): ?>
                     <tr>
-                        <td><?= $row['idestudiante'] ?></td>
-                        <td><?= $row['nombre_estudiante'] ?></td>
-                        <td><?= $row['email'] ?></td>
-                        <td><?= $row['sexo'] ?></td>
-                        <td><?= $row['desc_carrera'] ?></td>
-                        <td><?= $row['num_semestre'] ?></td>
+                        <td><?= $row->curp ?></td>
+                        <td><?= $row->nombre_profesor ?></td>
+                        <td><?= $row->apaterno ?></td>
+                        <td><?= $row->amaterno ?></td>
+                        <td><?= $row->cve_estatus ?></td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-info btn-xs">Acción</button>
@@ -59,17 +57,17 @@ $this->title = 'Estudiantes';
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><?= Html::a('Modificar', ['/estudiante/update?idestudiante='.$row['idestudiante']]) ?></li>
+                                    <li><?= Html::a('Modificar', ['/profesor/update?idprofesor='.$row->idprofesor]) ?></li>
                                     <li>
-                                        <a href="#" data-toggle="modal" data-target="#idestudiante_"<?= $row['idestudiante'] ?>>Eliminar</a>
+                                        <a href="#" data-toggle="modal" data-target="#idprofesor_"<?= $row->idprofesor ?>>Eliminar</a>
                                     </li>
-                                    <li><?= Html::a('Boleta', ['/reporte/boleta?id='.$row['idestudiante']]) ?></li>
-                                    <li><?= Html::a('Horario', ['/reporte/horario?id='.$row['idestudiante']]) ?></li>
+                                    <li><?= Html::a('Grupos', ['/reporte/boleta?id='.$row['idprofesor']]) ?></li>
+                                    <li><?= Html::a('Horario', ['/reporte/horario?id='.$row['idprofesor']]) ?></li>
                                 </ul>
                             </div>
                         </td>
                     </tr>
-                    <div class="modal fade" id="idestudiante_"<?= $row['idestudiante'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="idprofesor_"<?= $row['idprofesor'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -82,12 +80,12 @@ $this->title = 'Estudiantes';
                                     <div class="alert alert-danger" role="danger">
                                         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                                         <span class="sr-only">Mensaje:</span>
-                                        ¿Desea eliminar al estudiante con No. Control <?= $row['idestudiante'] ?>?
+                                        ¿Desea eliminar al profesor <?= $row->nombre_profesor." ".$row->apaterno." ".$row->amaterno ?>?
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <?= Html::beginForm(Url::toRoute("estudiante/delete"), "POST") ?>
-                                        <input type="hidden" name="idestudiante" value="<?= $row['idestudiante'] ?>">
+                                    <?= Html::beginForm(Url::toRoute("profesor/delete"), "POST") ?>
+                                        <input type="hidden" name="idprofesor" value="<?= $row['idprofesor'] ?>">
                                         <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
                                         <button type="submit" class="btn btn-danger">Eliminar</button>
                                     <?= Html::endForm() ?>

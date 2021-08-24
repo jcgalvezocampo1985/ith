@@ -8,7 +8,6 @@ $this->title = 'Boleta';
 
 ?>
 <?php $this->params['breadcrumbs'][] = $this->title; ?>
-<h3><?php $search ?></h3>
 <?php
 $f = ActiveForm::begin([
     "method" => "get",

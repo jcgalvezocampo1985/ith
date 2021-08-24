@@ -2,10 +2,11 @@
 
 namespace app\controllers;
 
+date_default_timezone_set('America/Mexico_City');
+
 use Yii;
 use yii\filters\AccessController;
 use yii\web\Controller;
-//use app\vendor\setasign\fpdf\FPDF;
 use yii\helpers\Html;
 use Fpdf\Fpdf;
 
@@ -160,33 +161,37 @@ class ReporteController extends Controller
             $calificacion_acumulada = 0;
             $creditos_acumulados = 0;
 
-            foreach($cuerpo as $row)
+            if($total_materias > 0)
             {
-                $calificacion = $row['calificacion'] === 'NA' ? 0 : $row['calificacion']; //Convierte a 0 cuando el valor de la calificación es NA
-                $calificacion_acumulada = $calificacion_acumulada + $calificacion;
-                $creditos_acumulados = $creditos_acumulados + $row['creditos'];
+                foreach($cuerpo as $row)
+                {
+                    $calificacion = ($row['calificacion'] == 'N/A' || $row['calificacion'] === 'NA') ? 0 : $row['calificacion']; //Convierte a 0 cuando el valor de la calificación es NA
+                    $calificacion_acumulada = $calificacion_acumulada + $calificacion;
+                    $creditos_acumulados = $creditos_acumulados + $row['creditos'];
+
+                    $pdf->SetX(12);
+                    $pdf->Cell(95, 5, utf8_decode($row['desc_materia']), 1, 0, 'L');
+                    $pdf->Cell(20, 5, utf8_decode($row['cve_materia']), 1, 0, 'C');
+                    $pdf->Cell(15, 5, utf8_decode($row["desc_grupo"]), 1, 0, 'C');
+                    $pdf->Cell(15, 5, utf8_decode($row['opc_curso']), 1, 0, 'C');
+                    $pdf->Cell(10, 5, utf8_decode($row['creditos']), 1, 0, 'C');
+                    $pdf->Cell(40, 5, utf8_decode($row['calificacion']), 1, 0, 'C');
+                    $pdf->Ln();
+                }
+
+                $promedio = round($calificacion_acumulada / $total_materias, 0);
+
+                $pdf->SetFont('Montserrat-Regular', '', 8);
                 $pdf->SetX(12);
-                $pdf->Cell(95, 5, utf8_decode($row['desc_materia']), 1, 0, 'L');
-                $pdf->Cell(20, 5, utf8_decode($row['cve_materia']), 1, 0, 'C');
-                $pdf->Cell(15, 5, utf8_decode($row["desc_grupo"]), 1, 0, 'C');
-                $pdf->Cell(15, 5, utf8_decode($row['opc_curso']), 1, 0, 'C');
-                $pdf->Cell(10, 5, utf8_decode($row['creditos']), 1, 0, 'C');
-                $pdf->Cell(40, 5, utf8_decode($row['calificacion']), 1, 0, 'C');
-                $pdf->Ln();
+                $pdf->Cell(145, 10, utf8_decode("CRÉDITOS APROBADOS"), 1, 0, 'R');
+                $pdf->Cell(10, 10, $creditos_acumulados, 1, 0, 'C');
+                $pdf->SetFont('Montserrat-Regular', '', 6.5);
+                $pdf->MultiCell(20, 5, "PROMEDIO PARCIAL", 1, 'C', false);
+                $pdf->SetFont('Montserrat-Bold', '', 8);
+                $y = $pdf->GetY() - 10;
+                $pdf->SetXY(187, $y);
+                $pdf->Cell(20, 10, $promedio, 1, 0, 'C');
             }
-
-            $promedio = round($calificacion_acumulada / $total_materias, 0);
-
-            $pdf->SetFont('Montserrat-Regular', '', 8);
-            $pdf->SetX(12);
-            $pdf->Cell(145, 10, utf8_decode("CRÉDITOS APROBADOS"), 1, 0, 'R');
-            $pdf->Cell(10, 10, $creditos_acumulados, 1, 0, 'C');
-            $pdf->SetFont('Montserrat-Regular', '', 6.5);
-            $pdf->MultiCell(20, 5, "PROMEDIO PARCIAL", 1, 'C', false);
-            $pdf->SetFont('Montserrat-Bold', '', 8);
-            $y = $pdf->GetY() - 10;
-            $pdf->SetXY(187, $y);
-            $pdf->Cell(20, 10, $promedio, 1, 0, 'C');
 
             $pdf->SetFont('Montserrat-Bold', '', 10);
             $pdf->Text(12, 185, 'A T E N T A M E N T E');

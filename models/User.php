@@ -2,47 +2,59 @@
 
 namespace app\models;
 
+use app\models\login\Usuario;
+use app\models\login\Rol;
+use app\models\login\UsuarioRol;
+
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
-    public $id;
-    public $username;
+    
+    public $idusuario;
+    public $curp;
+    public $nombre_usuario;
+    public $email;
     public $password;
+    public $cve_estatus;
     public $authKey;
     public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+    public $activate;
+    public $fecha_registro;
+    public $fecha_actualizacion;
+    public $verification_code;
+    public $role;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public static function findIdentity($id)
+    
+    /* busca la identidad del usuario a través de su $idusuario */
+
+    public static function findIdentity($idusuario)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        
+        $user = Usuario::find()
+                        ->where("activate=:activate", [":activate" => 1])
+                        ->andWhere("idusuario=:idusuario", ["idusuario" => $idusuario])
+                        ->one();
+        
+        return isset($user) ? new static($user) : null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    
+    /* Busca la identidad del usuario a través de su token de acceso */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
+        
+        $users = Usuario::find()
+                        ->where("activate=:activate", [":activate" => 1])
+                        ->andWhere("accessToken=:accessToken", [":accessToken" => $token])
+                        ->all();
+
+        foreach ($users as $user) {
+            if ($user->accessToken === $token) {
                 return new static($user);
             }
         }
@@ -51,15 +63,22 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by curp
      *
-     * @param string $username
+     * @param  string      $curp
      * @return static|null
      */
-    public static function findByUsername($username)
+    
+    /* Busca la identidad del usuario a través del username */
+    public static function findByUsername($curp)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
+        $users = Usuario::find()
+                        ->where("activate=:activate", ["activate" => 1])
+                        ->andWhere("curp=:curp", [":curp" => $curp])
+                        ->all();
+        
+        foreach ($users as $user) {
+            if (strcasecmp($user->curp, $curp) === 0) {
                 return new static($user);
             }
         }
@@ -68,24 +87,30 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    
+    /* Regresa el id del usuario */
     public function getId()
     {
-        return $this->id;
+        return $this->idusuario;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    
+    /* Regresa la clave de autenticación */
     public function getAuthKey()
     {
         return $this->authKey;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    
+    /* Valida la clave de autenticación */
     public function validateAuthKey($authKey)
     {
         return $this->authKey === $authKey;
@@ -94,11 +119,65 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     /**
      * Validates password
      *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
+     * @param  string  $password password to validate
+     * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        /* Valida el password */
+        if (crypt($password, $this->password) == $this->password)
+        {
+            return $password === $password;
+        }
     }
+
+    public static function isUserAutenticado($idusuario, $rol)
+    {
+        if(Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        {
+            /*
+            * $rol[1 => Administrador, 2 => Escolares, 3 => Profesor, 4 => dep, 5 => Estudiante, 6 => Consulta]
+            */
+            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => $rol]))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /*
+    public static function isUserAdministrador($idusuario)
+    {
+        if (Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        {
+            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => 1]))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }    
+
+    public static function isUserProfesor($idusuario)
+    {
+        if(Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        {
+            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => 3]))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    */
 }
