@@ -4,9 +4,9 @@ $(".idgrupo").on("click", function(e) {
     var id = $(this).attr("href");
 
     $.ajax({
-        url: "/profesor/listaalumnos/",
+        url: "http://localhost/ithuimanguillo/web/profesor/listaalumnos?idgrupo=" + id,
         type: "GET",
-        data: "idgrupo=" + id,
+        //data: "idgrupo=" + id,
         success: function(respuesta) {
             $('#lista_alumnos').html(respuesta);
         }
