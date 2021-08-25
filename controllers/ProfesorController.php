@@ -20,6 +20,9 @@ use app\models\ProfesorForm;
 use app\models\ProfesorSearch;
 use app\models\Alumno;
 use app\models\User;
+use app\models\Ciclo;
+use app\models\CicloForm;
+use app\models\CicloSearch;
 
 class ProfesorController extends Controller
 {
@@ -260,26 +263,61 @@ class ProfesorController extends Controller
 
     public function actionHorario()
     {
+        $form = new CicloSearch;
+        $idciclo = null;
+
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
         $idprofesor = $sql_profesor->idprofesor;
 
-        $sql = "SELECT
-                    *
-                FROM
-                    horario_profesor_v
-                WHERE
-                    idprofesor = :idprofesor";
-        $model = Yii::$app->db->createCommand($sql)
-                              ->bindValue(':idprofesor', $idprofesor)
-                              ->queryAll();
+        $ciclos = ArrayHelper::map(Ciclo::find()->all(), 'idciclo', 'desc_ciclo');
+ 
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $idciclo = Html::encode($form->idciclo);
 
-        return $this->render("horario", ['model' => $model]);
+                $sql = "SELECT
+                            *
+                        FROM
+                            horario_profesor_v
+                        WHERE
+                            idprofesor = :idprofesor
+                        AND
+                            idciclo = :idciclo";
+                $model = Yii::$app->db->createCommand($sql)
+                                      ->bindValue(':idprofesor', $idprofesor)
+                                      ->bindValue(':idciclo', $idciclo)
+                                      ->queryAll();
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+        else
+        {
+            $sql = "SELECT
+                        *
+                    FROM
+                        horario_profesor_v
+                    WHERE
+                        idprofesor = :idprofesor
+                    AND
+	                    idciclo = (SELECT MAX(idciclo) FROM ciclo)";
+            $model = Yii::$app->db->createCommand($sql)
+                                  ->bindValue(':idprofesor', $idprofesor)
+                                  ->queryAll();         
+        }
+
+        return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo]);
     }
 
     public function actionListaalumnos()
     {
-        $this->layout = 'main1';
+        $this->layout = 'main1';//Cambio de layout
+
         if(Yii::$app->request->get("idgrupo"))
         {
             $idgrupo = Html::encode($_GET["idgrupo"]);

@@ -1,5 +1,6 @@
 <?php
 
+use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -11,6 +12,19 @@ $this->title = 'Profesores';
 <div class="panel panel-primary">
     <div class="panel-heading">Profesores</div>
     <div class="panel-body">
+        <div class="col-md-4">
+            <?php
+            $f = ActiveForm::begin([
+                    "method" => "get",
+                    "action" => Url::toRoute("profesor/horario"),
+                    "enableClientValidation" => true
+                ]);
+            ?>
+                <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => ""]) ?>
+                <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+                <?= Html::a('Refrescar', ['profesor/horario'], ['class' => 'btn btn-info']) ?>
+            <?php $f->end() ?>
+        </div>
         <div class="col-md-12">
             <hr width="100%">
             <table class="table table-striped" id="tabla">
@@ -18,7 +32,6 @@ $this->title = 'Profesores';
                     <tr>
                         <th>Carrera</th>
                         <th>Grupo</th>
-                        <th>Aula</th>
                         <th>Materia</th>
                         <th>Créditos</th>
                         <th>Lunes</th>
@@ -33,23 +46,41 @@ $this->title = 'Profesores';
                 <tbody>
                     <?php
                     foreach($model as $row):
-                    $l = ($row['lunes']) ? explode("-", $row['lunes']) : "";
-                    $m = ($row['martes']) ? explode("-", $row['martes']) : "";
-                    $m1 = ($row['miercoles']) ? explode("-", $row['miercoles']) : "";
-                    $j = ($row['jueves']) ? explode("-", $row['jueves']) : "";
-                    $v = ($row['viernes']) ? explode("-", $row['viernes']) : "";
-                    $s = ($row['sabado']) ? explode("-", $row['sabado']) : "";
-                    $lunes = ($row['lunes']) ? $l[0]."-\n".$l[1] : "";
-                    $martes = ($row['martes']) ? $m[0]."-\n".$m[1] : "";
-                    $miercoles = ($row['miercoles']) ? $m1[0]."-\n".$m1[1] : "";
-                    $jueves = ($row['jueves']) ? $j[0]."-\n".$j[1] : "";
-                    $viernes = ($row['viernes']) ? $v[0]."-\n".$v[1] : "";
-                    $sabado = ($row['sabado']) ? $s[0]."-\n".$s[1] : "";
+                        $lunes = $row['lunes'];
+                        $martes = $row['martes'];
+                        $miercoles = $row['miercoles'];
+                        $jueves = $row['jueves'];
+                        $viernes = $row['viernes'];
+                        $sabado = $row['sabado'];
+
+                        if($lunes){
+                            $dia = explode("-", $lunes);
+                            $lunes = $dia[0]."-\n".$dia[1];
+                        }
+                        if($martes){
+                            $dia = explode("-", $martes);
+                            $martes = $dia[0]."-\n".$dia[1];
+                        }
+                        if($miercoles){
+                            $dia = explode("-", $miercoles);
+                            $miercoles = $dia[0]."-\n".$dia[1];
+                        }
+                        if($jueves){
+                            $dia = explode("-", $jueves);
+                            $jueves = $dia[0]."-\n".$dia[1];
+                        }
+                        if($viernes){
+                            $dia = explode("-", $row['viernes']);
+                            $viernes = $dia[0]."-\n".$dia[1];
+                        }
+                        if($sabado){
+                            $dia = explode("-", $sabado);
+                            $sabado = $dia[0]."-\n".$dia[1];
+                        }
                     ?>
                     <tr>
                         <td><?= $row['desc_carrera'] ?></td>
                         <td><?= $row['desc_grupo'] ?></td>
-                        <td><?= $row['aula'] ?></td>
                         <td><?= $row['desc_materia'] ?></td>
                         <td><?= $row['creditos'] ?></td>
                         <td><?= $lunes ?></td>
@@ -66,7 +97,7 @@ $this->title = 'Profesores';
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?= $row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos" id="idgrupo">Lista</a></li>
+                                    <li><a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos" id="idgrupo">Lista</a></li>
                                 </ul>
                             </div>
                         </td>

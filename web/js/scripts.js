@@ -1,12 +1,14 @@
 $(".idgrupo").on("click", function(e) {
     e.preventDefault();
 
-    var id = $(this).attr("href");
+    var valor = $(this).attr("href");
+    var url = valor.split('=')[0];
+    var id = valor.split('=')[1];
 
     $.ajax({
-        url: "http://localhost/ithuimanguillo/web/profesor/listaalumnos?idgrupo=" + id,
+        url: url,
         type: "GET",
-        //data: "idgrupo=" + id,
+        data: "idgrupo=" + id,
         success: function(respuesta) {
             $('#lista_alumnos').html(respuesta);
         }
