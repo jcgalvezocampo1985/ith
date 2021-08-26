@@ -20,7 +20,7 @@ $this->title = 'Profesores';
                     "enableClientValidation" => true
                 ]);
             ?>
-                <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => ""]) ?>
+                <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => "Periodo"]) ?>
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a('Refrescar', ['profesor/horario'], ['class' => 'btn btn-info']) ?>
             <?php $f->end() ?>
@@ -58,24 +58,24 @@ $this->title = 'Profesores';
                             $lunes = $dia[0]."-\n".$dia[1];
                         }
                         if($martes){
-                            $dia = explode("-", $martes);
-                            $martes = $dia[0]."-\n".$dia[1];
+                            $dia1 = explode("-", $martes);
+                            $martes = $dia1[0]."-\n".$dia1[1];
                         }
                         if($miercoles){
-                            $dia = explode("-", $miercoles);
-                            $miercoles = $dia[0]."-\n".$dia[1];
+                            $dia2 = explode("-", $miercoles);
+                            $miercoles = $dia2[0]."-\n".$dia2[1];
                         }
                         if($jueves){
-                            $dia = explode("-", $jueves);
-                            $jueves = $dia[0]."-\n".$dia[1];
+                            $dia3 = explode("-", $jueves);
+                            $jueves = $dia3[0]."-\n".$dia3[1];
                         }
                         if($viernes){
-                            $dia = explode("-", $row['viernes']);
-                            $viernes = $dia[0]."-\n".$dia[1];
+                            $dia4 = explode("-", $viernes);
+                            $viernes = $dia4[0]."-\n".$dia4[1];
                         }
                         if($sabado){
-                            $dia = explode("-", $sabado);
-                            $sabado = $dia[0]."-\n".$dia[1];
+                            $dia5 = explode("-", $sabado);
+                            $sabado = $dia5[0]."-\n".$dia5[1];
                         }
                     ?>
                     <tr>
@@ -97,7 +97,9 @@ $this->title = 'Profesores';
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos" id="idgrupo">Lista</a></li>
+                                    <li>
+                                        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos" >Lista</a>
+                                    </li>
                                 </ul>
                             </div>
                         </td>

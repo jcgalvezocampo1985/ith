@@ -18,10 +18,10 @@ use yii\data\Pagination;
 use app\models\Profesor;
 use app\models\ProfesorForm;
 use app\models\ProfesorSearch;
-use app\models\Alumno;
+//use app\models\Alumno;
 use app\models\User;
 use app\models\Ciclo;
-use app\models\CicloForm;
+//use app\models\CicloForm;
 use app\models\CicloSearch;
 
 class ProfesorController extends Controller
@@ -337,7 +337,7 @@ class ProfesorController extends Controller
                                   ->bindValue(':idgrupo', $idgrupo)
                                   ->queryAll();
 
-            return $this->render("listaAlumnos", ['model' => $model]);
+            return $this->render("listaAlumnos", ["model" => $model, "idgrupo" => $idgrupo]);
         }
     }
 }

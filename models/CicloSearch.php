@@ -19,7 +19,7 @@ class CicloSearch extends model
     public function attributeLabels()
     {
         return [
-            'idciclo' => ''
+            'idciclo' => 'Periodo'
         ];
     }
 }

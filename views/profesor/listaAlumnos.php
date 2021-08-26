@@ -1,6 +1,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">Lista de alumnos</div>
     <div class="panel-body">
+        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."reporte/listaalumnos?idgrupo=".$idgrupo ?>" class="btn btn-success">Descargar Lista</a>
         <table class="table table-striped" id="tabla">
             <thead>
                 <tr>
