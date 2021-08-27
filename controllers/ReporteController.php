@@ -500,7 +500,7 @@ class ReporteController extends Controller
             }
         }
 
-        $pdf->Output('I', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
+        $pdf->Output('D', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
     }
 
     public function actionHorarioprofesor()
