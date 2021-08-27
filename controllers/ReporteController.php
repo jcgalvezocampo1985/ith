@@ -405,26 +405,33 @@ class ReporteController extends Controller
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
+        $idciclo = Html::encode($_REQUEST['idciclo']);
 
         $sql_encabezado = "SELECT
                                *
                            FROM
                                 boleta_estudiante_encabezado, grupos
                            WHERE
-                                grupos.idgrupo = :idgrupo";
+                                grupos.idgrupo = :idgrupo
+                           AND
+                                grupos.idciclo= :idciclo";
         $encabezado = Yii::$app->db->createCommand($sql_encabezado)
                                    ->bindValue(':idgrupo', $idgrupo)
+                                   ->bindValue(':idciclo', $idciclo)
                                    ->queryOne();
 
         $sql_estudiantes = "SELECT
                                 estudiantes.idestudiante,
     	                        estudiantes.nombre_estudiante,
 	                            estudiantes.sexo,
-	                            cat_opcion_curso.desc_opcion_curso
+	                            cat_opcion_curso.desc_opcion_curso,
+                                cat_materias.desc_materia
                             FROM
     	                        estudiantes
 	                        INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
 	                        INNER JOIN cat_opcion_curso ON grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso
+	                        INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
+	                        INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
                             WHERE
                                 grupos_estudiantes.idgrupo = :idgrupo";
         $cuerpo = Yii::$app->db->createCommand($sql_estudiantes)
@@ -435,6 +442,8 @@ class ReporteController extends Controller
         $fecha = date('Y-m-d');
         $carrera = $encabezado['desc_carrera'];
         $plan = $encabezado['plan_estudios'];
+        $materia = $cuerpo[0]['desc_materia'];
+        $grupo = $encabezado['desc_grupo'];
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -458,9 +467,13 @@ class ReporteController extends Controller
         $pdf->Text(30, 65, utf8_decode($carrera));
         $pdf->Text(12, 70, utf8_decode('PLAN:'));
         $pdf->Text(30, 70, utf8_decode($plan));
+        $pdf->Text(12, 75, utf8_decode('MATERIA:'));
+        $pdf->Text(30, 75, utf8_decode($materia));
+        $pdf->Text(12, 80, utf8_decode('GRUPO:'));
+        $pdf->Text(30, 80, utf8_decode($grupo));
 
         $pdf->SetFont('Montserrat-Bold', '', 8);
-        $pdf->SetXY(12, 80);
+        $pdf->SetXY(12, 85);
         $pdf->Cell(10, 5, 'NO.', 1, 0, 'C');
         $pdf->Cell(30, 5, 'NO. CONTROL', 1, 0, 'C');
         $pdf->Cell(110, 5, 'ESTUDIANTE', 1, 0, 'C');
@@ -487,12 +500,28 @@ class ReporteController extends Controller
             }
         }
 
-        $pdf->Output('D', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
+        $pdf->Output('I', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
     }
 
     public function actionHorarioprofesor()
     {
-        //$idgrupo = Html::encode($_REQUEST['idgrupo']);
+        //$idprofesor = Html::encode($_REQUEST['idprofesor']);
+        //$idciclo = Html::encode($_REQUEST['idciclo']);
+        $idprofesor = 25;
+        $idciclo = 1;
+
+        $sql_materias = "SELECT
+                            *
+                         FROM
+                            horario_profesor_v
+                         WHERE
+                            idprofesor =:idprofesor
+                         AND
+                            idciclo = :idciclo";
+        $cuerpo = Yii::$app->db->createCommand($sql_materias)
+                               ->bindValue(':idprofesor', $idprofesor)
+                               ->bindValue(':idciclo', $idciclo)
+                               ->queryAll();
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -510,24 +539,193 @@ class ReporteController extends Controller
         $pdf->SettextColor(0, 0, 0);
         $url_header = Yii::$app->basePath.'/web/img/SEP1.png';
         $pdf->Image($url_header, 5, 7, 70);
-        $pdf->Rect(5, 5, 270, 25);
-        $pdf->Line(75, 5, 75, 30);
-        $pdf->Line(200, 5, 200, 30);
-        $pdf->Line(75, 18, 275, 18);
-        $pdf->Text(115, 16, "Horario de Trabajo");
+        $pdf->Rect(5, 5, 270, 20);
+        $pdf->Line(75, 5, 75, 25);
+        $pdf->Line(200, 5, 200, 25);
+        $pdf->Line(75, 15, 200, 15);
+        $pdf->Text(115, 13, "Horario de Trabajo");
         $pdf->SetFont('Montserrat-SemiBold', '', 10);
-        $pdf->Text(105, 27, "Referencia a la Norma ISO 9001:2015");
+        $pdf->Text(105, 22, "Referencia a la Norma ISO 9001:2015");
+        $pdf->Line(200, 18, 275, 18);
         $pdf->Line(200, 12, 275, 12);
-        $pdf->Line(220, 5, 220, 30);
+        $pdf->Line(220, 5, 220, 25);
         $pdf->Text(202, 10, utf8_decode("Código:"));
         $pdf->Text(227, 10, utf8_decode("TecNM-AC-PO-003-01"));
         $pdf->Text(202, 16, utf8_decode("Revisión:"));
         $pdf->Text(245, 16, "0");
-        $pdf->Text(202, 27, utf8_decode("Página"));
-        $pdf->Text(242, 27, utf8_decode("1 de 2"));
+        $pdf->Text(202, 23, utf8_decode("Página"));
+        $pdf->Text(242, 23, utf8_decode("1 de 2"));
 
-        $pdf->Rect(5, 40, 270, 40);
+        $pdf->Rect(5, 30, 270, 41);
+        $pdf->Line(5, 36, 275, 36);//HORIZONTAL
+        $pdf->Text(7, 34, utf8_decode("INSTITUTO TECNOLÓGICO DE:"));
+        $pdf->Line(75, 30, 75, 36);//VERTICAL
+        $pdf->Line(130, 30, 130, 71);//VERTICAL
+        $pdf->Text(131, 34, utf8_decode("C.C.T.:"));
+        $pdf->Line(147, 30, 147, 71);//VERTICAL
+        $pdf->Line(164, 36, 164, 71);//VERTICAL
+        $pdf->Line(180, 30, 180, 36);//VERTICAL
+        $pdf->Text(181, 34, utf8_decode("PERIODO ESCOLAR"));
+        $pdf->Line(225, 30, 225, 36);//VERTICAL
+
+        $pdf->SetFont('Montserrat-SemiBold', '', 7);
+        $pdf->Text(6, 39, utf8_decode("NOMBRE COMPLETO:"));
+        $pdf->Text(165, 39, utf8_decode("CLAVE COMPLETA DE LA(S) PLAZA(S):"));
+        $pdf->Line(5, 41, 164, 41);//HORIZONTAL
+
+        $pdf->Text(6, 44, utf8_decode("ESCOLARIDAD DEL PERSONAL"));
+        $pdf->Text(131, 44, utf8_decode("PASANTE"));
+        $pdf->Text(148, 44, utf8_decode("TITULADO"));
+        $pdf->Line(5, 46, 164, 46);//HORIZONTAL
+
+        $pdf->Text(6, 49, utf8_decode("LICENCIATURA EN:"));
+        $pdf->Line(5, 51, 275, 51);//HORIZONTAL
+
+        $pdf->Text(6, 54, utf8_decode("ESPECIALIZACIÓN EN:"));
+        $pdf->Text(165, 54, utf8_decode("TIPO DE NOMBRAMIENTO:"));
+        $pdf->Text(222, 54, utf8_decode("FECHA DE INGRESO A LA S.E.P.:"));
+        $pdf->Line(221, 51, 221, 71);//VERTICAL
+        $pdf->Line(5, 56, 164, 56);//HORIZONTAL
+
+        $pdf->Text(6, 59, utf8_decode("MAESTRÍA EN:"));
+        $pdf->Line(5, 61, 275, 61);//HORIZONTAL
+
+        $pdf->Text(6, 64, utf8_decode("DOCTORADO EN:"));
+        $pdf->Text(165, 64, utf8_decode("NO. DE TARJETA DE CONTROL:"));
+        $pdf->Text(222, 64, utf8_decode("FECHA DE INGRESO A LA INSTITUCIÓN:"));
+        $pdf->Line(5, 66, 164, 66);//HORIZONTAL
+
+        $pdf->Text(6, 69, utf8_decode("UNIDAD ORGÁNICA DE ADSCRIPCIÓN:"));
+
+        $pdf->SetFont('Montserrat-SemiBold', '', 10);
+        $pdf->Text(6, 77, utf8_decode("I.- CARGA ACADÉMICA"));
+
+        $pdf->SetFont('Montserrat-Bold', '', 7);
+        $pdf->SetFillColor(191, 191, 191);
+        $pdf->SetXY(6, 80);
+        $pdf->Cell(85, 12, "ASIGNATURA", 1, 0, 'C', true);
+        $pdf->Cell(14, 12, "GRUPO", 1, 0, 'C', true);
+        $pdf->MultiCell(14, 4, "ESTU-\nDIANTES\n ", 1, 'C', true);
+        $pdf->SetXY(119, 80);
+        $pdf->MultiCell(15, 4, "AULA\nTALLER o\nLAB.", 1, 'C', true);
+        $pdf->SetXY(134, 80);
+        $pdf->Cell(12, 12, "NIVEL", 1, 0, 'C', true);
+        $pdf->SetXY(146, 80);
+        $pdf->MultiCell(15, 4, "MODALI-\nDAD\n ", 1, 'C', true);
+        $pdf->SetXY(161, 80);
+        $pdf->Cell(14, 12, "CARRERA", 1, 0, 'C', true);
+        $pdf->Cell(80, 6, "HORARIO", 1, 0, 'C', true);
+        $pdf->SetXY(175, 86);
+        $pdf->Cell(16, 6, "L", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "M", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "M", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "J", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "V", 1, 0, 'C', true);
+        $pdf->SetXY(255, 80);
+        $pdf->MultiCell(20, 6, "TOTAL HRS\nSEMANALES", 1, 'C', true);
+        $pdf->Ln();
+
+        $pdf->SetY(92);
+        $pdf->SetFont('Montserrat-regular', '', 6.5);
+        foreach($cuerpo as $row)
+        {
+            $pdf->SetX(6);
+            $pdf->Cell(85, 5, utf8_decode($row['desc_materia']), 1, 0, 'L');
+            $pdf->Cell(14, 5, utf8_decode($row['desc_grupo']), 1, 0, 'L');
+            $pdf->Cell(14, 5, "", 1, 0, 'L');
+            $pdf->Cell(15, 5, utf8_decode($row['aula']), 1, 0, 'L');
+            $pdf->Cell(12, 5, "", 1, 0, 'L');
+            $pdf->Cell(15, 5, "", 1, 0, 'L');
+            $pdf->Cell(14, 5, "", 1, 0, 'L');
+            $pdf->Cell(16, 5, $row['lunes'], 1, 0, 'C');
+            $pdf->Cell(16, 5, $row['martes'], 1, 0, 'C');
+            $pdf->Cell(16, 5, $row['miercoles'], 1, 0, 'C');
+            $pdf->Cell(16, 5, $row['jueves'], 1, 0, 'C');
+            $pdf->Cell(16, 5, $row['viernes'], 1, 0, 'C');
+            $pdf->Cell(20, 5, "", 1, 0, 'L');
+            $pdf->Ln();
+        }
+        $pdf->SetX(6);
+        $pdf->Cell(169, 5, utf8_decode("PREPARACIÓN, CONTROL Y EVALUACIÓN DE MATERIAS QUE IMPARTE"), 1, 0, 'L');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(20, 5, "", 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetX(6);
+        $pdf->Cell(169, 5, "SUBTOTAL     ", 1, 0, 'R');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(20, 5, "", 1, 0, 'C');
+
+        $y = $pdf->GetY();
+        $pdf->SetFont('Montserrat-SemiBold', '', 10);
+        $pdf->Text(6, $y+10, utf8_decode("II.- ACTIVIDADES DE APOYO A LA DOCENCIA"));
+
+        $pdf->SetFont('Montserrat-Bold', '', 7);
+        $pdf->SetXY(6, $y+13);
+        $pdf->Cell(140, 12, "NOMBRE DE LA ACTIVIDAD", 1, 0, 'C', true);
+        $pdf->Cell(29, 12, "METAS A ATENDER", 1, 0, 'C', true);
+        $pdf->SetXY(175, $y+13);
+        $pdf->Cell(80, 6, "HORARIO", 1, 0, 'C', true);
+        $pdf->SetXY(175, $y+19);
+        $pdf->Cell(16, 6, "L", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "M", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "M", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "J", 1, 0, 'C', true);
+        $pdf->Cell(16, 6, "V", 1, 0, 'C', true);
+        $pdf->SetXY(255, $y+13);
+        $pdf->MultiCell(20, 6, "TOTAL HRS\nSEMANALES", 1, 'C', true);
+        $pdf->Ln();
+
+        $actividades = array('ORGANIZAR Y REALIZAR ACTIVIDADES DE CAPACITACIÓN Y SUPERACIÓN DOCENTE',
+                             'PRESTAR ASESORÍAS DOCENTES A ESTUDIANTES Y PASANTES',
+                             'DEFINIR, ADECUAR, PLANEAR, DIRIGIR, COORDINAR Y EVALUAR PROYECTOS Y PROGRAMAS DOCENTES',
+                             'DISEÑAR O PRODUCIR MATERIALES DIDÁCTICOS',
+                             'ACTIVIDADES DE APOYO A LA DOCENCIA Y A LA INVESTIGACIÓN',
+                             'PRESTAR  ASESORÍAS EN PROYECTOS EXTERNOS Y LABORES DE EXTENSIÓN',
+                             'PRESTAR ASESORÍAS EN SERVICIO SOCIAL'
+                            );
+
+        $pdf->SetXY(6, $y+25);
+        $pdf->SetFont('Montserrat-regular', '', 7);
+        for($i = 0; $i < count($actividades); $i++)
+        {
+            $pdf->SetX(6);
+            $pdf->Cell(140, 5, utf8_decode($actividades[$i]), 1, 0, 'L');
+            $pdf->Cell(29, 5, "", 1, 0, 'C');
+            $pdf->Cell(16, 5, "", 1, 0, 'C');
+            $pdf->Cell(16, 5, "", 1, 0, 'C');
+            $pdf->Cell(16, 5, "", 1, 0, 'C');
+            $pdf->Cell(16, 5, "", 1, 0, 'C');
+            $pdf->Cell(16, 5, "", 1, 0, 'C');
+            $pdf->Cell(20, 5, "", 1, 0, 'C');
+            $pdf->Ln();
+        }
+        $pdf->SetX(6);
+        $pdf->Cell(169, 5, "SUBTOTAL     ", 1, 0, 'R');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(20, 5, "", 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetX(6);
+        $pdf->Cell(169, 5, "TOTAL     ", 1, 0, 'R');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(16, 5, "", 1, 0, 'C');
+        $pdf->Cell(20, 5, "", 1, 0, 'C');
         
+
         $pdf->Output('I', 'horario.pdf');
     }
 }

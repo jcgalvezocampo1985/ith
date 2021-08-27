@@ -1,7 +1,12 @@
+<?php
+
+use yii\helpers\Html;
+$idciclo = $_GET["idciclo"];
+?>
 <div class="panel panel-primary">
     <div class="panel-heading">Lista de alumnos</div>
     <div class="panel-body">
-        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."reporte/listaalumnos?idgrupo=".$idgrupo ?>" class="btn btn-success">Descargar Lista</a>
+        <?= Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]) ?>
         <table class="table table-striped" id="tabla">
             <thead>
                 <tr>

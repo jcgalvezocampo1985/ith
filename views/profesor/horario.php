@@ -26,6 +26,14 @@ $this->title = 'Profesores';
             <?php $f->end() ?>
         </div>
         <div class="col-md-12">
+            <h4><span class="label label-warning"><?php
+            if($idciclo){
+                echo $model[0]['desc_ciclo'];
+            }else{
+                echo $ciclo_actual;
+            }
+            ?>
+            </span></h4>
             <hr width="100%">
             <table class="table table-striped" id="tabla">
                 <thead>
@@ -98,7 +106,7 @@ $this->title = 'Profesores';
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos" >Lista</a>
+                                        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos">Lista</a>
                                     </li>
                                 </ul>
                             </div>

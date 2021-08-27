@@ -265,6 +265,7 @@ class ProfesorController extends Controller
     {
         $form = new CicloSearch;
         $idciclo = null;
+        $ciclo = Ciclo::find()->where(["idciclo" => Ciclo::find()->max("idciclo")])->one();
 
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
@@ -308,10 +309,10 @@ class ProfesorController extends Controller
 	                    idciclo = (SELECT MAX(idciclo) FROM ciclo)";
             $model = Yii::$app->db->createCommand($sql)
                                   ->bindValue(':idprofesor', $idprofesor)
-                                  ->queryAll();         
+                                  ->queryAll();
         }
 
-        return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo]);
+        return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo, 'ciclo_actual' => $ciclo->desc_ciclo]);
     }
 
     public function actionListaalumnos()
