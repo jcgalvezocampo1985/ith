@@ -75,7 +75,7 @@ $this->title = 'Profesores';
                             $dia4 = explode("-", $viernes);
                             $viernes = $dia4[0]."-\n".$dia4[1];
                         }
-                        if($sabado){
+                        if($sabado != ""){
                             $dia5 = explode("-", $sabado);
                             $sabado = $dia5[0]."-\n".$dia5[1];
                         }
