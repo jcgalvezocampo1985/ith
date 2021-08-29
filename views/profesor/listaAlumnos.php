@@ -7,7 +7,7 @@ $idciclo = $_GET["idciclo"];
     <div class="panel-heading">Lista de alumnos</div>
     <div class="panel-body">
         <?= Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]) ?>
-        <table class="table table-striped" id="tabla">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>No. Control</th>

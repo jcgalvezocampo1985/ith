@@ -1,52 +1,22 @@
--- ----------------------------
--- Table structure for profesores
--- ----------------------------
-DROP TABLE IF EXISTS `profesores`;
-CREATE TABLE `profesores`  (
-  `idprofesor` int(11) NOT NULL AUTO_INCREMENT,
-  `curp` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
-  `nombre_profesor` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `apaterno` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `amaterno` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `fecha_registro` datetime NULL DEFAULT current_timestamp,
-  `fecha_actualizacion` datetime NULL DEFAULT current_timestamp,
-  `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'VIG',
-  PRIMARY KEY (`idprofesor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for roles_usuarios
--- ----------------------------
-DROP TABLE IF EXISTS `roles_usuarios`;
-CREATE TABLE `roles_usuarios`  (
-  `idusuario` int(11) NOT NULL,
-  `idrol` int(11) NOT NULL,
-  INDEX `fk_table1_cat_roles1_idx`(`idrol`) USING BTREE,
-  INDEX `fk_table1_usuarios1_idx`(`idusuario`) USING BTREE,
-  CONSTRAINT `fk_table1_cat_roles1` FOREIGN KEY (`idrol`) REFERENCES `cat_roles` (`idrol`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_table1_usuarios1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+ALTER TABLE usuarios
+MODIFY `nombre_usuario` VARCHAR(50) NOT NULL,
+CHANGE COLUMN `contrasenia` `password` VARCHAR(250) NOT NULL AFTER `nombre_usuario`,
+CHANGE COLUMN `cve_estatus` `cve_estatus` VARCHAR(3) NOT NULL AFTER `password`,
+ADD COLUMN `curp` varchar(20) NOT NULL AFTER `idusuario`,
+ADD COLUMN `email` varchar(100) NOT NULL AFTER `nombre_usuario`,
+ADD COLUMN `authKey` varchar(250) NOT NULL AFTER `cve_estatus`,
+ADD COLUMN `accessToken` varchar(250) NOT NULL AFTER `authKey`,
+ADD COLUMN `activate` TINYINT(1) NOT NULL AFTER `accessToken`,
+ADD COLUMN `verification_code` varchar(250) NOT NULL AFTER `fecha_actualizacion`;
 
+INSERT INTO `usuarios` VALUES (5, 'GAOJ850722HTCLCN05', 'Juan Carlos', 'jcgalvezocampo@gmail.com', 'itNwR7nhba4nc', '', 'ae6ed01d0462b66a67b4684ee50901764eaf7e2449a7cd7cef9ed285c70e75f3ed4d8e6a6b73b154a5db93dd867420f1b44816d43c1d7e3c621c696a42c1ba666ebfd7d152b18301febabc2fae14a3de9656843c436b1d0718195d5a981a816d5b15bbd7', 'c98148bf9f22e572fa4123e6e6a05e9ac144936f8d84e5f60a0d1b03c2840953219ce83b84fb2413ec9ebaa7ef017451a910c28b43ca026302dacd2371d2f48f4543f0ed5cb9c89f34f93b85207afa717a60a812ac041d1a735c599e30d02b0f6f6735ae', 1, NULL, NULL, 'f0ae8928');
 
--- ----------------------------
--- Table structure for usuarios
--- ----------------------------
-DROP TABLE IF EXISTS `usuarios`;
-CREATE TABLE `usuarios`  (
-  `idusuario` int(11) NOT NULL AUTO_INCREMENT,
-  `curp` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `nombre_usuario` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `authKey` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `accessToken` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `activate` tinyint(1) NOT NULL DEFAULT 0,
-  `fecha_registro` datetime NULL DEFAULT NULL,
-  `fecha_actualizacion` datetime NULL DEFAULT NULL,
-  `verification_code` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`idusuario`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+ALTER TABLE profesores
+ADD COLUMN `curp` varchar(20) NOT NULL AFTER `idprofesor`;
+
+UPDATE profesores SET `CURP` = 'GAOJ850722HTCLCN05' WHERE `idprofesor` = 25;
+
 
 -- ----------------------------
 -- View structure for boleta_detalle_v
@@ -59,12 +29,12 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_detalle_v` AS SEL
 `cat_materias`.`cve_materia` AS `cve_materia`,
 `grupos`.`desc_grupo_corto` AS `desc_grupo`,
 CASE
-		WHEN `actas_calificaciones`.`idopcion_curso` = 2 THEN	'REP' 
-		WHEN `actas_calificaciones`.`idopcion_curso` = 3 THEN	'ESP' 
-		WHEN `actas_calificaciones`.`idopcion_curso` = 4 THEN	'DUAL' 
-		WHEN `actas_calificaciones`.`idopcion_curso` = 5 THEN 'AUT'
-		ELSE 'ORD' 
-	END AS `opc_curso`,
+	WHEN `actas_calificaciones`.`idopcion_curso` = 2 THEN 'REP' 
+	WHEN `actas_calificaciones`.`idopcion_curso` = 3 THEN 'ESP' 
+	WHEN `actas_calificaciones`.`idopcion_curso` = 4 THEN 'DUAL' 
+	WHEN `actas_calificaciones`.`idopcion_curso` = 5 THEN 'AUT'
+	ELSE 'ORD' 
+END AS `opc_curso`,
 	`cat_materias`.`creditos` AS `creditos`,
 IF
 	( `actas_calificaciones`.`seg_opt` = '', `actas_calificaciones`.`pri_opt`, `actas_calificaciones`.`seg_opt` ) AS `calificacion` 
@@ -72,7 +42,7 @@ FROM
 	(( `actas_calificaciones` JOIN `grupos` ) JOIN `cat_materias` ) 
 WHERE
 	`actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` 
-	AND `grupos`.`idmateria` = `cat_materias`.`idmateria`; ;
+	AND `grupos`.`idmateria` = `cat_materias`.`idmateria`;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
@@ -83,9 +53,9 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 `a`.`nombre_estudiante` AS `nombre_estudiante`,
 `b`.`desc_carrera` AS `desc_carrera`,
 `b`.`plan_estudios` AS `plan_estudios`,
-`a`.`num_semestre` AS `num_semestre` 
+`a`.`num_semestre` AS `num_semestre`
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ); ;
+	( `estudiantes` `a` JOIN `cat_carreras` `b` );
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -138,7 +108,7 @@ FROM
 WHERE
 	`a`.`idgrupo` = `b`.`idgrupo` 
 	AND `b`.`idmateria` = `c`.`idmateria` 
-	AND `b`.`idprofesor` = `d`.`idprofesor` ; ;
+	AND `b`.`idprofesor` = `d`.`idprofesor` ;
 
 -- ----------------------------
 -- View structure for horario_profesor_v

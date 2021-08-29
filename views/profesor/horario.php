@@ -26,16 +26,10 @@ $this->title = 'Profesores';
             <?php $f->end() ?>
         </div>
         <div class="col-md-12">
-            <h4><span class="label label-warning"><?php
-            if($idciclo){
-                echo $model[0]['desc_ciclo'];
-            }else{
-                echo $ciclo_actual;
-            }
-            ?>
-            </span></h4>
+            <h4><span class="label label-warning"><?= $ciclo_actual ?></span></h4>
             <hr width="100%">
-            <table class="table table-striped" id="tabla">
+            <div class="table-responsive">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Carrera</th>
@@ -115,6 +109,7 @@ $this->title = 'Profesores';
                     <?php endforeach ?>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 </div>
