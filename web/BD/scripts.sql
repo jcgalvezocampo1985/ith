@@ -1,3 +1,104 @@
+DROP TABLE IF EXISTS `usuarios` ;
+
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `idusuario` INT NOT NULL,
+  `nombre_usuario` VARCHAR(45) NULL,
+  `curp` VARCHAR(20) NULL,
+  `contrasenia` VARCHAR(12) NULL,
+  `fecha_registro` DATETIME NULL,
+  `fecha_actualizacion` DATETIME NULL,
+  `cve_estatus` VARCHAR(3) NULL,
+  PRIMARY KEY (`idusuario`))
+ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `cat_roles` ;
+
+CREATE TABLE IF NOT EXISTS `cat_roles` (
+  `idrol` INT NOT NULL,
+  `desc_rol` VARCHAR(15) NULL,
+  PRIMARY KEY (`idrol`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `roles_usuarios`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `roles_usuarios` ;
+
+CREATE TABLE IF NOT EXISTS `roles_usuarios` (
+  `idusuario` INT NOT NULL,
+  `idrol` INT NOT NULL,
+  CONSTRAINT `fk_table1_usuarios1`
+    FOREIGN KEY (`idusuario`)
+    REFERENCES `usuarios` (`idusuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_table1_cat_roles1`
+    FOREIGN KEY (`idrol`)
+    REFERENCES `cat_roles` (`idrol`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_table1_usuarios1_idx` ON `roles_usuarios` (`idusuario` ASC);
+
+CREATE INDEX `fk_table1_cat_roles1_idx` ON `roles_usuarios` (`idrol` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `modulos_rol`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `modulos_rol` ;
+
+CREATE TABLE IF NOT EXISTS `modulos_rol` (
+  `idmodulo` INT NOT NULL,
+  `desc_modulo` VARCHAR(15) NULL,
+  PRIMARY KEY (`idmodulo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `permisos_rol`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `permisos_rol` ;
+
+CREATE TABLE IF NOT EXISTS `permisos_rol` (
+  `idpermiso` INT NOT NULL,
+  `idmodulo` INT NOT NULL,
+  `idrol` INT NOT NULL,
+  `ALTA` VARCHAR(1) NULL,
+  `BAJA` VARCHAR(1) NULL,
+  `MODIFICACION` VARCHAR(1) NULL,
+  `CONSULTA` VARCHAR(1) NULL,
+  `EJECUCION` VARCHAR(1) NULL,
+  PRIMARY KEY (`idpermiso`),
+  CONSTRAINT `fk_permisos_rol_modulos_rol1`
+    FOREIGN KEY (`idmodulo`)
+    REFERENCES `modulos_rol` (`idmodulo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_permisos_rol_cat_roles1`
+    FOREIGN KEY (`idrol`)
+    REFERENCES `cat_roles` (`idrol`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_permisos_rol_modulos_rol1_idx` ON `permisos_rol` (`idmodulo` ASC);
+
+CREATE INDEX `fk_permisos_rol_cat_roles1_idx` ON `permisos_rol` (`idrol` ASC);
+
+
+-- -----------------------------------------------------
+-- Data for table `cat_roles`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (1, 'Administrador');
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (2, 'Escolares');
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (3, 'Profesor');
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (4, 'dep');
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (5, 'Estudiante');
+INSERT INTO `cat_roles` (`idrol`, `desc_rol`) VALUES (6, 'consulta');
 
 ALTER TABLE usuarios
 MODIFY `nombre_usuario` VARCHAR(50) NOT NULL,
