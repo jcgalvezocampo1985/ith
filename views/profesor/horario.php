@@ -54,7 +54,7 @@ $this->title = 'Profesores';
                         $jueves = $row['jueves'];
                         $viernes = $row['viernes'];
                         $sabado = $row['sabado'];
-
+/*
                         if($lunes){
                             $dia = explode("-", $lunes);
                             $lunes = $dia[0]."-\n".$dia[1];
@@ -75,10 +75,14 @@ $this->title = 'Profesores';
                             $dia4 = explode("-", $viernes);
                             $viernes = $dia4[0]."-\n".$dia4[1];
                         }
-                        if($sabado != ""){
+                        if($sabado){
                             $dia5 = explode("-", $sabado);
-                            $sabado = $dia5[0]."-\n".$dia5[1];
-                        }
+                            if($dia5){
+                                $sabado = $dia5[0]."-\n".$dia5[1];
+                            }else{
+                                
+                            }
+                        }*/
                     ?>
                     <tr>
                         <td><?= $row['desc_carrera'] ?></td>
