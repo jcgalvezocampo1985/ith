@@ -6,7 +6,12 @@ $idciclo = $_GET["idciclo"];
 <div class="panel panel-primary">
     <div class="panel-heading">Lista de alumnos</div>
     <div class="panel-body">
-        <?= Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]) ?>
+        <?php
+        if(count($model) > 0){
+            echo Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]);
+        }
+        ?>
+        
         <table class="table table-striped">
             <thead>
                 <tr>

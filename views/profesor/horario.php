@@ -75,14 +75,14 @@ $this->title = 'Profesores';
                             $dia4 = explode("-", $viernes);
                             $viernes = $dia4[0]."-\n".$dia4[1];
                         }
-                        if($sabado){
+                        
+                        //if($sabado){
                             $dia5 = explode("-", $sabado);
-                            if($dia5){
+                            print_r($dia5);
+                            if(count($dia5)){
                                 $sabado = $dia5[0]."-\n".$dia5[1];
-                            }else{
-                                
                             }
-                        }*/
+                        //}*/
                     ?>
                     <tr>
                         <td><?= $row['desc_carrera'] ?></td>
