@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use Fpdf\Fpdf;
 
 use app\models\User;
+use app\models\Ciclo;
 
 class PDF extends FPDF
 {
@@ -405,7 +406,9 @@ class ReporteController extends Controller
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
-        $idciclo = Html::encode($_REQUEST['idciclo']);
+        $idciclo1 = Html::encode($_REQUEST['idciclo']);
+
+        $idciclo = ($idciclo1 != "") ? $idciclo1 : Ciclo::find()->max("idciclo");
 
         $sql_encabezado = "SELECT
                                *
