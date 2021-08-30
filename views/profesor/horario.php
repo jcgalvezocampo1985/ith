@@ -95,19 +95,8 @@ $this->title = 'Profesores';
                         <td><?= $jueves ?></td>
                         <td><?= $viernes ?></td>
                         <td><?= $sabado ?></td>
-                        <td style="min-width: 90px;">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info btn-xs">Acción</button>
-                                <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo" data-toggle="modal" data-target="#grupos">Lista</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <td>
+                            <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."profesor/listaalumnos=".$row['idgrupo'] ?>" class="idgrupo btn btn-success" data-toggle="modal" data-target="#grupos">Lista</a>
                         </td>
                     </tr>
                     <?php endforeach ?>

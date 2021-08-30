@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use Fpdf\Fpdf;
 
 use app\models\User;
+use app\models\Ciclo;
 
 class PDF extends FPDF
 {
@@ -405,7 +406,9 @@ class ReporteController extends Controller
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
-        $idciclo = Html::encode($_REQUEST['idciclo']);
+        $idciclo1 = Html::encode($_REQUEST['idciclo']);
+
+        $idciclo = ($idciclo1 != "") ? $idciclo1 : Ciclo::find()->max("idciclo");
 
         $sql_encabezado = "SELECT
                                *
@@ -433,9 +436,12 @@ class ReporteController extends Controller
 	                        INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
 	                        INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
                             WHERE
-                                grupos_estudiantes.idgrupo = :idgrupo";
+                                grupos_estudiantes.idgrupo = :idgrupo
+                            AND
+                                grupos.idciclo = :idciclo";
         $cuerpo = Yii::$app->db->createCommand($sql_estudiantes)
                                ->bindValue(':idgrupo', $idgrupo)
+                               ->bindValue(':idciclo', $idciclo)
                                ->queryAll();
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);

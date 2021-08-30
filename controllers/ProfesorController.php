@@ -264,8 +264,8 @@ class ProfesorController extends Controller
     public function actionHorario()
     {
         $form = new CicloSearch;
-        $idciclo = null;
-        $ciclo = Ciclo::find()->where(["idciclo" => Ciclo::find()->max("idciclo")])->one();
+        $idciclo = Ciclo::find()->max("idciclo");
+        $ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->one();
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
         $idprofesor = $sql_profesor->idprofesor;
@@ -312,7 +312,7 @@ class ProfesorController extends Controller
             
         }
 
-        $ciclo_actual = ($idciclo) ? $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
+        $ciclo_actual = ($idciclo) ? (count($model) > 0) ? $model[0]['desc_ciclo'] : $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
 
         return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo, 'ciclo_actual' => $ciclo_actual]);
     }
@@ -323,6 +323,7 @@ class ProfesorController extends Controller
 
         if(Yii::$app->request->get("idgrupo"))
         {
+
             $idgrupo = Html::encode($_GET["idgrupo"]);
 
             $query = "SELECT
