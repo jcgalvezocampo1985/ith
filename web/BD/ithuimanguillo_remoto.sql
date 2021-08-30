@@ -11,7 +11,7 @@
  Target Server Version : 100512
  File Encoding         : 65001
 
- Date: 17/08/2021 10:00:43
+ Date: 28/08/2021 23:40:59
 */
 
 SET NAMES utf8mb4;
@@ -2218,7 +2218,7 @@ CREATE TABLE `cat_materias`  (
   `fecha_actualizacion` datetime NULL DEFAULT NULL,
   `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idmateria`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 69 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 129 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of cat_materias
@@ -2245,7 +2245,7 @@ INSERT INTO `cat_materias` VALUES (19, 'AEF-1025', 'ESTADISTICA INFERENCIAL II',
 INSERT INTO `cat_materias` VALUES (20, 'ASC-1003', 'BASE DE DATOS Y SISTEMAS DE INFORMACIÓN GEOGRÁFICA', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (21, 'ACF-0905', 'ECUACIONES DIFERENCIALES', 5, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (22, 'ACF-0901', 'CÁLCULO DIFERENCIAL', 5, NULL, NULL, NULL);
-INSERT INTO `cat_materias` VALUES (23, 'ACF-0902', 'CÁLCULO INTEGRAL', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (23, 'ACF-0902.', 'CÁLCULO INTEGRAL', 5, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (24, 'PEQ-1009', 'ECONOMÍA', 3, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (25, 'TDF-1803', 'TALLER DE COMERCIO INTERNACIONAL', 5, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (26, 'TDC-1805', 'NEGOCIOS INTERNACIONALES', 5, NULL, NULL, NULL);
@@ -2258,7 +2258,7 @@ INSERT INTO `cat_materias` VALUES (32, 'LOC-0911', 'ENTORNO ECONÓMICO', 4, NULL
 INSERT INTO `cat_materias` VALUES (33, 'LOC-0928', 'SERVICIO AL CLIENTE', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (34, 'TDC-1804', 'ADMINISTRACIÓN ESTRATÉGICA', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (35, 'ASF-1014', 'INTRODUCCIÓN A LA AGRICULTURA PROTEGIDA', 5, NULL, NULL, NULL);
-INSERT INTO `cat_materias` VALUES (36, 'ASF-1009', 'BOTÁNICA APLICADA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (36, 'ASF-1006', 'BOTÁNICA APLICADA', 5, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (37, 'ACA-0909', 'TALLER DE INVESTIGACIÓN I', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (38, 'LOF-0931', 'TRÁFICO Y TRANSPORTE', 5, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (39, 'LOD-0915', 'GEOGRAFÍA PARA EL TRANSPORTE', 5, NULL, NULL, NULL);
@@ -2291,6 +2291,66 @@ INSERT INTO `cat_materias` VALUES (65, 'LOH-0902', 'BASE DE DATOS', 4, NULL, NUL
 INSERT INTO `cat_materias` VALUES (66, 'TDC-1801', 'TALLER DE COACHING', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (67, 'LOE-0922', 'INVESTIGACIÓN DE OPERACIONES II', 4, NULL, NULL, NULL);
 INSERT INTO `cat_materias` VALUES (68, 'ASF-1010', 'ESTADÍSTICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (69, 'AEQ-1064', 'TECNOLOGÍAS DE LA INFORMACIÓN Y LAS COMUNICACIONES', 3, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (70, 'AEC-1037', 'INGENIERÍA ECONÓMICA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (71, 'AED-1044', 'MERCADOTECNIA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (72, 'PEQ-1001', 'ADMINISTRACIÓN', 3, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (73, 'FIF-1802', 'BIOTECNOLOGÍA VEGETAL', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (74, 'ASF-1015', 'MÉTODOS ESTADÍSTICOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (75, 'ASF-1016', 'NUTRICIÓN VEGETAL', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (76, 'ASD-1020', 'SISTEMA DE PRODUCCIÓN AGRÍCOLA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (77, 'PEC-1004', 'ANÁLISIS NUMÉRICO', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (78, 'PED-1008', 'DINÁMICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (79, 'LOC-0903', 'CADENA DE SUMINISTRO', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (80, 'LOH-0909', 'DIBUJO ASISTIDO POR COMPUTADORA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (81, 'LOC-0925', 'PROCESOS DE FABRICACIÓN Y MANEJO DE MATERIALES', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (82, 'PEA-1005', 'CALIDAD EN LA INDUSTRIA PETROLERA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (83, 'AEF-1024', 'ESTADÍSTICA INFERENCIAL I', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (84, 'LOC-0919', 'INTRODUCCIÓN A LA INGENIERÍA EN LOGÍSTICA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (85, 'LOF-0912', 'FINANZAS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (86, 'LOF-0918', 'INNOVACIÓN', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (87, 'AED-1030', 'FORMULACIÓN Y EVALUACIÓN DE PROYECTOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (88, 'ASC-1013', 'INOCUIDAD ALIMENTARIA Y BIOSEGURIDAD', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (89, 'ACA-0910', 'TALLER DE INVESTIGACIÓN II', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (90, 'PED-1006', 'COMPUTACIÓN PARA INGENIERÍA PETROLERA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (91, 'PEA-1003', 'ANÁLISIS E INTERPRETACIÓN DE PLANOS Y DISEÑO DE INGENIERÍA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (92, 'ASQ-1008', 'DISEÑO AGRÍCOLA ASISTIDO POR  COMPUTADORA', 3, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (93, 'AEM-1066', 'TOPOGRAFÍA', 6, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (94, 'LOC-0914', 'FUNDAMENTOS DE DERECHO', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (95, 'AEF-1042', 'MECÁNICA CLÁSICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (96, 'PED-1020', 'MÉTODOS ELÉCTRICOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (97, 'ASQ-1023', 'TALLER DE ELEMENTOS DE MECÁNICA DE SÓLIDOS', 3, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (98, 'AED-1023', 'ENTOMOLOGÍA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (99, 'AEJ-1028', 'FITOPATOLOGÍA', 6, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (100, 'LOF-0901', 'ALMACENES', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (101, 'ASF-1018', 'PRINCIPIOS DE ELECTROMECÁNICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (102, 'LOC-0913', 'FUNDAMENTOS DE ADMINISTRACIÓN', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (103, 'ASD-1002', 'AGRONEGOCIOS II', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (104, 'PRV-1802', 'ANÁLISIS DE MÉTODO DE PRODUCCIÓN', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (105, 'PED-1015', 'GEOLOGÍA PETROLERA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (106, 'PED-1017', 'INGENIERÍA DE PERFORACIÓN DE POZOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (107, 'AEF-1017', 'ECOLOGÍA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (108, 'PEG-1025', 'QUÍMICA INORGÁNICA', 6, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (109, 'AEF-1056', 'QUÍMICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (110, 'ASF-1004', 'BIOLOGÍA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (111, 'AED-1006', 'BIOQUÍMICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (112, 'ASF-1005', 'BIOLOGÍA MOLECULAR', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (113, 'LOC-0927', 'QUÍMICA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (114, 'ASF-1022', 'SISTEMAS DE RIEGO SUPERFICIAL', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (115, 'ASF-1011', 'FERTIRRIGACIÓN', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (116, 'FID-1801', 'INNOVACIÓN TECNOLOGICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (117, 'PED-1031', 'TERMODINÁMICA', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (118, 'PEQ-1007', 'CONDUCCIÓN Y MANEJO DE HIDROCARBUROS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (119, 'PRF-1803', 'COMPORTAMIENTO DE LOS YACIMIENTOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (120, 'PED-1021', 'PETROFÍSICA Y REGISTRO DE POZOS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (121, 'ACF-0904', 'CÁLCULO VECTORIAL', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (122, 'PRJ-1801', 'SIMULACIÓN NUMÉRICA DE YACIMIENTOS', 6, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (123, 'PED-1013', 'GEOLOGÍA DE EXPLOTACIÓN DEL PETRÓLEO', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (124, 'PED-1024', 'PROPIEDADES DE LOS FLUÍDOS PETROLEROS', 5, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (125, 'LOJ-0917', 'HIGIENE Y SEGURIDAD', 6, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (126, 'LOH-0904', 'COMERCIO INTERNACIONAL', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (127, 'AEC-1018', 'ECONOMÍA', 4, NULL, NULL, NULL);
+INSERT INTO `cat_materias` VALUES (128, 'LOE-0920', 'INVENTARIOS', 4, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for cat_opcion_curso
@@ -2310,6 +2370,26 @@ INSERT INTO `cat_opcion_curso` VALUES (1, 'ORDINARIO', NULL);
 INSERT INTO `cat_opcion_curso` VALUES (2, 'REPETICION', NULL);
 INSERT INTO `cat_opcion_curso` VALUES (3, 'ESPECIAL', NULL);
 INSERT INTO `cat_opcion_curso` VALUES (4, 'DUAL', NULL);
+
+-- ----------------------------
+-- Table structure for cat_roles
+-- ----------------------------
+DROP TABLE IF EXISTS `cat_roles`;
+CREATE TABLE `cat_roles`  (
+  `idrol` int(11) NOT NULL,
+  `desc_rol` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`idrol`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cat_roles
+-- ----------------------------
+INSERT INTO `cat_roles` VALUES (1, 'Administrador');
+INSERT INTO `cat_roles` VALUES (2, 'Escolares');
+INSERT INTO `cat_roles` VALUES (3, 'Profesor');
+INSERT INTO `cat_roles` VALUES (4, 'dep');
+INSERT INTO `cat_roles` VALUES (5, 'Estudiante');
+INSERT INTO `cat_roles` VALUES (6, 'consulta');
 
 -- ----------------------------
 -- Table structure for ciclo
@@ -2599,7 +2679,7 @@ CREATE TABLE `grupos`  (
   CONSTRAINT `fk_grupos_cat_materias1` FOREIGN KEY (`idmateria`) REFERENCES `cat_materias` (`idmateria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_grupos_ciclo1` FOREIGN KEY (`idciclo`) REFERENCES `ciclo` (`idciclo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_grupos_profesores1` FOREIGN KEY (`idprofesor`) REFERENCES `profesores` (`idprofesor`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 73 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 189 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of grupos
@@ -2676,6 +2756,93 @@ INSERT INTO `grupos` VALUES (69, 1, NULL, 2, 65, 22, 'A', 'IV A  ILOG', NULL, NU
 INSERT INTO `grupos` VALUES (70, 1, NULL, 2, 66, 23, 'A', 'VIII A ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `grupos` VALUES (71, 1, NULL, 2, 67, 2, 'A', 'VI A   ILOG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `grupos` VALUES (72, 1, NULL, 1, 68, 2, 'A', 'II A   IIAS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `grupos` VALUES (101, 2, 1, 1, 69, 22, NULL, '1-IAS', NULL, NULL, NULL, '14:00-15:00', '14:00-15:00', '14:00-15:00', '', '', '');
+INSERT INTO `grupos` VALUES (102, 2, 7, 2, 70, 23, NULL, '7-LOG', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '');
+INSERT INTO `grupos` VALUES (103, 2, 5, 2, 71, 14, NULL, '5-LOG', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (104, 2, 3, 3, 72, 14, NULL, '3-PET', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', '');
+INSERT INTO `grupos` VALUES (105, 2, 7, 1, 73, 20, NULL, '7-IAS', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (106, 2, 3, 1, 74, 20, NULL, '3-IAS', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (107, 2, 5, 1, 75, 1, NULL, '5- IAS', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '');
+INSERT INTO `grupos` VALUES (108, 2, 5, 1, 76, 1, NULL, '5- IAS', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (109, 2, 1, 3, 22, 19, NULL, '1-PET 1 ILOG', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (110, 2, 1, 2, 22, 19, NULL, '1-PET 1 ILOG', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (111, 2, 3, 3, 77, 19, NULL, '3-PET', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '');
+INSERT INTO `grupos` VALUES (112, 2, 3, 1, 17, 19, NULL, '3-IAS', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (113, 2, 3, 4, 77, 19, NULL, '3-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
+INSERT INTO `grupos` VALUES (114, 2, 1, 4, 22, 19, NULL, '1-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (115, 2, 3, 3, 78, 15, NULL, '3-PET', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (116, 2, 3, 2, 79, 15, NULL, '3-LOG', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '');
+INSERT INTO `grupos` VALUES (117, 2, 7, 2, 16, 15, NULL, '7-LOG', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '');
+INSERT INTO `grupos` VALUES (118, 2, 3, 4, 78, 15, NULL, '3-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
+INSERT INTO `grupos` VALUES (119, 2, 1, 2, 80, 6, NULL, '1-LOG', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (120, 2, 5, 2, 81, 6, NULL, '5-LOG', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '');
+INSERT INTO `grupos` VALUES (121, 2, 5, 3, 82, 2, NULL, '5-PET', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '');
+INSERT INTO `grupos` VALUES (122, 2, 3, 2, 18, 2, NULL, '3-LOG - 1 IAS', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (123, 2, 1, 1, 18, 2, NULL, '3-LOG - 1 IAS', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (124, 2, 3, 2, 83, 2, NULL, '3-LOG', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (125, 2, 7, 2, 16, 2, NULL, '7-LOG', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (126, 2, 1, 2, 84, 10, NULL, '1-LOG', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '');
+INSERT INTO `grupos` VALUES (127, 2, 3, 2, 85, 10, NULL, '3-LOG', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '');
+INSERT INTO `grupos` VALUES (128, 2, 7, 2, 86, 10, NULL, '7-LOG', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (129, 2, 7, 2, 87, 10, NULL, '7-LOG', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (130, 2, 7, 1, 88, 24, NULL, '7-IAS', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (131, 2, 5, 3, 37, 24, NULL, '5-PET', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '');
+INSERT INTO `grupos` VALUES (132, 2, 7, 3, 89, 24, NULL, '7-PET-IAS-LOG', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '');
+INSERT INTO `grupos` VALUES (133, 2, 7, 1, 89, 24, NULL, '7-PET-IAS-LOG', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '');
+INSERT INTO `grupos` VALUES (134, 2, 7, 2, 89, 24, NULL, '7-PET-IAS-LOG', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '');
+INSERT INTO `grupos` VALUES (135, 2, 1, 1, 30, 24, NULL, '1-IAS - 1 PET', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '');
+INSERT INTO `grupos` VALUES (136, 2, 1, 3, 30, 24, NULL, '1-IAS - 1 PET', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '');
+INSERT INTO `grupos` VALUES (137, 2, 1, 3, 90, 26, NULL, '1-PET', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (138, 2, 5, 3, 91, 13, NULL, '5-PET', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (139, 2, 3, 1, 92, 13, NULL, '3-IAS', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', '');
+INSERT INTO `grupos` VALUES (140, 2, 3, 1, 93, 13, NULL, '3-IAS', NULL, NULL, NULL, '14:00-16:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '');
+INSERT INTO `grupos` VALUES (141, 2, 3, 2, 94, 4, NULL, '3-ILOG', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '');
+INSERT INTO `grupos` VALUES (142, 2, 3, 2, 95, 9, NULL, '3-LOG', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '');
+INSERT INTO `grupos` VALUES (143, 2, 5, 3, 96, 9, NULL, '5-PET', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (144, 2, 1, 1, 97, 9, NULL, '1-IAS', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', '');
+INSERT INTO `grupos` VALUES (145, 2, 5, 1, 98, 18, NULL, '5-IAS', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (146, 2, 5, 1, 99, 18, NULL, '5-IAS', NULL, NULL, NULL, '14:00-16:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '');
+INSERT INTO `grupos` VALUES (147, 2, 5, 2, 100, 25, NULL, '5-LOG', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (148, 2, 3, 1, 101, 25, NULL, '3-IAS', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '');
+INSERT INTO `grupos` VALUES (149, 2, 1, 4, 90, 25, NULL, '1-PET-MIX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
+INSERT INTO `grupos` VALUES (150, 2, 1, 2, 102, 3, NULL, '1-LOG', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '');
+INSERT INTO `grupos` VALUES (151, 2, 7, 1, 103, 3, NULL, '7-IAS', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (152, 2, 3, 4, 72, 3, NULL, '3-PET-MIX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (153, 2, 7, 3, 104, 21, NULL, '7-PET', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '');
+INSERT INTO `grupos` VALUES (154, 2, 1, 3, 105, 21, NULL, '1-PET', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (155, 2, 7, 3, 106, 21, NULL, '7-PET', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (156, 2, 5, 1, 46, 17, NULL, '5-IAS', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '');
+INSERT INTO `grupos` VALUES (157, 2, 3, 1, 107, 17, NULL, '3-IAS', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (158, 2, 1, 3, 108, 17, NULL, '1-PET', NULL, NULL, NULL, '13:00-15:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (159, 2, 1, 4, 108, 17, NULL, '1-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
+INSERT INTO `grupos` VALUES (160, 2, 1, 1, 109, 17, NULL, '1-IAS', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (161, 2, 1, 1, 48, 11, NULL, '1-IAS/PET', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (162, 2, 1, 3, 48, 11, NULL, '1-IAS/PET', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '');
+INSERT INTO `grupos` VALUES (163, 2, 1, 4, 48, 11, NULL, '1-PET-MIX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (164, 2, 1, 4, 30, 11, NULL, '1-PET-MIX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (165, 2, 1, 1, 110, 8, NULL, '1-IAS', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (166, 2, 3, 1, 111, 8, NULL, '3-IAS', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '');
+INSERT INTO `grupos` VALUES (167, 2, 5, 1, 112, 8, NULL, '5-IAS', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (168, 2, 1, 2, 113, 8, NULL, '1-LOG', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '');
+INSERT INTO `grupos` VALUES (170, 2, 5, 1, 114, 12, NULL, '5-IAS', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (171, 2, 7, 1, 115, 12, NULL, '7-IAS', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (172, 2, 7, 1, 116, 12, NULL, '7-IAS', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '');
+INSERT INTO `grupos` VALUES (173, 2, 3, 3, 117, 12, NULL, '3-PET', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (174, 2, 3, 4, 117, 12, NULL, '3-PET-MIX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (175, 2, 7, 3, 118, 7, NULL, '7-PET', NULL, NULL, NULL, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '');
+INSERT INTO `grupos` VALUES (176, 2, 7, 3, 119, 7, NULL, '7-PET', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (177, 2, 5, 3, 120, 7, NULL, '5-PET', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '');
+INSERT INTO `grupos` VALUES (178, 2, 3, 3, 121, 7, NULL, '3-PET', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '');
+INSERT INTO `grupos` VALUES (179, 2, 3, 4, 121, 7, NULL, '3-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 2');
+INSERT INTO `grupos` VALUES (180, 2, 7, 3, 122, 16, NULL, '7-PET', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-10:00', '');
+INSERT INTO `grupos` VALUES (181, 2, 3, 3, 123, 16, NULL, '3-PET', NULL, NULL, NULL, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '');
+INSERT INTO `grupos` VALUES (182, 2, 3, 4, 123, 16, NULL, '3-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
+INSERT INTO `grupos` VALUES (183, 2, 5, 3, 124, 16, NULL, '5-PET', NULL, NULL, NULL, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '');
+INSERT INTO `grupos` VALUES (184, 2, 5, 2, 125, 16, NULL, '5-LOG', NULL, NULL, NULL, '09:00-10:00 11:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '');
+INSERT INTO `grupos` VALUES (185, 2, 7, 2, 126, 5, NULL, '7-LOG', NULL, NULL, NULL, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '');
+INSERT INTO `grupos` VALUES (186, 2, 1, 2, 127, 5, NULL, '1-LOG', NULL, NULL, NULL, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '');
+INSERT INTO `grupos` VALUES (187, 2, 5, 2, 128, 5, NULL, '5-LOG', NULL, NULL, NULL, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '');
+INSERT INTO `grupos` VALUES (188, 2, 1, 4, 105, 0, NULL, '1-PET- MAX', NULL, NULL, NULL, '', '', '', '', '', 'TRIMESTRE 1');
 
 -- ----------------------------
 -- Table structure for grupos_estudiantes
@@ -6169,11 +6336,163 @@ INSERT INTO `migracion_actas_3` VALUES (12, 'ESTADÍSTICA   ASF-1010', 'II A   I
 INSERT INTO `migracion_actas_3` VALUES (13, 'ESTADÍSTICA   ASF-1010', 'II A   IIAS', '5', 5, 'F', '201240023', 'RUIZ MENDOZA ZAIRA DEL ALBA ', '', '', '', '', '89', '', 2, 'ASF-1010', 'IIAS', '1', 'ESTADÍSTICA   ', 68, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for migracion_grupos_nuevos
+-- ----------------------------
+DROP TABLE IF EXISTS `migracion_grupos_nuevos`;
+CREATE TABLE `migracion_grupos_nuevos`  (
+  `idgrupo` int(11) NULL DEFAULT NULL,
+  `idprofesor` int(11) NULL DEFAULT NULL,
+  `nombre_profesor` varchar(145) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `idcarrera` int(11) NULL DEFAULT NULL,
+  `desc_materia` varchar(145) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `cve_materia` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `desc_grupo` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `creditos` int(11) NULL DEFAULT NULL,
+  `lunes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `martes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `miercoles` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `jueves` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `viernes` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sabado` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `idmateria` int(11) NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of migracion_grupos_nuevos
+-- ----------------------------
+INSERT INTO `migracion_grupos_nuevos` VALUES (101, 22, 'Dr. José Javier Torres Hernández', 1, 'TECNOLOGIAS DE LA INFORMACIÓN Y LAS COMUNICACIONES', 'AEQ-1064', '1-IAS', 3, '14:00-15:00', '14:00-15:00', '14:00-15:00', '', '', '', 69);
+INSERT INTO `migracion_grupos_nuevos` VALUES (102, 23, 'M.A.N.M Leticia Valenzuela Alamilla', 2, 'INGENIERÍA ECONÓMICA', 'AEC-1037', '7-LOG', 4, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '', 70);
+INSERT INTO `migracion_grupos_nuevos` VALUES (103, 14, 'M.P.E Guadalupe Martínez Vichel', 2, 'MERCADOTECNIA', 'AED-1044', '5-LOG', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '10:00-11:00', '', 71);
+INSERT INTO `migracion_grupos_nuevos` VALUES (104, 14, '', 3, 'ADMINISTRACIÓN', 'PEQ-1001', '3-PET', 3, '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', '', 72);
+INSERT INTO `migracion_grupos_nuevos` VALUES (105, 20, 'Dr. Pedro Salvador Morales', 1, 'BIOTECNOLOGIA VEGETAL', 'FIF-1802', '7-IAS', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 73);
+INSERT INTO `migracion_grupos_nuevos` VALUES (106, 20, '', 1, 'MÉTODOS ESTADÍSTICOS', 'ASF-1015', '3-IAS', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 74);
+INSERT INTO `migracion_grupos_nuevos` VALUES (107, 1, 'Ing. Jedive Abarca Córdova', 1, 'NUTRICIÓN VEGETAL', 'ASF-1016', '5- IAS', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', 75);
+INSERT INTO `migracion_grupos_nuevos` VALUES (108, 1, '', 1, 'SISTEMA DE PRODUCCIÓN AGRÍCOLA', 'ASD-1020', '5- IAS', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 76);
+INSERT INTO `migracion_grupos_nuevos` VALUES (109, 19, 'Lic. Alexis Piña Marcial', 3, 'CALCULO DIFERENCIAL', 'ACF-0901', '1-PET 1 ILOG', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 22);
+INSERT INTO `migracion_grupos_nuevos` VALUES (110, 19, '', 2, 'CALCULO DIFERENCIAL', 'ACF-0901', '1-PET 1 ILOG', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 22);
+INSERT INTO `migracion_grupos_nuevos` VALUES (111, 19, '', 3, 'ANÁLISIS NUMÉRICO', 'PEC-1004', '3-PET', 4, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '', 77);
+INSERT INTO `migracion_grupos_nuevos` VALUES (112, 19, '', 1, 'CÁLCULO INTEGRAL', 'ACF-0902', '3-IAS', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 17);
+INSERT INTO `migracion_grupos_nuevos` VALUES (113, 19, '', 4, 'ANÁLISIS NUMÉRICO', 'PEC-1004', '3-PET- MAX', 4, '', '', '', '', '', 'TRIMESTRE 1', 77);
+INSERT INTO `migracion_grupos_nuevos` VALUES (114, 19, '', 4, 'CALCULO DIFERENCIAL', 'ACF-0901', '1-PET- MAX', 5, '', '', '', '', '', 'TRIMESTRE 2', 22);
+INSERT INTO `migracion_grupos_nuevos` VALUES (115, 15, 'Ing. Braulio Alberto Mateos Gallegos', 3, 'DINÁMICA', 'PED-1008', '3-PET', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 78);
+INSERT INTO `migracion_grupos_nuevos` VALUES (116, 15, '', 2, 'CADENA DE SUMINISTRO', 'LOC-0903', '3-LOG', 4, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '', 79);
+INSERT INTO `migracion_grupos_nuevos` VALUES (117, 15, '', 2, 'PROGRAMACION DE PROCESOS PRODUCTIVOS', 'LOC-0926', '7-LOG', 4, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', 16);
+INSERT INTO `migracion_grupos_nuevos` VALUES (118, 15, '', 4, 'DINÁMICA', 'PED-1008', '3-PET- MAX', 5, '', '', '', '', '', 'TRIMESTRE 1', 78);
+INSERT INTO `migracion_grupos_nuevos` VALUES (119, 6, 'M.M.V. Nadxieli Guadalupe Chévez Cruz', 2, 'DIBUJO ASISTIDO POR COMPUTADORA', 'LOH-0909', '1-LOG', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 80);
+INSERT INTO `migracion_grupos_nuevos` VALUES (120, 6, '', 2, 'PROCESOS DE FABRICACIÓN Y MANEJO DE MATERIALES', 'LOC-0925', '5-LOG', 4, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', 81);
+INSERT INTO `migracion_grupos_nuevos` VALUES (121, 2, 'Ing. Juan Carlos Adorno Guerra', 3, 'CALIDAD EN LA INDUSTRIA PETROLERA', 'PEA-1005', '5-PET', 4, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '', 82);
+INSERT INTO `migracion_grupos_nuevos` VALUES (122, 2, '', 2, 'ÁLGEBRA LINEAL', 'ACF-0903', '3-LOG - 1 IAS', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 18);
+INSERT INTO `migracion_grupos_nuevos` VALUES (123, 2, '', 1, 'ÁLGEBRA LINEAL', 'ACF-0903', '3-LOG - 1 IAS', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 18);
+INSERT INTO `migracion_grupos_nuevos` VALUES (124, 2, '', 2, 'ESTADÍSTICA INFERENCIAL I', 'AEF-1024', '3-LOG', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 83);
+INSERT INTO `migracion_grupos_nuevos` VALUES (125, 2, '', 2, 'INVESTIGACION DE OPERACIONES II', 'LOC-0926', '7-LOG', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 16);
+INSERT INTO `migracion_grupos_nuevos` VALUES (126, 10, 'M.A.N.F. Gustavo Adolfo Hernández Cadenas', 2, 'INTRODUCCION A LA INGENIERIA EN LOGISTICA', 'LOC-0919', '1-LOG', 4, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '', 84);
+INSERT INTO `migracion_grupos_nuevos` VALUES (127, 10, '', 2, 'FINANZAS', 'LOF-0912', '3-LOG', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', 85);
+INSERT INTO `migracion_grupos_nuevos` VALUES (128, 10, '', 2, 'INNOVACION', 'LOF-0918', '7-LOG', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 86);
+INSERT INTO `migracion_grupos_nuevos` VALUES (129, 10, '', 2, 'FORMULACION Y EVALUACION DE PROYECTOS', 'AED-1030', '7-LOG', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 87);
+INSERT INTO `migracion_grupos_nuevos` VALUES (130, 24, 'M.C Lorena Vázquez Hernández', 1, 'INOCUIDAD ALIMENTARIA Y BIOSEGURIDAD', 'ASC-1013', '7-IAS', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 88);
+INSERT INTO `migracion_grupos_nuevos` VALUES (131, 24, '', 3, 'TALLER DE INVESTIGACIÓN I', 'ACA-0909', '5-PET', 4, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', 37);
+INSERT INTO `migracion_grupos_nuevos` VALUES (132, 24, '', 3, 'TALLER DE INVESTIGACIÓN II', 'ACA-0910', '7-PET-IAS-LOG', 4, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '', 89);
+INSERT INTO `migracion_grupos_nuevos` VALUES (133, 24, '', 1, 'TALLER DE INVESTIGACIÓN II', 'ACA-0910', '7-PET-IAS-LOG', 4, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '', 89);
+INSERT INTO `migracion_grupos_nuevos` VALUES (134, 24, '', 2, 'TALLER DE INVESTIGACIÓN II', 'ACA-0910', '7-PET-IAS-LOG', 4, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '', 89);
+INSERT INTO `migracion_grupos_nuevos` VALUES (135, 24, '', 1, 'FUNDAMENTOS DE INVESTIGACIÓN', 'ACC-0906', '1-IAS - 1 PET', 4, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '', 30);
+INSERT INTO `migracion_grupos_nuevos` VALUES (136, 24, '', 3, 'FUNDAMENTOS DE INVESTIGACIÓN', 'ACC-0906', '1-IAS - 1 PET', 4, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '', 30);
+INSERT INTO `migracion_grupos_nuevos` VALUES (137, 26, 'M.T.E Marcela Zamora Santiago', 3, 'COMPUTACION PARA INGENIERIA PETROLERA', 'PED-1006', '1-PET', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 90);
+INSERT INTO `migracion_grupos_nuevos` VALUES (138, 13, 'M.E.D. Yulma  Jiménez Lara', 3, 'ANÁLISIS E INTERPRETACIÓN DE PLANOS Y DISEÑO DE INGENIERÍA', 'PEA-1003', '5-PET', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 91);
+INSERT INTO `migracion_grupos_nuevos` VALUES (139, 13, '', 1, 'DISEÑO AGRICOLA ASISTIDO POR  COMPUTADORA', 'ASQ-1008', '3-IAS', 3, '10:00-11:00', '10:00-11:00', '10:00-11:00', '', '', '', 92);
+INSERT INTO `migracion_grupos_nuevos` VALUES (140, 13, '', 1, 'TOPOGRAFIA', 'AEM-1066', '3-IAS', 6, '14:00-16:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '', 93);
+INSERT INTO `migracion_grupos_nuevos` VALUES (141, 4, 'Lic. Patricia del Carmen Cadenas Cadenas', 2, 'FUNDAMENTOS DE DERECHO', 'LOC-0914', '3-ILOG', 4, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', 94);
+INSERT INTO `migracion_grupos_nuevos` VALUES (142, 9, 'M.I.A Luis Alberto Escudero González ', 2, 'MECÁNICA CLÁSICA', 'AEF-1042', '3-LOG', 5, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', 95);
+INSERT INTO `migracion_grupos_nuevos` VALUES (143, 9, '', 3, 'MÉTODOS ELECTRICOS', 'PED-1020', '5-PET', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 96);
+INSERT INTO `migracion_grupos_nuevos` VALUES (144, 9, '', 1, 'TALLER DE ELEMENTOS DE MECANICA DE SOLIDOS', 'ASQ-1023', '1-IAS', 3, '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', '', 97);
+INSERT INTO `migracion_grupos_nuevos` VALUES (145, 18, 'M.C. Maricela Pablo Peréz', 1, 'ENTOMOLOGÍA', 'AED-1023', '5-IAS', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 98);
+INSERT INTO `migracion_grupos_nuevos` VALUES (146, 18, '', 1, 'FITOPATOLOGÍA', 'AEJ-1028', '5-IAS', 6, '14:00-16:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '14:00-15:00', '', 99);
+INSERT INTO `migracion_grupos_nuevos` VALUES (147, 25, 'Lic. Manuel Ernesto Villalobos López', 2, 'ALMACENES', 'LOF-0901', '5-LOG', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 100);
+INSERT INTO `migracion_grupos_nuevos` VALUES (148, 25, '', 1, 'PRINCIPIOS DE ELECTROMECÁNICA', 'ASF-1018', '3-IAS', 5, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', 101);
+INSERT INTO `migracion_grupos_nuevos` VALUES (149, 25, '', 4, 'COMPUTACIÓN PARA INGENIERIA PETROLERA', 'PED-1006', '1-PET-MIX', 5, '', '', '', '', '', 'TRIMESTRE 1', 90);
+INSERT INTO `migracion_grupos_nuevos` VALUES (150, 3, 'M.A.D Francisco Alvarado Rueda', 2, 'FUNDAMENTOS DE ADMINISTRACION', 'LOC-0913', '1-LOG', 4, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', '', 102);
+INSERT INTO `migracion_grupos_nuevos` VALUES (151, 3, '', 1, 'AGRONEGOCIOS II', 'ASD-1002', '7-IAS', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 103);
+INSERT INTO `migracion_grupos_nuevos` VALUES (152, 3, '', 4, 'ADMINISTRACIÓN', 'PEQ-1001', '3-PET-MIX', 3, '', '', '', '', '', 'TRIMESTRE 2', 72);
+INSERT INTO `migracion_grupos_nuevos` VALUES (153, 21, 'Ing. Bladimir Sánchez Ramirez', 3, 'ANALISIS DE METODO DE PRODUCCION', 'PRV-1802', '7-PET', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', 104);
+INSERT INTO `migracion_grupos_nuevos` VALUES (154, 21, '', 3, 'GEOLOGIA PETROLERA', 'PED-1015', '1-PET', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 105);
+INSERT INTO `migracion_grupos_nuevos` VALUES (155, 21, '', 3, 'INGENIERÍA DE PERFORACIÓN DE POZOS', 'PED-1017', '7-PET', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 106);
+INSERT INTO `migracion_grupos_nuevos` VALUES (156, 17, 'M.E.D. José Notario Torres', 1, 'DESARROLLO SUSTENTABLE', 'ACD-0908', '5-IAS', 5, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', 46);
+INSERT INTO `migracion_grupos_nuevos` VALUES (157, 17, '', 1, 'ECOLOGÍA', 'AEF-1017', '3-IAS', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 107);
+INSERT INTO `migracion_grupos_nuevos` VALUES (158, 17, '', 3, 'QUIMICA INORGANICA', 'PEG-1025', '1-PET', 6, '13:00-15:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 108);
+INSERT INTO `migracion_grupos_nuevos` VALUES (159, 17, '', 4, 'QUIMICA INORGANICA', 'PEG-1025', '1-PET- MAX', 6, '', '', '', '', '', 'TRIMESTRE 1', 108);
+INSERT INTO `migracion_grupos_nuevos` VALUES (160, 17, '', 1, 'QUIMICA', 'AEF-1056', '1-IAS', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 109);
+INSERT INTO `migracion_grupos_nuevos` VALUES (161, 11, 'M.E.D Ma. del Carmen Izquierdo Hernández ', 1, 'TALLER DE ETICA', 'ACA-0907', '1-IAS/PET', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 48);
+INSERT INTO `migracion_grupos_nuevos` VALUES (162, 11, '', 3, 'TALLER DE ETICA', 'ACA-0907', '1-IAS/PET', 4, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', '', 48);
+INSERT INTO `migracion_grupos_nuevos` VALUES (163, 11, '', 4, 'TALLER DE ETICA', 'ACA-0907', '1-PET-MIX', 4, '', '', '', '', '', 'TRIMESTRE 2', 48);
+INSERT INTO `migracion_grupos_nuevos` VALUES (164, 11, '', 4, 'FUNDAMENTOS DE INVESTIGACION', 'ACC-0906', '1-PET-MIX', 4, '', '', '', '', '', 'TRIMESTRE 2', 30);
+INSERT INTO `migracion_grupos_nuevos` VALUES (165, 8, 'Q.F.B. Doraliz de los Santos Mena', 1, 'BIOLOGIA', 'ASF-1004', '1-IAS', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 110);
+INSERT INTO `migracion_grupos_nuevos` VALUES (166, 8, '', 1, 'BIOQUIMICA', 'AED-1006', '3-IAS', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', 111);
+INSERT INTO `migracion_grupos_nuevos` VALUES (167, 8, '', 1, 'BIOLOGÍA MOLECULAR', 'ASF-1005', '5-IAS', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 112);
+INSERT INTO `migracion_grupos_nuevos` VALUES (168, 8, '', 2, 'QUIMICA', 'LOC-0927', '1-LOG', 4, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', 113);
+INSERT INTO `migracion_grupos_nuevos` VALUES (170, 12, 'M.C. Raquel Jiménez Ramírez', 1, 'SISTEMAS DE RIEGO SUPERFICIAL', 'ASF-1022', '5-IAS', 5, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 114);
+INSERT INTO `migracion_grupos_nuevos` VALUES (171, 12, '', 1, 'FERTIRRIGACIÓN', 'ASF-1011', '7-IAS', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 115);
+INSERT INTO `migracion_grupos_nuevos` VALUES (172, 12, '', 1, 'INNOVACION TECNOLOGICA', 'FID-1801', '7-IAS', 5, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', 116);
+INSERT INTO `migracion_grupos_nuevos` VALUES (173, 12, '', 3, 'TERMODINÁMICA', 'PED-1031', '3-PET', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 117);
+INSERT INTO `migracion_grupos_nuevos` VALUES (174, 12, '', 4, 'TERMODINÁMICA', 'PED-1031', '3-PET-MIX', 5, '', '', '', '', '', 'TRIMESTRE 2', 117);
+INSERT INTO `migracion_grupos_nuevos` VALUES (175, 7, 'Ing. Juan Angel  Cruz Alejandro', 3, 'CONDUCCIÓN Y MANEJO DE HIDROCARBUROS', 'PEQ-1007', '7-PET', 5, '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '10:00-11:00', '', 118);
+INSERT INTO `migracion_grupos_nuevos` VALUES (176, 7, '', 3, 'COMPORTAMIENTO DE LOS YACIMIENTOS', 'PRF-1803', '7-PET', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 119);
+INSERT INTO `migracion_grupos_nuevos` VALUES (177, 7, '', 3, 'PETROFÍSICA Y REGISTRO DE POZOS', 'PED-1021', '5-PET', 5, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', 120);
+INSERT INTO `migracion_grupos_nuevos` VALUES (178, 7, '', 3, 'CÁLCULO VECTORIAL', 'ACF-0904', '3-PET', 5, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', 121);
+INSERT INTO `migracion_grupos_nuevos` VALUES (179, 7, '', 4, 'CÁLCULO VECTORIAL', 'ACF-0904', '3-PET- MAX', 5, '', '', '', '', '', 'TRIMESTRE 2', 121);
+INSERT INTO `migracion_grupos_nuevos` VALUES (180, 16, 'Ing. José Alberto Méndez Montiel', 3, 'SIMULACION NUMERICA DE YACIMIENTOS', 'PRJ-1801', '7-PET', 6, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-10:00', '', 122);
+INSERT INTO `migracion_grupos_nuevos` VALUES (181, 16, '', 3, 'GEOLOGIA DE EXPLOTACIÓN DEL PETRÓLEO', 'PED-1013', '3-PET', 5, '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '11:00-12:00', '', 123);
+INSERT INTO `migracion_grupos_nuevos` VALUES (182, 16, '', 4, 'GEOLOGIA DE EXPLOTACIÓN DE L PETRÓLEO', 'PED-1013', '3-PET- MAX', 5, '', '', '', '', '', 'TRIMESTRE 1', 123);
+INSERT INTO `migracion_grupos_nuevos` VALUES (183, 16, '', 3, 'PROPIEDADES DE LOS FLUIDOS PETROLEROS', 'PED-1024', '5-PET', 5, '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '12:00-13:00', '', 124);
+INSERT INTO `migracion_grupos_nuevos` VALUES (184, 16, '', 2, 'HIGIENE Y SEGURIDAD', 'LOJ-0917', '5-LOG', 6, '09:00-10:00 11:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', 125);
+INSERT INTO `migracion_grupos_nuevos` VALUES (185, 5, 'Lic. Susana Castillo Montero', 2, 'COMERCIO INTERNACIONAL', 'LOH-0904', '7-LOG', 4, '08:00-09:00', '08:00-09:00', '08:00-09:00', '08:00-09:00', '', '', 126);
+INSERT INTO `migracion_grupos_nuevos` VALUES (186, 5, '', 2, 'ECONOMIA', 'AEC-1018', '1-LOG', 4, '09:00-10:00', '09:00-10:00', '09:00-10:00', '09:00-10:00', '', '', 127);
+INSERT INTO `migracion_grupos_nuevos` VALUES (187, 5, '', 2, 'INVENTARIOS', 'LOE-0920', '5-LOG', 4, '13:00-14:00', '13:00-14:00', '13:00-14:00', '13:00-14:00', '', '', 128);
+INSERT INTO `migracion_grupos_nuevos` VALUES (188, 0, 'SIN ASIGNAR', 4, 'GEOLOGIA PETROLERA', 'PED-1015', '1-PET- MAX', 5, '', '', '', '', '', 'TRIMESTRE 1', 105);
+
+-- ----------------------------
+-- Table structure for modulos_rol
+-- ----------------------------
+DROP TABLE IF EXISTS `modulos_rol`;
+CREATE TABLE `modulos_rol`  (
+  `idmodulo` int(11) NOT NULL,
+  `desc_modulo` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`idmodulo`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of modulos_rol
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for permisos_rol
+-- ----------------------------
+DROP TABLE IF EXISTS `permisos_rol`;
+CREATE TABLE `permisos_rol`  (
+  `idpermiso` int(11) NOT NULL,
+  `idmodulo` int(11) NOT NULL,
+  `idrol` int(11) NOT NULL,
+  `ALTA` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `BAJA` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `MODIFICACION` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `CONSULTA` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `EJECUCION` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`idpermiso`) USING BTREE,
+  INDEX `fk_permisos_rol_modulos_rol1_idx`(`idmodulo`) USING BTREE,
+  INDEX `fk_permisos_rol_cat_roles1_idx`(`idrol`) USING BTREE,
+  CONSTRAINT `fk_permisos_rol_cat_roles1` FOREIGN KEY (`idrol`) REFERENCES `cat_roles` (`idrol`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_permisos_rol_modulos_rol1` FOREIGN KEY (`idmodulo`) REFERENCES `modulos_rol` (`idmodulo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of permisos_rol
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for profesores
 -- ----------------------------
 DROP TABLE IF EXISTS `profesores`;
 CREATE TABLE `profesores`  (
   `idprofesor` int(11) NOT NULL AUTO_INCREMENT,
+  `curp` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `nombre_profesor` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `apaterno` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `amaterno` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -6181,37 +6500,56 @@ CREATE TABLE `profesores`  (
   `fecha_actualizacion` datetime NULL DEFAULT current_timestamp,
   `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'VIG',
   PRIMARY KEY (`idprofesor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of profesores
 -- ----------------------------
-INSERT INTO `profesores` VALUES (1, 'Jedive', 'Abarca', 'Córdova', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (2, 'Juan Carlos', 'Adorno', 'Guerra', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (3, 'Francisco', 'Alvarado', 'Rueda', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (4, 'Patricia del Carmen', 'Cadenas', 'Cadenas', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (5, 'Leydi Susana', 'Castillo', 'Montero', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (6, 'Nadxieli Guadalupe', 'Chevez', 'Cruz', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (7, 'Juan Ángel', 'Cruz', 'Alejandro', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (8, 'Doraliz', 'De los Santos', 'Mena', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (9, 'Luis Alberto', 'Escudero', 'González', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (10, 'Gustavo Adolfo', 'Hernández', 'Cadenas', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (11, 'María del Carmen', 'Izquierdo', 'Hernández', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (12, 'Raquel', 'Jiménez', 'Ramírez', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (13, 'Yulma', 'Jiménez', 'Lara', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (14, 'Guadalupe', 'Martínez', 'Vichel', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (15, 'Braulio Alberto', 'Mateos', 'Gallegos', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (16, 'José Alberto', 'Méndez', 'Montiel', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (17, 'José', 'Notario', 'Torres', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (18, 'Maricela', 'Pablo', 'Pérez', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (19, 'Alexis', 'Piña', 'Marcial', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (20, 'Pedro', 'Salvador', 'Morales', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (21, 'Bladimir', 'Sánchez', 'Ramírez', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (22, 'José Javier', 'Torres', 'Hernández', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (23, 'Leticia', 'Valenzuela', 'Alamilla', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (24, 'Lorena', 'Vázquez', 'Hernández', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (25, 'Manuel Ernesto', 'Villalobos', 'López', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (26, 'Marcela', 'Zamora', 'Santiago', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (0, '', 'Por asignar', ' ', ' ', '2021-08-18 08:52:33', '2021-08-18 08:52:33', 'VIG');
+INSERT INTO `profesores` VALUES (1, '', 'Jedive', 'Abarca', 'Córdova', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (2, '', 'Juan Carlos', 'Adorno', 'Guerra', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (3, '', 'Francisco', 'Alvarado', 'Rueda', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (4, '', 'Patricia del Carmen', 'Cadenas', 'Cadenas', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (5, '', 'Leydi Susana', 'Castillo', 'Montero', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (6, '', 'Nadxieli Guadalupe', 'Chevez', 'Cruz', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (7, '', 'Juan Ángel', 'Cruz', 'Alejandro', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (8, '', 'Doraliz', 'De los Santos', 'Mena', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (9, '', 'Luis Alberto', 'Escudero', 'González', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (10, '', 'Gustavo Adolfo', 'Hernández', 'Cadenas', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (11, '', 'María del Carmen', 'Izquierdo', 'Hernández', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (12, '', 'Raquel', 'Jiménez', 'Ramírez', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (13, '', 'Yulma', 'Jiménez', 'Lara', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (14, '', 'Guadalupe', 'Martínez', 'Vichel', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (15, '', 'Braulio Alberto', 'Mateos', 'Gallegos', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (16, '', 'José Alberto', 'Méndez', 'Montiel', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (17, '', 'José', 'Notario', 'Torres', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (18, '', 'Maricela', 'Pablo', 'Pérez', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (19, '', 'Alexis', 'Piña', 'Marcial', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (20, '', 'Pedro', 'Salvador', 'Morales', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (21, '', 'Bladimir', 'Sánchez', 'Ramírez', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (22, '', 'José Javier', 'Torres', 'Hernández', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (23, '', 'Leticia', 'Valenzuela', 'Alamilla', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (24, '', 'Lorena', 'Vázquez', 'Hernández', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (25, 'GAOJ850722HTCLCN05', 'Manuel Ernesto', 'Villalobos', 'López', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (26, '', 'Marcela', 'Zamora', 'Santiago', NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for roles_usuarios
+-- ----------------------------
+DROP TABLE IF EXISTS `roles_usuarios`;
+CREATE TABLE `roles_usuarios`  (
+  `idusuario` int(11) NOT NULL,
+  `idrol` int(11) NOT NULL,
+  INDEX `fk_table1_usuarios1_idx`(`idusuario`) USING BTREE,
+  INDEX `fk_table1_cat_roles1_idx`(`idrol`) USING BTREE,
+  CONSTRAINT `fk_table1_cat_roles1` FOREIGN KEY (`idrol`) REFERENCES `cat_roles` (`idrol`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_table1_usuarios1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of roles_usuarios
+-- ----------------------------
+INSERT INTO `roles_usuarios` VALUES (5, 3);
 
 -- ----------------------------
 -- Table structure for semestres
@@ -6233,6 +6571,31 @@ CREATE TABLE `semestres`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for usuarios
+-- ----------------------------
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios`  (
+  `idusuario` int(11) NOT NULL,
+  `nombre_usuario` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `authKey` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `accessToken` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `activate` tinyint(1) NOT NULL,
+  `curp` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `fecha_registro` datetime NULL DEFAULT NULL,
+  `fecha_actualizacion` datetime NULL DEFAULT NULL,
+  `verification_code` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`idusuario`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of usuarios
+-- ----------------------------
+INSERT INTO `usuarios` VALUES (5, 'Juan Carlos', 'jcgalvezocampo@gmail.com', 'itNwR7nhba4nc', '', 'ae6ed01d0462b66a67b4684ee50901764eaf7e2449a7cd7cef9ed285c70e75f3ed4d8e6a6b73b154a5db93dd867420f1b44816d43c1d7e3c621c696a42c1ba666ebfd7d152b18301febabc2fae14a3de9656843c436b1d0718195d5a981a816d5b15bbd7', 'c98148bf9f22e572fa4123e6e6a05e9ac144936f8d84e5f60a0d1b03c2840953219ce83b84fb2413ec9ebaa7ef017451a910c28b43ca026302dacd2371d2f48f4543f0ed5cb9c89f34f93b85207afa717a60a812ac041d1a735c599e30d02b0f6f6735ae', 1, 'GAOJ850722HTCLCN05', NULL, NULL, 'f0ae8928');
+
+-- ----------------------------
 -- View structure for boleta_detalle_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_detalle_v`;
@@ -6248,12 +6611,18 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 -- View structure for boleta_estudiante_encabezado
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_estudiante_encabezado`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_estudiante_encabezado` AS select `ciclo`.`desc_ciclo` AS `desc_ciclo`,`estudiantes`.`nombre_estudiante` AS `nombre_estudiante`,`estudiantes`.`idestudiante` AS `idestudiante`,`estudiantes`.`num_semestre` AS `num_semestre`,`cat_carreras`.`desc_carrera` AS `desc_carrera`,`cat_carreras`.`plan_estudios` AS `plan_estudios` from (((`estudiantes` join `cat_carreras` on(`estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera`)) join `grupos` on(`cat_carreras`.`idcarrera` = `grupos`.`idcarrera`)) join `ciclo` on(`grupos`.`idciclo` = `ciclo`.`idciclo`));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_estudiante_encabezado` AS select `ciclo`.`idciclo` AS `idciclo`,`ciclo`.`desc_ciclo` AS `desc_ciclo`,`estudiantes`.`nombre_estudiante` AS `nombre_estudiante`,`estudiantes`.`idestudiante` AS `idestudiante`,`estudiantes`.`num_semestre` AS `num_semestre`,`cat_carreras`.`desc_carrera` AS `desc_carrera`,`cat_carreras`.`plan_estudios` AS `plan_estudios`,`grupos`.`desc_grupo` AS `desc_grupo` from (((`estudiantes` join `cat_carreras` on(`estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera`)) join `grupos` on(`cat_carreras`.`idcarrera` = `grupos`.`idcarrera`)) join `ciclo` on(`grupos`.`idciclo` = `ciclo`.`idciclo`));
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
 -- ----------------------------
 DROP VIEW IF EXISTS `horario_estudiante_v`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS select `a`.`idestudiante` AS `idestudiante`,`b`.`idciclo` AS `idciclo`,`b`.`num_semestre` AS `num_semestre`,`b`.`idmateria` AS `idmateria`,`c`.`desc_materia` AS `desc_materia`,`c`.`cve_materia` AS `cve_materia`,`b`.`desc_grupo_corto` AS `desc_grupo_corto`,`b`.`aula` AS `aula`,`a`.`idopcion_curso` AS `idopcion_curso`,case when `a`.`idopcion_curso` = 2 then 'R' when `a`.`idopcion_curso` = 3 then 'E' end AS `desc_opcion_curso_corto`,`c`.`creditos` AS `creditos`,`b`.`lunes` AS `lunes`,`b`.`martes` AS `martes`,`b`.`miercoles` AS `miercoles`,`b`.`jueves` AS `jueves`,`b`.`viernes` AS `viernes`,`b`.`sabado` AS `sabado`,concat(`d`.`nombre_profesor`,' ',`d`.`apaterno`,' ',`d`.`amaterno`) AS `profesor` from (((`grupos_estudiantes` `a` join `grupos` `b`) join `cat_materias` `c`) join `profesores` `d`) where `a`.`idgrupo` = `b`.`idgrupo` and `b`.`idmateria` = `c`.`idmateria` and `b`.`idprofesor` = `d`.`idprofesor`;
+
+-- ----------------------------
+-- View structure for horario_profesor_v
+-- ----------------------------
+DROP VIEW IF EXISTS `horario_profesor_v`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_profesor_v` AS select `a`.`idprofesor` AS `idprofesor`,`a`.`idciclo` AS `idciclo`,`a`.`idcarrera` AS `idcarrera`,`b`.`cve_carrera` AS `cve_carrera`,`a`.`num_semestre` AS `num_semestre`,`a`.`idmateria` AS `idmateria`,`c`.`desc_materia` AS `desc_materia`,`c`.`cve_materia` AS `cve_materia`,`a`.`desc_grupo` AS `desc_grupo`,`a`.`aula` AS `aula`,`c`.`creditos` AS `creditos`,`a`.`lunes` AS `lunes`,`a`.`martes` AS `martes`,`a`.`miercoles` AS `miercoles`,`a`.`jueves` AS `jueves`,`a`.`viernes` AS `viernes`,`a`.`sabado` AS `sabado`,`a`.`idgrupo` AS `idgrupo`,`b`.`desc_carrera` AS `desc_carrera`,`ciclo`.`desc_ciclo` AS `desc_ciclo` from (((`grupos` `a` join `cat_carreras` `b`) join `cat_materias` `c`) join `ciclo` on(`a`.`idciclo` = `ciclo`.`idciclo`)) where `a`.`idcarrera` = `b`.`idcarrera` and `a`.`idmateria` = `c`.`idmateria`;
 
 SET FOREIGN_KEY_CHECKS = 1;

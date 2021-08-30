@@ -433,9 +433,12 @@ class ReporteController extends Controller
 	                        INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
 	                        INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
                             WHERE
-                                grupos_estudiantes.idgrupo = :idgrupo";
+                                grupos_estudiantes.idgrupo = :idgrupo
+                            AND
+                                grupos.idciclo = :idciclo";
         $cuerpo = Yii::$app->db->createCommand($sql_estudiantes)
                                ->bindValue(':idgrupo', $idgrupo)
+                               ->bindValue(':idciclo', $idciclo)
                                ->queryAll();
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);

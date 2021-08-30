@@ -312,7 +312,7 @@ class ProfesorController extends Controller
             
         }
 
-        $ciclo_actual = ($idciclo) ? $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
+        $ciclo_actual = ($idciclo) ? (count($model) > 0) ? $model[0]['desc_ciclo'] : $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
 
         return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo, 'ciclo_actual' => $ciclo_actual]);
     }
@@ -342,5 +342,19 @@ class ProfesorController extends Controller
 
             return $this->render("listaAlumnos", ["model" => $model, "idgrupo" => $idgrupo]);
         }
+    }
+
+    public function actionGenerarpassword()
+    {
+        if(Yii::$app->request->get("curp"))
+        {
+            $curp = Html::encode($_GET["curp"]);
+        }
+        else
+        {
+            $curp = null;
+        }
+
+        return $this->render("generarpassword", ["curp" => $curp]);
     }
 }
