@@ -428,13 +428,15 @@ class ReporteController extends Controller
     	                        estudiantes.nombre_estudiante,
 	                            estudiantes.sexo,
 	                            cat_opcion_curso.desc_opcion_curso,
-                                cat_materias.desc_materia
+                                cat_materias.desc_materia,
+                                cc.desc_carrera
                             FROM
     	                        estudiantes
 	                        INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
 	                        INNER JOIN cat_opcion_curso ON grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso
 	                        INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
 	                        INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
+                            INNER JOIN cat_carreras cc on cc.idcarrera = grupos.idcarrera 
                             WHERE
                                 grupos_estudiantes.idgrupo = :idgrupo
                             AND
@@ -446,7 +448,7 @@ class ReporteController extends Controller
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
-        $carrera = $encabezado['desc_carrera'];
+        $carrera = $cuerpo[0]['desc_carrera'];
         $plan = $encabezado['plan_estudios'];
         $materia = $cuerpo[0]['desc_materia'];
         $grupo = $encabezado['desc_grupo'];
