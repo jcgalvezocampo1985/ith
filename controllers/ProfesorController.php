@@ -285,7 +285,9 @@ class ProfesorController extends Controller
                         WHERE
                             idprofesor = :idprofesor
                         AND
-                            idciclo = :idciclo";
+                            idciclo = :idciclo
+                        ORDER BY
+                            lunes, viernes, sabado";
                 $model = Yii::$app->db->createCommand($sql)
                                       ->bindValue(':idprofesor', $idprofesor)
                                       ->bindValue(':idciclo', $idciclo)
@@ -305,7 +307,9 @@ class ProfesorController extends Controller
                     WHERE
                         idprofesor = :idprofesor
                     AND
-	                    idciclo = (SELECT MAX(idciclo) FROM ciclo)";
+	                    idciclo = (SELECT MAX(idciclo) FROM ciclo)
+                    ORDER BY
+                        lunes, viernes, sabado";
             $model = Yii::$app->db->createCommand($sql)
                                   ->bindValue(':idprofesor', $idprofesor)
                                   ->queryAll();
