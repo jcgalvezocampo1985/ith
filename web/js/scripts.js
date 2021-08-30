@@ -9,6 +9,9 @@ $(".idgrupo").on("click", function(e) {
     $.ajax({
         url: url + "?idgrupo=" + id + "&idciclo=" + idciclo,
         type: "GET",
+        beforeSend: function() {
+            $('#lista_alumnos').empty();
+        },
         //data: "idgrupo=" + id + "&idciclo=" + idciclo,
         success: function(respuesta) {
             $('#lista_alumnos').html(respuesta);
