@@ -51,7 +51,7 @@ class ProfesorController extends Controller
                         ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['horarioconsulta'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['horarioconsulta', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados

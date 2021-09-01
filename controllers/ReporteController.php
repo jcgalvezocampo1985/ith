@@ -106,11 +106,41 @@ class ReporteController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['listaalumnos'],//Especificar que acciones se van proteger
+                    'only' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -122,7 +152,7 @@ class ReporteController extends Controller
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
                             },  
-                        ]
+                        ],
                     ],
                 ],
                 //Controla el modo en que se accede a las acciones, en este ejemplo a la acción logout
