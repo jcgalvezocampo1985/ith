@@ -45,7 +45,22 @@ class SiteController extends Controller
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
                             },  
-                        ],  
+                        ],
+                        [
+                            //Los usuarios simples tienen permisos sobre las siguientes acciones
+                            'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un usuario simple
+                                //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                            },
+                        ],
                         [
                             //Los usuarios simples tienen permisos sobre las siguientes acciones
                             'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
@@ -59,6 +74,21 @@ class SiteController extends Controller
                                 //Llamada al método que comprueba si es un usuario simple
                                 //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
+                            },
+                        ],
+                        [
+                            //Los usuarios simples tienen permisos sobre las siguientes acciones
+                            'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un usuario simple
+                                //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
                             },
                         ],
                     ],
@@ -101,7 +131,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         //return $this->render('index');
-        return $this->redirect(["profesor/horario"]);
+        return $this->redirect(["profesor/index"]);
     }
 
     /**
@@ -114,7 +144,8 @@ class SiteController extends Controller
     {
         if(!\Yii::$app->user->isGuest)
         {
-            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+             return $this->redirect(["site/index"]);
+            /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
             {
                 return $this->redirect(["site/index"]);
             }
@@ -126,7 +157,11 @@ class SiteController extends Controller
             {
                 return $this->redirect(["site/index"]);
             }
-            /*if(User::isUserAdministrador(Yii::$app->user->identity->idusuario))
+            else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
+            {
+                return $this->redirect(["site/index"]);
+            }
+            if(User::isUserAdministrador(Yii::$app->user->identity->idusuario))
             {
                 return $this->redirect(["site/index"]);
             }
@@ -151,7 +186,11 @@ class SiteController extends Controller
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
             {
                 return $this->redirect(["site/index"]);
-            }   
+            } 
+            else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
+            {
+                return $this->redirect(["site/index"]);
+            }
         }
         else
         {

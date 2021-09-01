@@ -51,7 +51,7 @@ class ProfesorController extends Controller
                         ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['horarioconsulta', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'horarioconsulta', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -78,6 +78,21 @@ class ProfesorController extends Controller
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
                             },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['index', 'horarioconsulta', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
+                            },  
                         ]
                     ],
                 ],
@@ -94,7 +109,22 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(["horario"]);
+        if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+        {
+            return $this->redirect(["horarioconsulta"]);
+        }
+        else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2))
+        {
+            return $this->redirect(["horarioconsulta"]);
+        }
+        else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
+        {
+            return $this->redirect(["horario"]);
+        } 
+        else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
+        {
+            return $this->redirect(["horarioconsulta"]);
+        }
         exit;
         $form = new ProfesorSearch;
         $search = null;
