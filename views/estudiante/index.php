@@ -22,7 +22,7 @@ $this->title = 'Estudiantes';
                         "enableClientValidation" => true
                 ]);
             ?>
-                <?= $f->field($form, "q")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
+                <?= $f->field($form, "buscar")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a('Refrescar', ['estudiante/index'], ['class' => 'btn btn-info']) ?>
                 <?= Html::a('Nuevo Estudiante', ['estudiante/create'], ['class' => 'btn btn-info']) ?>
@@ -107,6 +107,6 @@ $this->title = 'Estudiantes';
     <div class="alert alert-warning" role="warning">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
-        No se encontró información relacionada con el criterio <?= $form->q ?>
+        No se encontró información relacionada con el criterio <?= $form->buscar ?>
     </div>
 <?php endif ?>

@@ -18,21 +18,59 @@ use yii\data\Pagination;
 use app\models\Estudiante;
 use app\models\EstudianteForm;
 use app\models\EstudianteSearch;
+use app\models\EstudianteHorarioSearch;
 use app\models\Carrera;
+use app\models\Ciclo;
+use app\models\User;
 
 class EstudianteController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['index', 'create', 'update', 'delete', 'horariomodificar'],//Especificar que acciones se van proteger
+                    'rules' => [
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'boleta', 'horariomodificar'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                            },  
+                        ]
+                    ],
+                ],
+                //Controla el modo en que se accede a las acciones, en este ejemplo a la acción logout
+                //sólo se puede acceder a través del método post
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'logout' => ['post'],
+                    ],
+                ],
+        ];
+    }
+
     public function actionIndex()
     {
         $form = new EstudianteSearch;
-        $search = null;
+        $idestudiante = null;
         $status = 0;
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $search = Html::encode($form->q);
+                $idestudiante = Html::encode($form->buscar);
                 $table = new \yii\db\Query();
                 $model = $table->from(['a' => 'estudiantes'])
                                ->select(['a.idestudiante', 
@@ -43,9 +81,9 @@ class EstudianteController extends Controller
 	                                'a.cve_estatus',
                                     'b.desc_carrera'])
                                ->innerJoin(['b' => 'cat_carreras'], '`b`.`idcarrera`=`a`.`idcarrera`')
-                               ->where(["like", "a.idestudiante", $search])
-                               ->orWhere(["like", "a.nombre_estudiante", $search])
-                               ->orWhere(["like", "a.email", $search])
+                               ->where(["like", "a.idestudiante", $idestudiante])
+                               ->orWhere(["like", "a.nombre_estudiante", $idestudiante])
+                               ->orWhere(["like", "a.email", $idestudiante])
                                ->orderBy('a.idestudiante');  
                 $status = 1;
             }
@@ -78,7 +116,7 @@ class EstudianteController extends Controller
                        ->limit($pages->limit)
                        ->all(); 
 
-        return $this->render("index", ['model' => $model, 'form' => $form, 'status' => $status, "pages" => $pages]);
+        return $this->render("index", ["model" => $model, "form" => $form, "status" => $status, "pages" => $pages]);
     }
 
     public function actionCreate()
@@ -254,10 +292,10 @@ class EstudianteController extends Controller
     public function actionHorario()
     {
         $table = new Estudiante;
-        $model = $table->find()->where(['idestudiante' => 1])->orderBy('nombre_estudiante')->all();
+        $model = $table->find()->where(["idestudiante" => 9999])->orderBy("nombre_estudiante")->all();
 
         $form = new EstudianteSearch;
-        $search = null;
+        $idestudiante = null;
 
         $status = 0;
 
@@ -265,16 +303,16 @@ class EstudianteController extends Controller
         {
             if($form->validate())
             {
-                $search = Html::encode($form->q);
+                $idestudiante = Html::encode($form->buscar);
                 $query = "SELECT
                             *
                           FROM
                             boleta_estudiante_encabezado
                           WHERE
-                            idestudiante=:idestudiante
-                          GROUP BY idestudiante";
+                            idestudiante = :idestudiante
+                          GROUP BY idciclo";
                 $model = Yii::$app->db->createCommand($query)
-                                      ->bindValue(':idestudiante', $search)
+                                      ->bindValue(":idestudiante", $idestudiante)
                                       ->queryAll();
 
                 $status = 1;
@@ -285,16 +323,16 @@ class EstudianteController extends Controller
             }
         }
 
-        return $this->render('horario', ['model' => $model, 'form' => $form, 'status' => $status]);
+        return $this->render("horario", ["model" => $model, "form" => $form, "status" => $status]);
     }
 
     public function actionBoleta()
     {
         $table = new Estudiante;
-        $model = $table->find()->where(['idestudiante' => 1])->orderBy('nombre_estudiante')->all();
+        $model = $table->find()->where(["idestudiante" => 99999])->orderBy("nombre_estudiante")->all();
 
         $form = new EstudianteSearch;
-        $search = null;
+        $idestudiante = null;
 
         $status = 0;
 
@@ -302,16 +340,16 @@ class EstudianteController extends Controller
         {
             if($form->validate())
             {
-                $search = Html::encode($form->q);
+                $idestudiante = Html::encode($form->buscar);
                 $query = "SELECT
                             *
                           FROM
                             boleta_estudiante_encabezado
                           WHERE
-                            idestudiante=:idestudiante
-                          GROUP BY idestudiante";
+                            idestudiante = :idestudiante
+                          GROUP BY idciclo";
                 $model = Yii::$app->db->createCommand($query)
-                                      ->bindValue(':idestudiante', $search)
+                                      ->bindValue(":idestudiante", $idestudiante)
                                       ->queryAll();
 
                 $status = 1;
@@ -322,6 +360,48 @@ class EstudianteController extends Controller
             }
         }
 
-        return $this->render('boleta', ['model' => $model, 'form' => $form, 'status' => $status]);
+        return $this->render("boleta", ["model" => $model, "form" => $form, "status" => $status]);
+    }
+
+    public function actionHorariomodificar()
+    {
+        $table = new Estudiante;
+        $model = $table->find()->where(['idestudiante' => 9999])->orderBy('nombre_estudiante')->all();
+        $ciclos = ArrayHelper::map(Ciclo::find()->all(), 'idciclo', 'desc_ciclo');
+
+        $form = new EstudianteHorarioSearch;
+        $idestudiante = null;
+
+        $status = 0;
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $idestudiante = Html::encode($form->idestudiante);
+                $idciclo = Html::encode($form->idciclo);
+
+                $query = "SELECT
+                            *
+                         FROM
+                            horario_estudiante_v
+                         WHERE
+                            idestudiante =:idestudiante
+                         AND
+                            idciclo = :idciclo";
+                $model = Yii::$app->db->createCommand($query)
+                                      ->bindValue(':idestudiante', $idestudiante)
+                                      ->bindValue(':idciclo', $idciclo)
+                                      ->queryAll();
+
+                $status = 1;
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+
+        return $this->render("horariomodificar", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "status" => $status]);
     }
 }

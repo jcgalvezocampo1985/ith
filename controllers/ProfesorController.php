@@ -23,6 +23,7 @@ use app\models\User;
 use app\models\Ciclo;
 //use app\models\CicloForm;
 use app\models\CicloSearch;
+use app\models\CicloProfesorSearch;
 
 class ProfesorController extends Controller
 {
@@ -31,8 +32,38 @@ class ProfesorController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos'],//Especificar que acciones se van proteger
+                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones se van proteger
                     'rules' => [
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['horarioconsulta'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                            },  
+                        ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
                             'actions' => ['index', 'horario', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
@@ -45,7 +76,7 @@ class ProfesorController extends Controller
                             'matchCallback' => function ($rule, $action) {
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
-                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario,3);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
                             },  
                         ]
                     ],
@@ -64,7 +95,7 @@ class ProfesorController extends Controller
     public function actionIndex()
     {
         return $this->redirect(["horario"]);
-
+        exit;
         $form = new ProfesorSearch;
         $search = null;
         $status = 0;
@@ -329,23 +360,108 @@ class ProfesorController extends Controller
         {
 
             $idgrupo = Html::encode($_GET["idgrupo"]);
+            $idciclo = (Html::encode($_GET["idciclo"]) == "") ? Ciclo::find()->max("idciclo") : Html::encode($_GET["idciclo"]);
 
             $query = "SELECT
-	                    estudiantes.idestudiante,
-	                    estudiantes.nombre_estudiante,
+                        estudiantes.idestudiante,
+    	                estudiantes.nombre_estudiante,
 	                    estudiantes.sexo,
 	                    cat_opcion_curso.desc_opcion_curso
                       FROM
-	                    estudiantes
+    	                estudiantes
 	                  INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
 	                  INNER JOIN cat_opcion_curso ON grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso
+	                  INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
+	                  INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
                       WHERE
-                        grupos_estudiantes.idgrupo=:idgrupo";
+                        grupos_estudiantes.idgrupo = :idgrupo
+                      AND
+                        grupos.idciclo = :idciclo
+                      ORDER BY
+                        estudiantes.nombre_estudiante ASC";
             $model = Yii::$app->db->createCommand($query)
                                   ->bindValue(':idgrupo', $idgrupo)
+                                  ->bindValue(':idciclo', $idciclo)
                                   ->queryAll();
 
-            return $this->render("listaAlumnos", ["model" => $model, "idgrupo" => $idgrupo]);
+            $query1 = "SELECT
+	                        cat_materias.desc_materia,
+	                        cat_carreras.desc_carrera 
+                       FROM
+	                        cat_carreras
+	                   INNER JOIN grupos ON cat_carreras.idcarrera = grupos.idcarrera
+	                   INNER JOIN cat_materias ON cat_materias.idmateria = grupos.idmateria
+                       WHERE
+                            grupos.idgrupo = :idgrupo
+                       AND
+                            grupos.idciclo = :idciclo";
+            $model1 = Yii::$app->db->createCommand($query1)
+                                  ->bindValue(':idgrupo', $idgrupo)
+                                  ->bindValue(':idciclo', $idciclo)
+                                  ->queryAll();
+
+            return $this->render("listaAlumnos", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo]);
         }
+    }
+
+    public function actionHorarioconsulta()
+    {
+        $form = new CicloProfesorSearch;
+        $ciclo = null;
+        $idciclo = null;
+        $profesores = ArrayHelper::map(Profesor::find()->asArray()->all(),'idprofesor', function($model){
+            return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
+        });
+        $ciclos = ArrayHelper::map(Ciclo::find()->all(), 'idciclo', 'desc_ciclo');
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $idciclo = Html::encode($form->idciclo);
+                $idprofesor = Html::encode($form->idprofesor);
+
+                $sql = "SELECT
+                            *
+                        FROM
+                            horario_profesor_v
+                        WHERE
+                            idprofesor = :idprofesor
+                        AND
+                            idciclo = :idciclo
+                        ORDER BY
+                            lunes, viernes, sabado";
+                $model = Yii::$app->db->createCommand($sql)
+                                      ->bindValue(':idprofesor', $idprofesor)
+                                      ->bindValue(':idciclo', $idciclo)
+                                      ->queryAll();
+
+                $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+                $ciclo = $sql['desc_ciclo'];
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+        else
+        {
+            $sql = "SELECT
+                            *
+                        FROM
+                            horario_profesor_v
+                        WHERE
+                            idprofesor = null
+                        /*AND
+                            idciclo = :idciclo*/
+                        ORDER BY
+                            lunes, viernes, sabado";
+                $model = Yii::$app->db->createCommand($sql)
+                                      //->bindValue(':idprofesor', $idprofesor)
+                                      //->bindValue(':idciclo', $idciclo)
+                                      ->queryAll();
+        }
+
+        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, 'ciclo_actual' => $ciclo, "profesores" => $profesores]);
     }
 }

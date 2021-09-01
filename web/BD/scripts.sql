@@ -119,6 +119,7 @@ ADD COLUMN `curp` varchar(20) NOT NULL AFTER `idprofesor`;
 UPDATE profesores SET `CURP` = 'GAOJ850722HTCLCN05' WHERE `idprofesor` = 25;
 
 
+
 -- ----------------------------
 -- View structure for boleta_detalle_v
 -- ----------------------------

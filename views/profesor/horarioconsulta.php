@@ -15,7 +15,7 @@ $this->title = 'Profesores';
         <?php
             $f = ActiveForm::begin([
                     "method" => "get",
-                    "action" => Url::toRoute("profesor/horario"),
+                    "action" => Url::toRoute("profesor/horarioconsulta"),
                     "enableClientValidation" => true
                 ]);
         ?>
@@ -23,11 +23,14 @@ $this->title = 'Profesores';
             <div class="col-md-4">
                 <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => "Periodo"]) ?>
             </div>
+            <div class="col-md-4">
+                <?= $f->field($form, "idprofesor")->dropDownList($profesores, ["prompt" => "Profesor"]) ?>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-                <?= Html::a('Refrescar', ['profesor/horario'], ['class' => 'btn btn-info']) ?>
+                <?= Html::a('Refrescar', ['profesor/horarioconsulta'], ['class' => 'btn btn-info']) ?>
             </div>
         </div>
         <?php $f->end() ?>
