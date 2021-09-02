@@ -310,7 +310,7 @@ class EstudianteController extends Controller
                             boleta_estudiante_encabezado
                           WHERE
                             idestudiante = :idestudiante
-                          GROUP BY idciclo";
+                          GROUP BY idciclo DESC";
                 $model = Yii::$app->db->createCommand($query)
                                       ->bindValue(":idestudiante", $idestudiante)
                                       ->queryAll();

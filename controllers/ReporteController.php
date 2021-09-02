@@ -351,7 +351,9 @@ class ReporteController extends Controller
                          WHERE
                             idestudiante =:idestudiante
                          AND
-                            idciclo = :idciclo";
+                            idciclo = :idciclo
+                         ORDER BY
+                            lunes, viernes, sabado";
         $cuerpo = Yii::$app->db->createCommand($sql_materias)
                                ->bindValue(':idestudiante', $idestudiante)
                                ->bindValue(':idciclo', $idciclo)
