@@ -106,11 +106,41 @@ class ReporteController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['listaalumnos'],//Especificar que acciones se van proteger
+                    'only' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -122,7 +152,22 @@ class ReporteController extends Controller
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
                             },  
-                        ]
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['listaalumnos', 'horarioprofesor'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
+                            },  
+                        ],
                     ],
                 ],
                 //Controla el modo en que se accede a las acciones, en este ejemplo a la acción logout
@@ -291,7 +336,7 @@ class ReporteController extends Controller
                            FROM
                                 boleta_estudiante_encabezado
                            WHERE
-                                idestudiante=:idestudiante
+                                idestudiante = :idestudiante
                            AND
                                 idciclo = :idciclo";
         $encabezado = Yii::$app->db->createCommand($sql_encabezado)
@@ -406,18 +451,24 @@ class ReporteController extends Controller
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
-        $idciclo1 = Html::encode($_REQUEST['idciclo']);
-
-        $idciclo = ($idciclo1 != "") ? $idciclo1 : Ciclo::find()->max("idciclo");
+        $idciclo = (Html::encode($_REQUEST['idciclo']) != "") ? Html::encode($_REQUEST['idciclo']) : Ciclo::find()->max("idciclo");
 
         $sql_encabezado = "SELECT
-                               *
+	                            ciclo.desc_ciclo,
+                            	cat_carreras.desc_carrera,
+	                            cat_carreras.plan_estudios,
+	                            grupos.desc_grupo,
+	                            grupos.desc_grupo_corto,
+	                            cat_materias.desc_materia 
                            FROM
-                                boleta_estudiante_encabezado, grupos
+	                            cat_carreras
+	                       INNER JOIN grupos ON cat_carreras.idcarrera = grupos.idcarrera
+	                       INNER JOIN ciclo ON ciclo.idciclo = grupos.idciclo
+	                       INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
                            WHERE
                                 grupos.idgrupo = :idgrupo
                            AND
-                                grupos.idciclo= :idciclo";
+                                ciclo.idciclo = :idciclo";
         $encabezado = Yii::$app->db->createCommand($sql_encabezado)
                                    ->bindValue(':idgrupo', $idgrupo)
                                    ->bindValue(':idciclo', $idciclo)
@@ -440,7 +491,9 @@ class ReporteController extends Controller
                             WHERE
                                 grupos_estudiantes.idgrupo = :idgrupo
                             AND
-                                grupos.idciclo = :idciclo";
+                                grupos.idciclo = :idciclo
+                            ORDER BY
+                                estudiantes.nombre_estudiante ASC";
         $cuerpo = Yii::$app->db->createCommand($sql_estudiantes)
                                ->bindValue(':idgrupo', $idgrupo)
                                ->bindValue(':idciclo', $idciclo)

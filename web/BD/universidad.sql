@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Remoto
+ Source Server         : MariaDB
  Source Server Type    : MariaDB
- Source Server Version : 100512
- Source Host           : 35.236.255.86:3306
- Source Schema         : ithuimanguillo
+ Source Server Version : 100510
+ Source Host           : localhost:3306
+ Source Schema         : universidad
 
  Target Server Type    : MariaDB
- Target Server Version : 100512
+ Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 30/08/2021 19:39:42
+ Date: 31/08/2021 20:09:12
 */
 
 SET NAMES utf8mb4;
@@ -2385,11 +2385,11 @@ CREATE TABLE `cat_roles`  (
 -- Records of cat_roles
 -- ----------------------------
 INSERT INTO `cat_roles` VALUES (1, 'Administrador');
-INSERT INTO `cat_roles` VALUES (2, 'Escolares');
+INSERT INTO `cat_roles` VALUES (2, 'Serv. Escolares');
 INSERT INTO `cat_roles` VALUES (3, 'Profesor');
-INSERT INTO `cat_roles` VALUES (4, 'dep');
+INSERT INTO `cat_roles` VALUES (4, 'Div. Estudios');
 INSERT INTO `cat_roles` VALUES (5, 'Estudiante');
-INSERT INTO `cat_roles` VALUES (6, 'consulta');
+INSERT INTO `cat_roles` VALUES (6, 'Consulta');
 
 -- ----------------------------
 -- Table structure for ciclo
@@ -16008,12 +16008,11 @@ CREATE TABLE `profesores`  (
   `fecha_actualizacion` datetime NULL DEFAULT current_timestamp,
   `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'VIG',
   PRIMARY KEY (`idprofesor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of profesores
 -- ----------------------------
-INSERT INTO `profesores` VALUES (0, '', 'Por asignar', ' ', ' ', '2021-08-18 08:52:33', '2021-08-18 08:52:33', 'VIG');
 INSERT INTO `profesores` VALUES (1, 'jedive.ac', 'Jedive', 'Abarca', 'Córdova', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (2, 'juan.ag', 'Juan Carlos', 'Adorno', 'Guerra', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (3, 'francisco.ar', 'Francisco', 'Alvarado', 'Rueda', NULL, NULL, NULL);
@@ -16040,6 +16039,7 @@ INSERT INTO `profesores` VALUES (23, 'leticia.va', 'Leticia', 'Valenzuela', 'Ala
 INSERT INTO `profesores` VALUES (24, 'lorena.vh', 'Lorena', 'Vázquez', 'Hernández', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (25, 'manuel.vl', 'Manuel Ernesto', 'Villalobos', 'López', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (26, 'marcela.zs', 'Marcela', 'Zamora', 'Santiago', NULL, NULL, NULL);
+INSERT INTO `profesores` VALUES (28, '', 'Por asignar', ' ', ' ', '2021-08-18 08:52:33', '2021-08-18 08:52:33', 'VIG');
 
 -- ----------------------------
 -- Table structure for roles_usuarios
@@ -16159,30 +16159,133 @@ INSERT INTO `usuarios` VALUES (31, 'marcela.zs', '', 'itA8Z8K7TZhPU', '', '', ''
 -- View structure for boleta_detalle_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_detalle_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_detalle_v` AS select `actas_calificaciones`.`idestudiante` AS `idestudiante`,`grupos`.`idciclo` AS `idciclo`,`cat_materias`.`desc_materia` AS `desc_materia`,`cat_materias`.`cve_materia` AS `cve_materia`,`grupos`.`desc_grupo_corto` AS `desc_grupo`,case when `actas_calificaciones`.`idopcion_curso` = 2 then 'REP' when `actas_calificaciones`.`idopcion_curso` = 3 then 'ESP' when `actas_calificaciones`.`idopcion_curso` = 4 then 'DUAL' when `actas_calificaciones`.`idopcion_curso` = 5 then 'AUT' else 'ORD' end AS `opc_curso`,`cat_materias`.`creditos` AS `creditos`,if(`actas_calificaciones`.`seg_opt` = '',`actas_calificaciones`.`pri_opt`,`actas_calificaciones`.`seg_opt`) AS `calificacion` from ((`actas_calificaciones` join `grupos`) join `cat_materias`) where `actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` and `grupos`.`idmateria` = `cat_materias`.`idmateria`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_detalle_v` AS SELECT
+	`actas_calificaciones`.`idestudiante` AS `idestudiante`,
+	`grupos`.`idciclo` AS `idciclo`,
+	`cat_materias`.`desc_materia` AS `desc_materia`,
+	`cat_materias`.`cve_materia` AS `cve_materia`,
+	`grupos`.`desc_grupo_corto` AS `desc_grupo`,
+CASE
+		
+		WHEN `actas_calificaciones`.`idopcion_curso` = 2 THEN
+		'REP' 
+		WHEN `actas_calificaciones`.`idopcion_curso` = 3 THEN
+		'ESP' 
+		WHEN `actas_calificaciones`.`idopcion_curso` = 4 THEN
+		'DUAL' 
+		WHEN `actas_calificaciones`.`idopcion_curso` = 5 THEN
+		'AUT' ELSE 'ORD' 
+	END AS `opc_curso`,
+	`cat_materias`.`creditos` AS `creditos`,
+IF
+	( `actas_calificaciones`.`seg_opt` = '', `actas_calificaciones`.`pri_opt`, `actas_calificaciones`.`seg_opt` ) AS `calificacion` 
+FROM
+	(( `actas_calificaciones` JOIN `grupos` ) JOIN `cat_materias` ) 
+WHERE
+	`actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` 
+	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_encabezado_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS select `a`.`idestudiante` AS `idestudiante`,`a`.`nombre_estudiante` AS `nombre_estudiante`,`b`.`desc_carrera` AS `desc_carrera`,`b`.`plan_estudios` AS `plan_estudios`,`a`.`num_semestre` AS `num_semestre` from (`estudiantes` `a` join `cat_carreras` `b`);
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS SELECT
+	`a`.`idestudiante` AS `idestudiante`,
+	`a`.`nombre_estudiante` AS `nombre_estudiante`,
+	`b`.`desc_carrera` AS `desc_carrera`,
+	`b`.`plan_estudios` AS `plan_estudios`,
+	`a`.`num_semestre` AS `num_semestre` 
+FROM
+	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
 -- ----------------------------
 DROP VIEW IF EXISTS `boleta_estudiante_encabezado`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_estudiante_encabezado` AS select `ciclo`.`idciclo` AS `idciclo`,`ciclo`.`desc_ciclo` AS `desc_ciclo`,`estudiantes`.`nombre_estudiante` AS `nombre_estudiante`,`estudiantes`.`idestudiante` AS `idestudiante`,`estudiantes`.`num_semestre` AS `num_semestre`,`cat_carreras`.`desc_carrera` AS `desc_carrera`,`cat_carreras`.`plan_estudios` AS `plan_estudios`,`grupos`.`desc_grupo` AS `desc_grupo` from (((`estudiantes` join `cat_carreras` on(`estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera`)) join `grupos` on(`cat_carreras`.`idcarrera` = `grupos`.`idcarrera`)) join `ciclo` on(`grupos`.`idciclo` = `ciclo`.`idciclo`));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_estudiante_encabezado` AS SELECT
+	`ciclo`.`idciclo` AS `idciclo`,
+	`ciclo`.`desc_ciclo` AS `desc_ciclo`,
+	`estudiantes`.`nombre_estudiante` AS `nombre_estudiante`,
+	`estudiantes`.`idestudiante` AS `idestudiante`,
+	`estudiantes`.`num_semestre` AS `num_semestre`,
+	`cat_carreras`.`desc_carrera` AS `desc_carrera`,
+	`cat_carreras`.`plan_estudios` AS `plan_estudios`,
+	`grupos`.`desc_grupo` AS `desc_grupo` 
+FROM
+	(((
+				`estudiantes`
+				JOIN `cat_carreras` ON ( `estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera` ))
+			JOIN `grupos` ON ( `cat_carreras`.`idcarrera` = `grupos`.`idcarrera` ))
+	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
 -- ----------------------------
 DROP VIEW IF EXISTS `horario_estudiante_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS select `a`.`idestudiante` AS `idestudiante`,`b`.`idciclo` AS `idciclo`,`b`.`num_semestre` AS `num_semestre`,`b`.`idmateria` AS `idmateria`,`c`.`desc_materia` AS `desc_materia`,`c`.`cve_materia` AS `cve_materia`,`b`.`desc_grupo_corto` AS `desc_grupo_corto`,`b`.`aula` AS `aula`,`a`.`idopcion_curso` AS `idopcion_curso`,case when `a`.`idopcion_curso` = 2 then 'R' when `a`.`idopcion_curso` = 3 then 'E' end AS `desc_opcion_curso_corto`,`c`.`creditos` AS `creditos`,`b`.`lunes` AS `lunes`,`b`.`martes` AS `martes`,`b`.`miercoles` AS `miercoles`,`b`.`jueves` AS `jueves`,`b`.`viernes` AS `viernes`,`b`.`sabado` AS `sabado`,concat(`d`.`nombre_profesor`,' ',`d`.`apaterno`,' ',`d`.`amaterno`) AS `profesor` from (((`grupos_estudiantes` `a` join `grupos` `b`) join `cat_materias` `c`) join `profesores` `d`) where `a`.`idgrupo` = `b`.`idgrupo` and `b`.`idmateria` = `c`.`idmateria` and `b`.`idprofesor` = `d`.`idprofesor`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS SELECT
+	`a`.`idestudiante` AS `idestudiante`,
+	`b`.`idciclo` AS `idciclo`,
+	`b`.`num_semestre` AS `num_semestre`,
+	`b`.`idmateria` AS `idmateria`,
+	`c`.`desc_materia` AS `desc_materia`,
+	`c`.`cve_materia` AS `cve_materia`,
+	`b`.`desc_grupo_corto` AS `desc_grupo_corto`,
+	`b`.`aula` AS `aula`,
+	`a`.`idopcion_curso` AS `idopcion_curso`,
+	CASE
+		WHEN `a`.`idopcion_curso` = 2 THEN 'R' 
+		WHEN `a`.`idopcion_curso` = 3 THEN 'E' 
+	END AS `desc_opcion_curso_corto`,
+	`c`.`creditos` AS `creditos`,
+	`b`.`lunes` AS `lunes`,
+	`b`.`martes` AS `martes`,
+	`b`.`miercoles` AS `miercoles`,
+	`b`.`jueves` AS `jueves`,
+	`b`.`viernes` AS `viernes`,
+	`b`.`sabado` AS `sabado`,
+	CONCAT( `d`.`nombre_profesor`, ' ', `d`.`apaterno`, ' ', `d`.`amaterno` ) AS `profesor` 
+FROM
+	((( `grupos_estudiantes` `a` JOIN `grupos` `b` ) JOIN `cat_materias` `c` ) JOIN `profesores` `d` ) 
+WHERE
+	`a`.`idgrupo` = `b`.`idgrupo` 
+	AND `b`.`idmateria` = `c`.`idmateria` 
+	AND `b`.`idprofesor` = `d`.`idprofesor` ;
 
 -- ----------------------------
 -- View structure for horario_profesor_v
 -- ----------------------------
 DROP VIEW IF EXISTS `horario_profesor_v`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_profesor_v` AS select `a`.`idprofesor` AS `idprofesor`,`a`.`idciclo` AS `idciclo`,`a`.`idcarrera` AS `idcarrera`,`b`.`cve_carrera` AS `cve_carrera`,`a`.`num_semestre` AS `num_semestre`,`a`.`idmateria` AS `idmateria`,`c`.`desc_materia` AS `desc_materia`,`c`.`cve_materia` AS `cve_materia`,`a`.`desc_grupo` AS `desc_grupo`,`a`.`aula` AS `aula`,`c`.`creditos` AS `creditos`,`a`.`lunes` AS `lunes`,`a`.`martes` AS `martes`,`a`.`miercoles` AS `miercoles`,`a`.`jueves` AS `jueves`,`a`.`viernes` AS `viernes`,`a`.`sabado` AS `sabado`,`a`.`idgrupo` AS `idgrupo`,`b`.`desc_carrera` AS `desc_carrera`,`ciclo`.`desc_ciclo` AS `desc_ciclo` from (((`grupos` `a` join `cat_carreras` `b`) join `cat_materias` `c`) join `ciclo` on(`a`.`idciclo` = `ciclo`.`idciclo`)) where `a`.`idcarrera` = `b`.`idcarrera` and `a`.`idmateria` = `c`.`idmateria`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_profesor_v` AS SELECT
+	`a`.`idprofesor` AS `idprofesor`,
+	`a`.`idciclo` AS `idciclo`,
+	`a`.`idcarrera` AS `idcarrera`,
+	`b`.`cve_carrera` AS `cve_carrera`,
+	`a`.`num_semestre` AS `num_semestre`,
+	`a`.`idmateria` AS `idmateria`,
+	`c`.`desc_materia` AS `desc_materia`,
+	`c`.`cve_materia` AS `cve_materia`,
+	`a`.`desc_grupo` AS `desc_grupo`,
+	`a`.`aula` AS `aula`,
+	`c`.`creditos` AS `creditos`,
+	`a`.`lunes` AS `lunes`,
+	`a`.`martes` AS `martes`,
+	`a`.`miercoles` AS `miercoles`,
+	`a`.`jueves` AS `jueves`,
+	`a`.`viernes` AS `viernes`,
+	`a`.`sabado` AS `sabado`,
+	`a`.`idgrupo` AS `idgrupo`,
+	`b`.`desc_carrera` AS `desc_carrera`,
+	`ciclo`.`desc_ciclo` AS `desc_ciclo` 
+FROM
+	(((
+				`grupos` `a`
+				JOIN `cat_carreras` `b` 
+				)
+			JOIN `cat_materias` `c` 
+			)
+	JOIN `ciclo` ON ( `a`.`idciclo` = `ciclo`.`idciclo` )) 
+WHERE
+	`a`.`idcarrera` = `b`.`idcarrera` 
+	AND `a`.`idmateria` = `c`.`idmateria` ;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -11,8 +11,14 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
 use app\models\login\User;
+use app\models\User as Usuario;
 
 AppAsset::register($this);
+
+if(!Yii::$app->user->isGuest){
+    $profesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
+    $link = ($profesor == 1) ? '/profesor/' : '/profesor/horarioconsulta';
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -32,7 +38,6 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     NavBar::begin([
@@ -47,7 +52,8 @@ AppAsset::register($this);
         'items' => [
             //['label' => 'Sitio', 'url' => ['/site/']],
             //['label' => 'Usuarios', 'url' => ['/usuario/']],
-            Yii::$app->user->isGuest ? "" : (['label' => 'Profesores', 'url' => ['/profesor/']]),
+            Yii::$app->user->isGuest ? "" : (['label' => 'Profesores', 'url' => [$link]]),
+            //Yii::$app->user->isGuest ? "" : (['label' => 'ProfesoresH', 'url' => ['/profesor/horarioconsulta']]),
             //['label' => 'Estudiantes', 'url' => ['/estudiante/']],
             ['label' => 'Boleta', 'url' => ['/estudiante/boleta']],
             ['label' => 'Horario', 'url' => ['/estudiante/horario']],
