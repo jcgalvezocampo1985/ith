@@ -487,6 +487,8 @@ class EstudianteController extends Controller
                     WHERE
     	                grupos.idcarrera = :idcarrera
                     AND
+                        grupos.idciclo = :idciclo
+                    AND
                         grupos.idgrupo NOT IN ((
 		                SELECT
 			                idgrupo
