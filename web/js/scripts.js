@@ -25,6 +25,16 @@ $(".idgrupo").on("click", function(e) {
     });
 });
 
+$(".eliminar_materia").on("click", function(e) {
+    e.preventDefault();
+
+    var url = $(this).attr("href");
+
+    if (confirm("¿Eliminar registro?")) {
+        $(location).attr('href', url)
+    }
+});
+
 $("#horario_agregar").on("click", function(e) {
     e.preventDefault();
 

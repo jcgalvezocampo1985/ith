@@ -13,6 +13,7 @@ use yii\widgets\ActiveForm;
                     <table class="table table-striped" id="tabla">
                         <thead>
                             <tr>
+                                <th>Ciclo</th>
                                 <th>Materia</th>
                                 <th>Créditos</th>
                                 <th>Semestre</th>
@@ -23,6 +24,7 @@ use yii\widgets\ActiveForm;
                         <tbody>
                             <?php foreach($materias as $row): ?>
                             <tr id="fila-<?= $row['idgrupo'].$idestudiante ?>">
+                                <td><?= $row['desc_ciclo'] ?></td>
                                 <td><?= $row['desc_materia'] ?></td>
                                 <td><?= $row['creditos'] ?></td>
                                 <td><?= $row['num_semestre'] ?></td>
@@ -76,6 +78,7 @@ $this->registerJs('$(document).ready(function(){
                 success: function(data) {
                     if (data == "1") {
                         $("tr#fila-" + numero).remove();
+                        alert("Materia agregada");
                     }
                 }
             });

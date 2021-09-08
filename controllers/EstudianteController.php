@@ -371,6 +371,7 @@ class EstudianteController extends Controller
 
     public function actionHorariomodificar()
     {
+        $idciclo_actual = Ciclo::find()->max("idciclo");
         $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(['idciclo' => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
         $form = new EstudianteHorarioSearch;
         $msg = null;
@@ -435,16 +436,16 @@ class EstudianteController extends Controller
             $msg = "No se encontraron registros relacionados con el No. Control ". $idestudiante;
         }
 
-        return $this->render("horariomodificar", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idestudiante" => $idestudiante, "idciclo" => $idciclo, "creditos" => $creditos, "idcarrera" => $idcarrera, "carrera" => $desc_carrera, "status" => $status, "msg" => $msg]);
+        return $this->render("horariomodificar", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idestudiante" => $idestudiante, "idciclo" => $idciclo, "idciclo_actual" => $idciclo_actual, "creditos" => $creditos, "idcarrera" => $idcarrera, "carrera" => $desc_carrera, "status" => $status, "msg" => $msg]);
     }
 
     public function actionDeletehorarioestudiante()
     {
-        if(Yii::$app->request->post())
+        if(Yii::$app->request->get())
         {
-            $idestudiante = Html::encode($_POST["idestudiante"]);
-            $idgrupo = Html::encode($_POST["idgrupo"]);
-            $idciclo = Html::encode($_POST["idciclo"]);
+            $idestudiante = Html::encode($_GET["idestudiante"]);
+            $idgrupo = Html::encode($_GET["idgrupo"]);
+            $idciclo = Html::encode($_GET["idciclo"]);
 
             if(GrupoEstudiante::deleteAll(["idestudiante" => $idestudiante, "idgrupo" => $idgrupo]))
             {
@@ -477,10 +478,12 @@ class EstudianteController extends Controller
 	                    grupos.idmateria,
 	                    cat_materias.desc_materia,
 	                    cat_materias.creditos,
-	                    grupos.num_semestre 
+	                    grupos.num_semestre,
+                        ciclo.desc_ciclo
                     FROM
     	                grupos
 	                INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
+                    INNER JOIN ciclo ON grupos.idciclo = ciclo.idciclo 
                     WHERE
     	                grupos.idcarrera = :idcarrera
                     AND
