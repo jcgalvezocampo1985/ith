@@ -54,6 +54,36 @@ class EstudianteController extends Controller
                         ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => [''],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => [''],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
                             'actions' => ['horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
