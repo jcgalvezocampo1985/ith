@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel panel-primary">
     <div class="panel-heading">Horario</div>
     <div class="panel-body">
+        <div class="col-md-6">
             <?php
                 $f = ActiveForm::begin([
                     "method" => "get",
@@ -19,7 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     "enableClientValidation" => true
                 ]);
             ?>
-        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-6">
                     <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => "Periodo", "options" => [$idciclo=>["selected" => true]]]) ?>
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <div class="modal fade" id="materias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="width: 80% !important;">
+    <div class="modal-dialog modal-lg" style="width: 85% !important;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

@@ -479,7 +479,8 @@ class EstudianteController extends Controller
 	                    cat_materias.desc_materia,
 	                    cat_materias.creditos,
 	                    grupos.num_semestre,
-                        ciclo.desc_ciclo
+                        ciclo.desc_ciclo,
+                        grupos.desc_grupo
                     FROM
     	                grupos
 	                INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria

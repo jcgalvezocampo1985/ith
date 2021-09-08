@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
                         <thead>
                             <tr>
                                 <th>Ciclo</th>
+                                <th>Grupo</th>
                                 <th>Materia</th>
                                 <th>Créditos</th>
                                 <th>Semestre</th>
@@ -25,6 +26,7 @@ use yii\widgets\ActiveForm;
                             <?php foreach($materias as $row): ?>
                             <tr id="fila-<?= $row['idgrupo'].$idestudiante ?>">
                                 <td><?= $row['desc_ciclo'] ?></td>
+                                <td><?= $row['desc_grupo'] ?></td>
                                 <td><?= $row['desc_materia'] ?></td>
                                 <td><?= $row['creditos'] ?></td>
                                 <td><?= $row['num_semestre'] ?></td>
