@@ -20,11 +20,12 @@ use app\models\EstudianteForm;
 use app\models\EstudianteSearch;
 use app\models\EstudianteHorarioSearch;
 use app\models\GrupoEstudiante;
-use app\models\GrupoEstudianteForm;
+//use app\models\GrupoEstudianteForm;
 use app\models\Carrera;
 use app\models\Ciclo;
-use app\models\Materia;
+//use app\models\Materia;
 use app\models\OpcionCurso;
+use app\models\ActaCalificacion;
 use app\models\User;
 
 class EstudianteController extends Controller
@@ -34,11 +35,11 @@ class EstudianteController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horariomodificar'],//Especificar que acciones se van proteger
+                    'only' => ['index', 'create', 'update', 'delete', 'horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'boleta', 'horariomodificar'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'create', 'update', 'delete', 'horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -49,6 +50,21 @@ class EstudianteController extends Controller
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                            },  
+                        ],
+                        [
+                            //El administrador tiene permisos sobre las siguientes acciones
+                            'actions' => ['horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones tiene permitidas este usuario
+                            //Esta propiedad establece que tiene permisos
+                            'allow' => true,
+                            //Usuarios autenticados, el signo ? es para invitados
+                            'roles' => ['@'],
+                            //Este método nos permite crear un filtro sobre la identidad del usuario
+                            //y así establecer si tiene permisos o no
+                            'matchCallback' => function ($rule, $action) {
+                                //Llamada al método que comprueba si es un administrador
+                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
                             },  
                         ]
                     ],
@@ -446,7 +462,11 @@ class EstudianteController extends Controller
             $idestudiante = Html::encode($_GET["idestudiante"]);
             $idgrupo = Html::encode($_GET["idgrupo"]);
             $idciclo = Html::encode($_GET["idciclo"]);
-
+            /*
+            $acta_calificacion = ActaCalificacion::find()
+                                                 ->where(["idestudiante" => $idestudiante, "idgrupo" => $idgrupo])
+                                                 ->count();
+            */
             if(GrupoEstudiante::deleteAll(["idestudiante" => $idestudiante, "idgrupo" => $idgrupo]))
             {
                 $msg = "Registro eliminado";
