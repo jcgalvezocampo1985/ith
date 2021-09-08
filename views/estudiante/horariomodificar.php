@@ -6,34 +6,47 @@ use yii\helpers\Url;
 
 $this->title = 'Horario';
 
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $this->params['breadcrumbs'][] = $this->title; ?>
-<?php
-$f = ActiveForm::begin([
-    "method" => "get",
-    "action" => Url::toRoute("estudiante/horariomodificar"),
-    "enableClientValidation" => true
-]);
-?>
+
 <div class="panel panel-primary">
     <div class="panel-heading">Horario</div>
     <div class="panel-body">
-        <div class="row">
-            <div class="col-md-4">
-                <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => "Periodo"]) ?>
+        <div class="col-md-6">
+            <?php
+                $f = ActiveForm::begin([
+                    "method" => "get",
+                    "action" => Url::toRoute("estudiante/horariomodificar"),
+                    "enableClientValidation" => true
+                ]);
+            ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $f->field($form, "idciclo")->dropDownList($ciclos, ["prompt" => "Periodo", "options" => [$idciclo=>["selected" => true]]]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $f->field($form, "idestudiante")->input("search", ["class" => "form-control", "placeholder" => "No. Control", "value" => $idestudiante]) ?>
+                </div>
             </div>
-            <div class="col-md-4">
-                <?= $f->field($form, "idestudiante")->input("search", ["class" => "form-control", "placeholder" => "No. Control"]) ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+            <?php $f->end() ?>
+                <?php if($idciclo_actual == $idciclo): ?>
+                <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar=".$idestudiante."=".$idciclo."=".$idcarrera ?>" id="horario_agregar" class="btn btn-info" data-toggle="modal" data-target="#materias">Asignar Materia</a>
+                <?php endif ?>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-            </div>
+        <div class="col-md-4 text-center">
+            <h4>Carrera<br /><span class="small"><?= $carrera ?></span></h4>
+        </div>
+        <div class="col-md-2 text-center">
+            <h4>Total de créditos<br /><span class="label label-warning"><?= $creditos ?></span></h4>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <hr width="100%">
+                <div class="table-responsive">
                 <table class="table table-striped" id="tabla">
                     <thead>
                         <tr>
@@ -62,49 +75,40 @@ $f = ActiveForm::begin([
                             <td><?= $row['viernes'] ?></td>
                             <td><?= $row['sabado'] ?></td>
                             <td>
-                                <a href="<?= Url::toRoute(['reporte/horario/', 'id' => $row['idestudiante'], 'idciclo' => $row['idciclo']]) ?>" class="btn btn-danger" role="button">Eliminar</a>
+                                <?php if($idciclo_actual == $idciclo): ?>
+                                <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/deletehorarioestudiante?idgrupo=".$row['idgrupo']."&idestudiante=".$row['idestudiante']."&idciclo=".$row['idciclo'] ?>" class="btn-sm btn-danger eliminar_materia">Eliminar</a>
+                                <?php endif ?>
                             </td>
                         </tr>
-                        <div class="modal fade" id="idestudiante_"<?= $row['idestudiante'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar registro</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="alert alert-danger" role="danger">
-                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        <span class="sr-only">Mensaje:</span>
-                                        ¿Desea eliminar al estudiante con No. Control <?= $row['idestudiante'] ?>?
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <?= Html::beginForm(Url::toRoute("estudiante/delete"), "POST") ?>
-                                        <input type="hidden" name="idestudiante" value="<?= $row['idestudiante'] ?>">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    <?= Html::endForm() ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                         <?php endforeach ?>
                     </tbody>
                 </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="materias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 85% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="classModalLabel">Asignar Materia</h4>
+            </div>
+            <div class="modal-body">
+                <div id="alumno_horario_agregar"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<?php $f->end() ?>
-
-<?php if(count($model) == 0 && $status == 1): ?>
+<?php if((count($model) == 0 && $status == 1) || (count($model) >= 0 && $status == 2)): ?>
     <div class="alert alert-warning" role="warning">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        No se encontró información relacionada al No. Control <?= $form->buscar ?>
+        <span class="sr-only"></span>
+        <b><?= $msg ?></b>
     </div>
 <?php endif ?>

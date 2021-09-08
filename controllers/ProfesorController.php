@@ -439,10 +439,10 @@ class ProfesorController extends Controller
         $form = new CicloProfesorSearch;
         $ciclo = null;
         $idciclo = null;
-        $profesores = ArrayHelper::map(Profesor::find()->asArray()->all(),'idprofesor', function($model){
+        $profesores = ArrayHelper::map(Profesor::find()->orderBy(["apaterno" => SORT_ASC, "amaterno" => SORT_ASC, "nombre_profesor" => SORT_ASC])->asArray()->all(),'idprofesor', function($model){
             return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
         });
-        $ciclos = ArrayHelper::map(Ciclo::find()->all(), 'idciclo', 'desc_ciclo');
+        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
 
         if($form->load(Yii::$app->request->get()))
         {

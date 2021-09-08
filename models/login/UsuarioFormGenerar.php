@@ -16,4 +16,11 @@ class UsuarioFormGenerar extends model
             [['curp'], 'required', 'message' => 'Requerido'],
         ];
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'curp' => 'Password'
+        ];
+    }
 }
