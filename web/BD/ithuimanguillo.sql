@@ -5,13 +5,13 @@
  Source Server Type    : MariaDB
  Source Server Version : 100510
  Source Host           : localhost:3306
- Source Schema         : ithuimanguillo
+ Source Schema         : universidad
 
  Target Server Type    : MariaDB
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 07/09/2021 22:16:59
+ Date: 07/09/2021 22:24:03
 */
 
 SET NAMES utf8mb4;
@@ -34,8 +34,8 @@ CREATE TABLE `actas_calificaciones`  (
   PRIMARY KEY (`idacta_cal`) USING BTREE,
   INDEX `fk_actas_calificaciones_grupos_estudiantes1_idx`(`idestudiante`, `idgrupo`) USING BTREE,
   INDEX `fk_actas_calificaciones_cat_opcion_curso1_idx`(`idopcion_curso`) USING BTREE,
-  CONSTRAINT `fk_actas_calificaciones_cat_opcion_curso1` FOREIGN KEY (`idopcion_curso`) REFERENCES `cat_opcion_curso` (`idopcion_curso`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_actas_calificaciones_grupos_estudiantes1` FOREIGN KEY (`idestudiante`, `idgrupo`) REFERENCES `grupos_estudiantes` (`idestudiante`, `idgrupo`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `fk_actas_calificaciones_cat_opcion_curso1` FOREIGN KEY (`idopcion_curso`) REFERENCES `cat_opcion_curso` (`idopcion_curso`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_actas_calificaciones_grupos_estudiantes1` FOREIGN KEY (`idestudiante`, `idgrupo`) REFERENCES `grupos_estudiantes` (`idestudiante`, `idgrupo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB AUTO_INCREMENT = 1343 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -122,6 +122,7 @@ INSERT INTO `actas_calificaciones` VALUES (78, 6, '181240016', 1, '89', '', '202
 INSERT INTO `actas_calificaciones` VALUES (79, 6, '181240069', 1, '85', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
 INSERT INTO `actas_calificaciones` VALUES (80, 6, '181240041', 1, '86', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
 INSERT INTO `actas_calificaciones` VALUES (81, 6, '161240030', 2, '90', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
+INSERT INTO `actas_calificaciones` VALUES (82, 7, '191240049', 1, 'NA', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
 INSERT INTO `actas_calificaciones` VALUES (83, 7, '191240050', 1, '94', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
 INSERT INTO `actas_calificaciones` VALUES (84, 7, '191240051', 1, '', '83', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
 INSERT INTO `actas_calificaciones` VALUES (85, 7, '191240052', 1, '92', '', '2021-08-07 19:40:01', '2021-08-07 19:40:01', 'VIG');
@@ -1962,9 +1963,9 @@ CREATE TABLE `grupos_estudiantes`  (
   INDEX `fk_grupos_estudiantes_cat_opcion_curso1_idx`(`idopcion_curso`) USING BTREE,
   INDEX `fk_grupos_estudiantes_estudiantes1_idx`(`idestudiante`) USING BTREE,
   INDEX `fk_grupos_estudiantes_grupos1_idx`(`idgrupo`) USING BTREE,
-  CONSTRAINT `fk_grupos_estudiantes_cat_opcion_curso1` FOREIGN KEY (`idopcion_curso`) REFERENCES `cat_opcion_curso` (`idopcion_curso`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_grupos_estudiantes_estudiantes1` FOREIGN KEY (`idestudiante`) REFERENCES `estudiantes` (`idestudiante`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_grupos_estudiantes_grupos1` FOREIGN KEY (`idgrupo`) REFERENCES `grupos` (`idgrupo`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_grupos_estudiantes_cat_opcion_curso1` FOREIGN KEY (`idopcion_curso`) REFERENCES `cat_opcion_curso` (`idopcion_curso`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_grupos_estudiantes_estudiantes1` FOREIGN KEY (`idestudiante`) REFERENCES `estudiantes` (`idestudiante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_grupos_estudiantes_grupos1` FOREIGN KEY (`idgrupo`) REFERENCES `grupos` (`idgrupo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -2051,6 +2052,7 @@ INSERT INTO `grupos_estudiantes` VALUES (6, '181240050', 1, NULL, NULL, NULL, NU
 INSERT INTO `grupos_estudiantes` VALUES (6, '181240058', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '6181240058');
 INSERT INTO `grupos_estudiantes` VALUES (6, '181240060', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '6181240060');
 INSERT INTO `grupos_estudiantes` VALUES (6, '181240069', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '6181240069');
+INSERT INTO `grupos_estudiantes` VALUES (7, '191240049', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '7191240049');
 INSERT INTO `grupos_estudiantes` VALUES (7, '191240050', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '7191240050');
 INSERT INTO `grupos_estudiantes` VALUES (7, '191240051', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '7191240051');
 INSERT INTO `grupos_estudiantes` VALUES (7, '191240052', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-07 19:39:56', '2021-08-07 19:39:56', 'VIG', NULL, '7191240052');
@@ -3227,9 +3229,11 @@ INSERT INTO `grupos_estudiantes` VALUES (106, '201240013', 1, NULL, NULL, NULL, 
 INSERT INTO `grupos_estudiantes` VALUES (106, '201240016', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '106201240016');
 INSERT INTO `grupos_estudiantes` VALUES (106, '201240019', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '106201240019');
 INSERT INTO `grupos_estudiantes` VALUES (106, '201240023', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '106201240023');
+INSERT INTO `grupos_estudiantes` VALUES (107, '191240049', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '107191240049');
 INSERT INTO `grupos_estudiantes` VALUES (107, '191240050', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '107191240050');
 INSERT INTO `grupos_estudiantes` VALUES (107, '191240051', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '107191240051');
 INSERT INTO `grupos_estudiantes` VALUES (107, '191240052', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '107191240052');
+INSERT INTO `grupos_estudiantes` VALUES (108, '191240049', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '108191240049');
 INSERT INTO `grupos_estudiantes` VALUES (108, '191240050', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '108191240050');
 INSERT INTO `grupos_estudiantes` VALUES (108, '191240051', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '108191240051');
 INSERT INTO `grupos_estudiantes` VALUES (108, '191240052', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '108191240052');
@@ -3900,7 +3904,6 @@ INSERT INTO `grupos_estudiantes` VALUES (184, '191240020', 1, NULL, NULL, NULL, 
 INSERT INTO `grupos_estudiantes` VALUES (184, '191240024', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '184191240024');
 INSERT INTO `grupos_estudiantes` VALUES (184, '191240028', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '184191240028');
 INSERT INTO `grupos_estudiantes` VALUES (184, '191240029', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '184191240029');
-INSERT INTO `grupos_estudiantes` VALUES (185, '161240013', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-09-07 21:58:32', '2021-09-07 21:58:32', 'VIG', 1, '185161240013');
 INSERT INTO `grupos_estudiantes` VALUES (185, '181240001', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '185181240001');
 INSERT INTO `grupos_estudiantes` VALUES (185, '181240002', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '185181240002');
 INSERT INTO `grupos_estudiantes` VALUES (185, '181240007', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 01:42:54', '2021-08-30 01:42:54', 'VIG', 2, '185181240007');
@@ -3958,6 +3961,7 @@ INSERT INTO `grupos_estudiantes` VALUES (188, '211240071', 1, NULL, NULL, NULL, 
 INSERT INTO `grupos_estudiantes` VALUES (188, '211240072', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 04:59:12', '2021-08-30 04:59:12', 'VIG', 2, '188211240072');
 INSERT INTO `grupos_estudiantes` VALUES (188, '211240073', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 04:59:12', '2021-08-30 04:59:12', 'VIG', 2, '188211240073');
 INSERT INTO `grupos_estudiantes` VALUES (188, '211240075', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 04:59:12', '2021-08-30 04:59:12', 'VIG', 2, '188211240075');
+INSERT INTO `grupos_estudiantes` VALUES (188, '211240076', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 04:59:12', '2021-08-30 04:59:12', 'VIG', 2, '188211240076');
 
 -- ----------------------------
 -- Table structure for modulos_rol
@@ -4060,7 +4064,7 @@ CREATE TABLE `roles_usuarios`  (
 -- ----------------------------
 -- Records of roles_usuarios
 -- ----------------------------
-INSERT INTO `roles_usuarios` VALUES (5, 1);
+INSERT INTO `roles_usuarios` VALUES (5, 3);
 INSERT INTO `roles_usuarios` VALUES (6, 3);
 INSERT INTO `roles_usuarios` VALUES (7, 1);
 INSERT INTO `roles_usuarios` VALUES (8, 3);
@@ -4186,7 +4190,7 @@ FROM
 	(( `actas_calificaciones` JOIN `grupos` ) JOIN `cat_materias` ) 
 WHERE
 	`actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` 
-	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ; ;
+	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
@@ -4199,7 +4203,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 	`b`.`plan_estudios` AS `plan_estudios`,
 	`a`.`num_semestre` AS `num_semestre` 
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ; ;
+	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -4219,7 +4223,7 @@ FROM
 				`estudiantes`
 				JOIN `cat_carreras` ON ( `estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera` ))
 			JOIN `grupos` ON ( `cat_carreras`.`idcarrera` = `grupos`.`idcarrera` ))
-	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ; ;
+	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
@@ -4246,8 +4250,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `horario_estudiante_v` AS
 	`b`.`jueves` AS `jueves`,
 	`b`.`viernes` AS `viernes`,
 	`b`.`sabado` AS `sabado`,
-	CONCAT( `d`.`nombre_profesor`, ' ', `d`.`apaterno`, ' ', `d`.`amaterno` ) AS `profesor`,
-	`a`.`idgrupo` AS `idgrupo`
+	CONCAT( `d`.`nombre_profesor`, ' ', `d`.`apaterno`, ' ', `d`.`amaterno` ) AS `profesor` 
 FROM
 	((( `grupos_estudiantes` `a` JOIN `grupos` `b` ) JOIN `cat_materias` `c` ) JOIN `profesores` `d` ) 
 WHERE
@@ -4290,6 +4293,6 @@ FROM
 	JOIN `ciclo` ON ( `a`.`idciclo` = `ciclo`.`idciclo` )) 
 WHERE
 	`a`.`idcarrera` = `b`.`idcarrera` 
-	AND `a`.`idmateria` = `c`.`idmateria` ; ;
+	AND `a`.`idmateria` = `c`.`idmateria` ;
 
 SET FOREIGN_KEY_CHECKS = 1;
