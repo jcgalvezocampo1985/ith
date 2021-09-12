@@ -23,6 +23,7 @@ use yii\widgets\ActiveForm;
                             </tr>
                         </thead>
                         <tbody>
+                            <div class="lista_materias">
                             <?php foreach($materias as $row): ?>
                             <tr id="fila-<?= $row['idgrupo'].$idestudiante ?>">
                                 <td><?= $row['desc_ciclo'] ?></td>
@@ -44,6 +45,7 @@ use yii\widgets\ActiveForm;
                                 </td>
                             </tr>
                         <?php endforeach ?>
+                        </div>
                     </tbody>
                 </table>
                 </div>
@@ -88,7 +90,5 @@ $this->registerJs('$(document).ready(function(){
             alert("Selecciona la opción del curso");
         }
     });
-
-    
 })', \yii\web\VIEW::POS_HEAD);
 ?>
