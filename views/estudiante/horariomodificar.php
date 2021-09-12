@@ -38,11 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-        <div class="col-md-4 text-center">
-            <h4>Carrera<br /><span class="small"><?= $carrera ?></span></h4>
+        <div class="col-md-3 text-left">
+            <h4>No. Control: <span class="small"><?= $idestudiante ?></span></h4>
+            <h4>Estudiante: <span class="small"><?= $estudiante ?></span></h4>
         </div>
-        <div class="col-md-2 text-center">
-            <h4>Total de créditos<br /><span class="label label-warning"><?= $creditos ?></span></h4>
+        <div class="col-md-3 text-left">
+            <h4>Carrera: <span class="small"><?= $carrera ?></span></h4>
+            <h4>Total de créditos: <span class="label label-warning"><?= $creditos ?></span></h4>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -96,7 +98,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h4 class="modal-title" id="classModalLabel">Asignar Materia</h4>
             </div>
             <div class="modal-body">
-                <div id="alumno_horario_agregar"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="desc_materia">Materia</label>
+                            <input type="text" name="desc_materia" id="desc_materia" />
+                            <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar?idestudiante=".$idestudiante."&idciclo=".$idciclo."&idcarrera=".$idcarrera ?>" class="btn btn-primary" id="buscar_materia">Buscar</a>
+                            <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar?idestudiante=".$idestudiante."&idciclo=".$idciclo."&idcarrera=".$idcarrera ?>" class="btn btn-info" id="refrecar_lista_materia">Refrescar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <span id="alumno_horario_agregar"></span>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>

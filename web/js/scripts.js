@@ -60,42 +60,129 @@ $("#horario_agregar").on("click", function(e) {
         }
     });
 });
+
 $('#materias').on('hidden.bs.modal', function(e) {
+    e.preventDefault;
     location.reload();
 });
-/*
-$(".agregar_materia").on("click", function(e) {
+
+$("#buscar_materia").on("click", function(e) {
     e.preventDefault();
 
-    var url = $(this).attr("href");
-    var fila = $(this).attr("id");
-    var numero = fila.split('-')[1];
+    var desc_materia = $("#desc_materia").val();
 
-    var idopcion_curso = $("#idopcion_curso-" + numero).val();
-    var idestudiante = $("#idestudiante").val();
-    var idciclo = $("#idciclo").val();
-    var idgrupo = $("#idgrupo-" + numero).val();
+    var valor_url = $(this).attr("href");
+    var url = valor_url.split("?")[0];
+    var variables = valor_url.split("?")[1];
 
-    if (idopcion_curso !== "") {
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {
-                "idgrupo": idgrupo,
-                "idopcion_curso": idopcion_curso,
-                "idestudiante": idestudiante,
-                "idciclo": idciclo
-            },
-            beforeSend: function() {
+    var var_idestudiante = variables.split("&")[0];
+    var idestudiante = var_idestudiante.split("=")[1];
 
-            },
-            success: function(data) {
-                if (data === 1) {
-                    $("tr#fila-" + numero).remove();
-                }
-            }
-        });
-    } else {
-        alert("Selecciona la opción del curso");
+    var var_idciclo = variables.split("&")[1];
+    var idciclo = var_idciclo.split("=")[1];
+
+    var var_idcarrera = variables.split("&")[2];
+    var idcarrera = var_idcarrera.split("=")[1];
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {
+            "idestudiante": idestudiante,
+            "idciclo": idciclo,
+            "idcarrera": idcarrera,
+            "desc_materia": desc_materia
+        },
+        beforeSend: function() {
+            $('#alumno_horario_agregar').empty();
+        },
+        success: function(data) {
+            $('#alumno_horario_agregar').html(data);
+        }
+    });
+});
+
+$("#refrecar_lista_materia").on("click", function(e) {
+    e.preventDefault();
+
+    var desc_materia = $("#desc_materia").val("");
+
+    var valor_url = $(this).attr("href");
+    var url = valor_url.split("?")[0];
+    var variables = valor_url.split("?")[1];
+
+    var var_idestudiante = variables.split("&")[0];
+    var idestudiante = var_idestudiante.split("=")[1];
+
+    var var_idciclo = variables.split("&")[1];
+    var idciclo = var_idciclo.split("=")[1];
+
+    var var_idcarrera = variables.split("&")[2];
+    var idcarrera = var_idcarrera.split("=")[1];
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {
+            "idestudiante": idestudiante,
+            "idciclo": idciclo,
+            "idcarrera": idcarrera
+        },
+        beforeSend: function() {
+            $('#alumno_horario_agregar').empty();
+        },
+        success: function(data) {
+            $('#alumno_horario_agregar').html(data);
+        }
+    });
+});
+
+/*
+$("#reload").click(function(e) {
+    e.preventDefault();
+    $.pjax.reload({ container: '#alumno_horario_agregar', async: true });
+});
+
+var submit_form = false;
+
+$("body").on("click", ".search-submit-circle", function() {
+    //enable submit for applyFilter event
+    if (submit_form === false) {
+        submit_form = true;
+        $("#alumno_horario_agregar").yiiGridView("applyFilter");
     }
-});*/
+});
+//disable default submit
+
+$("body").on("beforeFilter", "#alumno_horario_agregar", function(event) {
+    event.preventDefault();
+    var valor_url = $("#horario_agregar").attr("href");
+    var url = valor_url.split('=')[0];
+    var idestudiante = valor_url.split('=')[1];
+    var idciclo = valor_url.split('=')[2];
+    var idcarrera = valor_url.split('=')[3];
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {
+            "idcarrera": idcarrera,
+            "idestudiante": idestudiante,
+            "idciclo": idciclo
+        },
+        beforeSend: function() {
+            //$('#alumno_horario_agregar').empty();
+        },
+        success: function(respuesta) {
+            //$.pjax.reload({ container: '#alumno_horario_agregar', async: true });
+
+        }
+    });
+
+    return submit_form;
+});
+
+$("body").on("afterFilter", "#buscar_materia", function(event) {
+    submit_form = false;
+});
+*/
