@@ -75,6 +75,9 @@ $form = ActiveForm::begin([
                             $s8 = $row['s8'];
                             $s9 = $row['s9'];
 
+                            $promedio_p = "";
+                            $promedio_s = "";
+
                             if ($p1 > 0) {
                                 $promedio_p = round($p1,0);
                             }
