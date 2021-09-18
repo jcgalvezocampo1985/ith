@@ -102,7 +102,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="desc_materia">Materia</label>
-                            <input type="text" name="desc_materia" id="desc_materia" />
+                            <input type="text" name="desc_materia" id="desc_materia" class="form-control" placeholder="Materia" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar?idestudiante=".$idestudiante."&idciclo=".$idciclo."&idcarrera=".$idcarrera ?>" class="btn btn-primary" id="buscar_materia">Buscar</a>
                             <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar?idestudiante=".$idestudiante."&idciclo=".$idciclo."&idcarrera=".$idcarrera ?>" class="btn btn-info" id="refrecar_lista_materia">Refrescar</a>
                         </div>
@@ -113,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <span id="alumno_horario_agregar"></span>
                     </div>
                 </div>
-            </div>
+             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
             </div>

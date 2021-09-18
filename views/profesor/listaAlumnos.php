@@ -9,15 +9,13 @@ use yii\helpers\Html;
             <div class="col-md-4">
                 <h4>Carrera: <small><?= $model1[0]['desc_carrera'] ?></small></h4>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <h4>Matería: <small><?= $model1[0]['desc_materia'] ?></small></h4>
             </div>
-            <div class="col-md-3">
-                <?php
-                    if(count($model) > 0){
-                        echo Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]);
-                    }
-                ?>
+            <div class="col-md-4">
+                <?php if(count($model) > 0): ?>
+                <?= Html::a("Descargar Lista", ["reporte/listaalumnos?idgrupo=$idgrupo&idciclo=$idciclo"], ["class" => "btn btn-success"]) ?>
+                <?php endif ?>
             </div>
         </div>
         <table class="table table-striped">
