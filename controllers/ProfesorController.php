@@ -323,12 +323,13 @@ class ProfesorController extends Controller
     {
         $form = new CicloSearch;
         $idciclo = Ciclo::find()->max("idciclo");
+        $ultimo_ciclo = $idciclo;
         $ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->one();
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
         $idprofesor = $sql_profesor->idprofesor;
 
-        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
+        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), "idciclo", "desc_ciclo");
  
         if($form->load(Yii::$app->request->get()))
         {
@@ -353,13 +354,13 @@ class ProfesorController extends Controller
                 ORDER BY
                     lunes, viernes, sabado";
         $model = Yii::$app->db->createCommand($sql)
-                              ->bindValue(':idprofesor', $idprofesor)
-                              ->bindValue(':idciclo', $idciclo)
+                              ->bindValue(":idprofesor", $idprofesor)
+                              ->bindValue(":idciclo", $idciclo)
                               ->queryAll();
 
-        $ciclo_actual = ($idciclo) ? (count($model) > 0) ? $model[0]['desc_ciclo'] : $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
+        $ciclo_actual = ($idciclo) ? ((count($model) > 0) ? $model[0]["desc_ciclo"] : $ciclo["desc_ciclo"]) : $ciclo->desc_ciclo;
 
-        return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo, 'ciclo_actual' => $ciclo_actual]);
+        return $this->render("horario", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor, "ciclo_actual" => $ciclo_actual, "ultimo_ciclo" => $ultimo_ciclo]);
     }
 
     public function actionListaalumnos()
@@ -482,16 +483,19 @@ class ProfesorController extends Controller
                                   ->queryAll();
         }
 
-        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "ciclo_actual" => $ciclo, "idprofesor" => $idprofesor,"profesores" => $profesores]);
+        $ultimo_ciclo = Ciclo::find()->max("idciclo");
+
+        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "ciclo_actual" => $ciclo, "idprofesor" => $idprofesor, "profesores" => $profesores, "ultimo_ciclo" => $ultimo_ciclo]);
     }
 
-    public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor)
+    public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
         {
             $idgrupo = Html::encode($idgrupo);
             $idprofesor = Html::encode($idprofesor);
             $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
+            $ultimo_ciclo = Html::encode($ultimo_ciclo);
 
             $model = (new \yii\db\Query())
                             ->from(["estudiantes"])
@@ -541,7 +545,7 @@ class ProfesorController extends Controller
                             ->andFilterWhere(["grupos.idciclo" => $idciclo])
                             ->all();
 
-            return $this->render("listaAlumnosCalificacion", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo, "idprofesor" => $idprofesor]);
+            return $this->render("listaAlumnosCalificacion", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo, "idprofesor" => $idprofesor, "ultimo_ciclo" => $ultimo_ciclo]);
         }
     }
 
@@ -552,6 +556,8 @@ class ProfesorController extends Controller
             $idgrupo = Html::encode($_POST["idgrupo"]);
             $idciclo = Html::encode($_POST["idciclo"]);
             $idprofesor = Html::encode($_POST["idprofesor"]);
+            $r = Html::encode($_POST["r"]);
+            $ultimo_ciclo = Ciclo::find()->max("idciclo");
 
             $total = count($_POST["p1"]);
 
@@ -560,42 +566,24 @@ class ProfesorController extends Controller
                 $idestudiante = Html::encode($_POST["idestudiante"][$i]);
 
                 $p1 = Html::encode($_POST["p1"][$i]);
-                $p1 = ($p1 < 0) ? 0 : $p1;
                 $p2 = Html::encode($_POST["p2"][$i]);
-                $p2 = ($p2 < 0) ? 0 : $p2;
                 $p3 = Html::encode($_POST["p3"][$i]);
-                $p3 = ($p3 < 0) ? 0 : $p3;
                 $p4 = Html::encode($_POST["p4"][$i]);
-                $p4 = ($p4 < 0) ? 0 : $p4;
                 $p5 = Html::encode($_POST["p5"][$i]);
-                $p5 = ($p5 < 0) ? 0 : $p5;
                 $p6 = Html::encode($_POST["p6"][$i]);
-                $p6 = ($p6 < 0) ? 0 : $p6;
                 $p7 = Html::encode($_POST["p7"][$i]);
-                $p7 = ($p7 < 0) ? 0 : $p7;
                 $p8 = Html::encode($_POST["p8"][$i]);
-                $p8 = ($p8 < 0) ? 0 : $p8;
                 $p9 = Html::encode($_POST["p9"][$i]);
-                $p9 = ($p9 < 0) ? 0 : $p9;
 
                 $s1 = Html::encode($_POST["s1"][$i]);
-                $s1 = ($s1 < 0) ? 0 : $s1;
                 $s2 = Html::encode($_POST["s2"][$i]);
-                $s2 = ($s2 < 0) ? 0 : $s2;
                 $s3 = Html::encode($_POST["s3"][$i]);
-                $s3 = ($s3 < 0) ? 0 : $s3;
                 $s4 = Html::encode($_POST["s4"][$i]);
-                $s4 = ($s4 < 0) ? 0 : $s4;
                 $s5 = Html::encode($_POST["s5"][$i]);
-                $s5 = ($s5 < 0) ? 0 : $s5;
                 $s6 = Html::encode($_POST["s6"][$i]);
-                $s6 = ($s6 < 0) ? 0 : $s6;
                 $s7 = Html::encode($_POST["s7"][$i]);
-                $s7 = ($s7 < 0) ? 0 : $s7;
                 $s8 = Html::encode($_POST["s8"][$i]);
-                $s8 = ($s8 < 0) ? 0 : $s8;
                 $s9 = Html::encode($_POST["s9"][$i]);
-                $s9 = ($s9 < 0) ? 0 : $s9;
 
                 $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
 
@@ -623,7 +611,8 @@ class ProfesorController extends Controller
                     $table->update();
                 }    
             }
-            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
+
+            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
             exit;
         }
     }

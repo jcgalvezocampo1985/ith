@@ -5,9 +5,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'Profesores';
-
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $this->params['breadcrumbs'][] = $this->title; ?>
 
 <div class="panel panel-primary">
     <div class="panel-heading">Profesores</div>
@@ -55,7 +54,7 @@ $this->title = 'Profesores';
                                 <th style="width: 85px;">Jueves</th>
                                 <th style="width: 85px;">Viernes</th>
                                 <th style="width: 85px;">Sábado</th>
-                                <th style="width: 180px;"></th>
+                                <th style="width: 180px;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,13 +101,14 @@ $this->title = 'Profesores';
                                 <td><?= $sabado ?></td>
                                 <td>
                                     <div class="btn-group dropleft">
-                                        <button type="button" class="btn btn-info btn-xs">Acción</button>
                                         <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a("Lista", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
-                                            <li><?= Html::a("Calificación", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor], ["target" => "_parent"]) ?></li>
+                                            <?php if($idciclo == $ultimo_ciclo): ?>
+                                            <li><?= Html::a("Calificación", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
                                         </ul>
                                     </div>
                                 </td>

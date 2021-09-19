@@ -2,6 +2,14 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
+
+$url = ($_GET["r"] == "true") ? "horario" : "horarioconsulta";
+
+if($idciclo != $ultimo_ciclo){
+    header("Location: ".Url::toRoute("/profesor/".$url."?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
+    exit;
+}
 
 $form = ActiveForm::begin([
     "method" => "post",
@@ -27,7 +35,7 @@ $form = ActiveForm::begin([
             </div>
             <div class="col-md-2">
                 <input type="submit" class="btn btn-warning" name="guardar" value="Guardar" />
-                <?= Html::a("Regresar", ["profesor/horarioconsulta?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-info"]) ?>
+                <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-info"]) ?>
             </div>
         </div>
         <hr width="100%">
@@ -41,99 +49,107 @@ $form = ActiveForm::begin([
                             <th>Nombre</th>
                             <th>Opción</th>
                             <th>T</th>
-                            <th>P1</th>
-                            <th>P2</th>
-                            <th>P3</th>
-                            <th>P4</th>
-                            <th>P5</th>
-                            <th>P6</th>
-                            <th>P7</th>
-                            <th>P8</th>
-                            <th>P9</th>
-                            <th>Prom.</th>
+                            <th class="text-center">P1</th>
+                            <th class="text-center">P2</th>
+                            <th class="text-center">P3</th>
+                            <th class="text-center">P4</th>
+                            <th class="text-center">P5</th>
+                            <th class="text-center">P6</th>
+                            <th class="text-center">P7</th>
+                            <th class="text-center">P8</th>
+                            <th class="text-center">P9</th>
+                            <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
                     <tbody class="text-nowrap">
                         <?php foreach($model as $row): ?>
                         <?php
-                            $p1 = $row['p1'];
-                            $p2 = $row['p2'];
-                            $p3 = $row['p3'];
-                            $p4 = $row['p4'];
-                            $p5 = $row['p5'];
-                            $p6 = $row['p6'];
-                            $p7 = $row['p7'];
-                            $p8 = $row['p8'];
-                            $p9 = $row['p9'];
-                            $s1 = $row['s1'];
-                            $s2 = $row['s2'];
-                            $s3 = $row['s3'];
-                            $s4 = $row['s4'];
-                            $s5 = $row['s5'];
-                            $s6 = $row['s6'];
-                            $s7 = $row['s7'];
-                            $s8 = $row['s8'];
-                            $s9 = $row['s9'];
+                            $p1 = ($row['p1'] == "") ? 0 : $row['p1'];
+                            $p2 = ($row['p2'] == "") ? 0 : $row['p2'];
+                            $p3 = ($row['p3'] == "") ? 0 : $row['p3'];
+                            $p4 = ($row['p4'] == "") ? 0 : $row['p4'];
+                            $p5 = ($row['p5'] == "") ? 0 : $row['p5'];
+                            $p6 = ($row['p6'] == "") ? 0 : $row['p6'];
+                            $p7 = ($row['p7'] == "") ? 0 : $row['p7'];
+                            $p8 = ($row['p8'] == "") ? 0 : $row['p8'];
+                            $p9 = ($row['p9'] == "") ? 0 : $row['p9'];
+
+                            $s1 = ($row['s1'] == "") ? 0 : $row['s1'];
+                            $s2 = ($row['s2'] == "") ? 0 : $row['s2'];
+                            $s3 = ($row['s3'] == "") ? 0 : $row['s3'];
+                            $s4 = ($row['s4'] == "") ? 0 : $row['s4'];
+                            $s5 = ($row['s5'] == "") ? 0 : $row['s5'];
+                            $s6 = ($row['s6'] == "") ? 0 : $row['s6'];
+                            $s7 = ($row['s7'] == "") ? 0 : $row['s7'];
+                            $s8 = ($row['s8'] == "") ? 0 : $row['s8'];
+                            $s9 = ($row['s9'] == "") ? 0 : $row['s9'];
+
+                            $r1 = "";
+                            $r2 = "";
+                            $r3 = "";
+                            $r4 = "";
+                            $r5 = "";
+                            $r6 = "";
+                            $r7 = "";
+                            $r8 = "";
+                            $r9 = "";
 
                             $promedio_p = "";
-                            $promedio_s = "";
 
-                            if ($p1 > 0) {
-                                $promedio_p = round($p1,0);
-                            }
-                            if ($p2 > 0) {
-                                $promedio_p = round(($p1+$p2)/2, 0);
-                            }
-                            if ($p3 > 0) {
-                                $promedio_p = round(($p1+$p2+$p3)/3, 0);
-                            }
-                            if ($p4 > 0) {
-                                $promedio_p = round(($p1+$p2+$p3+$p4)/4, 0);
-                            }
-                            if ($p5 > 0) {
-                                $promedio_p = round(($p1+$p2+$p3+$p4+$p5)/5, 0);
-                            }
-                            if ($p6 > 0) {
-                                $promedio_p = round(($p1+$p2+$p3+$p4+$p5+$p6)/6, 0);
-                            }
-                            if ($p7 > 0) {
-                                $promedio_p = round(($p1+$p2+$p3+$p4+$p5+$p6+$p7)/7, 0);
-                            }
-                            if($p8 > 0){
-                                $promedio_p = round(($p1+$p2+$p3+$p4+$p5+$p6+$p7+$p8)/8, 0);
-                            }
-                            if($p9 > 0){
-                                $promedio_p = round(($p1+$p2+$p3+$p4+$p5+$p6+$p7+$p8+$p9)/9, 0);
+                            $p1 = ($row['s1'] >= 0 && $row['s1'] != "") ? $s1 : $p1;
+                            $p2 = ($row['s2'] >= 0 && $row['s2'] != "") ? $s2 : $p2;
+                            $p3 = ($row['s3'] >= 0 && $row['s3'] != "") ? $s3 : $p3;
+                            $p4 = ($row['s4'] >= 0 && $row['s4'] != "") ? $s4 : $p4;
+                            $p5 = ($row['s5'] >= 0 && $row['s5'] != "") ? $s5 : $p5;
+                            $p6 = ($row['s6'] >= 0 && $row['s6'] != "") ? $s6 : $p6;
+                            $p7 = ($row['s7'] >= 0 && $row['s7'] != "") ? $s7 : $p7;
+                            $p8 = ($row['s8'] >= 0 && $row['s8'] != "") ? $s8 : $p8;
+                            $p9 = ($row['s9'] >= 0 && $row['s9'] != "") ? $s9 : $p9;
+
+                            if ($row['p1'] >= 0 && $row['p1'] != "") {
+                                $promedio_p = round($p1, 0);
+                                $r1 = "readonly";
                             }
 
-                            if ($s1 > 0) {
-                                $promedio_s = round($s1,0);
+                            if ($row['p2'] >= 0 && $row['p2'] != "") {
+                                $promedio_p = round(($p1 + $p2) / 2, 0);
+                                $r2 = "readonly";
                             }
-                            if ($s2 > 0) {
-                                $promedio_s = round(($s1+$s2)/2, 0);
+
+                            if ($row['p3'] >= 0 && $row['p3'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
+                                $r3 = "readonly";
                             }
-                            if ($s3 > 0) {
-                                $promedio_s = round(($s1+$s2+$s3)/3, 0);
+
+                            if ($row['p4'] >= 0 && $row['p4'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
+                                $r4 = "readonly";
                             }
-                            if ($s4 > 0) {
-                                $promedio_s = round(($s1+$s2+$s3+$s4)/4, 0);
+
+                            if ($row['p5'] >= 0 && $row['p5'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
+                                $r5 = "readonly";
                             }
-                            if ($s5 > 0) {
-                                $promedio_s = round(($s1+$s2+$s3+$s4+$s5)/5, 0);
+
+                            if ($row['p6'] >= 0 && $row['p6'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
+                                $r6 = "readonly";
                             }
-                            if ($s6 > 0) {
-                                $promedio_s = round(($s1+$s2+$s3+$s4+$s5+$s6)/6, 0);
+
+                            if ($row['p7'] >= 0 && $row['p7'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
+                                $r7 = "readonly";
                             }
-                            if ($s7 > 0) {
-                                $promedio_s = round(($s1+$s2+$s3+$s4+$s5+$s6+$s7)/7, 0);
+
+                            if ($row['p8'] >= 0 && $row['p8'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
+                                $r8 = "readonly";
                             }
-                            if($s8 > 0){
-                                $promedio_s = round(($s1+$s2+$s3+$s4+$s5+$s6+$s7+$s8)/8, 0);
+
+                            if ($row['p9'] >= 0 && $row['p9'] != "") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
+                                $r9 = "readonly";
                             }
-                            if($s9 > 0){
-                                $promedio_s = round(($s1+$s2+$s3+$s4+$s5+$s6+$s7+$s8+$s9)/9, 0);
-                            }
-                            
                         ?>
                         <tr>
                             <td rowspan="3"><?= $row['idestudiante'] ?></td>
@@ -142,35 +158,35 @@ $form = ActiveForm::begin([
                         </tr>
                         <tr>
                             <td>P</td>
-                            <td><input type="number" name="p1[]" class="validar_calificacion" maxlength="3" value="<?= $p1 ?>" /></td>
-                            <td><input type="number" name="p2[]" class="validar_calificacion" maxlength="3" value="<?= $p2 ?>" /></td>
-                            <td><input type="number" name="p3[]" class="validar_calificacion" maxlength="3" value="<?= $p3 ?>" /></td>
-                            <td><input type="number" name="p4[]" class="validar_calificacion" maxlength="3" value="<?= $p4 ?>" /></td>
-                            <td><input type="number" name="p5[]" class="validar_calificacion" maxlength="3" value="<?= $p5 ?>" /></td>
-                            <td><input type="number" name="p6[]" class="validar_calificacion" maxlength="3" value="<?= $p6 ?>" /></td>
-                            <td><input type="number" name="p7[]" class="validar_calificacion" maxlength="3" value="<?= $p7 ?>" /></td>
-                            <td><input type="number" name="p8[]" class="validar_calificacion" maxlength="3" value="<?= $p8 ?>" /></td>
-                            <td><input type="number" name="p9[]" class="validar_calificacion" maxlength="3" value="<?= $p9 ?>" /></td>
-                            <td><?= $promedio_p ?></td>
+                            <td><input type="number" name="p1[]" class="validar_calificacion" maxlength="3" value="<?= $row['p1'] ?>" <?= $r1 ?> /></td>
+                            <td><input type="number" name="p2[]" class="validar_calificacion" maxlength="3" value="<?= $row['p2'] ?>" <?= $r2 ?> /></td>
+                            <td><input type="number" name="p3[]" class="validar_calificacion" maxlength="3" value="<?= $row['p3'] ?>" <?= $r3 ?> /></td>
+                            <td><input type="number" name="p4[]" class="validar_calificacion" maxlength="3" value="<?= $row['p4'] ?>" <?= $r4 ?> /></td>
+                            <td><input type="number" name="p5[]" class="validar_calificacion" maxlength="3" value="<?= $row['p5'] ?>" <?= $r5 ?> /></td>
+                            <td><input type="number" name="p6[]" class="validar_calificacion" maxlength="3" value="<?= $row['p6'] ?>" <?= $r6 ?> /></td>
+                            <td><input type="number" name="p7[]" class="validar_calificacion" maxlength="3" value="<?= $row['p7'] ?>" <?= $r7 ?> /></td>
+                            <td><input type="number" name="p8[]" class="validar_calificacion" maxlength="3" value="<?= $row['p8'] ?>" <?= $r8 ?> /></td>
+                            <td><input type="number" name="p9[]" class="validar_calificacion" maxlength="3" value="<?= $row['p9'] ?>" <?= $r9 ?> /></td>
+                            <td rowspan="2" class="text-center"><h3><span class="label label-primary"><?= $promedio_p ?></span><h3></td>
                         </tr>
                         <tr>
                             <td>S</td>
-                            <td><input type="number" name="s1[]" class="validar_calificacion" maxlength="3" value="<?= $s1 ?>" /></td>
-                            <td><input type="number" name="s2[]" class="validar_calificacion" maxlength="3" value="<?= $s2 ?>" /></td>
-                            <td><input type="number" name="s3[]" class="validar_calificacion" maxlength="3" value="<?= $s3 ?>" /></td>
-                            <td><input type="number" name="s4[]" class="validar_calificacion" maxlength="3" value="<?= $s4 ?>" /></td>
-                            <td><input type="number" name="s5[]" class="validar_calificacion" maxlength="3" value="<?= $s5 ?>" /></td>
-                            <td><input type="number" name="s6[]" class="validar_calificacion" maxlength="3" value="<?= $s6 ?>" /></td>
-                            <td><input type="number" name="s7[]" class="validar_calificacion" maxlength="3" value="<?= $s7 ?>" /></td>
-                            <td><input type="number" name="s8[]" class="validar_calificacion" maxlength="3" value="<?= $s8 ?>" /></td>
-                            <td><input type="number" name="s9[]" class="validar_calificacion" maxlength="3" value="<?= $s9 ?>" /></td>
-                            <td><?= $promedio_s ?></td>
+                            <td><input type="number" name="s1[]" class="validar_calificacion" maxlength="3" value="<?= $row['s1'] ?>" /></td>
+                            <td><input type="number" name="s2[]" class="validar_calificacion" maxlength="3" value="<?= $row['s2'] ?>" /></td>
+                            <td><input type="number" name="s3[]" class="validar_calificacion" maxlength="3" value="<?= $row['s3'] ?>" /></td>
+                            <td><input type="number" name="s4[]" class="validar_calificacion" maxlength="3" value="<?= $row['s4'] ?>" /></td>
+                            <td><input type="number" name="s5[]" class="validar_calificacion" maxlength="3" value="<?= $row['s5'] ?>" /></td>
+                            <td><input type="number" name="s6[]" class="validar_calificacion" maxlength="3" value="<?= $row['s6'] ?>" /></td>
+                            <td><input type="number" name="s7[]" class="validar_calificacion" maxlength="3" value="<?= $row['s7'] ?>" /></td>
+                            <td><input type="number" name="s8[]" class="validar_calificacion" maxlength="3" value="<?= $row['s8'] ?>" /></td>
+                            <td><input type="number" name="s9[]" class="validar_calificacion" maxlength="3" value="<?= $row['s9'] ?>" /></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" />
                         <?php endforeach ?>
                         <input type="hidden" name="idgrupo" value="<?= $idgrupo ?>" readonly="true" />
                         <input type="hidden" name="idciclo" value="<?= $idciclo ?>" readonly="true" />
                         <input type="hidden" name="idprofesor" value="<?= $idprofesor ?>" readonly="true" />
+                        <input type="hidden" name="r" value="<?= $_GET["r"] ?>" readonly="true" />
                     </tbody>
                 </table>
             </div>
