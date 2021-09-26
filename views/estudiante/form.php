@@ -81,7 +81,6 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-<?= $form->field($model, "estado")->hiddenInput(["value"=> $status])->label(false); ?>
 <?php $form->end() ?>
 <?php if($msg){ ?>
     <div class="alert alert-success" role="warning">

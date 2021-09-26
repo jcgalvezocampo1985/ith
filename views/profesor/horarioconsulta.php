@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-12">
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a('Refrescar', ['profesor/horarioconsulta'], ['class' => 'btn btn-info']) ?>
+                <?= Html::a("<span class='glyphicon glyphicon-print'></span>", ["reporte/listaalumnoscalificacionprofesor?idprofesor=".$idprofesor."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
         <?php $f->end() ?>
@@ -107,8 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <ul class="dropdown-menu">
                                             <li><?= Html::a("Lista", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
-                                            <li><?= Html::a("Calificación", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <li><?= Html::a("Capturar Calificación", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
+                                            <li><?= Html::a("Lista Calificación", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
                                         </ul>
                                     </div>
                                 </td>

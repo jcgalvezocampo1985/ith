@@ -246,10 +246,10 @@ class EstudianteController extends Controller
 
         if($model->load(Yii::$app->request->post()))
         {
+            $model->estado = "2";
             if($model->validate())
             {
                 $table = Estudiante::findOne($model->idestudiante);
-
                 if($table)
                 {
                     $table->nombre_estudiante = $model->nombre_estudiante;

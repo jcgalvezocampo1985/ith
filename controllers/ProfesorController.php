@@ -29,11 +29,11 @@ class ProfesorController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones se van proteger
+                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -63,7 +63,7 @@ class ProfesorController extends Controller
                         ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'horario', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'horario', 'listaalumnos', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -106,6 +106,7 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
+        /*
         if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
         {
             return $this->redirect(["horarioconsulta"]);
@@ -122,7 +123,7 @@ class ProfesorController extends Controller
         {
             return $this->redirect(["horarioconsulta"]);
         }
-        exit;
+        exit;*/
         $form = new ProfesorSearch;
         $search = null;
         $status = 0;
@@ -537,10 +538,12 @@ class ProfesorController extends Controller
                                     "cat_materias.desc_materia",
     	                            "cat_carreras.desc_carrera",
                                     "grupos.num_semestre",
-                                    "grupos.desc_grupo"
+                                    "grupos.desc_grupo",
+                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
                             ])
                             ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
                             ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
+                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
                             ->where(["grupos.idgrupo" => $idgrupo])
                             ->andFilterWhere(["grupos.idciclo" => $idciclo])
                             ->all();
@@ -575,7 +578,7 @@ class ProfesorController extends Controller
                 $p8 = Html::encode($_POST["p8"][$i]);
                 $p9 = Html::encode($_POST["p9"][$i]);
 
-                $s1 = Html::encode($_POST["s1"][$i]);
+                /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
                 $s3 = Html::encode($_POST["s3"][$i]);
                 $s4 = Html::encode($_POST["s4"][$i]);
@@ -583,7 +586,7 @@ class ProfesorController extends Controller
                 $s6 = Html::encode($_POST["s6"][$i]);
                 $s7 = Html::encode($_POST["s7"][$i]);
                 $s8 = Html::encode($_POST["s8"][$i]);
-                $s9 = Html::encode($_POST["s9"][$i]);
+                $s9 = Html::encode($_POST["s9"][$i]);*/
 
                 $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
 
@@ -598,7 +601,7 @@ class ProfesorController extends Controller
                     $table->p7 = $p7;
                     $table->p8 = $p8;
                     $table->p9 = $p9;
-                    $table->s1 = $s1;
+                    /*$table->s1 = $s1;
                     $table->s2 = $s2;
                     $table->s3 = $s3;
                     $table->s4 = $s4;
@@ -606,7 +609,7 @@ class ProfesorController extends Controller
                     $table->s6 = $s6;
                     $table->s7 = $s7;
                     $table->s8 = $s8;
-                    $table->s9 = $s9;
+                    $table->s9 = $s9;*/
                     $table->fecha_actualizacion = date("Y-m-d h:i:s");
                     $table->update();
                 }    
