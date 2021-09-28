@@ -907,84 +907,84 @@ class ReporteController extends Controller
         if ($total_calificaciones['p9_total'] > 0) {
             $x_encabezado = 16;
             $pdf->SetXY($x_encabezado + 108, 85);
-            $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P8', 1, 0, 'C');
-            $pdf->Cell(8, 5, 'P9', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
 
         }else{
             if ($total_calificaciones['p8_total'] > 0) {
                 $x_encabezado = 20;
                 $pdf->SetXY($x_encabezado + 108, 85);
-                $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P8', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
             }else{
                 if ($total_calificaciones['p7_total'] > 0) {
                     $x_encabezado = 24;
                     $pdf->SetXY($x_encabezado + 108, 85);
-                    $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
                 } else{
                     if ($total_calificaciones['p6_total'] > 0) {
                         $x_encabezado = 28;
                         $pdf->SetXY($x_encabezado + 108, 85);
-                        $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
                     } else{
                         if ($total_calificaciones['p5_total'] > 0) {
                             $x_encabezado = 32;
                             $pdf->SetXY($x_encabezado + 108, 85);
-                            $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
                         }else{
                             if ($total_calificaciones['p4_total'] > 0) {
                                 $x_encabezado = 34;
                                 $pdf->SetXY($x_encabezado + 108, 85);
-                                $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
                             } else{
                                 if ($total_calificaciones['p3_total'] > 0) {
                                     $x_encabezado = 36;
                                     $pdf->SetXY($x_encabezado + 108, 85);
-                                    $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                    $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                                    $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
                                 }else{
                                     if ($total_calificaciones['p2_total'] > 0) {
                                         $x_encabezado = 38;
                                         $pdf->SetXY($x_encabezado + 108, 85);
-                                        $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                        $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
                                     }else{
                                         if ($total_calificaciones['p1_total'] > 0) {
                                             $x_encabezado = 40;
                                             $pdf->SetXY($x_encabezado + 108, 85);
-                                            $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                         }else{
                                             $x_encabezado = 50;
                                         }
@@ -1173,83 +1173,83 @@ class ReporteController extends Controller
             if ($total_calificaciones['p9_total'] > 0) {
                 $x_encabezado = 16;
                 $pdf->SetXY($x_encabezado + 108, 85);
-                $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P8', 1, 0, 'C');
-                $pdf->Cell(8, 5, 'P9', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
             } else {
                 if ($total_calificaciones['p8_total'] > 0) {
                     $x_encabezado = 20;
                     $pdf->SetXY($x_encabezado + 108, 85);
-                    $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
-                    $pdf->Cell(8, 5, 'P8', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
                 } else {
                     if ($total_calificaciones['p7_total'] > 0) {
                         $x_encabezado = 24;
                         $pdf->SetXY($x_encabezado + 108, 85);
-                        $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
-                        $pdf->Cell(8, 5, 'P7', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
                     } else {
                         if ($total_calificaciones['p6_total'] > 0) {
                             $x_encabezado = 28;
                             $pdf->SetXY($x_encabezado + 108, 85);
-                            $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
-                            $pdf->Cell(8, 5, 'P6', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
                         } else {
                             if ($total_calificaciones['p5_total'] > 0) {
                                 $x_encabezado = 32;
                                 $pdf->SetXY($x_encabezado + 108, 85);
-                                $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
-                                $pdf->Cell(8, 5, 'P5', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
                             } else {
                                 if ($total_calificaciones['p4_total'] > 0) {
                                     $x_encabezado = 34;
                                     $pdf->SetXY($x_encabezado + 108, 85);
-                                    $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                    $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                                    $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
-                                    $pdf->Cell(8, 5, 'P4', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
                                 } else {
                                     if ($total_calificaciones['p3_total'] > 0) {
                                         $x_encabezado = 36;
                                         $pdf->SetXY($x_encabezado + 108, 85);
-                                        $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                        $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
-                                        $pdf->Cell(8, 5, 'P3', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
                                     } else {
                                         if ($total_calificaciones['p2_total'] > 0) {
                                             $x_encabezado = 38;
                                             $pdf->SetXY($x_encabezado + 108, 85);
-                                            $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
-                                            $pdf->Cell(8, 5, 'P2', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
                                         } else {
                                             if ($total_calificaciones['p1_total'] > 0) {
                                                 $x_encabezado = 40;
                                                 $pdf->SetXY($x_encabezado + 108, 85);
-                                                $pdf->Cell(8, 5, 'P1', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                             } else {
                                                 $x_encabezado = 50;
                                             }

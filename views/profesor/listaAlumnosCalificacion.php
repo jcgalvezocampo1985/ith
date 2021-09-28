@@ -64,15 +64,15 @@ $form = ActiveForm::begin([
                             <th>Nombre</th>
                             <th>Opción</th>
                             <th>Opc.</th>
-                            <th class="text-center">P1</th>
-                            <th class="text-center">P2</th>
-                            <th class="text-center">P3</th>
-                            <th class="text-center">P4</th>
-                            <th class="text-center">P5</th>
-                            <th class="text-center">P6</th>
-                            <th class="text-center">P7</th>
-                            <th class="text-center">P8</th>
-                            <th class="text-center">P9</th>
+                            <th class="text-center">C1</th>
+                            <th class="text-center">C2</th>
+                            <th class="text-center">C3</th>
+                            <th class="text-center">C4</th>
+                            <th class="text-center">C5</th>
+                            <th class="text-center">C6</th>
+                            <th class="text-center">C7</th>
+                            <th class="text-center">C8</th>
+                            <th class="text-center">C9</th>
                             <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
