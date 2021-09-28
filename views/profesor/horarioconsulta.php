@@ -34,7 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-12">
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a('Refrescar', ['profesor/horarioconsulta'], ['class' => 'btn btn-info']) ?>
+                <?php if($idciclo): ?>
                 <?= Html::a("<span class='glyphicon glyphicon-print'></span>", ["reporte/listaalumnoscalificacionprofesor?idprofesor=".$idprofesor."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
+                <?php endif ?>
             </div>
         </div>
         <?php $f->end() ?>

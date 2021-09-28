@@ -32,6 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-12">
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a('Refrescar', ['profesor/horario'], ['class' => 'btn btn-info']) ?>
+                <?php if($idciclo): ?>
+                <?= Html::a("<span class='glyphicon glyphicon-print'></span>", ["reporte/listaalumnoscalificacionprofesor?idprofesor=".$idprofesor."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
+                <?php endif ?>
             </div>
         </div>
         <?php $f->end() ?>
@@ -107,6 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php if($idciclo == $ultimo_ciclo): ?>
                                             <li><?= Html::a("Calificación", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=true"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
+                                            <li><?= Html::a("Lista Calificación", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
                                         </ul>
                                     </div>
                                 </td>

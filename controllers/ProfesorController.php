@@ -106,7 +106,6 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        /*
         if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
         {
             return $this->redirect(["horarioconsulta"]);
@@ -123,7 +122,7 @@ class ProfesorController extends Controller
         {
             return $this->redirect(["horarioconsulta"]);
         }
-        exit;*/
+        exit;
         $form = new ProfesorSearch;
         $search = null;
         $status = 0;
