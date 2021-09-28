@@ -39,12 +39,12 @@ $form = ActiveForm::begin([
             <div class="col-md-2">
                 <h4>Semestre: <small><?= $model1[0]['num_semestre'] ?></small></h4>
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
                 <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
                 <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
-                <?= Html::a("<span class='glyphicon glyphicon-print'></span>", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
+                <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
         <hr width="100%">
