@@ -4,7 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$url = ($_GET["r"] == "true") ? "horario" : "horarioconsulta";
+$r = $_GET["r"];
+$url = ($r == "true") ? "horario" : "horarioconsulta";
 
 if($idciclo != $ultimo_ciclo){
     header("Location: ".Url::toRoute("/profesor/".$url."?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
@@ -41,8 +42,8 @@ $form = ActiveForm::begin([
             <div class="col-md-2"></div>
             <div class="col-md-4">
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
-                <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary"]) ?>
-                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=false"], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
+                <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
+                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
                 <?= Html::a("<span class='glyphicon glyphicon-print'></span>", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
@@ -172,15 +173,15 @@ $form = ActiveForm::begin([
                             <td><?= $row['nombre_estudiante'] ?></td>
                             <td><?= $row['desc_opcion_curso'] ?></td>
                             <td class="text-center">P</td>
-                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?= $r1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?= $r2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?= $r3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?= $r4 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $r5 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $r6 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $r7 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $r8 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
