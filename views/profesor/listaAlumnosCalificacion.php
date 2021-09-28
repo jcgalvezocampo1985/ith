@@ -64,15 +64,15 @@ $form = ActiveForm::begin([
                             <th>Nombre</th>
                             <th>Opción</th>
                             <th>Opc.</th>
-                            <th class="text-center">P1</th>
-                            <th class="text-center">P2</th>
-                            <th class="text-center">P3</th>
-                            <th class="text-center">P4</th>
-                            <th class="text-center">P5</th>
-                            <th class="text-center">P6</th>
-                            <th class="text-center">P7</th>
-                            <th class="text-center">P8</th>
-                            <th class="text-center">P9</th>
+                            <th class="text-center">C1</th>
+                            <th class="text-center">C2</th>
+                            <th class="text-center">C3</th>
+                            <th class="text-center">C4</th>
+                            <th class="text-center">C5</th>
+                            <th class="text-center">C6</th>
+                            <th class="text-center">C7</th>
+                            <th class="text-center">C8</th>
+                            <th class="text-center">C9</th>
                             <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
@@ -204,7 +204,7 @@ $form = ActiveForm::begin([
     <br />
     <ul>
         <li>Sólo se permite ingresar valores númericos <b>mayor o igual a 70, menor o igual a 100 y NA</b> (cuando el estudiante no apruebe la materia).</li>
-        <li>No se permite dejar cuadros de texto antecesores en blanco <b>(no podrá capturar en P2, si P1 está en blanco y así sucesivamente)</b>.</li>
+        <li>No se permite dejar cuadros de texto antecesores en blanco <b>(no podrá capturar en C2, si C1 está en blanco y así sucesivamente)</b>.</li>
         <li>No se permite dejar cuadros de texto en blanco de un parcial al capturar la calificación <b>(no se guardarán los cambios, si en un parcial faltan estudiantes por capturar su calificación).</b></li>
     </ul>
 </div>
@@ -245,7 +245,7 @@ $this->registerJs('$(document).ready(function(){
                 $("#" + id_estudiante).val("");
                 $("#p1-" + idestudiante).focus();
                 $("#alerta").removeClass("alert-success").addClass("alert-danger");
-                $("#mensaje_texto").html("El cuadro de texto correspondiente al <b>P" + i + "</b> del estudiante con <b>No. Control " + idestudiante + "</b> no debe quedar en blanco");
+                $("#mensaje_texto").html("El cuadro de texto correspondiente al <b>C" + i + "</b> del estudiante con <b>No. Control " + idestudiante + "</b> no debe quedar en blanco");
                 $("#mensaje_error").slideDown(1000).delay(5000).slideUp(1000);
             }
         }
