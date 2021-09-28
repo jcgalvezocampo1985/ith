@@ -204,7 +204,7 @@ $form = ActiveForm::begin([
     <br />
     <ul>
         <li>Sólo se permite ingresar valores númericos <b>mayor o igual a 70, menor o igual a 100 y NA</b> (cuando el estudiante no apruebe la materia).</li>
-        <li>No se permite dejar cuadros de texto antecesores en blanco <b>(no podrá capturar en P2, si P1 está en blanco y así sucesivamente)</b>.</li>
+        <li>No se permite dejar cuadros de texto antecesores en blanco <b>(no podrá capturar en C2, si C1 está en blanco y así sucesivamente)</b>.</li>
         <li>No se permite dejar cuadros de texto en blanco de un parcial al capturar la calificación <b>(no se guardarán los cambios, si en un parcial faltan estudiantes por capturar su calificación).</b></li>
     </ul>
 </div>
@@ -245,7 +245,7 @@ $this->registerJs('$(document).ready(function(){
                 $("#" + id_estudiante).val("");
                 $("#p1-" + idestudiante).focus();
                 $("#alerta").removeClass("alert-success").addClass("alert-danger");
-                $("#mensaje_texto").html("El cuadro de texto correspondiente al <b>P" + i + "</b> del estudiante con <b>No. Control " + idestudiante + "</b> no debe quedar en blanco");
+                $("#mensaje_texto").html("El cuadro de texto correspondiente al <b>C" + i + "</b> del estudiante con <b>No. Control " + idestudiante + "</b> no debe quedar en blanco");
                 $("#mensaje_error").slideDown(1000).delay(5000).slideUp(1000);
             }
         }
