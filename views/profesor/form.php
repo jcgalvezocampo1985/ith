@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\jui\DatePicker;
 
 $this->title = "Nuevo Profesor";
 $this->params["breadcrumbs"][] = ["label" => "Profesores", "url" => ["index"]];
@@ -48,7 +49,15 @@ $form = ActiveForm::begin([
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "fecha_actualizacion")->input("fecha_actualizacion", ["maxlength" => 19]) ?>
+                    <?= $form->field($model, "fecha_actualizacion")->
+    widget(DatePicker::className(),[
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions' => [
+            'yearRange' => '-115:+0',
+            'changeYear' => true
+        ],
+        'options' => ['class' => 'form-control']
+    ])?>
                 </div>
             </div>
         </div>
@@ -69,6 +78,7 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
+<?= $form->field($model, "estado")->hiddenInput(["value"=> $status])->label(false); ?>
 <?php $form->end() ?>
 <?php if($msg){ ?>
     <div class="alert alert-success" role="warning">

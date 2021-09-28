@@ -3,3 +3,7 @@
 .modal-body {
     overflow-x: auto;
 }
+
+.texto-xs {
+    font-size: 8px;
+}

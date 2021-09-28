@@ -15,13 +15,14 @@ class ProfesorForm extends model
     public $fecha_registro;
     public $fecha_actualizacion;
     public $cve_estatus;
+    public $estado;
 
     public function rules()
     {
         return [
             [['curp', 'nombre_profesor', 'apaterno', 'amaterno', 'fecha_registro', 'cve_estatus'], 'required', 'message' => 'Requerido'],
             ['curp', 'string', 'min' => 3, 'max' => 20, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 20 caracteres'],
-            ['curp', 'match', 'pattern' => "/^.[0-9A-Za-z]+$/i", 'message' => 'Sólo valores alfanuméricos'],
+            ['curp', 'match', 'pattern' => "/^.[0-9A-Za-z.]+$/i", 'message' => 'Sólo valores alfanuméricos'],
             ['curp', 'curp_existe'],
             ['nombre_profesor', 'match', 'pattern' => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", 'message' => 'Sólo letras'],
             ['nombre_profesor', 'match', 'pattern' => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", 'message' => 'Sólo letras'],
@@ -37,7 +38,7 @@ class ProfesorForm extends model
     public function attributeLabels()
     {
         return [
-            'curp' => 'CURP',
+            'curp' => 'Usuario',
             'nombre_profesor' => 'Nombre',
             'apaterno' => 'Apellido Paterno',
             'amaterno' => 'Apellido Materno',

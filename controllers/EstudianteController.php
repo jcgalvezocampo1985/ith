@@ -246,10 +246,10 @@ class EstudianteController extends Controller
 
         if($model->load(Yii::$app->request->post()))
         {
+            $model->estado = "2";
             if($model->validate())
             {
                 $table = Estudiante::findOne($model->idestudiante);
-
                 if($table)
                 {
                     $table->nombre_estudiante = $model->nombre_estudiante;
@@ -545,7 +545,7 @@ class EstudianteController extends Controller
                                     "ciclo.desc_ciclo",
                                     "grupos.desc_grupo"
                                 ])
-                                ->orderBy("cat_materias.desc_materia")
+                                ->orderBy(["grupos.num_semestre" => SORT_DESC, "cat_materias.desc_materia" => SORT_ASC])
                                 ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
                                 ->innerJoin(["ciclo"], "grupos.idciclo = ciclo.idciclo")
                                 ->where(["grupos.idcarrera" => $idcarrera])

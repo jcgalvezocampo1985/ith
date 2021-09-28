@@ -9,21 +9,18 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\web\Session;
 use yii\widgets\ActiveForm;
-use yii\filters\AccessController;
 use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 
 use app\models\Profesor;
 use app\models\ProfesorForm;
 use app\models\ProfesorSearch;
-//use app\models\Alumno;
 use app\models\User;
 use app\models\Ciclo;
-//use app\models\CicloForm;
 use app\models\CicloSearch;
 use app\models\CicloProfesorSearch;
+use app\models\GrupoEstudiante;
 
 class ProfesorController extends Controller
 {
@@ -32,11 +29,11 @@ class ProfesorController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones se van proteger
+                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -66,7 +63,7 @@ class ProfesorController extends Controller
                         ],
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'horario', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'horario', 'listaalumnos', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -326,60 +323,44 @@ class ProfesorController extends Controller
     {
         $form = new CicloSearch;
         $idciclo = Ciclo::find()->max("idciclo");
+        $ultimo_ciclo = $idciclo;
         $ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->one();
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
         $idprofesor = $sql_profesor->idprofesor;
 
-        $ciclos = ArrayHelper::map(Ciclo::find()->all(), 'idciclo', 'desc_ciclo');
+        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), "idciclo", "desc_ciclo");
  
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
                 $idciclo = Html::encode($form->idciclo);
-
-                $sql = "SELECT
-                            *
-                        FROM
-                            horario_profesor_v
-                        WHERE
-                            idprofesor = :idprofesor
-                        AND
-                            idciclo = :idciclo
-                        ORDER BY
-                            lunes, viernes, sabado";
-                $model = Yii::$app->db->createCommand($sql)
-                                      ->bindValue(':idprofesor', $idprofesor)
-                                      ->bindValue(':idciclo', $idciclo)
-                                      ->queryAll();
             }
             else
             {
                 $form->getErrors();
             }
         }
-        else
-        {
-            $sql = "SELECT
-                        *
-                    FROM
-                        horario_profesor_v
-                    WHERE
-                        idprofesor = :idprofesor
-                    AND
-	                    idciclo = (SELECT MAX(idciclo) FROM ciclo)
-                    ORDER BY
-                        lunes, viernes, sabado";
-            $model = Yii::$app->db->createCommand($sql)
-                                  ->bindValue(':idprofesor', $idprofesor)
-                                  ->queryAll();
-            
-        }
 
-        $ciclo_actual = ($idciclo) ? (count($model) > 0) ? $model[0]['desc_ciclo'] : $ciclo['desc_ciclo'] : $ciclo->desc_ciclo;
+        $sql = "SELECT
+                    *
+                FROM
+                    horario_profesor_v
+                WHERE
+                    idprofesor = :idprofesor
+                AND
+	                idciclo = :idciclo
+                ORDER BY
+                    lunes, viernes, sabado";
+        $model = Yii::$app->db->createCommand($sql)
+                              ->bindValue(":idprofesor", $idprofesor)
+                              ->bindValue(":idciclo", $idciclo)
+                              ->queryAll();
 
-        return $this->render("horario", ['model' => $model, 'form' => $form, 'ciclos' => $ciclos, 'idciclo' => $idciclo, 'ciclo_actual' => $ciclo_actual]);
+        $ciclo_actual = ($idciclo) ? ((count($model) > 0) ? $model[0]["desc_ciclo"] : $ciclo["desc_ciclo"]) : $ciclo->desc_ciclo;
+
+        return $this->render("horario", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor, "ciclo_actual" => $ciclo_actual, "ultimo_ciclo" => $ultimo_ciclo]);
     }
 
     public function actionListaalumnos()
@@ -392,43 +373,33 @@ class ProfesorController extends Controller
             $idgrupo = Html::encode($_GET["idgrupo"]);
             $idciclo = (Html::encode($_GET["idciclo"]) == "") ? Ciclo::find()->max("idciclo") : Html::encode($_GET["idciclo"]);
 
-            $query = "SELECT
-                        estudiantes.idestudiante,
-    	                estudiantes.nombre_estudiante,
-	                    estudiantes.sexo,
-	                    cat_opcion_curso.desc_opcion_curso
-                      FROM
-    	                estudiantes
-	                  INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
-	                  INNER JOIN cat_opcion_curso ON grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso
-	                  INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
-	                  INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
-                      WHERE
-                        grupos_estudiantes.idgrupo = :idgrupo
-                      AND
-                        grupos.idciclo = :idciclo
-                      ORDER BY
-                        estudiantes.nombre_estudiante ASC";
-            $model = Yii::$app->db->createCommand($query)
-                                  ->bindValue(':idgrupo', $idgrupo)
-                                  ->bindValue(':idciclo', $idciclo)
-                                  ->queryAll();
+            $model = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+	                            "estudiantes.sexo",
+	                            "cat_opcion_curso.desc_opcion_curso"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
 
-            $query1 = "SELECT
-	                        cat_materias.desc_materia,
-	                        cat_carreras.desc_carrera 
-                       FROM
-	                        cat_carreras
-	                   INNER JOIN grupos ON cat_carreras.idcarrera = grupos.idcarrera
-	                   INNER JOIN cat_materias ON cat_materias.idmateria = grupos.idmateria
-                       WHERE
-                            grupos.idgrupo = :idgrupo
-                       AND
-                            grupos.idciclo = :idciclo";
-            $model1 = Yii::$app->db->createCommand($query1)
-                                  ->bindValue(':idgrupo', $idgrupo)
-                                  ->bindValue(':idciclo', $idciclo)
-                                  ->queryAll();
+            $model1 = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                    "cat_materias.desc_materia",
+    	                            "cat_carreras.desc_carrera"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
+                            ->all();
 
             return $this->render("listaAlumnos", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo]);
         }
@@ -439,6 +410,7 @@ class ProfesorController extends Controller
         $form = new CicloProfesorSearch;
         $ciclo = null;
         $idciclo = null;
+        $idprofesor = null;
         $profesores = ArrayHelper::map(Profesor::find()->orderBy(["apaterno" => SORT_ASC, "amaterno" => SORT_ASC, "nombre_profesor" => SORT_ASC])->asArray()->all(),'idprofesor', function($model){
             return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
         });
@@ -450,6 +422,9 @@ class ProfesorController extends Controller
             {
                 $idciclo = Html::encode($form->idciclo);
                 $idprofesor = Html::encode($form->idprofesor);
+
+                $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+                $ciclo = $sql['desc_ciclo'];
 
                 $sql = "SELECT
                             *
@@ -465,33 +440,182 @@ class ProfesorController extends Controller
                                       ->bindValue(':idprofesor', $idprofesor)
                                       ->bindValue(':idciclo', $idciclo)
                                       ->queryAll();
-
-                $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
-                $ciclo = $sql['desc_ciclo'];
             }
             else
             {
                 $form->getErrors();
             }
         }
-        else
+        else if(Yii::$app->request->get())
         {
-            $sql = "SELECT
+            $idciclo = Html::encode($_GET["idciclo"]);
+            $idprofesor = Html::encode($_GET["idprofesor"]);
+
+            $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+            $ciclo = $sql['desc_ciclo'];
+
+                $sql = "SELECT
                             *
                         FROM
                             horario_profesor_v
                         WHERE
-                            idprofesor = null
-                        /*AND
-                            idciclo = :idciclo*/
+                            idprofesor = :idprofesor
+                        AND
+                            idciclo = :idciclo
                         ORDER BY
                             lunes, viernes, sabado";
                 $model = Yii::$app->db->createCommand($sql)
-                                      //->bindValue(':idprofesor', $idprofesor)
-                                      //->bindValue(':idciclo', $idciclo)
+                                      ->bindValue(':idprofesor', $idprofesor)
+                                      ->bindValue(':idciclo', $idciclo)
                                       ->queryAll();
         }
+        else
+        {
+            $sql = "SELECT
+                        *
+                    FROM
+                        horario_profesor_v
+                    WHERE
+                        idprofesor = null
+                    ORDER BY
+                        lunes, viernes, sabado";
+            $model = Yii::$app->db->createCommand($sql)
+                                  ->queryAll();
+        }
 
-        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, 'ciclo_actual' => $ciclo, "profesores" => $profesores]);
+        $ultimo_ciclo = Ciclo::find()->max("idciclo");
+
+        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "ciclo_actual" => $ciclo, "idprofesor" => $idprofesor, "profesores" => $profesores, "ultimo_ciclo" => $ultimo_ciclo]);
+    }
+
+    public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    {
+        if(isset($idgrupo))
+        {
+            $idgrupo = Html::encode($idgrupo);
+            $idprofesor = Html::encode($idprofesor);
+            $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
+            $ultimo_ciclo = Html::encode($ultimo_ciclo);
+
+            $model = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+	                            "estudiantes.sexo",
+	                            "cat_opcion_curso.desc_opcion_curso",
+                                "grupos_estudiantes.p1",
+	                            "grupos_estudiantes.p2",
+	                            "grupos_estudiantes.p3",
+	                            "grupos_estudiantes.p4",
+	                            "grupos_estudiantes.p5",
+	                            "grupos_estudiantes.p6",
+	                            "grupos_estudiantes.p7",
+	                            "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p9",
+	                            "grupos_estudiantes.s1",
+	                            "grupos_estudiantes.s2",
+	                            "grupos_estudiantes.s3",
+	                            "grupos_estudiantes.s4",
+	                            "grupos_estudiantes.s5",
+	                            "grupos_estudiantes.s6",
+	                            "grupos_estudiantes.s7",
+	                            "grupos_estudiantes.s8",
+	                            "grupos_estudiantes.s9",
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
+
+            $model1 = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                    "cat_materias.desc_materia",
+    	                            "cat_carreras.desc_carrera",
+                                    "grupos.num_semestre",
+                                    "grupos.desc_grupo",
+                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
+                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
+                            ->all();
+
+            return $this->render("listaAlumnosCalificacion", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo, "idprofesor" => $idprofesor, "ultimo_ciclo" => $ultimo_ciclo]);
+        }
+    }
+
+    public function actionGuardarcalificacion()
+    {
+        if(Yii::$app->request->post())
+        {
+            $idgrupo = Html::encode($_POST["idgrupo"]);
+            $idciclo = Html::encode($_POST["idciclo"]);
+            $idprofesor = Html::encode($_POST["idprofesor"]);
+            $r = Html::encode($_POST["r"]);
+            $ultimo_ciclo = Ciclo::find()->max("idciclo");
+
+            $total = count($_POST["p1"]);
+
+            for($i = 0; $i < $total; $i++)
+            {
+                $idestudiante = Html::encode($_POST["idestudiante"][$i]);
+
+                $p1 = Html::encode($_POST["p1"][$i]);
+                $p2 = Html::encode($_POST["p2"][$i]);
+                $p3 = Html::encode($_POST["p3"][$i]);
+                $p4 = Html::encode($_POST["p4"][$i]);
+                $p5 = Html::encode($_POST["p5"][$i]);
+                $p6 = Html::encode($_POST["p6"][$i]);
+                $p7 = Html::encode($_POST["p7"][$i]);
+                $p8 = Html::encode($_POST["p8"][$i]);
+                $p9 = Html::encode($_POST["p9"][$i]);
+
+                /*$s1 = Html::encode($_POST["s1"][$i]);
+                $s2 = Html::encode($_POST["s2"][$i]);
+                $s3 = Html::encode($_POST["s3"][$i]);
+                $s4 = Html::encode($_POST["s4"][$i]);
+                $s5 = Html::encode($_POST["s5"][$i]);
+                $s6 = Html::encode($_POST["s6"][$i]);
+                $s7 = Html::encode($_POST["s7"][$i]);
+                $s8 = Html::encode($_POST["s8"][$i]);
+                $s9 = Html::encode($_POST["s9"][$i]);*/
+
+                $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
+
+                if($table)
+                {
+                    $table->p1 = $p1;
+                    $table->p2 = $p2;
+                    $table->p3 = $p3;
+                    $table->p4 = $p4;
+                    $table->p5 = $p5;
+                    $table->p6 = $p6;
+                    $table->p7 = $p7;
+                    $table->p8 = $p8;
+                    $table->p9 = $p9;
+                    /*$table->s1 = $s1;
+                    $table->s2 = $s2;
+                    $table->s3 = $s3;
+                    $table->s4 = $s4;
+                    $table->s5 = $s5;
+                    $table->s6 = $s6;
+                    $table->s7 = $s7;
+                    $table->s8 = $s8;
+                    $table->s9 = $s9;*/
+                    $table->fecha_actualizacion = date("Y-m-d h:i:s");
+                    $table->update();
+                }    
+            }
+
+            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
+            exit;
+        }
     }
 }

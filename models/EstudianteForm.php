@@ -53,7 +53,7 @@ class EstudianteForm extends model
             'fecha_registro' => 'Fecha Registro',
             'fecha_actualizacion' => 'Fecha Actuaización',
             'cve_estatus' => 'Clave Status',
-            'idcarrera' => 'Carrera',
+            'idcarrera' => 'Carrera'
         ];
     }
 
@@ -70,22 +70,14 @@ class EstudianteForm extends model
             }
         }
     }
-
     
     public function idestudiante_existe($attribute, $params)
     {
         $table = Estudiante::find()->where("idestudiante=:idestudiante", [":idestudiante" => $this->idestudiante]);
 
-        if($this->estado === 1)
+        if ($table->count() >= 1)
         {
-
-        }
-        else
-        {
-            if ($table->count() >= 1)
-            {
-                $this->addError($attribute, "El No. Control ingresado ya existe");
-            }
+            $this->addError($attribute, $this->estado);
         }
     }
 }
