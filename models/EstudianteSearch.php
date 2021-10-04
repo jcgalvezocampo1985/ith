@@ -19,7 +19,7 @@ class EstudianteSearch extends model
     public function attributeLabels()
     {
         return [
-            'buscar' => 'No. Control'
+            'buscar' => 'Buscar'
         ];
     }
 }

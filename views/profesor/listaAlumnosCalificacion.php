@@ -63,7 +63,6 @@ $form = ActiveForm::begin([
                         <tr>
                             <th>No. Control</th>
                             <th>Nombre</th>
-                            <th>Opción</th>
                             <th>Opc.</th>
                             <th class="text-center">C1</th>
                             <th class="text-center">C2</th>
@@ -74,6 +73,13 @@ $form = ActiveForm::begin([
                             <th class="text-center">C7</th>
                             <th class="text-center">C8</th>
                             <th class="text-center">C9</th>
+                            <th class="text-center">C10</th>
+                            <th class="text-center">C11</th>
+                            <th class="text-center">C12</th>
+                            <th class="text-center">C13</th>
+                            <th class="text-center">C14</th>
+                            <th class="text-center">C15</th>
+                            <th class="text-center">C16</th>
                             <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
@@ -90,6 +96,13 @@ $form = ActiveForm::begin([
                             $p7 = (!is_numeric($row['p7'])) ? 0 : $row['p7'];
                             $p8 = (!is_numeric($row['p8'])) ? 0 : $row['p8'];
                             $p9 = (!is_numeric($row['p9'])) ? 0 : $row['p9'];
+                            $p10 = (!is_numeric($row['p10'])) ? 0 : $row['p10'];
+                            $p11 = (!is_numeric($row['p11'])) ? 0 : $row['p11'];
+                            $p12 = (!is_numeric($row['p12'])) ? 0 : $row['p12'];
+                            $p13 = (!is_numeric($row['p13'])) ? 0 : $row['p13'];
+                            $p14 = (!is_numeric($row['p14'])) ? 0 : $row['p14'];
+                            $p15 = (!is_numeric($row['p15'])) ? 0 : $row['p15'];
+                            $p16 = (!is_numeric($row['p16'])) ? 0 : $row['p16'];
 
                             $s1 = (!is_numeric($row['s1'])) ? 0 : $row['s1'];
                             $s2 = (!is_numeric($row['s2'])) ? 0 : $row['s2'];
@@ -100,6 +113,13 @@ $form = ActiveForm::begin([
                             $s7 = (!is_numeric($row['s7'])) ? 0 : $row['s7'];
                             $s8 = (!is_numeric($row['s8'])) ? 0 : $row['s8'];
                             $s9 = (!is_numeric($row['s9'])) ? 0 : $row['s9'];
+                            $s10 = (!is_numeric($row['s10'])) ? 0 : $row['s10'];
+                            $s11 = (!is_numeric($row['s11'])) ? 0 : $row['s11'];
+                            $s12 = (!is_numeric($row['s12'])) ? 0 : $row['s12'];
+                            $s13 = (!is_numeric($row['s13'])) ? 0 : $row['s13'];
+                            $s14 = (!is_numeric($row['s14'])) ? 0 : $row['s14'];
+                            $s15 = (!is_numeric($row['s15'])) ? 0 : $row['s15'];
+                            $s16 = (!is_numeric($row['s16'])) ? 0 : $row['s16'];
 
                             $r1 = "";
                             $r2 = "";
@@ -110,6 +130,13 @@ $form = ActiveForm::begin([
                             $r7 = "";
                             $r8 = "";
                             $r9 = "";
+                            $r10 = "";
+                            $r11 = "";
+                            $r12 = "";
+                            $r13 = "";
+                            $r14 = "";
+                            $r15 = "";
+                            $r16 = "";
 
                             $promedio_p = "";
 
@@ -122,66 +149,99 @@ $form = ActiveForm::begin([
                             $p7 = (is_numeric($row['s7'])) ? $s7 : $p7;
                             $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
                             $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
+                            $p10 = (is_numeric($row['s9'])) ? $s10 : $p10;
+                            $p11 = (is_numeric($row['s9'])) ? $s11 : $p11;
+                            $p12 = (is_numeric($row['s9'])) ? $s12 : $p12;
+                            $p13 = (is_numeric($row['s9'])) ? $s13 : $p13;
+                            $p14 = (is_numeric($row['s9'])) ? $s14 : $p14;
+                            $p15 = (is_numeric($row['s9'])) ? $s15 : $p15;
+                            $p16 = (is_numeric($row['s9'])) ? $s16 : $p16;
 
                             if (is_numeric($row['p1']) || $row['p1'] == "NA") {
                                 $promedio_p = round($p1, 0);
                                 $r1 = "readonly";
                             }
-
                             if (is_numeric($row['p2']) || $row['p2'] == "NA") {
                                 $promedio_p = round(($p1 + $p2) / 2, 0);
                                 $r2 = "readonly";
                             }
-
                             if (is_numeric($row['p3']) || $row['p3'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
                                 $r3 = "readonly";
                             }
-
                             if (is_numeric($row['p4']) || $row['p4'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
                                 $r4 = "readonly";
                             }
-
                             if (is_numeric($row['p5']) || $row['p5'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
                                 $r5 = "readonly";
                             }
-
                             if (is_numeric($row['p6']) || $row['p6'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
                                 $r6 = "readonly";
                             }
-
                             if (is_numeric($row['p7']) || $row['p7'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
                                 $r7 = "readonly";
                             }
-
                             if (is_numeric($row['p8']) || $row['p8'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
                                 $r8 = "readonly";
                             }
-
                             if (is_numeric($row['p9']) || $row['p9'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
                                 $r9 = "readonly";
+                            }
+                            if (is_numeric($row['p10']) || $row['p10'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10) / 10, 0);
+                                $r10 = "readonly";
+                            }
+                            if (is_numeric($row['p11']) || $row['p11'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11) / 11, 0);
+                                $r11 = "readonly";
+                            }
+                            if (is_numeric($row['p12']) || $row['p12'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12) / 12, 0);
+                                $r12 = "readonly";
+                            }
+                            if (is_numeric($row['p13']) || $row['p13'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13) / 13, 0);
+                                $r13 = "readonly";
+                            }
+                            if (is_numeric($row['p14']) || $row['p14'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14) / 14, 0);
+                                $r14 = "readonly";
+                            }
+                            if (is_numeric($row['p15']) || $row['p15'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15) / 15, 0);
+                                $r15 = "readonly";
+                            }
+                            if (is_numeric($row['p16']) || $row['p16'] == "NA") {
+                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
+                                $r16 = "readonly";
                             }
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
                             <td><?= $row['nombre_estudiante'] ?></td>
-                            <td><?= $row['desc_opcion_curso'] ?></td>
-                            <td class="text-center">P</td>
-                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center">C</td>
+                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?php //$r1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?php //$r2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?php //$r3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?php //$r4 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?php //$r5 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?php //$r6 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?php //$r7 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?php //$r8 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p10[]" class="calificacion verificar_espacio_h verificar_espacio_v10" id="p10-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p10'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p11[]" class="calificacion verificar_espacio_h verificar_espacio_v11" id="p11-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p11'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p12[]" class="calificacion verificar_espacio_h verificar_espacio_v12" id="p12-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p12'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p13[]" class="calificacion verificar_espacio_h verificar_espacio_v13" id="p13-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p13'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p14[]" class="calificacion verificar_espacio_h verificar_espacio_v14" id="p14-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p14'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p15[]" class="calificacion verificar_espacio_h verificar_espacio_v15" id="p15-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p15'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p16[]" class="calificacion verificar_espacio_h verificar_espacio_v16" id="p16-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p16'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
@@ -212,7 +272,7 @@ $form = ActiveForm::begin([
 <?php
 $this->registerCss('
 .calificacion{
-    width: 40px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+    width: 32px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 }
 .error_input{
     border: 2px solid #ff3333;
@@ -278,6 +338,13 @@ $this->registerJs('$(document).ready(function(){
             inputs_vacios7 = evaluar_vacios(nFilas, 7);
             inputs_vacios8 = evaluar_vacios(nFilas, 8);
             inputs_vacios9 = evaluar_vacios(nFilas, 9);
+            inputs_vacios10 = evaluar_vacios(nFilas, 10);
+            inputs_vacios11 = evaluar_vacios(nFilas, 11);
+            inputs_vacios12 = evaluar_vacios(nFilas, 12);
+            inputs_vacios13 = evaluar_vacios(nFilas, 13);
+            inputs_vacios14 = evaluar_vacios(nFilas, 14);
+            inputs_vacios15 = evaluar_vacios(nFilas, 15);
+            inputs_vacios16 = evaluar_vacios(nFilas, 16);
 
             if (inputs_vacios1 < nFilas) {
                 filas = nFilas;
@@ -315,6 +382,35 @@ $this->registerJs('$(document).ready(function(){
                 filas = nFilas * 9;
                 total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9;
             }
+            if (inputs_vacios10 < nFilas) {
+                filas = nFilas * 10;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10;
+            }
+            if (inputs_vacios11 < nFilas) {
+                filas = nFilas * 11;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11;
+            }
+            if (inputs_vacios12 < nFilas) {
+                filas = nFilas * 12;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12;
+            }
+            if (inputs_vacios13 < nFilas) {
+                filas = nFilas * 13;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13;
+            }
+            if (inputs_vacios14 < nFilas) {
+                filas = nFilas * 14;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14;
+            }
+            if (inputs_vacios15 < nFilas) {
+                filas = nFilas * 15;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14 + inputs_vacios15;
+            }
+            if (inputs_vacios16 < nFilas) {
+                filas = nFilas * 16;
+                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14 + inputs_vacios15 + inputs_vacios16;
+            }
+
 
             evaluar_error(inputs_vacios1, 1, nFilas);
             evaluar_error(inputs_vacios2, 2, nFilas);
@@ -325,6 +421,13 @@ $this->registerJs('$(document).ready(function(){
             evaluar_error(inputs_vacios7, 7, nFilas);
             evaluar_error(inputs_vacios8, 8, nFilas);
             evaluar_error(inputs_vacios9, 9, nFilas);
+            evaluar_error(inputs_vacios10, 10, nFilas);
+            evaluar_error(inputs_vacios11, 11, nFilas);
+            evaluar_error(inputs_vacios12, 12, nFilas);
+            evaluar_error(inputs_vacios13, 13, nFilas);
+            evaluar_error(inputs_vacios14, 14, nFilas);
+            evaluar_error(inputs_vacios15, 15, nFilas);
+            evaluar_error(inputs_vacios16, 16, nFilas);
 
             if (total_inputs_vacios == 0 && total_inputs_vacios < filas) {
                 $(".calificacion").removeClass("error_input");
@@ -343,7 +446,6 @@ $this->registerJs('$(document).ready(function(){
                 $("#mensaje_error").slideDown(1000).delay(4000).slideUp(1000, function(){
                     $("#guardar").removeAttr("disabled");
                 });
-                
             }
         } else {
             $("#formulario")[0].reportValidity();

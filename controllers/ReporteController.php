@@ -11,7 +11,7 @@ use Fpdf\Fpdf;
 
 use app\models\User;
 use app\models\Ciclo;
-use app\models\GrupoEstudiante;
+use app\models\Materia;
 
 class PDF extends FPDF
 {
@@ -30,38 +30,53 @@ class PDF extends FPDF
         if($this->getReporte() == 'Boleta')
         {
             $url_header = Yii::$app->basePath.'/web/img/header.png';
-            $this->Image( $url_header, 10, 5, 150 );
-            $this->AddFont( 'Montserrat-Bold', '', 'Montserrat-Bold.php' );
-            $this->SetFont( 'Montserrat-Bold', '', 9 );
-            $this->SetTextColor( 125, 125, 125 );
-            $this->Text( 130, 35, utf8_decode( 'Instituto Tecnológico de Huimanguillo' ) );
-            $this->SetFontSize( 8 );
-            $this->Text( 80, 42, utf8_decode( '"2021: Año de la Independencia"' ) );
+            $this->Image($url_header, 10, 5, 150);
+            $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+            $this->SetFont('Montserrat-Bold', '', 9);
+            $this->SetTextColor(125, 125, 125);
+            $this->Text(130, 35, utf8_decode('Instituto Tecnológico de Huimanguillo'));
+            $this->SetFontSize(8);
+            $this->Text(80, 42, utf8_decode('"2021: Año de la Independencia"'));
 
-            $this->AddFont( 'Montserrat-SemiBold', '', 'Montserrat-SemiBold.php' );
-            $this->SetFont( 'Montserrat-SemiBold', '', 8 );
-            $this->SettextColor( 76, 76, 76 );
-            $this->Text( 12, 50, utf8_decode( 'SEP' ) );
-            $this->Text( 50, 50, utf8_decode( 'INSTITUTO TECNOLÓGICO DE HUIMANGUILLO' ) );
-            $this->Text( 140, 50, utf8_decode( 'SES' ) );
-            $this->Text( 155, 50, utf8_decode( 'TNM' ) );
+            $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+            $this->SetFont('Montserrat-SemiBold', '', 8);
+            $this->SettextColor(76, 76, 76);
+            $this->Text(12, 50, utf8_decode('SEP'));
+            $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
+            $this->Text(140, 50, utf8_decode('SES'));
+            $this->Text(155, 50, utf8_decode('TNM'));
         }
         else if($this->getReporte() == 'Horario')
         {
             $url_header = Yii::$app->basePath.'/web/img/header_horario.png';
-            $this->Image( $url_header, 10, 5, 197 );
+            $this->Image($url_header, 10, 5, 197);
 
-            $this->AddFont( 'Montserrat-SemiBold', '', 'Montserrat-SemiBold.php' );
-            $this->SetFont( 'Montserrat-SemiBold', '', 8 );
-            $this->SettextColor( 76, 76, 76 );
-            $this->Text( 12, 50, utf8_decode( 'SEP' ) );
-            $this->Text( 50, 50, utf8_decode( 'INSTITUTO TECNOLÓGICO DE HUIMANGUILLO' ) );
-            $this->Text( 140, 50, utf8_decode( 'SES' ) );
-            $this->Text( 155, 50, utf8_decode( 'TNM' ) );
+            $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+            $this->SetFont('Montserrat-SemiBold', '', 8);
+            $this->SettextColor(76, 76, 76);
+            $this->Text(12, 50, utf8_decode('SEP'));
+            $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
+            $this->Text(140, 50, utf8_decode('SES'));
+            $this->Text(155, 50, utf8_decode('TNM'));
         }
-        else
+        else if($this->getReporte() == 'Lista Calificacion')
         {
+            $url_header = Yii::$app->basePath.'/web/img/header.png';
+            $this->Image($url_header, 60, 5, 150);
+            $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+            $this->SetFont('Montserrat-Bold', '', 9);
+            $this->SetTextColor(125, 125, 125);
+            $this->Text(180, 30, utf8_decode('Instituto Tecnológico de Huimanguillo'));
+            $this->SetFontSize(8);
+            $this->Text(120, 37, utf8_decode('"2021: Año de la Independencia"'));
 
+            $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+            $this->SetFont('Montserrat-SemiBold', '', 8);
+            $this->SettextColor(76, 76, 76);
+            $this->Text(50, 45, utf8_decode('SEP'));
+            $this->Text(80, 45, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
+            $this->Text(180, 45, utf8_decode('SES'));
+            $this->Text(220, 45, utf8_decode('TNM'));
         }
 
         
@@ -95,6 +110,11 @@ class PDF extends FPDF
             $this->SetTextColor(125, 125, 125);
             $this->Text(12, 265, '181240065');
             $this->Text(190, 265, 'Rev. O');
+        }
+        else if($this->getReporte() == 'Lista Calificacion')
+        {
+            $url_footer = Yii::$app->basePath.'/web/img/footer.png';
+            $this->Image($url_footer, 50, 180, 185);
         }
 
     }
@@ -796,6 +816,492 @@ class ReporteController extends Controller
         $idgrupo = Html::encode($idgrupo);
         $idciclo = Html::encode($idciclo);
 
+        $materia = (new \yii\db\Query())
+                            ->from(["grupos"])
+                            ->select(["cat_materias.desc_materia"])
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->one();
+
+        $encabezado = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                "ciclo.desc_ciclo",
+                            	"cat_carreras.desc_carrera",
+	                            "cat_carreras.plan_estudios",
+	                            "grupos.desc_grupo",
+	                            "grupos.desc_grupo_corto",
+	                            "cat_materias.desc_materia",
+                                "CONCAT(profesores.apaterno, ' ', profesores.amaterno, ' ', profesores.nombre_profesor) AS profesor"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo, "ciclo.idciclo" => $idciclo])
+                            ->all();
+
+        $cuerpo = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+                                "grupos_estudiantes.p1",
+	                            "grupos_estudiantes.p2",
+	                            "grupos_estudiantes.p3",
+	                            "grupos_estudiantes.p4",
+	                            "grupos_estudiantes.p5",
+	                            "grupos_estudiantes.p6",
+	                            "grupos_estudiantes.p7",
+	                            "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p9",
+                                "grupos_estudiantes.p9",
+                                "grupos_estudiantes.p10",
+                                "grupos_estudiantes.p11",
+                                "grupos_estudiantes.p12",
+                                "grupos_estudiantes.p13",
+                                "grupos_estudiantes.p14",
+                                "grupos_estudiantes.p15",
+                                "grupos_estudiantes.p16",
+	                            "grupos_estudiantes.s1",
+	                            "grupos_estudiantes.s2",
+	                            "grupos_estudiantes.s3",
+	                            "grupos_estudiantes.s4",
+	                            "grupos_estudiantes.s5",
+	                            "grupos_estudiantes.s6",
+	                            "grupos_estudiantes.s7",
+	                            "grupos_estudiantes.s8",
+	                            "grupos_estudiantes.s9",
+                                "grupos_estudiantes.s10",
+                                "grupos_estudiantes.s11",
+                                "grupos_estudiantes.s12",
+                                "grupos_estudiantes.s13",
+                                "grupos_estudiantes.s14",
+                                "grupos_estudiantes.s15",
+                                "grupos_estudiantes.s16"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
+
+        $total_calificaciones = (new \yii\db\Query())
+                                    ->select([
+                                        "IF(grupos_estudiantes.p1 <> '', COUNT(grupos_estudiantes.p1), 0) AS p1_total",
+	                                    "IF(grupos_estudiantes.p2 <> '', COUNT(grupos_estudiantes.p2), 0) AS p2_total",
+	                                    "IF(grupos_estudiantes.p3 <> '', COUNT(grupos_estudiantes.p3), 0) AS p3_total",
+	                                    "IF(grupos_estudiantes.p4 <> '', COUNT(grupos_estudiantes.p4), 0) AS p4_total",
+	                                    "IF(grupos_estudiantes.p5 <> '', COUNT(grupos_estudiantes.p5), 0) AS p5_total",
+	                                    "IF(grupos_estudiantes.p6 <> '', COUNT(grupos_estudiantes.p6), 0) AS p6_total",
+	                                    "IF(grupos_estudiantes.p7 <> '', COUNT(grupos_estudiantes.p7), 0) AS p7_total",
+	                                    "IF(grupos_estudiantes.p8 <> '', COUNT(grupos_estudiantes.p8), 0) AS p8_total",
+	                                    "IF(grupos_estudiantes.p9 <> '', COUNT(grupos_estudiantes.p9), 0) AS p9_total",
+                                        "IF(grupos_estudiantes.p10 <> '', COUNT(grupos_estudiantes.p10), 0) AS p10_total",
+                                        "IF(grupos_estudiantes.p11 <> '', COUNT(grupos_estudiantes.p11), 0) AS p11_total",
+                                        "IF(grupos_estudiantes.p12 <> '', COUNT(grupos_estudiantes.p12), 0) AS p12_total",
+                                        "IF(grupos_estudiantes.p13 <> '', COUNT(grupos_estudiantes.p13), 0) AS p13_total",
+                                        "IF(grupos_estudiantes.p14 <> '', COUNT(grupos_estudiantes.p14), 0) AS p14_total",
+                                        "IF(grupos_estudiantes.p15 <> '', COUNT(grupos_estudiantes.p15), 0) AS p15_total",
+                                        "IF(grupos_estudiantes.p16 <> '', COUNT(grupos_estudiantes.p16), 0) AS p16_total"
+                                    ])
+                                    ->from(["grupos_estudiantes"])
+                                    ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                                    ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                                    ->one();
+
+        $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
+        $fecha = date('Y-m-d');
+        $carrera = $encabezado[0]['desc_carrera'];
+        $plan = $encabezado[0]['plan_estudios'];
+        $materia = $materia['desc_materia'];
+        $grupo = $encabezado[0]['desc_grupo'];
+        $profesor = utf8_decode($encabezado[0]['profesor']);
+
+        header('Content-type: application/pdf');
+        $pdf = new PDF();
+        $pdf->setReporte('Lista Calificacion');
+        $pdf->AliasNbPages();
+        $pdf->AddPage('L', 'Letter');
+        $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-MediumItalic', '', 'Montserrat-MediumItalic.php');
+        $pdf->AddFont('Montserrat-LightItalic', '', 'Montserrat-LightItalic.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
+
+        $pdf->SetFont('Montserrat-SemiBold', '', 8);
+        $pdf->SettextColor(0, 0, 0);
+        $pdf->Text(12, 60, utf8_decode('PERIODO:'));
+        $pdf->Text(30, 60, $periodo);
+        $pdf->Text(115, 60, 'FECHA:');
+        $pdf->Text(135, 60, $fecha);
+        $pdf->Text(115, 65, 'PROFESOR:');
+        $pdf->Text(135, 65, $profesor);
+        $pdf->Text(12, 65, utf8_decode('CARRERA:'));
+        $pdf->Text(30, 65, utf8_decode($carrera));
+        $pdf->Text(12, 70, utf8_decode('PLAN:'));
+        $pdf->Text(30, 70, utf8_decode($plan));
+        $pdf->Text(12, 75, utf8_decode('MATERIA:'));
+        $pdf->Text(30, 75, utf8_decode($materia));
+        $pdf->Text(12, 80, utf8_decode('GRUPO:'));
+        $pdf->Text(30, 80, utf8_decode($grupo));
+        /*     
+        $x_encabezado = 20;
+
+        if ($total_calificaciones['p16_total'] > 0) {
+            
+            $pdf->SetXY(248, 85);
+            $pdf->Cell(8, 5, 'C16', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p15_total'] > 0) {
+            $pdf->SetXY(240, 85);
+            $pdf->Cell(8, 5, 'C15', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p14_total'] > 0) {
+            $pdf->SetXY(232, 85);
+            $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p13_total'] > 0) {
+            $pdf->SetXY(224, 85);
+            $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p12_total'] > 0) {
+            $pdf->SetXY(216, 85);
+            $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p11_total'] > 0) {
+            $pdf->SetXY(208, 85);
+            $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p10_total'] > 0) {
+            $pdf->SetXY(200, 85);
+            $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p9_total'] > 0) {
+            $pdf->SetXY(192, 85);
+            $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p8_total'] > 0) {
+            $pdf->SetXY(184, 85);
+            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p7_total'] > 0) {
+            $pdf->SetXY(176, 85);
+            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p6_total'] > 0) {
+            $pdf->SetXY(168, 85);
+            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p5_total'] > 0) {
+            $pdf->SetXY(160, 85);
+            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p4_total'] > 0) {
+            $pdf->SetXY(152, 85);
+            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p3_total'] > 0) {
+            $pdf->SetXY(144, 85);
+            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p2_total'] > 0) {
+            $pdf->SetXY(136, 85);
+            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+        }
+        if ($total_calificaciones['p1_total'] > 0) {
+            $x_encabezado = 95;
+            $pdf->SetXY($x_encabezado + 108, 85);
+            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+        }
+        */
+
+        if ($total_calificaciones['p16_total'] > 0) {
+            $x_encabezado = 20;
+            $pdf->SetXY($x_encabezado + 108, 85);
+            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C15', 1, 0, 'C');
+            $pdf->Cell(8, 5, 'C16', 1, 0, 'C');
+        } else {
+            if ($total_calificaciones['p15_total'] > 0) {
+                $x_encabezado = 25;
+                $pdf->SetXY($x_encabezado + 108, 85);
+                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C15', 1, 0, 'C');
+            } else {
+                if ($total_calificaciones['p14_total'] > 0) {
+                    $x_encabezado = 30;
+                    $pdf->SetXY($x_encabezado + 108, 85);
+                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+                } else {
+                    if ($total_calificaciones['p13_total'] > 0) {
+                        $x_encabezado = 35;
+                        $pdf->SetXY($x_encabezado + 108, 85);
+                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                    } else {
+                        if ($total_calificaciones['p12_total'] > 0) {
+                            $x_encabezado = 40;
+                            $pdf->SetXY($x_encabezado + 108, 85);
+                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                        } else {
+                            if ($total_calificaciones['p11_total'] > 0) {
+                                $x_encabezado = 45;
+                                $pdf->SetXY($x_encabezado + 108, 85);
+                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                            } else {
+                                if ($total_calificaciones['p10_total'] > 0) {
+                                    $x_encabezado = 50;
+                                    $pdf->SetXY($x_encabezado + 108, 85);
+                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                                } else {
+                                    if ($total_calificaciones['p9_total'] > 0) {
+                                        $x_encabezado = 55;
+                                        $pdf->SetXY($x_encabezado + 108, 85);
+                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                    } else  {
+                                        if ($total_calificaciones['p8_total'] > 0) {
+                                            $x_encabezado = 60;
+                                            $pdf->SetXY($x_encabezado + 108, 85);
+                                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                        } else {
+                                            if ($total_calificaciones['p7_total'] > 0) {
+                                                $x_encabezado = 65;
+                                                $pdf->SetXY($x_encabezado + 108, 85);
+                                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                            } else {
+                                                if ($total_calificaciones['p6_total'] > 0) {
+                                                    $x_encabezado = 70;
+                                                    $pdf->SetXY($x_encabezado + 108, 85);
+                                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                                } else {
+                                                    if ($total_calificaciones['p5_total'] > 0) {
+                                                        $x_encabezado = 75;
+                                                        $pdf->SetXY($x_encabezado + 108, 85);
+                                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                    } else {
+                                                        if ($total_calificaciones['p4_total'] > 0) {
+                                                            $x_encabezado = 80;
+                                                            $pdf->SetXY($x_encabezado + 108, 85);
+                                                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                        } else {
+                                                            if ($total_calificaciones['p3_total'] > 0) {
+                                                                $x_encabezado = 85;
+                                                                $pdf->SetXY($x_encabezado + 108, 85);
+                                                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                            } else {
+                                                                if ($total_calificaciones['p2_total'] > 0) {
+                                                                    $x_encabezado = 90;
+                                                                    $pdf->SetXY($x_encabezado + 108, 85);
+                                                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                                } else {
+                                                                    if ($total_calificaciones['p1_total'] > 0) {
+                                                                        $x_encabezado = 95;
+                                                                        $pdf->SetXY($x_encabezado + 108, 85);
+                                                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                    } else {
+                                                                        $x_encabezado = 100;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $pdf->SetFont('Montserrat-Bold', '', 8);
+        $pdf->SetXY($x_encabezado, 85);
+        $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
+        $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
+        $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
+        $pdf->Ln();
+
+        $total_estudiantes = count($cuerpo);
+
+        if($total_estudiantes > 0)
+        {
+            $numero = 1;
+            $pdf->SetFont('Montserrat-regular', '', 8);
+            foreach ($cuerpo as $row)
+            {
+                $p1 = $row['p1'];
+                $p2 = $row['p2'];
+                $p3 = $row['p3'];
+                $p4 = $row['p4'];
+                $p5 = $row['p5'];
+                $p6 = $row['p6'];
+                $p7 = $row['p7'];
+                $p8 = $row['p8'];
+                $p9 = $row['p9'];
+                $p10 = $row['p10'];
+                $p11 = $row['p11'];
+                $p12 = $row['p12'];
+                $p13 = $row['p13'];
+                $p14 = $row['p14'];
+                $p15 = $row['p15'];
+                $p16 = $row['p16'];
+
+                $pdf->SetX($x_encabezado);
+                $pdf->Cell(8, 5, $numero, 1, 0, 'C');
+                $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
+                $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
+                ($p1 != "") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+                ($p2 != "") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+                ($p3 != "") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+                ($p4 != "") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+                ($p5 != "") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+                ($p6 != "") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+                ($p7 != "") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+                ($p8 != "") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+                ($p9 != "") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
+                ($p10 != "") ? $pdf->Cell(8, 5, $p10, 1, 0, 'C') : "";
+                ($p11 != "") ? $pdf->Cell(8, 5, $p11, 1, 0, 'C') : "";
+                ($p12 != "") ? $pdf->Cell(8, 5, $p12, 1, 0, 'C') : "";
+                ($p13 != "") ? $pdf->Cell(8, 5, $p13, 1, 0, 'C') : "";
+                ($p14 != "") ? $pdf->Cell(8, 5, $p14, 1, 0, 'C') : "";
+                ($p15 != "") ? $pdf->Cell(8, 5, $p15, 1, 0, 'C') : "";
+                ($p16 != "") ? $pdf->Cell(8, 5, $p16, 1, 0, 'C') : "";
+                $pdf->Ln();
+                $numero = $numero + 1;
+            }
+        }
+
+        $pdf->Output('D', utf8_decode($encabezado[0]['desc_grupo'])."_".$periodo.'.pdf');
+    }
+
+    public function actionListaalumnoscalificacionRespaldo($idgrupo, $idciclo)
+    {
+        $idgrupo = Html::encode($idgrupo);
+        $idciclo = Html::encode($idciclo);
+
         $encabezado = (new \yii\db\Query())
                             ->from(["cat_carreras"])
                             ->select([
@@ -879,7 +1385,7 @@ class ReporteController extends Controller
         $pdf = new PDF();
         $pdf->setReporte('Boleta');
         $pdf->AliasNbPages();
-        $pdf->AddPage('P', 'Letter');
+        $pdf->AddPage('l', 'Letter');
         $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
         $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $pdf->AddFont('Montserrat-MediumItalic', '', 'Montserrat-MediumItalic.php');
@@ -1053,9 +1559,11 @@ class ReporteController extends Controller
                             ->from(["grupos"])
                             ->select([
                                 "grupos.idgrupo",
-	                            "grupos.idciclo"
+	                            "grupos.idciclo",
+                                "cat_materias.desc_materia"
                             ])
-                            ->where(["idprofesor" => $idprofesor, "idciclo" => $idciclo])
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos.idprofesor" => $idprofesor, "grupos.idciclo" => $idciclo])
                             ->all();
 
         header('Content-type: application/pdf');
@@ -1063,7 +1571,8 @@ class ReporteController extends Controller
         $pdf->setReporte('Boleta');
         $pdf->AliasNbPages();
 
-        foreach ($profesor_grupos as $registros) {
+        foreach ($profesor_grupos as $registros)
+        {
             $idgrupo = $registros["idgrupo"];
 
             $encabezado = (new \yii\db\Query())
@@ -1088,33 +1597,44 @@ class ReporteController extends Controller
                             ->from(["estudiantes"])
                             ->select([
                                 "estudiantes.idestudiante",
-                                "estudiantes.nombre_estudiante",
-                                "estudiantes.sexo",
-                                "cat_opcion_curso.desc_opcion_curso_corto",
+    	                        "estudiantes.nombre_estudiante",
                                 "cat_materias.desc_materia",
-                                "cat_opcion_curso.desc_opcion_curso",
                                 "grupos_estudiantes.p1",
-                                "grupos_estudiantes.p2",
-                                "grupos_estudiantes.p3",
-                                "grupos_estudiantes.p4",
-                                "grupos_estudiantes.p5",
-                                "grupos_estudiantes.p6",
-                                "grupos_estudiantes.p7",
-                                "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p2",
+	                            "grupos_estudiantes.p3",
+	                            "grupos_estudiantes.p4",
+	                            "grupos_estudiantes.p5",
+	                            "grupos_estudiantes.p6",
+	                            "grupos_estudiantes.p7",
+	                            "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p9",
                                 "grupos_estudiantes.p9",
-                                "grupos_estudiantes.s1",
-                                "grupos_estudiantes.s2",
-                                "grupos_estudiantes.s3",
-                                "grupos_estudiantes.s4",
-                                "grupos_estudiantes.s5",
-                                "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7",
-                                "grupos_estudiantes.s8",
-                                "grupos_estudiantes.s9"
+                                "grupos_estudiantes.p10",
+                                "grupos_estudiantes.p11",
+                                "grupos_estudiantes.p12",
+                                "grupos_estudiantes.p13",
+                                "grupos_estudiantes.p14",
+                                "grupos_estudiantes.p15",
+                                "grupos_estudiantes.p16",
+	                            "grupos_estudiantes.s1",
+	                            "grupos_estudiantes.s2",
+	                            "grupos_estudiantes.s3",
+	                            "grupos_estudiantes.s4",
+	                            "grupos_estudiantes.s5",
+	                            "grupos_estudiantes.s6",
+	                            "grupos_estudiantes.s7",
+	                            "grupos_estudiantes.s8",
+	                            "grupos_estudiantes.s9",
+                                "grupos_estudiantes.s10",
+                                "grupos_estudiantes.s11",
+                                "grupos_estudiantes.s12",
+                                "grupos_estudiantes.s13",
+                                "grupos_estudiantes.s14",
+                                "grupos_estudiantes.s15",
+                                "grupos_estudiantes.s16"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
                             ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
                             ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
                             ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
@@ -1123,29 +1643,36 @@ class ReporteController extends Controller
             $total_calificaciones = (new \yii\db\Query())
                                     ->select([
                                         "IF(grupos_estudiantes.p1 <> '', COUNT(grupos_estudiantes.p1), 0) AS p1_total",
-                                        "IF(grupos_estudiantes.p2 <> '', COUNT(grupos_estudiantes.p2), 0) AS p2_total",
-                                        "IF(grupos_estudiantes.p3 <> '', COUNT(grupos_estudiantes.p3), 0) AS p3_total",
-                                        "IF(grupos_estudiantes.p4 <> '', COUNT(grupos_estudiantes.p4), 0) AS p4_total",
-                                        "IF(grupos_estudiantes.p5 <> '', COUNT(grupos_estudiantes.p5), 0) AS p5_total",
-                                        "IF(grupos_estudiantes.p6 <> '', COUNT(grupos_estudiantes.p6), 0) AS p6_total",
-                                        "IF(grupos_estudiantes.p7 <> '', COUNT(grupos_estudiantes.p7), 0) AS p7_total",
-                                        "IF(grupos_estudiantes.p8 <> '', COUNT(grupos_estudiantes.p8), 0) AS p8_total",
-                                        "IF(grupos_estudiantes.p9 <> '', COUNT(grupos_estudiantes.p9), 0) AS p9_total"
+	                                    "IF(grupos_estudiantes.p2 <> '', COUNT(grupos_estudiantes.p2), 0) AS p2_total",
+	                                    "IF(grupos_estudiantes.p3 <> '', COUNT(grupos_estudiantes.p3), 0) AS p3_total",
+	                                    "IF(grupos_estudiantes.p4 <> '', COUNT(grupos_estudiantes.p4), 0) AS p4_total",
+	                                    "IF(grupos_estudiantes.p5 <> '', COUNT(grupos_estudiantes.p5), 0) AS p5_total",
+	                                    "IF(grupos_estudiantes.p6 <> '', COUNT(grupos_estudiantes.p6), 0) AS p6_total",
+	                                    "IF(grupos_estudiantes.p7 <> '', COUNT(grupos_estudiantes.p7), 0) AS p7_total",
+	                                    "IF(grupos_estudiantes.p8 <> '', COUNT(grupos_estudiantes.p8), 0) AS p8_total",
+	                                    "IF(grupos_estudiantes.p9 <> '', COUNT(grupos_estudiantes.p9), 0) AS p9_total",
+                                        "IF(grupos_estudiantes.p10 <> '', COUNT(grupos_estudiantes.p10), 0) AS p10_total",
+                                        "IF(grupos_estudiantes.p11 <> '', COUNT(grupos_estudiantes.p11), 0) AS p11_total",
+                                        "IF(grupos_estudiantes.p12 <> '', COUNT(grupos_estudiantes.p12), 0) AS p12_total",
+                                        "IF(grupos_estudiantes.p13 <> '', COUNT(grupos_estudiantes.p13), 0) AS p13_total",
+                                        "IF(grupos_estudiantes.p14 <> '', COUNT(grupos_estudiantes.p14), 0) AS p14_total",
+                                        "IF(grupos_estudiantes.p15 <> '', COUNT(grupos_estudiantes.p15), 0) AS p15_total",
+                                        "IF(grupos_estudiantes.p16 <> '', COUNT(grupos_estudiantes.p16), 0) AS p16_total"
                                     ])
                                     ->from(["grupos_estudiantes"])
                                     ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
                                     ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
                                     ->one();
-
+                                    
             $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
             $fecha = date('Y-m-d');
             $carrera = $encabezado[0]['desc_carrera'];
             $plan = $encabezado[0]['plan_estudios'];
-            $materia = $cuerpo[0]['desc_materia'];
+            $materia = $registros["desc_materia"];
             $grupo = $encabezado[0]['desc_grupo'];
             $profesor = utf8_decode($encabezado[0]['profesor']);
 
-            $pdf->AddPage('P', 'Letter');
+            $pdf->AddPage('L', 'Letter');
             $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
             $pdf->AddFont('Montserrat-MediumItalic', '', 'Montserrat-MediumItalic.php');
@@ -1170,8 +1697,8 @@ class ReporteController extends Controller
             $pdf->Text(12, 80, utf8_decode('GRUPO:'));
             $pdf->Text(30, 80, utf8_decode($grupo));
 
-            if ($total_calificaciones['p9_total'] > 0) {
-                $x_encabezado = 16;
+            if ($total_calificaciones['p16_total'] > 0) {
+                $x_encabezado = 20;
                 $pdf->SetXY($x_encabezado + 108, 85);
                 $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                 $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
@@ -1182,9 +1709,35 @@ class ReporteController extends Controller
                 $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
                 $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
                 $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C15', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C16', 1, 0, 'C');
             } else {
-                if ($total_calificaciones['p8_total'] > 0) {
-                    $x_encabezado = 20;
+                if ($total_calificaciones['p15_total'] > 0) {
+                $x_encabezado = 25;
+                $pdf->SetXY($x_encabezado + 108, 85);
+                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
+                $pdf->Cell(8, 5, 'C15', 1, 0, 'C');
+            } else {
+                if ($total_calificaciones['p14_total'] > 0) {
+                    $x_encabezado = 30;
                     $pdf->SetXY($x_encabezado + 108, 85);
                     $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                     $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
@@ -1194,9 +1747,15 @@ class ReporteController extends Controller
                     $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
                     $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
                     $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
+                    $pdf->Cell(8, 5, 'C14', 1, 0, 'C');
                 } else {
-                    if ($total_calificaciones['p7_total'] > 0) {
-                        $x_encabezado = 24;
+                    if ($total_calificaciones['p13_total'] > 0) {
+                        $x_encabezado = 35;
                         $pdf->SetXY($x_encabezado + 108, 85);
                         $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                         $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
@@ -1205,9 +1764,15 @@ class ReporteController extends Controller
                         $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
                         $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
                         $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
+                        $pdf->Cell(8, 5, 'C13', 1, 0, 'C');
                     } else {
-                        if ($total_calificaciones['p6_total'] > 0) {
-                            $x_encabezado = 28;
+                        if ($total_calificaciones['p12_total'] > 0) {
+                            $x_encabezado = 40;
                             $pdf->SetXY($x_encabezado + 108, 85);
                             $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                             $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
@@ -1215,43 +1780,130 @@ class ReporteController extends Controller
                             $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
                             $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
                             $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
+                            $pdf->Cell(8, 5, 'C12', 1, 0, 'C');
                         } else {
-                            if ($total_calificaciones['p5_total'] > 0) {
-                                $x_encabezado = 32;
+                            if ($total_calificaciones['p11_total'] > 0) {
+                                $x_encabezado = 45;
                                 $pdf->SetXY($x_encabezado + 108, 85);
                                 $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                 $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
                                 $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
                                 $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
                                 $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
+                                $pdf->Cell(8, 5, 'C11', 1, 0, 'C');
                             } else {
-                                if ($total_calificaciones['p4_total'] > 0) {
-                                    $x_encabezado = 34;
+                                if ($total_calificaciones['p10_total'] > 0) {
+                                    $x_encabezado = 50;
                                     $pdf->SetXY($x_encabezado + 108, 85);
                                     $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                     $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
                                     $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
                                     $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                    $pdf->Cell(8, 5, 'C10', 1, 0, 'C');
                                 } else {
-                                    if ($total_calificaciones['p3_total'] > 0) {
-                                        $x_encabezado = 36;
+                                    if ($total_calificaciones['p9_total'] > 0) {
+                                        $x_encabezado = 55;
                                         $pdf->SetXY($x_encabezado + 108, 85);
                                         $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                         $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
                                         $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
-                                    } else {
-                                        if ($total_calificaciones['p2_total'] > 0) {
-                                            $x_encabezado = 38;
+                                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
+                                        $pdf->Cell(8, 5, 'C9', 1, 0, 'C');
+                                    } else  {
+                                        if ($total_calificaciones['p8_total'] > 0) {
+                                            $x_encabezado = 60;
                                             $pdf->SetXY($x_encabezado + 108, 85);
                                             $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
                                             $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
+                                            $pdf->Cell(8, 5, 'C8', 1, 0, 'C');
                                         } else {
-                                            if ($total_calificaciones['p1_total'] > 0) {
-                                                $x_encabezado = 40;
+                                            if ($total_calificaciones['p7_total'] > 0) {
+                                                $x_encabezado = 65;
                                                 $pdf->SetXY($x_encabezado + 108, 85);
                                                 $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                                $pdf->Cell(8, 5, 'C7', 1, 0, 'C');
                                             } else {
-                                                $x_encabezado = 50;
+                                                if ($total_calificaciones['p6_total'] > 0) {
+                                                    $x_encabezado = 70;
+                                                    $pdf->SetXY($x_encabezado + 108, 85);
+                                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                    $pdf->Cell(8, 5, 'C6', 1, 0, 'C');
+                                                } else {
+                                                    if ($total_calificaciones['p5_total'] > 0) {
+                                                        $x_encabezado = 75;
+                                                        $pdf->SetXY($x_encabezado + 108, 85);
+                                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                        $pdf->Cell(8, 5, 'C5', 1, 0, 'C');
+                                                    } else {
+                                                        if ($total_calificaciones['p4_total'] > 0) {
+                                                            $x_encabezado = 80;
+                                                            $pdf->SetXY($x_encabezado + 108, 85);
+                                                            $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                            $pdf->Cell(8, 5, 'C4', 1, 0, 'C');
+                                                        } else {
+                                                            if ($total_calificaciones['p3_total'] > 0) {
+                                                                $x_encabezado = 85;
+                                                                $pdf->SetXY($x_encabezado + 108, 85);
+                                                                $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                                $pdf->Cell(8, 5, 'C3', 1, 0, 'C');
+                                                            } else {
+                                                                if ($total_calificaciones['p2_total'] > 0) {
+                                                                    $x_encabezado = 90;
+                                                                    $pdf->SetXY($x_encabezado + 108, 85);
+                                                                    $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                    $pdf->Cell(8, 5, 'C2', 1, 0, 'C');
+                                                                } else {
+                                                                    if ($total_calificaciones['p1_total'] > 0) {
+                                                                        $x_encabezado = 95;
+                                                                        $pdf->SetXY($x_encabezado + 108, 85);
+                                                                        $pdf->Cell(8, 5, 'C1', 1, 0, 'C');
+                                                                    } else {
+                                                                        $x_encabezado = 100;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -1261,6 +1913,7 @@ class ReporteController extends Controller
                     }
                 }
             }
+        }
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY($x_encabezado, 85);
@@ -1271,11 +1924,12 @@ class ReporteController extends Controller
 
             $total_estudiantes = count($cuerpo);
 
-            if ($total_estudiantes > 0) {
+            if($total_estudiantes > 0)
+            {
                 $numero = 1;
-                $promedio_p = "";
                 $pdf->SetFont('Montserrat-regular', '', 8);
-                foreach ($cuerpo as $row) {
+                foreach ($cuerpo as $row)
+                {
                     $p1 = $row['p1'];
                     $p2 = $row['p2'];
                     $p3 = $row['p3'];
@@ -1285,6 +1939,13 @@ class ReporteController extends Controller
                     $p7 = $row['p7'];
                     $p8 = $row['p8'];
                     $p9 = $row['p9'];
+                    $p10 = $row['p10'];
+                    $p11 = $row['p11'];
+                    $p12 = $row['p12'];
+                    $p13 = $row['p13'];
+                    $p14 = $row['p14'];
+                    $p15 = $row['p15'];
+                    $p16 = $row['p16'];
 
                     $pdf->SetX($x_encabezado);
                     $pdf->Cell(8, 5, $numero, 1, 0, 'C');
@@ -1299,11 +1960,18 @@ class ReporteController extends Controller
                     ($p7 != "") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
                     ($p8 != "") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
                     ($p9 != "") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
+                    ($p10 != "") ? $pdf->Cell(8, 5, $p10, 1, 0, 'C') : "";
+                    ($p11 != "") ? $pdf->Cell(8, 5, $p11, 1, 0, 'C') : "";
+                    ($p12 != "") ? $pdf->Cell(8, 5, $p12, 1, 0, 'C') : "";
+                    ($p13 != "") ? $pdf->Cell(8, 5, $p13, 1, 0, 'C') : "";
+                    ($p14 != "") ? $pdf->Cell(8, 5, $p14, 1, 0, 'C') : "";
+                    ($p15 != "") ? $pdf->Cell(8, 5, $p15, 1, 0, 'C') : "";
+                    ($p16 != "") ? $pdf->Cell(8, 5, $p16, 1, 0, 'C') : "";
                     $pdf->Ln();
                     $numero = $numero + 1;
                 }
             }
         }
-        $pdf->Output('D', utf8_decode($encabezado[0]['desc_grupo'])."_".$periodo.'.pdf');
+        $pdf->Output('I', utf8_decode($periodo).'.pdf');
     }
 }

@@ -8,6 +8,7 @@ use app\models\Profesor;
 
 class ProfesorForm extends model
 {
+    public $idprofesor;
     public $curp;
     public $nombre_profesor;
     public $apaterno;
@@ -20,7 +21,7 @@ class ProfesorForm extends model
     public function rules()
     {
         return [
-            [['curp', 'nombre_profesor', 'apaterno', 'amaterno', 'fecha_registro', 'cve_estatus'], 'required', 'message' => 'Requerido'],
+            [['estado', 'curp', 'nombre_profesor', 'apaterno', 'amaterno', 'fecha_registro', 'cve_estatus'], 'required', 'message' => 'Requerido'],
             ['curp', 'string', 'min' => 3, 'max' => 20, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 20 caracteres'],
             ['curp', 'match', 'pattern' => "/^.[0-9A-Za-z.]+$/i", 'message' => 'Sólo valores alfanuméricos'],
             ['curp', 'curp_existe'],
@@ -31,7 +32,7 @@ class ProfesorForm extends model
             ['apaterno', 'string', 'min' => 3, 'max' => 45, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 45 caracteres'],
             ['amaterno', 'match', 'pattern' => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", 'message' => 'Sólo letras'],
             ['amaterno', 'string', 'min' => 3, 'max' => 45, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 45 caracteres'],
-            ['fecha_registro', 'string', 'min' => 10, 'max' => 19, 'tooShort' => 'Mínimo 10 caracteres', 'tooLong' => 'Máximo 19 caracteres']
+            [['fecha_registro', 'fecha_actualizacion'], 'string', 'min' => 10, 'max' => 19, 'tooShort' => 'Mínimo 10 caracteres', 'tooLong' => 'Máximo 19 caracteres'],
         ];
     }
 
@@ -44,18 +45,17 @@ class ProfesorForm extends model
             'amaterno' => 'Apellido Materno',
             'fecha_registro' => 'Fecha Registro',
             'fecha_actualizacion' => 'Fecha Actualización',
-            'cve_estatus' => 'Status'
+            'cve_estatus' => 'Clave Status'
         ];
     }
 
     public function curp_existe($attribute, $params)
     {
-        //Buscar el curp en la tabla
         $table = Profesor::find()->where("curp=:curp", [":curp" => $this->curp]);
-        //Si el curp existe mostrar el error
-        if ($table->count() == 1)
+
+        if ($table->count() >= 1 && $this->estado == 0)
         {
-            $this->addError($attribute, "La CURP ingresada ya existe");
+            $this->addError($attribute, "El usuario ingresado ya existe");
         }
     }
 }

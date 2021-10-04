@@ -22,7 +22,7 @@ class EstudianteForm extends model
     public function rules()
     {
         return [
-            [['idestudiante', 'nombre_estudiante', 'email', 'sexo', 'num_semestre', 'fecha_registro', 'cve_estatus', 'idcarrera'], 'required', 'message' => 'Requerido'],
+            [['estado', 'idestudiante', 'nombre_estudiante', 'email', 'sexo', 'num_semestre', 'fecha_registro', 'cve_estatus', 'idcarrera'], 'required', 'message' => 'Requerido'],
             ['idestudiante', 'match', 'pattern' => "/^.[0-9A-Za-z]+$/i", 'message' => 'Sólo valores alfanuméricos'],
             ['idestudiante', 'string', 'min' => 3, 'max' => 15, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 15 caracteres'],
             ['idestudiante', 'idestudiante_existe'],
@@ -35,8 +35,8 @@ class EstudianteForm extends model
             ['num_semestre', 'string', 'min' => 1, 'max' => 1, 'tooShort' => 'Mínimo 1 caracter', 'tooLong' => 'Máximo 1 caracter'],
             ['num_semestre', 'integer', 'message' => 'Sólo números'],
             ['num_semestre', 'string', 'min' => 1, 'max' => 2, 'tooShort' => 'Mínimo 1 caracter', 'tooLong' => 'Máximo 2 caracteres'],
-            ['fecha_registro', 'string', 'min' => 10, 'max' => 19, 'tooShort' => 'Mínimo 10 caracteres', 'tooLong' => 'Máximo 19 caracteres'],
-            //['fecha_registro', 'date', 'format' => 'yyyy', 'message' => 'Requerido'],
+            [['fecha_registro', 'fecha_actualizacion'], 'string', 'min' => 10, 'max' => 19, 'tooShort' => 'Mínimo 10 caracteres', 'tooLong' => 'Máximo 19 caracteres'],
+            //['fecha_registro', 'date', 'format' => 'php:Y-m-d', 'message' => 'Requerido'],
             //['fecha_actualizacion', 'required', 'message' => 'Requerido'],
             ['idcarrera', 'integer', 'message' => 'Sólo números']
         ];
@@ -53,31 +53,28 @@ class EstudianteForm extends model
             'fecha_registro' => 'Fecha Registro',
             'fecha_actualizacion' => 'Fecha Actuaización',
             'cve_estatus' => 'Clave Status',
-            'idcarrera' => 'Carrera'
+            'idcarrera' => 'Carrera',
+            'estado' => 'Estado'
         ];
     }
 
     public function email_existe($attribute, $params)
     {
-        //Buscar el email en la tabla
         $table = Estudiante::find()->where("email=:email", [":email" => $this->email]);
-        //Si el email existe mostrar el error
-        if ($this->estado === false)
+
+        if ($table->count() == 1 && $this->estado == 0)
         {
-            if ($table->count() === 1)
-            {
-                $this->addError($attribute, "El email ingresado ya existe");
-            }
+            $this->addError($attribute, "El email ingresado ya existe");
         }
     }
-    
+
     public function idestudiante_existe($attribute, $params)
     {
         $table = Estudiante::find()->where("idestudiante=:idestudiante", [":idestudiante" => $this->idestudiante]);
 
-        if ($table->count() >= 1)
+        if ($table->count() >= 1 && $this->estado == 0)
         {
-            $this->addError($attribute, $this->estado);
+            $this->addError($attribute, "EL No. Control ya existe");
         }
     }
 }

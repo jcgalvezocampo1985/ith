@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="caret"></span>
                                         </button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu pull-right">
                                             <li><?= Html::a("Lista Alumnos", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
                                             <li><?= Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=true"], ["target" => "_parent"]) ?></li>
@@ -139,3 +139,20 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php
+$this->registerCss('
+.table-responsive {
+  overflow-y: visible !important;
+}
+@media (max-width: 767px) {
+    .table-responsive .dropdown-menu {
+        position: static !important;
+    }
+}
+@media (min-width: 768px) {
+    .table-responsive {
+        overflow: inherit;
+    }
+}
+');
+?>

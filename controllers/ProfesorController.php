@@ -12,6 +12,7 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
+use Carbon\Carbon;
 
 use app\models\Profesor;
 use app\models\ProfesorForm;
@@ -106,7 +107,7 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+        /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
         {
             return $this->redirect(["horarioconsulta"]);
         }
@@ -122,23 +123,23 @@ class ProfesorController extends Controller
         {
             return $this->redirect(["horarioconsulta"]);
         }
-        exit;
+        exit;*/
         $form = new ProfesorSearch;
-        $search = null;
-        $status = 0;
+        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
+        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $search = Html::encode($form->q);
+                //$search = Html::encode($form->q);
+                $search = Html::encode($form->buscar);
                 $table = Profesor::find()
                                  ->where(["like", "curp", $search])
                                  ->orWhere(["like", "nombre_profesor", $search])
                                  ->orWhere(["like", "apaterno", $search])
                                  ->orWhere(["like", "amaterno", $search])
                                  ->orWhere(["like", "cve_estatus", $search]);
-                $status = 1;
             }
             else
             {
@@ -160,13 +161,37 @@ class ProfesorController extends Controller
                        ->limit($pages->limit)
                        ->all();
 
-        return $this->render("index", ['model' => $model, 'form' => $form, 'status' => $status, "pages" => $pages]);
+        if(count($model) == 0){
+            $error = 2;
+            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+        }
+
+        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
 
-    public function actionCreate()
+    public function actionCreate($msg = "", $error = "")
     {
         $model = new ProfesorForm;
-        $msg = false;
+
+        if(Yii::$app->request->get() && $error != 1)
+        {
+            $modelo = $_GET["modelo"];
+            $model->idprofesor = $modelo["idprofesor"];
+            $model->curp = $modelo["curp"];
+            $model->nombre_profesor = $modelo["nombre_profesor"];
+            $model->apaterno = $modelo["apaterno"];
+            $model->amaterno = $modelo["amaterno"];
+            $model->fecha_registro = $modelo["fecha_registro"];
+            $model->fecha_actualizacion = $modelo["fecha_actualizacion"];
+            $model->cve_estatus = $modelo["cve_estatus"];
+        }
+
+        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
+    }
+
+    public function actionStore()
+    {
+        $model = new ProfesorForm;
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
         {
@@ -175,45 +200,107 @@ class ProfesorController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if($model->load(Yii::$app->request->post()))
+        if ($model->load(Yii::$app->request->post()))
         {
-            if($model->validate())
+            $idprofesor = $model->idprofesor;
+            $existe_profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->count();
+
+            if ($model->validate())
             {
-                $table = new Profesor();
-                $table->curp = $model->curp;
-                $table->nombre_profesor = $model->nombre_profesor;
-                $table->apaterno = $model->apaterno;
-                $table->amaterno = $model->amaterno;
-                $table->fecha_registro = $model->fecha_registro;
-                $table->fecha_actualizacion = $model->fecha_actualizacion;
-
-                if($table->insert())
+                if ($existe_profesor == 0)
                 {
-                    $model->curp = "";
-                    $model->nombre_profesor = "";
-                    $model->apaterno = "";
-                    $model->amaterno = "";
-                    $model->fecha_registro = "";
-                    $model->fecha_actualizacion = "";
+                    $table = new Profesor();
+                    $table->curp = $model->curp;
+                    $table->nombre_profesor = $model->nombre_profesor;
+                    $table->apaterno = $model->apaterno;
+                    $table->amaterno = $model->amaterno;
+                    $table->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                    $table->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
+                    $table->cve_estatus = $model->cve_estatus;
 
-                    $msg = "Profesor agregado";
+                    if ($table->insert())
+                    {
+                        $msg = "Profesor agregado";
+                        $error = 1;
+                    }
+                    else
+                    {
+                        $msg = "Ocurrió un error al intentar agregar el profesor, intenta nuevamente";
+                        $error = 3;
+                    }
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar el nuevo profesor, intenta nuevamente";
+                    $msg = "Usuario ya existe";
+                    $error = 3;
                 }
+
+                $modelo = [
+                    "idprofesor" => $model->idprofesor,
+                    "curp" => $model->curp,
+                    "nombre_profesor" => $model->nombre_profesor,
+                    "apaterno" => $model->apaterno,
+                    "amaterno" => $model->amaterno,
+                    "fecha_registro" => $model->fecha_registro,
+                    "fecha_actualizacion" => $model->fecha_actualizacion,
+                    "cve_estatus" => $model->cve_estatus
+                ];
+
+                return $this->redirect(["profesor/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
             }
             else
             {
                 $model->getErrors();
-            }
+            } 
         }
-
-        return $this->render("form", ["model" => $model, "msg" => $msg]);
+        else
+        {
+            return $this->redirect(["profesor/index"]);
+        }
     }
 
-    public function actionUpdate()
+    public function actionEdit($idprofesor, $msg = "", $error = "")
     {
+        $idestudiante = Html::encode($idprofesor);
+        $msg = Html::encode($msg);
+        $error = Html::encode($error);
+
+        if(Yii::$app->request->get())
+        {
+            $model = new ProfesorForm;
+
+            if($idprofesor)
+            {
+                $table = Profesor::findOne($idprofesor);
+
+                if($table)
+                {
+                    $model->idprofesor = $table->idprofesor;
+                    $model->curp = $table->curp;
+                    $model->nombre_profesor = $table->nombre_profesor;
+                    $model->apaterno = $table->apaterno;
+                    $model->amaterno = $table->amaterno;
+                    $model->fecha_registro = Carbon::parse(strtotime($table->fecha_registro))->format('Y-m-d');
+                    $model->fecha_actualizacion = Carbon::parse(strtotime($table->fecha_actualizacion))->format('Y-m-d');
+                    $model->cve_estatus = $table->cve_estatus;
+                }
+                else
+                {
+                    return $this->redirect(["profesor/index"]);
+                }
+            }
+            else
+            {
+                return $this->redirect(["profesor/index"]);
+            }
+        }
+        else
+        {
+            return $this->redirect(["profesor/index"]);
+        }
+
+        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
+
         $model = new ProfesorForm;
         $msg = false;
 
@@ -294,6 +381,65 @@ class ProfesorController extends Controller
         }
 
         return $this->render("form", ["model" => $model,  "msg" => $msg]);
+    }
+
+    public function actionUpdate()
+    {
+        $model = new ProfesorForm;
+
+        if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
+        {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load(Yii::$app->request->post()))
+        {
+            $idprofesor = $model->idprofesor;
+            $msg = false;
+
+            if($model->validate())
+            {
+                $table = Profesor::findOne($idprofesor);
+
+                if($table)
+                {
+                    $table->curp = $model->curp;
+                    $table->nombre_profesor = $model->nombre_profesor;
+                    $table->sexo = $model->sexo;
+                    $table->idcarrera = $model->idcarrera;
+                    $table->num_semestre = $model->num_semestre;
+                    $table->fecha_registro = $model->fecha_registro;
+                    $table->fecha_actualizacion = $model->fecha_actualizacion;
+                    $table->cve_estatus = $model->cve_estatus;
+
+                    if($table->update())
+                    {
+                        $msg = "Registro actualizado";
+                    }
+                    else
+                    {
+                        $msg = "No detectaron cambios en el registro";
+                    }
+                    $error = 1;
+                }
+                else
+                {
+                    $msg = "Alumno no encontrado";
+                    $error = 2;
+                }
+            }
+            else
+            {
+                return $this->getErrors();
+            }
+            return $this->redirect(["estudiante/edit", "idestudiante" => $idestudiante, "msg" => $msg, "error" => $error]);
+        }
+        else
+        {
+            return $this->redirect(["estudiante/index"]);
+        }
     }
 
     public function actionDelete()
@@ -513,6 +659,13 @@ class ProfesorController extends Controller
 	                            "grupos_estudiantes.p7",
 	                            "grupos_estudiantes.p8",
 	                            "grupos_estudiantes.p9",
+                                "grupos_estudiantes.p10",
+                                "grupos_estudiantes.p11",
+                                "grupos_estudiantes.p12",
+                                "grupos_estudiantes.p13",
+                                "grupos_estudiantes.p14",
+                                "grupos_estudiantes.p15",
+                                "grupos_estudiantes.p16",
 	                            "grupos_estudiantes.s1",
 	                            "grupos_estudiantes.s2",
 	                            "grupos_estudiantes.s3",
@@ -522,6 +675,13 @@ class ProfesorController extends Controller
 	                            "grupos_estudiantes.s7",
 	                            "grupos_estudiantes.s8",
 	                            "grupos_estudiantes.s9",
+                                "grupos_estudiantes.s10",
+                                "grupos_estudiantes.s11",
+                                "grupos_estudiantes.s12",
+                                "grupos_estudiantes.s13",
+                                "grupos_estudiantes.s14",
+                                "grupos_estudiantes.s15",
+                                "grupos_estudiantes.s16"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -576,6 +736,13 @@ class ProfesorController extends Controller
                 $p7 = Html::encode($_POST["p7"][$i]);
                 $p8 = Html::encode($_POST["p8"][$i]);
                 $p9 = Html::encode($_POST["p9"][$i]);
+                $p10 = Html::encode($_POST["p10"][$i]);
+                $p11 = Html::encode($_POST["p11"][$i]);
+                $p12 = Html::encode($_POST["p12"][$i]);
+                $p13 = Html::encode($_POST["p13"][$i]);
+                $p14 = Html::encode($_POST["p14"][$i]);
+                $p15 = Html::encode($_POST["p15"][$i]);
+                $p16 = Html::encode($_POST["p16"][$i]);
 
                 /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
@@ -600,6 +767,13 @@ class ProfesorController extends Controller
                     $table->p7 = $p7;
                     $table->p8 = $p8;
                     $table->p9 = $p9;
+                    $table->p10 = $p10;
+                    $table->p11 = $p11;
+                    $table->p12 = $p12;
+                    $table->p13 = $p13;
+                    $table->p14 = $p14;
+                    $table->p15 = $p15;
+                    $table->p16 = $p16;
                     /*$table->s1 = $s1;
                     $table->s2 = $s2;
                     $table->s3 = $s3;

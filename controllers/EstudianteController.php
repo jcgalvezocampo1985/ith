@@ -9,26 +9,22 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\web\Session;
 use yii\widgets\ActiveForm;
-use yii\filters\AccessController;
 use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
+use Carbon\Carbon;
 
 use app\models\Estudiante;
 use app\models\EstudianteForm;
 use app\models\EstudianteSearch;
 use app\models\EstudianteHorarioSearch;
 use app\models\GrupoEstudiante;
-//use app\models\GrupoEstudianteForm;
 use app\models\Carrera;
 use app\models\Ciclo;
-//use app\models\Materia;
 use app\models\OpcionCurso;
 use app\models\ActaCalificacion;
 use app\models\User;
 use app\models\GrupoEstudianteSearch;
-use app\models\MateriaSearch;
 
 class EstudianteController extends Controller
 {
@@ -116,13 +112,14 @@ class EstudianteController extends Controller
     {
         $form = new EstudianteSearch;
         $idestudiante = null;
-        $status = 0;
+        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
+        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $idestudiante = Html::encode($form->buscar);
+                $search = Html::encode($form->buscar);
                 $table = new \yii\db\Query();
                 $model = $table->from(['a' => 'estudiantes'])
                                ->select(['a.idestudiante', 
@@ -133,11 +130,11 @@ class EstudianteController extends Controller
 	                                'a.cve_estatus',
                                     'b.desc_carrera'])
                                ->innerJoin(['b' => 'cat_carreras'], '`b`.`idcarrera`=`a`.`idcarrera`')
-                               ->where(["like", "a.idestudiante", $idestudiante])
-                               ->orWhere(["like", "a.nombre_estudiante", $idestudiante])
-                               ->orWhere(["like", "a.email", $idestudiante])
-                               ->orderBy('a.idestudiante');  
-                $status = 1;
+                               ->where(["like", "a.idestudiante", $search])
+                               ->orWhere(["like", "a.nombre_estudiante", $search])
+                               ->orWhere(["like", "a.email", $search])
+                               ->orderBy('a.idestudiante');
+                
             }
             else
             {
@@ -164,20 +161,46 @@ class EstudianteController extends Controller
                     "pageSize" => 20,
                     "totalCount" => $count->count(),
                 ]);
+
         $model = $table->offset($pages->offset)
                        ->limit($pages->limit)
-                       ->all(); 
+                       ->all();
 
-        return $this->render("index", ["model" => $model, "form" => $form, "status" => $status, "pages" => $pages]);
+        if(count($model) == 0){
+            $error = 2;
+            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+        }
+        
+        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
 
-    public function actionCreate()
+    public function actionCreate($msg = "", $error = "")
     {
         $model = new EstudianteForm;
-        $msg = false;
         $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
         $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
         $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
+
+        if(Yii::$app->request->get() && $error != 1)
+        {
+            $modelo = $_GET["modelo"];
+            $model->idestudiante = $modelo["idestudiante"];
+            $model->nombre_estudiante = $modelo["nombre_estudiante"];
+            $model->email = $modelo["email"];
+            $model->sexo = $modelo["sexo"];
+            $model->idcarrera = $modelo["idcarrera"];
+            $model->num_semestre = $modelo["num_semestre"];
+            $model->fecha_registro = $modelo["fecha_registro"];
+            $model->fecha_actualizacion = $modelo["fecha_actualizacion"];
+            $model->cve_estatus = $modelo["cve_estatus"];
+        }
+
+        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
+    }
+
+    public function actionStore()
+    {
+        $model = new EstudianteForm;
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
         {
@@ -186,56 +209,128 @@ class EstudianteController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if($model->load(Yii::$app->request->post()))
+        if ($model->load(Yii::$app->request->post()))
         {
-            if($model->validate())
+            $idestudiante = $model->idestudiante;
+            $email = $model->email;
+            $existe_idestudiante = Estudiante::find()->where(["idestudiante" => $idestudiante])->count();
+            $existe_email = Estudiante::find()->where(["email" => $email])->count();
+
+            if ($model->validate())
             {
-                $table = new Estudiante();
-                $table->idestudiante = $model->idestudiante;
-                $table->nombre_estudiante = $model->nombre_estudiante;
-                $table->email = $model->email;
-                $table->sexo = $model->sexo;
-                $table->idcarrera = $model->idcarrera;
-                $table->num_semestre = $model->num_semestre;
-                $table->fecha_registro = $model->fecha_registro;
-                $table->fecha_actualizacion = $model->fecha_actualizacion;
-                $table->cve_estatus = $model->cve_estatus;
-
-                if($table->insert())
+                if ($existe_idestudiante == 0)
                 {
-                    $model->idestudiante = "";
-                    $model->nombre_estudiante = "";
-                    $model->email = "";
-                    $model->sexo = "";
-                    $model->idcarrera = "";
-                    $model->num_semestre = "";
-                    $model->fecha_registro = "";
-                    $model->fecha_actualizacion = "";
-                    $model->cve_estatus = "";
+                    if ($existe_email == 0)
+                    {
+                        $table = new Estudiante();
+                        $table->idestudiante = $model->idestudiante;
+                        $table->nombre_estudiante = $model->nombre_estudiante;
+                        $table->email = $model->email;
+                        $table->sexo = $model->sexo;
+                        $table->idcarrera = $model->idcarrera;
+                        $table->num_semestre = $model->num_semestre;
+                        $table->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                        $table->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
+                        $table->cve_estatus = $model->cve_estatus;
 
-                    $msg = "Estudiante agregado";
+                        if ($table->insert())
+                        {
+                            $msg = "Estudiante agregado";
+                            $error = 1;
+                        }
+                        else
+                        {
+                            $msg = "Ocurrió un error al intentar agregar el estudiante, intenta nuevamente";
+                            $error = 3;
+                        }
+                    }
+                    else
+                    {
+                        $msg = "Email ya existe";
+                        $error = 3;
+                    }
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar el nuevo profesor, intenta nuevamente";
+                    $msg = "No. Control ya existe";
+                    $error = 3;
                 }
+
+                $modelo = [
+                    "idestudiante" => $model->idestudiante,
+                    "nombre_estudiante" => $model->nombre_estudiante,
+                    "email" => $model->email,
+                    "sexo" => $model->sexo,
+                    "idcarrera" => $model->idcarrera,
+                    "num_semestre" => $model->num_semestre,
+                    "fecha_registro" => $model->fecha_registro,
+                    "fecha_actualizacion" => $model->fecha_actualizacion,
+                    "cve_estatus" => $model->cve_estatus
+                ];
+
+                return $this->redirect(["estudiante/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
             }
             else
             {
                 $model->getErrors();
+            } 
+        }
+        else
+        {
+            return $this->redirect(["estudiante/index"]);
+        }
+    }
+
+    public function actionEdit($idestudiante, $msg = "", $error = "")
+    {
+        $idestudiante = Html::encode($idestudiante);
+        $msg = Html::encode($msg);
+        $error = Html::encode($error);
+
+        if(Yii::$app->request->get())
+        {
+            $model = new EstudianteForm;
+            $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
+            $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
+            $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
+
+            if($idestudiante)
+            {
+                $table = Estudiante::findOne($idestudiante);
+
+                if($table)
+                {
+                    $model->idestudiante = $table->idestudiante;
+                    $model->nombre_estudiante = $table->nombre_estudiante;
+                    $model->email = $table->email;
+                    $model->sexo = $table->sexo;
+                    $model->idcarrera = $table->idcarrera;
+                    $model->num_semestre = $table->num_semestre;
+                    $model->fecha_registro = Carbon::parse(strtotime($table->fecha_registro))->format('Y-m-d');
+                    $model->fecha_actualizacion = Carbon::parse(strtotime($table->fecha_actualizacion))->format('Y-m-d');
+                    $model->cve_estatus = $table->cve_estatus;
+                }
+                else
+                {
+                    return $this->redirect(["estudiante/index"]);
+                }
+            }
+            else
+            {
+                return $this->redirect(["estudiante/index"]);
             }
         }
+        else
+        {
+            return $this->redirect(["estudiante/index"]);
+        }
 
-        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
+        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
     }
 
     public function actionUpdate()
     {
         $model = new EstudianteForm;
-        $msg = false;
-        $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
-        $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
-        $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
         {
@@ -246,10 +341,13 @@ class EstudianteController extends Controller
 
         if($model->load(Yii::$app->request->post()))
         {
-            $model->estado = "2";
+            $idestudiante = $model->idestudiante;
+            $msg = false;
+
             if($model->validate())
             {
-                $table = Estudiante::findOne($model->idestudiante);
+                $table = Estudiante::findOne($idestudiante);
+
                 if($table)
                 {
                     $table->nombre_estudiante = $model->nombre_estudiante;
@@ -269,71 +367,55 @@ class EstudianteController extends Controller
                     {
                         $msg = "No detectaron cambios en el registro";
                     }
+                    $error = 1;
                 }
                 else
                 {
                     $msg = "Alumno no encontrado";
+                    $error = 2;
                 }
             }
             else
             {
                 return $this->getErrors();
             }
-        }
-
-        if(Yii::$app->request->get("idestudiante"))
-        {
-            $id = Html::encode($_GET["idestudiante"]);
-            if($id)
-            {
-                $table = Estudiante::findOne($id);
-
-                if($table)
-                {
-                    $model->idestudiante = $table->idestudiante;
-                    $model->nombre_estudiante = $table->nombre_estudiante;
-                    $model->email = $table->email;
-                    $model->sexo = $table->sexo;
-                    $model->idcarrera = $table->idcarrera;
-                    $model->num_semestre = $table->num_semestre;
-                    $model->fecha_registro = $table->fecha_registro;
-                    $model->fecha_actualizacion = $table->fecha_actualizacion;
-                    $model->cve_estatus = $table->cve_estatus;
-                }
-                else
-                {
-                    return $this->redirect(["estudiante/index"]);
-                }
-            }
-            else
-            {
-                return $this->redirect(["estudiante/index"]);
-            }
+            return $this->redirect(["estudiante/edit", "idestudiante" => $idestudiante, "msg" => $msg, "error" => $error]);
         }
         else
         {
             return $this->redirect(["estudiante/index"]);
         }
-
-        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
     }
 
     public function actionDelete()
     {
         if(Yii::$app->request->post())
         {
-            $id = Html::encode($_POST["idestudiante"]);
+            $idestudiante = Html::encode($_POST["idestudiante"]);
 
-            if(Estudiante::deleteAll("idestudiante=:idestudiante", [":idestudiante" => $id]))
+            $total_relacion = GrupoEstudiante::find()
+                                            ->where(["idestudiante" => $idestudiante])
+                                            ->count();
+            if($total_relacion == 0)
             {
-                echo "Registro eliminado, redireccionando...";
-                echo "<meta http-equiv='refresh' content='2; ".Url::toRoute("estudiante/index")."'>";
+                if(Estudiante::deleteAll("idestudiante=:idestudiante", [":idestudiante" => $idestudiante]))
+                {
+                    $error = 1;
+                    $msg = "Registro eliminado";
+                }
+                else
+                {
+                    $error = 3;
+                    $msg = "Error al eliminar el registro";
+                }
             }
             else
             {
-                echo "Error al eliminar el registro, redireccionando...";
-                echo "<meta http-equiv='refresh' content='2; ".Url::toRoute("estudiante/index")."'>";
+                $error = 3;
+                $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
             }
+            header("Location: ".Url::toRoute("/estudiante/index?msg=$msg&error=$error"));
+            exit;
         }
         else
         {
