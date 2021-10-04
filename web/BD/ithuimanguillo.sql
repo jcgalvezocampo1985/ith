@@ -4207,7 +4207,7 @@ FROM
 	(( `actas_calificaciones` JOIN `grupos` ) JOIN `cat_materias` ) 
 WHERE
 	`actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` 
-	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ; ;
+	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
@@ -4220,7 +4220,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 	`b`.`plan_estudios` AS `plan_estudios`,
 	`a`.`num_semestre` AS `num_semestre` 
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ; ;
+	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -4240,7 +4240,7 @@ FROM
 				`estudiantes`
 				JOIN `cat_carreras` ON ( `estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera` ))
 			JOIN `grupos` ON ( `cat_carreras`.`idcarrera` = `grupos`.`idcarrera` ))
-	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ; ;
+	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
@@ -4274,7 +4274,7 @@ FROM
 WHERE
 	`a`.`idgrupo` = `b`.`idgrupo` 
 	AND `b`.`idmateria` = `c`.`idmateria` 
-	AND `b`.`idprofesor` = `d`.`idprofesor` ;
+	AND `b`.`idprofesor` = `d`.`idprofesor`;
 
 -- ----------------------------
 -- View structure for horario_profesor_v
@@ -4311,6 +4311,6 @@ FROM
 	JOIN `ciclo` ON ( `a`.`idciclo` = `ciclo`.`idciclo` )) 
 WHERE
 	`a`.`idcarrera` = `b`.`idcarrera` 
-	AND `a`.`idmateria` = `c`.`idmateria` ; ;
+	AND `a`.`idmateria` = `c`.`idmateria` ;
 
 SET FOREIGN_KEY_CHECKS = 1;
