@@ -13,6 +13,6 @@ class Profesor extends ActiveRecord
 
     public static function tableName()
     {
-        return 'profesores';
+        return "profesores";
     }
 }

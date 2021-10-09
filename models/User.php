@@ -133,12 +133,12 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 
     public static function isUserAutenticado($idusuario, $rol)
     {
-        if(Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        if(Usuario::findOne(["idusuario" => $idusuario, "activate" => "1"]))
         {
             /*
             * $rol[1 => Administrador, 2 => Escolares, 3 => Profesor, 4 => dep, 5 => Estudiante, 6 => Consulta]
             */
-            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => $rol]))
+            if(UsuarioRol::findOne(["idusuario" => $idusuario, "idrol" => $rol]))
             {
                 return true;
             }
@@ -152,9 +152,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     /*
     public static function isUserAdministrador($idusuario)
     {
-        if (Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        if (Usuario::findOne(["idusuario" => $idusuario, "activate" => "1"]))
         {
-            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => 1]))
+            if(UsuarioRol::findOne(["idusuario" => $idusuario, "idrol" => 1]))
             {
                 return true;
             }
@@ -167,9 +167,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 
     public static function isUserProfesor($idusuario)
     {
-        if(Usuario::findOne(['idusuario' => $idusuario, 'activate' => '1']))
+        if(Usuario::findOne(["idusuario" => $idusuario, "activate" => "1"]))
         {
-            if(UsuarioRol::findOne(['idusuario' => $idusuario, 'idrol' => 3]))
+            if(UsuarioRol::findOne(["idusuario" => $idusuario, "idrol" => 3]))
             {
                 return true;
             }

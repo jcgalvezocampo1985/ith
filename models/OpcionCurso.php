@@ -13,6 +13,6 @@ class OpcionCurso extends ActiveRecord
 
     public static function tableName()
     {
-        return 'cat_opcion_curso';
+        return "cat_opcion_curso";
     }
 }

@@ -13,6 +13,6 @@ class Ciclo extends ActiveRecord
 
     public static function tableName()
     {
-        return 'ciclo';
+        return "ciclo";
     }
 }

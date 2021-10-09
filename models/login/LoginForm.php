@@ -28,20 +28,20 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['curp', 'password'], 'required', 'message' => 'Requerido'],
+            [["curp", "password"], "required", "message" => "Requerido"],
             // rememberMe must be a boolean value
-            //['rememberMe', 'boolean'],
+            //["rememberMe", "boolean"],
             // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            ["password", "validatePassword"],
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'curp' => 'Usuario',
-            'password' => 'Contraseña',
-            //'rememberMe' => 'Recordar'
+            "curp" => "Usuario",
+            "password" => "Contraseña",
+            //"rememberMe" => "Recordar"
         ];
     }
 
@@ -58,7 +58,7 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Usuario o contraseña incorrectos');
+                $this->addError($attribute, "Usuario o contraseña incorrectos");
             }
         }
     }

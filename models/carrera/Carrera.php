@@ -4,7 +4,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 
-class GrupoEstudiante extends ActiveRecord
+class Carrera extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class GrupoEstudiante extends ActiveRecord
 
     public static function tableName()
     {
-        return "grupos_estudiantes";
+        return "cat_carreras";
     }
 }

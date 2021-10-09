@@ -1,8 +1,6 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
 ?>
 <div class="panel panel-primary">
     <div class="panel-heading">Asignar materia</div>

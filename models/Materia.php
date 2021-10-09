@@ -13,6 +13,6 @@ class Materia extends ActiveRecord
 
     public static function tableName()
     {
-        return 'cat_materias';
+        return "cat_materias";
     }
 }

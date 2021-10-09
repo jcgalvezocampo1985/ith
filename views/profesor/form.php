@@ -4,11 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 
-$this->title = "Nuevo Profesor";
+$this->title = ($status == 1) ? "Modificar Profesor" : "Nuevo Profesor";
 $this->params["breadcrumbs"][] = ["label" => "Profesores", "url" => ["index"]];
 $this->params["breadcrumbs"][] = $this->title;
 
-$estado = ($status == 1) ? true : false;
 $action = ($status == 1) ? "update" : "store";
 
 $form = ActiveForm::begin([
@@ -26,24 +25,24 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "curp")->input("text", ["maxlength" => 20]) ?>
+                    <?= $form->field($model, "curp")->input("text", ["maxlength" => 20, "autocomplete" => "off"]) ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "nombre_profesor")->input("text", ["maxlength" => 45]) ?>
+                    <?= $form->field($model, "nombre_profesor")->input("text", ["maxlength" => 45, "autocomplete" => "off"]) ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "apaterno")->input("text", ["maxlength" => 45]) ?>
+                    <?= $form->field($model, "apaterno")->input("text", ["maxlength" => 45, "autocomplete" => "off"]) ?>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "amaterno")->input("text", ["maxlength" => 45]) ?>
+                    <?= $form->field($model, "amaterno")->input("text", ["maxlength" => 45, "autocomplete" => "off"]) ?>
                 </div>
             </div>
             <div class="col-md-4">
@@ -89,7 +88,17 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "cve_estatus")->input("text", ["maxlength" => 3]) ?>
+                    <?= $form->field($model, "cve_estatus")->input("text", ["maxlength" => 3, "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <?= $form->field($model, "email")->input("email", ["maxlength" => 100, "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <?= $form->field($model, "password")->input("password", ["maxlength" => 15, "autocomplete" => "off"]) ?>
                 </div>
             </div>
         </div>
@@ -103,5 +112,6 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-<?= $form->field($model, "estado")->hiddenInput(["value"=> $status])->label(false); ?>
+<?= $form->field($model, "estado")->hiddenInput(["value"=> $status, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "idprofesor")->hiddenInput(["value"=> $model->idprofesor, "readonly" => true])->label(false) ?>
 <?php $form->end() ?>

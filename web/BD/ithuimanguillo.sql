@@ -11,7 +11,7 @@
  Target Server Version : 100510
  File Encoding         : 65001
 
- Date: 03/10/2021 22:31:07
+ Date: 09/10/2021 18:31:15
 */
 
 SET NAMES utf8mb4;
@@ -1479,10 +1479,9 @@ CREATE TABLE `estudiantes`  (
 -- ----------------------------
 -- Records of estudiantes
 -- ----------------------------
-INSERT INTO `estudiantes` VALUES ('151240020', 'ROMERO FLORES ROSA YULIANA', 'jcgalvezocampos@gmail.com', 'F', 2, 1, '2021-09-21 00:00:00', NULL, '2');
+INSERT INTO `estudiantes` VALUES ('151240020', 'ROMERO FLORES ROSA YULIANA', 'jcgalvezocampos@gmail.com', 'F', 2, 1, '2021-09-21 00:00:00', '2021-10-08 00:00:00', '2');
 INSERT INTO `estudiantes` VALUES ('1512400201', 'fghfh', 'fhgsds@p.cpm', 'M', 2, 2, '2021-10-05 00:00:00', '2021-10-01 00:00:00', '2');
 INSERT INTO `estudiantes` VALUES ('1512400207', 'Juan', 'jcgalvezocamposs@gmail.com', 'M', 1, 2, '2021-09-21 00:00:00', NULL, '2');
-INSERT INTO `estudiantes` VALUES ('15124002w07', 'Juan', 'jcgalvezocamsposs@gmail.com', 'F', 2, 2, '2021-09-21 00:00:00', '2021-09-22 00:00:00', '2');
 INSERT INTO `estudiantes` VALUES ('151240043', 'GUTIERREZ GUTIERREZ ERICK DANIEL', 'huimanguillo.tecnm.mx', 'M', 3, NULL, NULL, NULL, NULL);
 INSERT INTO `estudiantes` VALUES ('161240002', 'CRUZ RAMOS ERICK FABIAN', 'huimanguillo.tecnm.mx', 'M', 3, NULL, NULL, NULL, NULL);
 INSERT INTO `estudiantes` VALUES ('161240003', 'GONZÁLEZ GIL ARTURO', 'huimanguillo.tecnm.mx', 'M', 1, NULL, NULL, NULL, NULL);
@@ -4029,12 +4028,12 @@ CREATE TABLE `profesores`  (
   `fecha_actualizacion` datetime NULL DEFAULT current_timestamp,
   `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'VIG',
   PRIMARY KEY (`idprofesor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of profesores
 -- ----------------------------
-INSERT INTO `profesores` VALUES (1, 'jedive.ac', 'Jedive', 'Abarca', 'Córdova', NULL, NULL, '1');
+INSERT INTO `profesores` VALUES (1, 'jedive.ac', 'Jedive', 'Abarca', 'Córdova', '2021-10-10 00:00:00', '2021-10-25 00:00:00', '1');
 INSERT INTO `profesores` VALUES (2, 'juan.ag', 'Juan Carlos', 'Adorno', 'Guerra', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (3, 'francisco.ar', 'Francisco', 'Alvarado', 'Rueda', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (4, 'patricia.cc', 'Patricia del Carmen', 'Cadenas', 'Cadenas', NULL, NULL, NULL);
@@ -4060,9 +4059,8 @@ INSERT INTO `profesores` VALUES (23, 'leticia.va', 'Leticia', 'Valenzuela', 'Ala
 INSERT INTO `profesores` VALUES (24, 'lorena.vh', 'Lorena', 'Vázquez', 'Hernández', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (25, 'manuel.vl', 'Manuel Ernesto', 'Villalobos', 'López', NULL, NULL, NULL);
 INSERT INTO `profesores` VALUES (26, 'marcela.zs', 'Marcela', 'Zamora', 'Santiago', NULL, NULL, NULL);
-INSERT INTO `profesores` VALUES (28, '', 'Por asignar', ' ', ' ', '2021-08-18 08:52:33', '2021-08-18 08:52:33', 'VIG');
 INSERT INTO `profesores` VALUES (29, 'administrador', 'Juan Carlos', 'Gálvez', 'Ocampo', '2021-09-08 12:47:44', '2021-09-08 12:47:44', 'VIG');
-INSERT INTO `profesores` VALUES (30, 'jgalvez', 'juan carlos', 'galvez', 'ocampo', '2021-10-06 00:00:00', '2021-10-14 00:00:00', '2');
+INSERT INTO `profesores` VALUES (37, 'jcgalvezocampo', 'Juan Carlos', 'Gálvez', 'Ocampo', '2021-10-08 00:00:00', '2021-10-08 00:00:00', '1');
 
 -- ----------------------------
 -- Table structure for roles_usuarios
@@ -4137,21 +4135,21 @@ CREATE TABLE `usuarios`  (
   `nombre_usuario` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `password` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `authKey` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `accessToken` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `activate` tinyint(1) NOT NULL,
+  `cve_estatus` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `authKey` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `accessToken` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `activate` tinyint(1) NULL DEFAULT NULL,
   `curp` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `fecha_registro` datetime NULL DEFAULT NULL,
   `fecha_actualizacion` datetime NULL DEFAULT NULL,
-  `verification_code` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `verification_code` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`idusuario`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (5, 'administrador', '', 'itNwR7nhba4nc', '', 'ae6ed01d0462b66a67b4684ee50901764eaf7e2449a7cd7cef9ed285c70e75f3ed4d8e6a6b73b154a5db93dd867420f1b44816d43c1d7e3c621c696a42c1ba666ebfd7d152b18301febabc2fae14a3de9656843c436b1d0718195d5a981a816d5b15bbd7', 'c98148bf9f22e572fa4123e6e6a05e9ac144936f8d84e5f60a0d1b03c2840953219ce83b84fb2413ec9ebaa7ef017451a910c28b43ca026302dacd2371d2f48f4543f0ed5cb9c89f34f93b85207afa717a60a812ac041d1a735c599e30d02b0f6f6735ae', 1, 'administrador', NULL, NULL, 'f0ae8928');
+INSERT INTO `usuarios` VALUES (5, 'administrador', 'jcgalvezocampo@gmail.com', 'itNwR7nhba4nc', '', 'ae6ed01d0462b66a67b4684ee50901764eaf7e2449a7cd7cef9ed285c70e75f3ed4d8e6a6b73b154a5db93dd867420f1b44816d43c1d7e3c621c696a42c1ba666ebfd7d152b18301febabc2fae14a3de9656843c436b1d0718195d5a981a816d5b15bbd7', 'c98148bf9f22e572fa4123e6e6a05e9ac144936f8d84e5f60a0d1b03c2840953219ce83b84fb2413ec9ebaa7ef017451a910c28b43ca026302dacd2371d2f48f4543f0ed5cb9c89f34f93b85207afa717a60a812ac041d1a735c599e30d02b0f6f6735ae', 1, 'administrador', NULL, NULL, 'f0ae8928');
 INSERT INTO `usuarios` VALUES (6, 'jedive.ac', '', 'itxI7JazP1gKY', '', '', '', 1, 'jedive.ac', NULL, NULL, '');
 INSERT INTO `usuarios` VALUES (7, 'juan.ag', '', 'itScX.iKd/12.', '', '', '', 1, 'juan.ag', NULL, NULL, '');
 INSERT INTO `usuarios` VALUES (8, 'francisco.ar', '', 'itrhcJizRowYg', '', '', '', 1, 'francisco.ar', NULL, NULL, '');
@@ -4178,6 +4176,7 @@ INSERT INTO `usuarios` VALUES (28, 'leticia.va', '', 'itJBPzytUwE.I', '', '', ''
 INSERT INTO `usuarios` VALUES (29, 'lorena.vh', '', 'itPGN7WHStnlM', '', '', '', 1, 'lorena.vh', NULL, NULL, '');
 INSERT INTO `usuarios` VALUES (30, 'manuel.vl', '', 'itWTgznX5eTG2', '', '', '', 1, 'manuel.vl', NULL, NULL, '');
 INSERT INTO `usuarios` VALUES (31, 'marcela.zs', '', 'itA8Z8K7TZhPU', '', '', '', 1, 'marcela.zs', NULL, NULL, '');
+INSERT INTO `usuarios` VALUES (32, 'jcgalvezocampo', 'juan@gmail.com', 'itWa/HDzA.mos', NULL, NULL, NULL, 1, 'jcgalvezocampo', '2021-10-08 00:00:00', '2021-10-08 00:00:00', NULL);
 
 -- ----------------------------
 -- View structure for boleta_detalle_v
@@ -4207,7 +4206,7 @@ FROM
 	(( `actas_calificaciones` JOIN `grupos` ) JOIN `cat_materias` ) 
 WHERE
 	`actas_calificaciones`.`idgrupo` = `grupos`.`idgrupo` 
-	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ;
+	AND `grupos`.`idmateria` = `cat_materias`.`idmateria` ; ;
 
 -- ----------------------------
 -- View structure for boleta_encabezado_v
@@ -4220,7 +4219,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `boleta_encabezado_v` AS 
 	`b`.`plan_estudios` AS `plan_estudios`,
 	`a`.`num_semestre` AS `num_semestre` 
 FROM
-	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ;
+	( `estudiantes` `a` JOIN `cat_carreras` `b` ) ; ;
 
 -- ----------------------------
 -- View structure for boleta_estudiante_encabezado
@@ -4240,7 +4239,7 @@ FROM
 				`estudiantes`
 				JOIN `cat_carreras` ON ( `estudiantes`.`idcarrera` = `cat_carreras`.`idcarrera` ))
 			JOIN `grupos` ON ( `cat_carreras`.`idcarrera` = `grupos`.`idcarrera` ))
-	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ;
+	JOIN `ciclo` ON ( `grupos`.`idciclo` = `ciclo`.`idciclo` )) ; ;
 
 -- ----------------------------
 -- View structure for horario_estudiante_v
@@ -4274,7 +4273,7 @@ FROM
 WHERE
 	`a`.`idgrupo` = `b`.`idgrupo` 
 	AND `b`.`idmateria` = `c`.`idmateria` 
-	AND `b`.`idprofesor` = `d`.`idprofesor`;
+	AND `b`.`idprofesor` = `d`.`idprofesor` ;
 
 -- ----------------------------
 -- View structure for horario_profesor_v
@@ -4311,6 +4310,6 @@ FROM
 	JOIN `ciclo` ON ( `a`.`idciclo` = `ciclo`.`idciclo` )) 
 WHERE
 	`a`.`idcarrera` = `b`.`idcarrera` 
-	AND `a`.`idmateria` = `c`.`idmateria` ;
+	AND `a`.`idmateria` = `c`.`idmateria` ; ;
 
 SET FOREIGN_KEY_CHECKS = 1;

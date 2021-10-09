@@ -29,11 +29,11 @@ class SiteController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'logout', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones se van proteger
+                    'only' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'logout', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -48,7 +48,7 @@ class SiteController extends Controller
                         ],
                         [
                             //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -63,7 +63,7 @@ class SiteController extends Controller
                         ],
                         [
                             //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -78,7 +78,7 @@ class SiteController extends Controller
                         ],
                         [
                             //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index', 'logout'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados

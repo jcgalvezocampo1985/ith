@@ -13,14 +13,14 @@ class UsuarioFormGenerar extends model
     public function rules()
     {
         return [
-            [['curp'], 'required', 'message' => 'Requerido'],
+            [["curp"], "required", "message" => "Requerido"],
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'curp' => 'Password'
+            "curp" => "Password"
         ];
     }
 }

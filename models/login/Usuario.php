@@ -13,7 +13,7 @@ class Usuario extends ActiveRecord{
     
     public static function tableName()
     {
-        return 'usuarios';
+        return "usuarios";
     }
     
 }

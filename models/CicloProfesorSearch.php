@@ -20,8 +20,8 @@ class CicloProfesorSearch extends model
     public function attributeLabels()
     {
         return [
-            'idciclo' => 'Periodo',
-            'idprofesor' => 'Profesor'
+            "idciclo" => "Periodo",
+            "idprofesor" => "Profesor"
         ];
     }
 }

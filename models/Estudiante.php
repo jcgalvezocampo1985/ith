@@ -15,7 +15,7 @@ class Estudiante extends ActiveRecord
 
     public static function tableName()
     {
-        return 'estudiantes';
+        return "estudiantes";
     }
 
     public function afterFind()

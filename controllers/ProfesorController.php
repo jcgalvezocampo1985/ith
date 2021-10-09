@@ -21,7 +21,9 @@ use app\models\User;
 use app\models\Ciclo;
 use app\models\CicloSearch;
 use app\models\CicloProfesorSearch;
-use app\models\GrupoEstudiante;
+use app\models\Grupo;
+use app\models\login\Usuario;
+use app\models\RolUsuario;
 
 class ProfesorController extends Controller
 {
@@ -127,12 +129,13 @@ class ProfesorController extends Controller
         $form = new ProfesorSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
+        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
+        $idciclo = Ciclo::find()->max("idciclo");
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                //$search = Html::encode($form->q);
                 $search = Html::encode($form->buscar);
                 $table = Profesor::find()
                                  ->where(["like", "curp", $search])
@@ -166,7 +169,7 @@ class ProfesorController extends Controller
             $msg = "No se encontró información relacionada con el criterio de búsqueda";
         }
 
-        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
+        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages, "ciclos" => $ciclos, "ultimo_ciclo" => $idciclo]);
     }
 
     public function actionCreate($msg = "", $error = "")
@@ -220,6 +223,22 @@ class ProfesorController extends Controller
 
                     if ($table->insert())
                     {
+                        $idusuario = Usuario::find()->max("idusuario") + 1;
+                        $table1 = new Usuario();
+                        $table1->idusuario = $idusuario;
+                        $table1->nombre_usuario = $model->curp;
+                        $table1->email = $model->email;
+                        $table1->activate = 1;
+                        $table1->curp = $model->curp;
+                        $table1->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                        $table1->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
+                        $table1->password = crypt($model->password, Yii::$app->params['salt']);
+                        $table1->insert();
+
+                        $table2 = new RolUsuario();
+                        $table2->idusuario = $idusuario;
+                        $table2->idrol = 3;
+
                         $msg = "Profesor agregado";
                         $error = 1;
                     }
@@ -407,11 +426,10 @@ class ProfesorController extends Controller
                 {
                     $table->curp = $model->curp;
                     $table->nombre_profesor = $model->nombre_profesor;
-                    $table->sexo = $model->sexo;
-                    $table->idcarrera = $model->idcarrera;
-                    $table->num_semestre = $model->num_semestre;
-                    $table->fecha_registro = $model->fecha_registro;
-                    $table->fecha_actualizacion = $model->fecha_actualizacion;
+                    $table->apaterno = $model->apaterno;
+                    $table->amaterno = $model->amaterno;
+                    $table->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                    $table->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
                     $table->cve_estatus = $model->cve_estatus;
 
                     if($table->update())
@@ -426,7 +444,7 @@ class ProfesorController extends Controller
                 }
                 else
                 {
-                    $msg = "Alumno no encontrado";
+                    $msg = "Profesor no encontrado";
                     $error = 2;
                 }
             }
@@ -434,11 +452,11 @@ class ProfesorController extends Controller
             {
                 return $this->getErrors();
             }
-            return $this->redirect(["estudiante/edit", "idestudiante" => $idestudiante, "msg" => $msg, "error" => $error]);
+            return $this->redirect(["profesor/edit", "idprofesor" => $idprofesor, "msg" => $msg, "error" => $error]);
         }
         else
         {
-            return $this->redirect(["estudiante/index"]);
+            return $this->redirect(["profesor/index"]);
         }
     }
 
@@ -446,22 +464,36 @@ class ProfesorController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $id = Html::encode($_POST["idestudiante"]);
+            $idprofesor = Html::encode($_POST["idprofesor"]);
 
-            if(Profesor::deleteAll("idestudiante=:idestudiante", [":idestudiante" => $id]))
+            $total_relacion = Grupo::find()
+                                    ->where(["idprofesor" => $idprofesor])
+                                    ->count();
+
+            if($total_relacion == 0)
             {
-                echo "Registro eliminado, redireccionando...";
-                echo "<meta http-equiv='refresh' content='2; ".Url::toRoute("estudiante/index")."'>";
+                if(Profesor::deleteAll("idprofesor=:idprofesor", [":idprofesor" => $idprofesor]))
+                {
+                    $error = 1;
+                    $msg = "Registro eliminado";
+                }
+                else
+                {
+                    $error = 3;
+                    $msg = "Error al eliminar el registro";
+                }
             }
             else
             {
-                echo "Error al eliminar el registro, redireccionando...";
-                echo "<meta http-equiv='refresh' content='2; ".Url::toRoute("estudiante/index")."'>";
+                $error = 3;
+                $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
             }
+            header("Location: ".Url::toRoute("/profesor/index?msg=$msg&error=$error"));
+            exit;
         }
         else
         {
-            return $this->redirect(["estudiante/index"]);
+            return $this->redirect(["profesor/index"]);
         }
     }
 
@@ -471,6 +503,7 @@ class ProfesorController extends Controller
         $idciclo = Ciclo::find()->max("idciclo");
         $ultimo_ciclo = $idciclo;
         $ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+
         $curp = Html::encode(Yii::$app->user->identity->curp);
         $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
         $idprofesor = $sql_profesor->idprofesor;
@@ -791,5 +824,64 @@ class ProfesorController extends Controller
             header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
             exit;
         }
+    }
+
+    public function actionHorarioprofesor()
+    {
+        $this->layout = 'main2';
+
+        $idciclo = Ciclo::find()->max("idciclo");
+        $idprofesor = Html::encode($_GET["idprofesor"]);
+        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
+
+        $sql = "SELECT
+                    *
+                FROM
+                    horario_profesor_v
+                WHERE
+                    idprofesor = :idprofesor
+                AND
+	                idciclo = :idciclo
+                ORDER BY
+                    lunes, viernes, sabado";
+        $model = Yii::$app->db->createCommand($sql)
+                              ->bindValue(":idprofesor", $idprofesor)
+                              ->bindValue(":idciclo", $idciclo)
+                              ->queryAll();
+
+        return $this->render("horario_profesor", ["model" => $model, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor]);
+    }
+
+    public function actionHorarioprofesorconsulta()
+    {
+        $this->layout = 'main2';
+
+        $idciclo = Html::encode($_GET["idciclo"]);
+        $idprofesor = Html::encode($_GET["idprofesor"]);
+
+        $sql = "SELECT
+                    *
+                FROM
+                    horario_profesor_v
+                WHERE
+                    idprofesor = :idprofesor
+                AND
+	                idciclo = :idciclo
+                ORDER BY
+                    lunes, viernes, sabado";
+        $model = Yii::$app->db->createCommand($sql)
+                              ->bindValue(":idprofesor", $idprofesor)
+                              ->bindValue(":idciclo", $idciclo)
+                              ->queryAll();
+
+        return $this->render("horario_profesor", ["model" => $model, "idciclo" => $idciclo]);
+    }
+
+    public function actionConsultarprofesor()
+    {
+        $idprofesor = Html::encode($_GET["idprofesor"]);
+        $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
+
+        echo $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
     }
 }

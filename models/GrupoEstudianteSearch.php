@@ -53,20 +53,20 @@ class GrupoEstudianteSearch extends model
             "pagination" => [
                 "pageSize" => 5,
             ],
-            'sort' => [
-                'attributes' => [
-                    'idgrupo',
-                    'idmateria',
-                    'desc_materia',
-                    'creditos',
-                    'num_semestre',
-                    'desc_ciclo',
-                    'desc_grupo'
+            "sort" => [
+                "attributes" => [
+                    "idgrupo",
+                    "idmateria",
+                    "desc_materia",
+                    "creditos",
+                    "num_semestre",
+                    "desc_ciclo",
+                    "desc_grupo"
                 ],
-                'defaultOrder' => [
-                    'desc_ciclo' => SORT_DESC,
-                    'num_semestre' => SORT_DESC,
-                    'desc_materia' => SORT_ASC
+                "defaultOrder" => [
+                    "desc_ciclo" => SORT_DESC,
+                    "num_semestre" => SORT_DESC,
+                    "desc_materia" => SORT_ASC
                 ]
             ]
         ]);

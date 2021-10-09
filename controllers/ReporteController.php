@@ -924,7 +924,7 @@ class ReporteController extends Controller
         $pdf->Text(230, 60, 'FECHA:');
         $pdf->Text(245, 60, $fecha);
 
-        $x_encabezado = 100;
+        $x_encabezado = 90;
         $y_encabezado = 77;
         $columnas = 0;
 

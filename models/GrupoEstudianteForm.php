@@ -38,18 +38,18 @@ class GrupoEstudianteForm extends model
     public function rules()
     {
         return [
-            [['idgrupo', 'idestudiante', 'idopcion_curso', 'idciclo'], 'required', 'message' => 'Requerido'],
-            [['p1','p2','p3','p4','p5','p6','p7','p8','p9','s1','s2','s3','s4','s5','s6','s7','s8','s9'], 'pattern' => "/^.[0-9]+$/i", 'message' => 'Sólo valores alfanuméricos']
+            [["idgrupo", "idestudiante", "idopcion_curso", "idciclo"], "required", "message" => "Requerido"],
+            [["p1","p2","p3","p4","p5","p6","p7","p8","p9","s1","s2","s3","s4","s5","s6","s7","s8","s9"], "pattern" => "/^.[0-9]+$/i", "message" => "Sólo valores alfanuméricos"]
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'idgrupo' => 'Materia',
-            'idestudiante' => 'Estudiante',
-            'idopcion_curso' => '',
-            'idciclo' => 'Ciclo'
+            "idgrupo" => "Materia",
+            "idestudiante" => "Estudiante",
+            "idopcion_curso" => "",
+            "idciclo" => "Ciclo"
         ];
     }
 }

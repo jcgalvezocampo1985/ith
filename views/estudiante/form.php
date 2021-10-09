@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 
-$this->title = "Nuevo Estudiante";
+$this->title = ($status == 1) ? "Modificar Estudiante" : "Nuevo Estudiante";
 $this->params["breadcrumbs"][] = ["label" => "Estudiantes", "url" => ["index"]];
 $this->params["breadcrumbs"][] = $this->title;
 
