@@ -1,7 +1,6 @@
 <?php
 
-namespace app\models;
-use Yii;
+namespace app\models\ciclo;
 use yii\base\model;
 
 class CicloProfesorSearch extends model

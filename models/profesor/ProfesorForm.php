@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\profesor;
 
 use Yii;
 use yii\base\model;
-use app\models\Profesor;
+use app\models\profesor\Profesor;
 use app\models\login\Usuario;
 
 class ProfesorForm extends model

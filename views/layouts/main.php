@@ -62,7 +62,10 @@ if(!Yii::$app->user->isGuest){
             ['label' => 'Admin', 'items' =>
                 [
                     ['label' => 'Carreras', 'url' => ['/carrera/index']],
-                    ['label' => 'Materias', 'url' => ['/materia/index']]
+                    ['label' => 'Materias', 'url' => ['/materia/index']],
+                    ['label' => 'Opc. Curso', 'url' => ['/opcioncurso/index']],
+                    ['label' => 'Ciclos', 'url' => ['/ciclo/index']],
+                    ['label' => 'Grupos', 'url' => ['/grupo/index']],
                 ]
             ],
             Yii::$app->user->isGuest ? (

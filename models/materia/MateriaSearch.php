@@ -1,14 +1,30 @@
 <?php
 
-namespace app\models;
+namespace app\models\materia;
 
 use Yii;
 use yii\base\model;
 use yii\data\ActiveDataProvider;
-use app\models\Materia;
+use app\models\materia\Materia;
 
 class MateriaSearch extends Materia
 {
+    public $buscar;
+
+    public function rules()
+    {
+        return [
+            ["buscar", "required", "message" => "Requerido"]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            "buscar" => "Buscar"
+        ];
+    }
+    /*
     public $idmateria;
     public $cve_materia;
     public $desc_materia;
@@ -25,6 +41,7 @@ class MateriaSearch extends Materia
         ];
     }
 
+    
     public function search($params)
     {
         $query = Materia::find();
@@ -52,4 +69,5 @@ class MateriaSearch extends Materia
 
         return $dataProvider;
     }
+    */
 }

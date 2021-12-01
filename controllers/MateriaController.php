@@ -12,11 +12,11 @@ use yii\data\Pagination;
 
 use app\models\User;
 use app\models\grupo\Grupo;
-use app\models\carrera\Carrera;
-use app\models\carrera\CarreraForm;
-use app\models\carrera\CarreraSearch;
+use app\models\materia\Materia;
+use app\models\materia\MateriaForm;
+use app\models\materia\MateriaSearch;
 
-class CarreraController extends Controller
+class MateriaController extends Controller
 {
     public function behaviors()
     {
@@ -100,28 +100,31 @@ class CarreraController extends Controller
 
     public function actionIndex()
     {
-        $form = new CarreraSearch;
+        $form = new MateriaSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
         $table = new \yii\db\Query();
-        $model = $table->from(["cat_carreras"])
-                       ->select(["idcarrera", 
-	                             "cve_carrera", 
-	                             "desc_carrera", 
-	                             "no_semestres", 
-	                             "plan_estudios"])
-                       ->orderBy("desc_carrera");
+        $model = $table->from(["cat_materias"])
+                       ->select(["idmateria", 
+	                             "cve_materia", 
+	                             "desc_materia", 
+	                             "creditos",
+                                 "fecha_registro",
+                                 "fecha_actualizacion",
+                                 "cve_estatus"])
+                       ->orderBy("desc_materia");   
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
                 $search = Html::encode($form->buscar);
-                $model = $table->where(["like", "cve_carrera", $search])
-                               ->orWhere(["like", "desc_carrera", $search])
-                               ->orWhere(["like", "no_semestres", $search])
-                               ->orWhere(["like", "plan_estudios", $search]);
+                $model = $table->where(["like", "cve_materia", $search])
+                               ->orWhere(["like", "desc_materia", $search])
+                               ->orWhere(["like", "creditos", $search])
+                               ->orWhere(["like", "fecha_registro", $search])
+                               ->orWhere(["like", "fecha_actualizacion", $search]);
             }
             else
             {
@@ -149,15 +152,15 @@ class CarreraController extends Controller
 
     public function actionCreate($msg = "", $error = "")
     {
-        $model = new CarreraForm();
+        $model = new MateriaForm();
 
         if(Yii::$app->request->get() && $error != 1)
         {
             $modelo = $_GET["modelo"];
-            $model->cve_carrera = $modelo["cve_carrera"];
-            $model->desc_carrera = $modelo["desc_carrera"];
-            $model->no_semestres = $modelo["no_semestres"];
-            $model->plan_estudios = $modelo["plan_estudios"];
+            $model->cve_materia = $modelo["cve_materia"];
+            $model->desc_materia = $modelo["desc_materia"];
+            $model->creditos = $modelo["creditos"];
+            $model->cve_estatus = $modelo["cve_estatus"];
         }
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
@@ -165,37 +168,38 @@ class CarreraController extends Controller
 
     public function actionStore()
     {
-        $model = new CarreraForm;
+        $model = new MateriaForm;
 
         if ($model->load(Yii::$app->request->post()))
         {
             if ($model->validate())
             {
-                $table = new Carrera();
-                $table->cve_carrera = $model->cve_carrera;
-                $table->desc_carrera = $model->desc_carrera;
-                $table->no_semestres = $model->no_semestres;
-                $table->plan_estudios = $model->plan_estudios;
+                $table = new Materia();
+                $table->cve_materia = $model->cve_materia;
+                $table->desc_materia = $model->desc_materia;
+                $table->creditos = $model->creditos;
+                $table->cve_estatus = $model->cve_estatus;
+                $table->fecha_registro = date("y-m-d h:i:s");
 
                 if ($table->insert())
                 {
-                    $msg = "Carrera agregada";
+                    $msg = "Materia agregada";
                     $error = 1;
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar la carrera, intenta nuevamente";
+                    $msg = "Ocurrió un error al intentar agregar la materia, intenta nuevamente";
                     $error = 3;
                 }
 
                 $modelo = [
-                    "cve_carrera" => $model->cve_carrera,
-                    "desc_carrera" => $model->desc_carrera,
-                    "no_semestres" => $model->no_semestres,
-                    "plan_estudios" => $model->plan_estudios
+                    "cve_materia" => $model->cve_materia,
+                    "desc_materia" => $model->desc_materia,
+                    "creditos" => $model->creditos,
+                    "cve_estatus" => $model->cve_estatus
                 ];
 
-                return $this->redirect(["carrera/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
+                return $this->redirect(["materia/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
             }
             else
             {
@@ -204,45 +208,45 @@ class CarreraController extends Controller
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["materia/index"]);
         }
     }
 
     public function actionEdit($id, $msg = "", $error = "")
     {
-        $idcarrera = Html::encode($id);
+        $idmateria = Html::encode($id);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
 
         if(Yii::$app->request->get())
         {
-            $model = new CarreraForm;
+            $model = new MateriaForm;
 
-            if($idcarrera)
+            if($idmateria)
             {
-                $table = Carrera::findOne($idcarrera);
+                $table = Materia::findOne($idmateria);
 
                 if($table)
                 {
-                    $model->idcarrera = $table->idcarrera;
-                    $model->cve_carrera = $table->cve_carrera;
-                    $model->desc_carrera = $table->desc_carrera;
-                    $model->no_semestres = $table->no_semestres;
-                    $model->plan_estudios = $table->plan_estudios;
+                    $model->idmateria = $table->idmateria;
+                    $model->cve_materia = $table->cve_materia;
+                    $model->desc_materia = $table->desc_materia;
+                    $model->creditos = $table->creditos;
+                    $model->cve_estatus = $table->cve_estatus;
                 }
                 else
                 {
-                    return $this->redirect(["carrera/index"]);
+                    return $this->redirect(["materia/index"]);
                 }
             }
             else
             {
-                return $this->redirect(["carrera/index"]);
+                return $this->redirect(["materia/index"]);
             }
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["materia/index"]);
         }
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
@@ -250,22 +254,23 @@ class CarreraController extends Controller
 
     public function actionUpdate()
     {
-        $model = new CarreraForm;
+        $model = new MateriaForm;
 
         if($model->load(Yii::$app->request->post()))
         {
-            $idcarrera = $model->idcarrera;
+            $idmateria = $model->idmateria;
 
             if($model->validate())
             {
-                $table = Carrera::findOne($idcarrera);
+                $table = Materia::findOne($idmateria);
 
                 if ($table)
                 {
-                    $table->cve_carrera = $model->cve_carrera;
-                    $table->desc_carrera = $model->desc_carrera;
-                    $table->no_semestres = $model->no_semestres;
-                    $table->plan_estudios= $model->plan_estudios;
+                    $table->cve_materia = $model->cve_materia;
+                    $table->desc_materia = $model->desc_materia;
+                    $table->creditos = $model->creditos;
+                    $table->cve_estatus= $model->cve_estatus;
+                    $table->fecha_actualizacion= date("y-m-d h:i:s");
 
                     if($table->update())
                     {
@@ -287,11 +292,11 @@ class CarreraController extends Controller
             {
                 return $this->getErrors();
             }
-            return $this->redirect(["carrera/edit", "id" => $idcarrera, "msg" => $msg, "error" => $error]);
+            return $this->redirect(["materia/edit", "id" => $idmateria, "msg" => $msg, "error" => $error]);
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["materia/index"]);
         }
     }
 
@@ -299,14 +304,14 @@ class CarreraController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $idcarrera = Html::encode($_POST["idcarrera"]);
+            $idmateria = Html::encode($_POST["idmateria"]);
 
             $total_relacion = Grupo::find()
-                                    ->where(["idcarrera" => $idcarrera])
+                                    ->where(["idmateria" => $idmateria])
                                     ->count();
             if($total_relacion == 0)
             {
-                if(Carrera::deleteAll("idcarrera=:idcarrera", [":idcarrera" => $idcarrera]))
+                if(Materia::deleteAll("idmateria=:idmateria", [":idmateria" => $idmateria]))
                 {
                     $error = 1;
                     $msg = "Registro eliminado";
@@ -322,12 +327,12 @@ class CarreraController extends Controller
                 $error = 3;
                 $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
             }
-            header("Location: ".Url::toRoute("/carrera/index?msg=$msg&error=$error"));
+            header("Location: ".Url::toRoute("/materia/index?msg=$msg&error=$error"));
             exit;
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["materia/index"]);
         }
     }
 }

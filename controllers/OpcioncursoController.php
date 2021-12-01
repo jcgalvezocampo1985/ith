@@ -11,12 +11,12 @@ use yii\web\Controller;
 use yii\data\Pagination;
 
 use app\models\User;
-use app\models\grupo\Grupo;
-use app\models\carrera\Carrera;
-use app\models\carrera\CarreraForm;
-use app\models\carrera\CarreraSearch;
+use app\models\grupoestudiante\GrupoEstudiante;
+use app\models\opcioncurso\OpcionCurso;
+use app\models\opcioncurso\OpcionCursoForm;
+use app\models\opcioncurso\OpcionCursoSearch;
 
-class CarreraController extends Controller
+class OpcioncursoController extends Controller
 {
     public function behaviors()
     {
@@ -100,28 +100,24 @@ class CarreraController extends Controller
 
     public function actionIndex()
     {
-        $form = new CarreraSearch;
+        $form = new OpcionCursoSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
         $table = new \yii\db\Query();
-        $model = $table->from(["cat_carreras"])
-                       ->select(["idcarrera", 
-	                             "cve_carrera", 
-	                             "desc_carrera", 
-	                             "no_semestres", 
-	                             "plan_estudios"])
-                       ->orderBy("desc_carrera");
+        $model = $table->from(["cat_opcion_curso"])
+                       ->select(["idopcion_curso", 
+	                             "desc_opcion_curso", 
+	                             "desc_opcion_curso_corto"])
+                       ->orderBy("desc_opcion_curso");
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
                 $search = Html::encode($form->buscar);
-                $model = $table->where(["like", "cve_carrera", $search])
-                               ->orWhere(["like", "desc_carrera", $search])
-                               ->orWhere(["like", "no_semestres", $search])
-                               ->orWhere(["like", "plan_estudios", $search]);
+                $model = $table->where(["like", "desc_opcion_curso", $search])
+                               ->orWhere(["like", "desc_opcion_curso_corto", $search]);
             }
             else
             {
@@ -143,21 +139,19 @@ class CarreraController extends Controller
             $error = 2;
             $msg = "No se encontró información relacionada con el criterio de búsqueda";
         }
-        
+
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
 
     public function actionCreate($msg = "", $error = "")
     {
-        $model = new CarreraForm();
+        $model = new OpcionCursoForm();
 
         if(Yii::$app->request->get() && $error != 1)
         {
             $modelo = $_GET["modelo"];
-            $model->cve_carrera = $modelo["cve_carrera"];
-            $model->desc_carrera = $modelo["desc_carrera"];
-            $model->no_semestres = $modelo["no_semestres"];
-            $model->plan_estudios = $modelo["plan_estudios"];
+            $model->desc_opcion_curso = $modelo["desc_opcion_curso"];
+            $model->desc_opcion_curso_corto = $modelo["desc_opcion_curso_corto"];
         }
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
@@ -165,37 +159,33 @@ class CarreraController extends Controller
 
     public function actionStore()
     {
-        $model = new CarreraForm;
+        $model = new OpcionCursoForm;
 
         if ($model->load(Yii::$app->request->post()))
         {
             if ($model->validate())
             {
-                $table = new Carrera();
-                $table->cve_carrera = $model->cve_carrera;
-                $table->desc_carrera = $model->desc_carrera;
-                $table->no_semestres = $model->no_semestres;
-                $table->plan_estudios = $model->plan_estudios;
+                $table = new OpcionCurso();
+                $table->desc_opcion_curso = $model->desc_opcion_curso;
+                $table->desc_opcion_curso_corto = $model->desc_opcion_curso_corto;
 
                 if ($table->insert())
                 {
-                    $msg = "Carrera agregada";
+                    $msg = "Opción Curso agregada";
                     $error = 1;
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar la carrera, intenta nuevamente";
+                    $msg = "Ocurrió un error al intentar agregar la Opción Curso, intenta nuevamente";
                     $error = 3;
                 }
 
                 $modelo = [
-                    "cve_carrera" => $model->cve_carrera,
-                    "desc_carrera" => $model->desc_carrera,
-                    "no_semestres" => $model->no_semestres,
-                    "plan_estudios" => $model->plan_estudios
+                    "desc_opcion_curso" => $model->desc_opcion_curso,
+                    "desc_opcion_curso_corto" => $model->desc_opcion_curso_corto
                 ];
 
-                return $this->redirect(["carrera/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
+                return $this->redirect(["opcioncurso/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
             }
             else
             {
@@ -204,45 +194,43 @@ class CarreraController extends Controller
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["opcioncurso/index"]);
         }
     }
 
     public function actionEdit($id, $msg = "", $error = "")
     {
-        $idcarrera = Html::encode($id);
+        $idopcion_curso = Html::encode($id);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
 
         if(Yii::$app->request->get())
         {
-            $model = new CarreraForm;
+            $model = new OpcionCursoForm;
 
-            if($idcarrera)
+            if($idopcion_curso)
             {
-                $table = Carrera::findOne($idcarrera);
+                $table = OpcionCurso::findOne($idopcion_curso);
 
                 if($table)
                 {
-                    $model->idcarrera = $table->idcarrera;
-                    $model->cve_carrera = $table->cve_carrera;
-                    $model->desc_carrera = $table->desc_carrera;
-                    $model->no_semestres = $table->no_semestres;
-                    $model->plan_estudios = $table->plan_estudios;
+                    $model->idopcion_curso = $table->idopcion_curso;
+                    $model->desc_opcion_curso = $table->desc_opcion_curso;
+                    $model->desc_opcion_curso_corto = $table->desc_opcion_curso_corto;
                 }
                 else
                 {
-                    return $this->redirect(["carrera/index"]);
+                    return $this->redirect(["opcioncurso/index"]);
                 }
             }
             else
             {
-                return $this->redirect(["carrera/index"]);
+                return $this->redirect(["opcioncurso/index"]);
             }
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["opcioncurso/index"]);
         }
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
@@ -250,22 +238,20 @@ class CarreraController extends Controller
 
     public function actionUpdate()
     {
-        $model = new CarreraForm;
+        $model = new OpcionCursoForm;
 
         if($model->load(Yii::$app->request->post()))
         {
-            $idcarrera = $model->idcarrera;
+            $idopcion_curso = $model->idopcion_curso;
 
             if($model->validate())
             {
-                $table = Carrera::findOne($idcarrera);
+                $table = OpcionCurso::findOne($idopcion_curso);
 
                 if ($table)
                 {
-                    $table->cve_carrera = $model->cve_carrera;
-                    $table->desc_carrera = $model->desc_carrera;
-                    $table->no_semestres = $model->no_semestres;
-                    $table->plan_estudios= $model->plan_estudios;
+                    $table->desc_opcion_curso = $model->desc_opcion_curso;
+                    $table->desc_opcion_curso_corto = $model->desc_opcion_curso_corto;
 
                     if($table->update())
                     {
@@ -287,11 +273,11 @@ class CarreraController extends Controller
             {
                 return $this->getErrors();
             }
-            return $this->redirect(["carrera/edit", "id" => $idcarrera, "msg" => $msg, "error" => $error]);
+            return $this->redirect(["opcioncurso/edit", "id" => $idopcion_curso, "msg" => $msg, "error" => $error]);
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["opcioncurso/index"]);
         }
     }
 
@@ -299,14 +285,15 @@ class CarreraController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $idcarrera = Html::encode($_POST["idcarrera"]);
+            $idopcion_curso = Html::encode($_POST["idopcion_curso"]);
 
-            $total_relacion = Grupo::find()
-                                    ->where(["idcarrera" => $idcarrera])
-                                    ->count();
+            $total_relacion = GrupoEstudiante::find()
+                                            ->where(["idopcion_curso" => $idopcion_curso])
+                                            ->count();
+
             if($total_relacion == 0)
             {
-                if(Carrera::deleteAll("idcarrera=:idcarrera", [":idcarrera" => $idcarrera]))
+                if(OpcionCurso::deleteAll("idopcion_curso=:idopcion_curso", [":idopcion_curso" => $idopcion_curso]))
                 {
                     $error = 1;
                     $msg = "Registro eliminado";
@@ -322,12 +309,12 @@ class CarreraController extends Controller
                 $error = 3;
                 $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
             }
-            header("Location: ".Url::toRoute("/carrera/index?msg=$msg&error=$error"));
+            header("Location: ".Url::toRoute("/opcioncurso/index?msg=$msg&error=$error"));
             exit;
         }
         else
         {
-            return $this->redirect(["carrera/index"]);
+            return $this->redirect(["opcioncurso/index"]);
         }
     }
 }

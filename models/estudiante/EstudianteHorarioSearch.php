@@ -1,7 +1,7 @@
 <?php
 
-namespace app\models;
-use Yii;
+namespace app\models\estudiante;
+
 use yii\base\model;
 
 class EstudianteHorarioSearch extends model

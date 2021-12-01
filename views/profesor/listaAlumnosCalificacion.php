@@ -285,7 +285,7 @@ $this->registerCss('
 $this->registerJs('$(document).ready(function(){
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
-        var url = $(this).attr("href");
+        let url = $(this).attr("href");
 
         if (confirm("¿Desea refrescar la ventana?")) {
             $(location).attr("href", url)
@@ -293,13 +293,13 @@ $this->registerJs('$(document).ready(function(){
     });
 
     $(".verificar_espacio_h").on("keyup", function() {
-        var id_estudiante = $(this).attr("id");
-        var id = id_estudiante.split("-")[0];
-        var idestudiante = id_estudiante.split("-")[1];
+        let id_estudiante = $(this).attr("id");
+        let id = id_estudiante.split("-")[0];
+        let idestudiante = id_estudiante.split("-")[1];
 
         if (id != "p1") {
-            var i = (id.split("p")[1]) - 1;
-            var p = $("#p" + i + "-" + idestudiante).val();
+            let i = (id.split("p")[1]) - 1;
+            let p = $("#p" + i + "-" + idestudiante).val();
 
             if (p == "") {
                 $("#mensaje_error").stop(true);

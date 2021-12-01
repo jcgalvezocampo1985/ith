@@ -1,11 +1,27 @@
 <?php
 
-namespace app\models;
-use Yii;
+namespace app\models\ciclo;
+
 use yii\base\model;
 
 class CicloSearch extends model
 {
+    public $buscar;
+
+    public function rules()
+    {
+        return [
+            ["buscar", "required", "message" => "Requerido"]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            "buscar" => "Buscar"
+        ];
+    }
+    /*
     public $idciclo;
 
     public function rules()
@@ -22,4 +38,5 @@ class CicloSearch extends model
             "idciclo" => "Periodo"
         ];
     }
+    */
 }

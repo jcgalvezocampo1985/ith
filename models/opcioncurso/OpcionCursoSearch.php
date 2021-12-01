@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models\carrera;
-use Yii;
+namespace app\models\opcioncurso;
+
 use yii\base\model;
 
-class CarreraSearch extends model
+class OpcionCursoSearch extends model
 {
     public $buscar;
 

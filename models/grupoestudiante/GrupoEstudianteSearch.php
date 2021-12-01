@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\models\grupoestudiante;
 
 use Yii;
 use yii\base\model;
-use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
+//use yii\data\ActiveDataProvider;
+//use yii\data\ArrayDataProvider;
 
 class GrupoEstudianteSearch extends model
 {
@@ -25,6 +25,7 @@ class GrupoEstudianteSearch extends model
         ];
     }
 
+    /*
     public function search($params)
     {
         $query = (new \yii\db\Query())->from(["a" => "grupos"])
@@ -78,13 +79,14 @@ class GrupoEstudianteSearch extends model
         }
 
         $query->andFilterWhere(["like", "b.desc_materia", $this->desc_materia]);
-        /*
-        $query->andFilterWhere(["like", "a.desc_grupo", $this->desc_grupo])
-              ->andFilterWhere(["like", "a.num_semestre", $this->num_semestre])
-              ->andFilterWhere(["like", "b.desc_materia", $this->desc_materia])
-              ->andFilterWhere(["like", "b.creditos", $this->creditos])
-              ->andFilterWhere(["like", "c.desc_ciclo", $this->desc_ciclo]);
-        */
+        
+        //$query->andFilterWhere(["like", "a.desc_grupo", $this->desc_grupo])
+              //->andFilterWhere(["like", "a.num_semestre", $this->num_semestre])
+              //->andFilterWhere(["like", "b.desc_materia", $this->desc_materia])
+              //->andFilterWhere(["like", "b.creditos", $this->creditos])
+              //->andFilterWhere(["like", "c.desc_ciclo", $this->desc_ciclo]);
+        
         return $dataProvider;
     }
+    */
 }

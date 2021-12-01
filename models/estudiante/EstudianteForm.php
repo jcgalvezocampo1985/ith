@@ -1,10 +1,9 @@
 <?php
 
-namespace app\models;
+namespace app\models\estudiante;
 
-use Yii;
 use yii\base\model;
-use app\models\Estudiante;
+use app\models\estudiante\Estudiante;
 
 class EstudianteForm extends model
 {

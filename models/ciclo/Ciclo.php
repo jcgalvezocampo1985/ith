@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\ciclo;
 use Yii;
 use yii\db\ActiveRecord;
 
-class Materia extends ActiveRecord
+class Ciclo extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class Materia extends ActiveRecord
 
     public static function tableName()
     {
-        return "cat_materias";
+        return "ciclo";
     }
 }

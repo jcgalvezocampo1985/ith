@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\opcioncurso;
 use Yii;
 use yii\db\ActiveRecord;
 
-class Ciclo extends ActiveRecord
+class OpcionCurso extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class Ciclo extends ActiveRecord
 
     public static function tableName()
     {
-        return "ciclo";
+        return "cat_opcion_curso";
     }
 }

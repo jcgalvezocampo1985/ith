@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\grupoestudiante;
 use Yii;
 use yii\db\ActiveRecord;
 
-class Grupo extends ActiveRecord
+class GrupoEstudiante extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class Grupo extends ActiveRecord
 
     public static function tableName()
     {
-        return "grupos";
+        return "grupos_estudiantes";
     }
 }

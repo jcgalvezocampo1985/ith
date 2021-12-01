@@ -1,10 +1,9 @@
 <?php
 
-namespace app\models;
-use Yii;
+namespace app\models\profesor;
 use yii\base\model;
 
-class EstudianteSearch extends model
+class ProfesorSearch extends model
 {
     public $buscar;
 
@@ -19,7 +18,7 @@ class EstudianteSearch extends model
     public function attributeLabels()
     {
         return [
-            'buscar' => 'Buscar'
+            "buscar" => "Buscar"
         ];
     }
 }

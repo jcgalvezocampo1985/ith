@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\login;
 use Yii;
 use yii\db\ActiveRecord;
 
-class OpcionCurso extends ActiveRecord
+class RolUsuario extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class OpcionCurso extends ActiveRecord
 
     public static function tableName()
     {
-        return "cat_opcion_curso";
+        return "roles_usuario";
     }
 }

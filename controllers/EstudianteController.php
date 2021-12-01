@@ -14,17 +14,17 @@ use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use Carbon\Carbon;
 
-use app\models\Estudiante;
-use app\models\EstudianteForm;
-use app\models\EstudianteSearch;
-use app\models\EstudianteHorarioSearch;
-use app\models\GrupoEstudiante;
-use app\models\Carrera;
-use app\models\Ciclo;
-use app\models\OpcionCurso;
+use app\models\estudiante\Estudiante;
+use app\models\estudiante\EstudianteForm;
+use app\models\estudiante\EstudianteSearch;
+use app\models\estudiante\EstudianteHorarioSearch;
+use app\models\grupoestudiante\GrupoEstudiante;
+use app\models\grupoestudiante\GrupoEstudianteSearch;
+use app\models\carrera\Carrera;
+use app\models\opcioncurso\OpcionCurso;
+use app\models\ciclo\Ciclo;
 use app\models\ActaCalificacion;
 use app\models\User;
-use app\models\GrupoEstudianteSearch;
 
 class EstudianteController extends Controller
 {

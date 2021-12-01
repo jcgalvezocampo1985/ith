@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\profesor;
 use Yii;
 use yii\db\ActiveRecord;
 
-class RolUsuario extends ActiveRecord
+class Profesor extends ActiveRecord
 {
     public static function getDb()
     {
@@ -13,6 +13,6 @@ class RolUsuario extends ActiveRecord
 
     public static function tableName()
     {
-        return "roles_usuario";
+        return "profesores";
     }
 }

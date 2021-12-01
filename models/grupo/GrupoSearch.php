@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models\carrera;
-use Yii;
+namespace app\models\grupo;
+
 use yii\base\model;
 
-class CarreraSearch extends model
+class GrupoSearch extends model
 {
     public $buscar;
 

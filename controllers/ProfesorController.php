@@ -14,16 +14,17 @@ use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
 use Carbon\Carbon;
 
-use app\models\Profesor;
-use app\models\ProfesorForm;
-use app\models\ProfesorSearch;
-use app\models\User;
-use app\models\Ciclo;
-use app\models\CicloSearch;
-use app\models\CicloProfesorSearch;
-use app\models\Grupo;
+use app\models\profesor\Profesor;
+use app\models\profesor\ProfesorForm;
+use app\models\profesor\ProfesorSearch;
+use app\models\ciclo\Ciclo;
+use app\models\ciclo\CicloSearch;
+use app\models\ciclo\CicloProfesorSearch;
+use app\models\grupo\Grupo;
+use app\models\grupoestudiante\GrupoEstudiante;
 use app\models\login\Usuario;
-use app\models\RolUsuario;
+use app\models\login\RolUsuario;
+use app\models\User;
 
 class ProfesorController extends Controller
 {
@@ -280,7 +281,7 @@ class ProfesorController extends Controller
 
     public function actionEdit($idprofesor, $msg = "", $error = "")
     {
-        $idestudiante = Html::encode($idprofesor);
+        $idprofesor = Html::encode($idprofesor);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
-use Yii;
+namespace app\models\estudiante;
+
 use yii\base\model;
 
-class ProfesorSearch extends model
+class EstudianteSearch extends model
 {
     public $buscar;
 
