@@ -20,7 +20,7 @@ $this->params["breadcrumbs"][] = $this->title;
                         "enableClientValidation" => true
                 ]);
             ?>
-                <?= $f->field($form, "buscar")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
+                <?= $f->field($form, "idciclo")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
                 <?= Html::a("Refrescar", ["ciclo/index"], ["class" => "btn btn-info"]) ?>
                 <?= Html::a("Nuevo Ciclo", ["ciclo/create"], ["class" => "btn btn-info"]) ?>

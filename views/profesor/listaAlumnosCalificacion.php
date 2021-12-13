@@ -282,7 +282,20 @@ $this->registerCss('
     display: none;
 ');
 
-$this->registerJs('$(document).ready(function(){
+$this->registerJs('
+$(document).keyup(function(objEvent) {
+    if (objEvent.keyCode == 9) {  //tab pressed
+        objEvent.preventDefault(); // stops its action
+
+        var id = $(".valor1").attr("id");
+
+        //var hasFocus = $(".valor").is(":focus");
+        var valor = $(".valor1").val();
+    }
+})
+
+$(document).ready(function(){
+    $(".valor2:first").focus();
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");

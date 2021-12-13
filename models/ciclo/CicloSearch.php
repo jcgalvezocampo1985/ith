@@ -6,19 +6,19 @@ use yii\base\model;
 
 class CicloSearch extends model
 {
-    public $buscar;
+    public $idciclo;
 
     public function rules()
     {
         return [
-            ["buscar", "required", "message" => "Requerido"]
+            ["idciclo", "required", "message" => "Requerido"]
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            "buscar" => "Buscar"
+            "idciclo" => "Buscar"
         ];
     }
     /*

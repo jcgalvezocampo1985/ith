@@ -119,7 +119,7 @@ class CicloController extends Controller
         {
             if($form->validate())
             {
-                $search = Html::encode($form->buscar);
+                $search = Html::encode($form->idciclo);
                 $model = $table->where(["like", "desc_ciclo", $search])
                                ->orWhere(["like", "semestre", $search])
                                ->orWhere(["like", "anio", $search])

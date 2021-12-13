@@ -110,7 +110,8 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+        /*
+        if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
         {
             return $this->redirect(["horarioconsulta"]);
         }
@@ -126,7 +127,7 @@ class ProfesorController extends Controller
         {
             return $this->redirect(["horarioconsulta"]);
         }
-        exit;*/
+        */
         $form = new ProfesorSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
@@ -845,6 +846,7 @@ class ProfesorController extends Controller
 	                idciclo = :idciclo
                 ORDER BY
                     lunes, viernes, sabado";
+
         $model = Yii::$app->db->createCommand($sql)
                               ->bindValue(":idprofesor", $idprofesor)
                               ->bindValue(":idciclo", $idciclo)
@@ -870,6 +872,7 @@ class ProfesorController extends Controller
 	                idciclo = :idciclo
                 ORDER BY
                     lunes, viernes, sabado";
+
         $model = Yii::$app->db->createCommand($sql)
                               ->bindValue(":idprofesor", $idprofesor)
                               ->bindValue(":idciclo", $idciclo)
@@ -884,5 +887,58 @@ class ProfesorController extends Controller
         $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
 
         echo $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
+    }
+
+    public function actionTabs()
+    {
+        return $this->render("tabs");
+    }
+
+    public function actionSeguimientos()
+    {
+        $form = new ProfesorSearch;
+        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
+        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
+        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
+        $idciclo = Ciclo::find()->max("idciclo");
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $search = Html::encode($form->buscar);
+                $table = Profesor::find()
+                                 ->where(["like", "curp", $search])
+                                 ->orWhere(["like", "nombre_profesor", $search])
+                                 ->orWhere(["like", "apaterno", $search])
+                                 ->orWhere(["like", "amaterno", $search])
+                                 ->orWhere(["like", "cve_estatus", $search]);
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+        else
+        {
+            $table = Profesor::find();
+                 
+        }
+
+        $count = clone $table;
+        $pages = new Pagination([
+                    "pageSize" => 10,
+                    "totalCount" => $count->count(),
+                ]);
+        $model = $table->offset($pages->offset)
+                       ->limit($pages->limit)
+                       ->all();
+
+        if(count($model) == 0){
+            $error = 2;
+            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+        }
+
+        return $this->render("seguimientos", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages, "ciclos" => $ciclos, "ultimo_ciclo" => $idciclo]);
     }
 }
