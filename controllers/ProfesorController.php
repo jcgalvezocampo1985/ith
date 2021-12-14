@@ -782,6 +782,10 @@ class ProfesorController extends Controller
                 $p15 = Html::encode($_POST["p15"][$i]);
                 $p16 = Html::encode($_POST["p16"][$i]);
 
+                if($tot){
+
+                }
+
                 
 
                 /*$s1 = Html::encode($_POST["s1"][$i]);
