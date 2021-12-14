@@ -17,6 +17,8 @@ $form = ActiveForm::begin([
     "id" => "formulario",
     "action" => "guardarcalificacion"
 ]);
+
+$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 ?>
 <div class="panel panel-primary">
     <div class="panel-heading">Captura de calificaciones</div>
@@ -121,6 +123,23 @@ $form = ActiveForm::begin([
                             $s15 = (!is_numeric($row['s15'])) ? 0 : $row['s15'];
                             $s16 = (!is_numeric($row['s16'])) ? 0 : $row['s16'];
 
+                            $sp1 = $row['sp1'];
+                            $sp2 = $row['sp2'];
+                            $sp3 = $row['sp3'];
+                            $sp4 = $row['sp4'];
+                            $sp5 = $row['sp5'];
+                            $sp6 = $row['sp6'];
+                            $sp7 = $row['sp7'];
+                            $sp8 = $row['sp8'];
+                            $sp9 = $row['sp9'];
+                            $sp10 = $row['sp10'];
+                            $sp11 = $row['sp11'];
+                            $sp12 = $row['sp12'];
+                            $sp13 = $row['sp13'];
+                            $sp14 = $row['sp14'];
+                            $sp15 = $row['sp15'];
+                            $sp16 = $row['sp16'];
+
                             $r1 = "";
                             $r2 = "";
                             $r3 = "";
@@ -221,27 +240,240 @@ $form = ActiveForm::begin([
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
                                 $r16 = "readonly";
                             }
+
+                            $readonly1 = "";
+                            $readonly2 = "";
+                            $readonly3 = "";
+                            $readonly4 = "";
+                            $readonly5 = "";
+                            $readonly6 = "";
+                            $readonly7 = "";
+                            $readonly8 = "";
+                            $readonly9 = "";
+                            $readonly10 = "";
+                            $readonly11 = "";
+                            $readonly12 = "";
+                            $readonly13 = "";
+                            $readonly14 = "";
+                            $readonly15 = "";
+                            $readonly16 = "";
+
+                            if($sp1 == 1 && $seguimiento1 == 0){
+                                $readonly1 = "readonly";
+                            }
+                            if($sp2 == 1 && $seguimiento1 == 0){
+                                $readonly2 = "readonly";
+                            }
+                            if($sp3 == 1 && $seguimiento1 == 0){
+                                $readonly3 = "readonly";
+                            }
+                            if($sp4 == 1 && $seguimiento1 == 0){
+                                $readonly4 = "readonly";
+                            }
+                            if($sp5 == 1 && $seguimiento1 == 0){
+                                $readonly5 = "readonly";
+                            }
+                            if($sp6 == 1 && $seguimiento1 == 0){
+                                $readonly6 = "readonly";
+                            }
+                            if($sp7 == 1 && $seguimiento1 == 0){
+                                $readonly7 = "readonly";
+                            }
+                            if($sp8 == 1 && $seguimiento1 == 0){
+                                $readonly8 = "readonly";
+                            }
+                            if($sp9 == 1 && $seguimiento1 == 0){
+                                $readonly9 = "readonly";
+                            }
+                            if($sp10 == 1 && $seguimiento1 == 0){
+                                $readonly10 = "readonly";
+                            }
+                            if($sp11 == 1 && $seguimiento1 == 0){
+                                $readonly11 = "readonly";
+                            }
+                            if($sp12 == 1 && $seguimiento1 == 0){
+                                $readonly12 = "readonly";
+                            }
+                            if($sp13 == 1 && $seguimiento1 == 0){
+                                $readonly13 = "readonly";
+                            }
+                            if($sp14 == 1 && $seguimiento1 == 0){
+                                $readonly14 = "readonly";
+                            }
+                            if($sp15 == 1 && $seguimiento1 == 0){
+                                $readonly15 = "readonly";
+                            }
+                            if($sp16 == 1 && $seguimiento1 == 0){
+                                $readonly16 = "readonly";
+                            }
+
+                            if($sp1 == 2 && $seguimiento2 == 0){
+                                $readonly1 = "readonly";
+                            }
+                            if($sp2 == 2 && $seguimiento2 == 0){
+                                $readonly2 = "readonly";
+                            }
+                            if($sp3 == 2 && $seguimiento2 == 0){
+                                $readonly3 = "readonly";
+                            }
+                            if($sp4 == 2 && $seguimiento2 == 0){
+                                $readonly4 = "readonly";
+                            }
+                            if($sp5 == 2 && $seguimiento2 == 0){
+                                $readonly5 = "readonly";
+                            }
+                            if($sp6 == 2 && $seguimiento2 == 0){
+                                $readonly6 = "readonly";
+                            }
+                            if($sp7 == 2 && $seguimiento2 == 0){
+                                $readonly7 = "readonly";
+                            }
+                            if($sp8 == 2 && $seguimiento2 == 0){
+                                $readonly8 = "readonly";
+                            }
+                            if($sp9 == 2 && $seguimiento2 == 0){
+                                $readonly9 = "readonly";
+                            }
+                            if($sp10 == 2 && $seguimiento2 == 0){
+                                $readonly10 = "readonly";
+                            }
+                            if($sp11 == 2 && $seguimiento2 == 0){
+                                $readonly11 = "readonly";
+                            }
+                            if($sp12 == 2 && $seguimiento2 == 0){
+                                $readonly12 = "readonly";
+                            }
+                            if($sp13 == 2 && $seguimiento2 == 0){
+                                $readonly13 = "readonly";
+                            }
+                            if($sp14 == 2 && $seguimiento2 == 0){
+                                $readonly14 = "readonly";
+                            }
+                            if($sp15 == 2 && $seguimiento2 == 0){
+                                $readonly15 = "readonly";
+                            }
+                            if($sp16 == 2 && $seguimiento2 == 0){
+                                $readonly16 = "readonly";
+                            }
+
+                            if($sp1 == 3 && $seguimiento3 == 0){
+                                $readonly1 = "readonly";
+                            }
+                            if($sp2 == 3 && $seguimiento3 == 0){
+                                $readonly2 = "readonly";
+                            }
+                            if($sp3 == 3 && $seguimiento3 == 0){
+                                $readonly3 = "readonly";
+                            }
+                            if($sp4 == 3 && $seguimiento3 == 0){
+                                $readonly4 = "readonly";
+                            }
+                            if($sp5 == 3 && $seguimiento3 == 0){
+                                $readonly5 = "readonly";
+                            }
+                            if($sp6 == 3 && $seguimiento3 == 0){
+                                $readonly6 = "readonly";
+                            }
+                            if($sp7 == 3 && $seguimiento3 == 0){
+                                $readonly7 = "readonly";
+                            }
+                            if($sp8 == 3 && $seguimiento3 == 0){
+                                $readonly8 = "readonly";
+                            }
+                            if($sp9 == 3 && $seguimiento3 == 0){
+                                $readonly9 = "readonly";
+                            }
+                            if($sp10 == 3 && $seguimiento3 == 0){
+                                $readonly10 = "readonly";
+                            }
+                            if($sp11 == 3 && $seguimiento3 == 0){
+                                $readonly11 = "readonly";
+                            }
+                            if($sp12 == 3 && $seguimiento3 == 0){
+                                $readonly12 = "readonly";
+                            }
+                            if($sp13 == 3 && $seguimiento3 == 0){
+                                $readonly13 = "readonly";
+                            }
+                            if($sp14 == 3 && $seguimiento3 == 0){
+                                $readonly14 = "readonly";
+                            }
+                            if($sp15 == 3 && $seguimiento3 == 0){
+                                $readonly15 = "readonly";
+                            }
+                            if($sp16 == 3 && $seguimiento3 == 0){
+                                $readonly16 = "readonly";
+                            }
+
+                            if($sp1 == 4 && $seguimiento4 == 0){
+                                $readonly1 = "readonly";
+                            }
+                            if($sp2 == 4 && $seguimiento4 == 0){
+                                $readonly2 = "readonly";
+                            }
+                            if($sp3 == 4 && $seguimiento4 == 0){
+                                $readonly3 = "readonly";
+                            }
+                            if($sp4 == 4 && $seguimiento4 == 0){
+                                $readonly4 = "readonly";
+                            }
+                            if($sp5 == 4 && $seguimiento4 == 0){
+                                $readonly5 = "readonly";
+                            }
+                            if($sp6 == 4 && $seguimiento4 == 0){
+                                $readonly6 = "readonly";
+                            }
+                            if($sp7 == 4 && $seguimiento4 == 0){
+                                $readonly7 = "readonly";
+                            }
+                            if($sp8 == 4 && $seguimiento4 == 0){
+                                $readonly8 = "readonly";
+                            }
+                            if($sp9 == 4 && $seguimiento4 == 0){
+                                $readonly9 = "readonly";
+                            }
+                            if($sp10 == 4 && $seguimiento4 == 0){
+                                $readonly10 = "readonly";
+                            }
+                            if($sp11 == 4 && $seguimiento4 == 0){
+                                $readonly11 = "readonly";
+                            }
+                            if($sp12 == 4 && $seguimiento4 == 0){
+                                $readonly12 = "readonly";
+                            }
+                            if($sp13 == 4 && $seguimiento4 == 0){
+                                $readonly13 = "readonly";
+                            }
+                            if($sp14 == 4 && $seguimiento4 == 0){
+                                $readonly14 = "readonly";
+                            }
+                            if($sp15 == 4 && $seguimiento4 == 0){
+                                $readonly15 = "readonly";
+                            }
+                            if($sp16 == 4 && $seguimiento4 == 0){
+                                $readonly16 = "readonly";
+                            }
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
                             <td><?= $row['nombre_estudiante'] ?></td>
                             <td class="text-center">C</td>
-                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?php //$r1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?php //$r2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?php //$r3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?php //$r4 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?php //$r5 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?php //$r6 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?php //$r7 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?php //$r8 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p10[]" class="calificacion verificar_espacio_h verificar_espacio_v10" id="p10-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p10'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p11[]" class="calificacion verificar_espacio_h verificar_espacio_v11" id="p11-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p11'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p12[]" class="calificacion verificar_espacio_h verificar_espacio_v12" id="p12-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p12'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p13[]" class="calificacion verificar_espacio_h verificar_espacio_v13" id="p13-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p13'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p14[]" class="calificacion verificar_espacio_h verificar_espacio_v14" id="p14-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p14'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p15[]" class="calificacion verificar_espacio_h verificar_espacio_v15" id="p15-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p15'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p16[]" class="calificacion verificar_espacio_h verificar_espacio_v16" id="p16-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p16'] ?>" <?php //$r9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?= $readonly ?> <?= $readonly1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?= $readonly ?> <?= $readonly2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?= $readonly ?> <?= $readonly3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?= $readonly ?> <?= $readonly4  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $readonly ?> <?= $readonly5  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $readonly ?> <?= $readonly6  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $readonly ?> <?= $readonly7  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $readonly ?> <?= $readonly8  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $readonly ?> <?= $readonly9  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p10[]" class="calificacion verificar_espacio_h verificar_espacio_v10" id="p10-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p10'] ?>" <?= $readonly ?> <?= $readonly10  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p11[]" class="calificacion verificar_espacio_h verificar_espacio_v11" id="p11-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p11'] ?>" <?= $readonly ?> <?= $readonly11  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p12[]" class="calificacion verificar_espacio_h verificar_espacio_v12" id="p12-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p12'] ?>" <?= $readonly ?> <?= $readonly12  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p13[]" class="calificacion verificar_espacio_h verificar_espacio_v13" id="p13-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p13'] ?>" <?= $readonly ?> <?= $readonly13  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p14[]" class="calificacion verificar_espacio_h verificar_espacio_v14" id="p14-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p14'] ?>" <?= $readonly ?> <?= $readonly14  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p15[]" class="calificacion verificar_espacio_h verificar_espacio_v15" id="p15-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p15'] ?>" <?= $readonly ?> <?= $readonly15  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="p16[]" class="calificacion verificar_espacio_h verificar_espacio_v16" id="p16-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p16'] ?>" <?= $readonly ?> <?= $readonly16  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />

@@ -717,7 +717,23 @@ class ProfesorController extends Controller
                                 "grupos_estudiantes.s13",
                                 "grupos_estudiantes.s14",
                                 "grupos_estudiantes.s15",
-                                "grupos_estudiantes.s16"
+                                "grupos_estudiantes.s16",
+                                "grupos_estudiantes.sp1",
+	                            "grupos_estudiantes.sp2",
+	                            "grupos_estudiantes.sp3",
+	                            "grupos_estudiantes.sp4",
+	                            "grupos_estudiantes.sp5",
+	                            "grupos_estudiantes.sp6",
+	                            "grupos_estudiantes.sp7",
+	                            "grupos_estudiantes.sp8",
+	                            "grupos_estudiantes.sp9",
+                                "grupos_estudiantes.sp10",
+                                "grupos_estudiantes.sp11",
+                                "grupos_estudiantes.sp12",
+                                "grupos_estudiantes.sp13",
+                                "grupos_estudiantes.sp14",
+                                "grupos_estudiantes.sp15",
+                                "grupos_estudiantes.sp16"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -743,7 +759,21 @@ class ProfesorController extends Controller
                             ->andFilterWhere(["grupos.idciclo" => $idciclo])
                             ->all();
 
-            return $this->render("listaAlumnosCalificacion", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo, "idprofesor" => $idprofesor, "ultimo_ciclo" => $ultimo_ciclo]);
+            $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
+            $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
+            $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
+            $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
+
+            return $this->render("listaAlumnosCalificacion", ["model" => $model,
+                                                              "model1" => $model1,
+                                                              "idciclo" => $idciclo,
+                                                              "idgrupo" => $idgrupo,
+                                                              "idprofesor" => $idprofesor,
+                                                              "ultimo_ciclo" => $ultimo_ciclo,
+                                                              "seguimiento1" => $seguimiento1,
+                                                              "seguimiento2" => $seguimiento2,
+                                                              "seguimiento3" => $seguimiento3,
+                                                              "seguimiento4" => $seguimiento4]);
         }
     }
 
@@ -757,7 +787,10 @@ class ProfesorController extends Controller
             $r = Html::encode($_POST["r"]);
             $ultimo_ciclo = Ciclo::find()->max("idciclo");
 
-            $total_seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1])->count();
+            $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
+            $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
+            $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
+            $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
 
             $total = count($_POST["p1"]);
 
@@ -782,11 +815,6 @@ class ProfesorController extends Controller
                 $p15 = Html::encode($_POST["p15"][$i]);
                 $p16 = Html::encode($_POST["p16"][$i]);
 
-                if($tot){
-
-                }
-
-                
 
                 /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
@@ -818,6 +846,29 @@ class ProfesorController extends Controller
                     $table->p14 = $p14;
                     $table->p15 = $p15;
                     $table->p16 = $p16;
+
+                    if($seguimiento1 == 1)
+                    {
+                        $table->sp1 = ($p1 != "") ? 1 : ""; 
+                        $table->sp2 = ($p2 != "") ? 1 : "";
+                        $table->sp3 = ($p3 != "") ? 1 : "";
+                        $table->sp4 = ($p4 != "") ? 1 : "";
+                    }
+
+                    if($seguimiento1 == 2)
+                    {
+                        $sp2 = GrupoEstudiante::find()->where([])->count();
+                        $table->sp2 = ($p2 != "") ? (($sp2 == "") ? 2 : "") : "";
+                        $table->sp3 = ($p3 != "") ? 2 : "";
+                        $table->sp4 = ($p4 != "") ? 2 : "";
+                    }
+
+                    if($seguimiento1 == 1 || $seguimiento2 == 1 || $seguimiento3 == 1 || $seguimiento4 == 1){
+                        $table->fecha_actualizacion = date("Y-m-d h:i:s");
+                        $table->update();
+                    }
+
+                    
                     /*$table->s1 = $s1;
                     $table->s2 = $s2;
                     $table->s3 = $s3;
@@ -827,8 +878,8 @@ class ProfesorController extends Controller
                     $table->s7 = $s7;
                     $table->s8 = $s8;
                     $table->s9 = $s9;*/
-                    $table->fecha_actualizacion = date("Y-m-d h:i:s");
-                    $table->update();
+                    
+                    
                 }    
             }
 
