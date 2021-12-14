@@ -757,6 +757,8 @@ class ProfesorController extends Controller
             $r = Html::encode($_POST["r"]);
             $ultimo_ciclo = Ciclo::find()->max("idciclo");
 
+            $total_seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1])->count();
+
             $total = count($_POST["p1"]);
 
             for($i = 0; $i < $total; $i++)
@@ -779,6 +781,8 @@ class ProfesorController extends Controller
                 $p14 = Html::encode($_POST["p14"][$i]);
                 $p15 = Html::encode($_POST["p15"][$i]);
                 $p16 = Html::encode($_POST["p16"][$i]);
+
+                
 
                 /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
