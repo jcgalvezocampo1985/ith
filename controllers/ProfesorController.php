@@ -22,6 +22,7 @@ use app\models\ciclo\CicloSearch;
 use app\models\ciclo\CicloProfesorSearch;
 use app\models\grupo\Grupo;
 use app\models\grupoestudiante\GrupoEstudiante;
+use app\models\profesorseguimiento\ProfesorSeguimiento;
 use app\models\login\Usuario;
 use app\models\login\RolUsuario;
 use app\models\User;
@@ -899,20 +900,40 @@ class ProfesorController extends Controller
         $form = new ProfesorSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
-        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
         $idciclo = Ciclo::find()->max("idciclo");
+
+        $total_profesores = Profesor::find()->count();
+        $total_seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 1, "bandera" => 1])->count();
+        $total_seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 2, "bandera" => 1])->count();
+        $total_seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 3, "bandera" => 1])->count();
+        $total_seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 4, "bandera" => 1])->count();
+
+        $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
+        $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;
+        $ts3 = ($total_seguimiento3 == $total_profesores) ? 1 : 0;
+        $ts4 = ($total_seguimiento4 == $total_profesores) ? 1 : 0;
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
                 $search = Html::encode($form->buscar);
-                $table = Profesor::find()
-                                 ->where(["like", "curp", $search])
-                                 ->orWhere(["like", "nombre_profesor", $search])
-                                 ->orWhere(["like", "apaterno", $search])
-                                 ->orWhere(["like", "amaterno", $search])
-                                 ->orWhere(["like", "cve_estatus", $search]);
+                $table = (new \yii\db\Query())
+                            ->from(["profesores"])
+                            ->select(["profesores.idprofesor",
+                                       "profesores.nombre_profesor",
+                                       "profesores.apaterno",
+                                       "profesores.amaterno",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4"])
+                            ->where(["like", "curp", $search])
+                            ->orWhere(["like", "nombre_profesor", $search])
+                            ->orWhere(["like", "apaterno", $search])
+                            ->orWhere(["like", "amaterno", $search])
+                            ->orWhere(["like", "cve_estatus", $search])
+                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
             }
             else
             {
@@ -921,8 +942,17 @@ class ProfesorController extends Controller
         }
         else
         {
-            $table = Profesor::find();
-                 
+            $table = (new \yii\db\Query())
+                            ->from(["profesores"])
+                            ->select(["profesores.idprofesor",
+                                       "profesores.nombre_profesor",
+                                       "profesores.apaterno",
+                                       "profesores.amaterno",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4"])
+                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
         }
 
         $count = clone $table;
@@ -939,6 +969,99 @@ class ProfesorController extends Controller
             $msg = "No se encontró información relacionada con el criterio de búsqueda";
         }
 
-        return $this->render("seguimientos", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages, "ciclos" => $ciclos, "ultimo_ciclo" => $idciclo]);
+        return $this->render("seguimientos", ["model" => $model,
+                                              "form" => $form,
+                                              "msg" => $msg,
+                                              "error" => $error,
+                                              "pages" => $pages,
+                                              "ts1" => $ts1,
+                                              "ts2" => $ts2,
+                                              "ts3" => $ts3,
+                                              "ts4" => $ts4]);
+    }
+
+    public function actionAsignarseguimiento()
+    {
+        $idprofesor = (Html::encode(isset($_GET["idprofesor"]))) ? Html::encode($_GET["idprofesor"]) : null;
+        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
+        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
+        $idciclo = Ciclo::find()->max("idciclo");
+
+        if($bandera != "" && $idprofesor != "" && $seguimiento != "")
+        {
+            $total_registro = ProfesorSeguimiento::find()
+                                                 ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
+                                                 ->count();
+
+            if($total_registro == 0)
+            {
+                $table = new ProfesorSeguimiento();
+                $table->idciclo = $idciclo;
+                $table->idprofesor = $idprofesor;
+                $table->seguimiento = $seguimiento;
+                $table->bandera = $bandera;
+                $table->insert();
+            }
+            else
+            {
+                $total_registro = ProfesorSeguimiento::find()
+                                                     ->select('idseguimiento')
+                                                     ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
+                                                     ->one();
+
+                $idseguimiento = $total_registro->idseguimiento;
+
+                $table = ProfesorSeguimiento::findOne($idseguimiento);
+                $table->bandera = $bandera;
+                $table->update();
+            }
+        }
+    }
+
+    public function actionAsignarseguimientos()
+    {
+        $idciclo = Ciclo::find()->max("idciclo");
+        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
+        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
+
+        if($bandera != "" && $seguimiento != "")
+        {
+            $table = (new \yii\db\Query())
+                            ->from(["profesores"])
+                            ->select(["profesores.idprofesor"])
+                            ->all();
+
+            foreach($table as $row)
+            {
+                $idprofesor = $row['idprofesor'];
+                $total_registro = ProfesorSeguimiento::find()
+                                                    ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
+                                                    ->count();
+
+                if($total_registro == 0)
+                {
+                    $table = new ProfesorSeguimiento();
+                    $table->idciclo = $idciclo;
+                    $table->idprofesor = $idprofesor;
+                    $table->seguimiento = $seguimiento;
+                    $table->bandera = $bandera;
+                    $table->insert();
+                }
+                else
+                {
+                    $total_registro = ProfesorSeguimiento::find()
+                                                        ->select('idseguimiento')
+                                                        ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
+                                                        ->one();
+
+                    $idseguimiento = $total_registro->idseguimiento;
+
+                    $table = ProfesorSeguimiento::findOne($idseguimiento);
+                    $table->bandera = $bandera;
+                    $table->update();
+                }
+            }
+            
+        }
     }
 }

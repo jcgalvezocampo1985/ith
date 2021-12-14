@@ -140,6 +140,11 @@ class SiteController extends Controller
     * @return Response|string
     */
 
+    public function actionTabs()
+    {
+        return $this->render('tabs');
+    }
+
     public function actionLogin()
     {
         if(!\Yii::$app->user->isGuest)
