@@ -61,8 +61,6 @@ class GrupoEstudianteForm extends model
     public $sp14;
     public $sp15;
     public $sp16;
-    public $fecha_registro;
-    public $fecha_actualizacion;
     public $cve_estatus;
 
     public function rules()

@@ -17,7 +17,6 @@ $form = ActiveForm::begin([
     "id" => "formulario",
     "action" => "guardarcalificacion"
 ]);
-
 $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 ?>
 <div class="panel panel-primary">
@@ -140,23 +139,6 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $sp15 = $row['sp15'];
                             $sp16 = $row['sp16'];
 
-                            $r1 = "";
-                            $r2 = "";
-                            $r3 = "";
-                            $r4 = "";
-                            $r5 = "";
-                            $r6 = "";
-                            $r7 = "";
-                            $r8 = "";
-                            $r9 = "";
-                            $r10 = "";
-                            $r11 = "";
-                            $r12 = "";
-                            $r13 = "";
-                            $r14 = "";
-                            $r15 = "";
-                            $r16 = "";
-
                             $promedio_p = "";
 
                             $p1 = (is_numeric($row['s1'])) ? $s1 : $p1;
@@ -178,281 +160,73 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
 
                             if (is_numeric($row['p1']) || $row['p1'] == "NA") {
                                 $promedio_p = round($p1, 0);
-                                $r1 = "readonly";
                             }
                             if (is_numeric($row['p2']) || $row['p2'] == "NA") {
                                 $promedio_p = round(($p1 + $p2) / 2, 0);
-                                $r2 = "readonly";
                             }
                             if (is_numeric($row['p3']) || $row['p3'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
-                                $r3 = "readonly";
                             }
                             if (is_numeric($row['p4']) || $row['p4'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
-                                $r4 = "readonly";
                             }
                             if (is_numeric($row['p5']) || $row['p5'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
-                                $r5 = "readonly";
                             }
                             if (is_numeric($row['p6']) || $row['p6'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
-                                $r6 = "readonly";
                             }
                             if (is_numeric($row['p7']) || $row['p7'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
-                                $r7 = "readonly";
                             }
                             if (is_numeric($row['p8']) || $row['p8'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
-                                $r8 = "readonly";
                             }
                             if (is_numeric($row['p9']) || $row['p9'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
-                                $r9 = "readonly";
                             }
                             if (is_numeric($row['p10']) || $row['p10'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10) / 10, 0);
-                                $r10 = "readonly";
                             }
                             if (is_numeric($row['p11']) || $row['p11'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11) / 11, 0);
-                                $r11 = "readonly";
                             }
                             if (is_numeric($row['p12']) || $row['p12'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12) / 12, 0);
-                                $r12 = "readonly";
                             }
                             if (is_numeric($row['p13']) || $row['p13'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13) / 13, 0);
-                                $r13 = "readonly";
                             }
                             if (is_numeric($row['p14']) || $row['p14'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14) / 14, 0);
-                                $r14 = "readonly";
                             }
                             if (is_numeric($row['p15']) || $row['p15'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15) / 15, 0);
-                                $r15 = "readonly";
                             }
                             if (is_numeric($row['p16']) || $row['p16'] == "NA") {
                                 $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
-                                $r16 = "readonly";
                             }
+                            
+                            /**
+                             * Evalua los seguimientos si estan abiertos o cerrados para captura de calificaciones
+                             */
+                            $readonly1 = ($sp1 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp1 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp1 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp1 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly2 = ($sp2 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp2 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp2 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp2 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly3 = ($sp3 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp3 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp3 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp3 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly4 = ($sp4 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp4 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp4 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp4 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly5 = ($sp5 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp5 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp5 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp5 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly6 = ($sp6 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp6 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp6 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp6 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly7 = ($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly8 = ($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly9 = ($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly10 = ($sp10 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp10 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp10 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp10 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly11 = ($sp11 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp11 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp11 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp11 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly12 = ($sp12 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp12 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp12 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp12 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly13 = ($sp13 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp13 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp13 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp13 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly14 = ($sp14 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp14 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp14 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp14 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly15 = ($sp15 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp15 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp15 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp15 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly16 = ($sp16 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp16 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp16 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp16 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
 
-                            $readonly1 = "";
-                            $readonly2 = "";
-                            $readonly3 = "";
-                            $readonly4 = "";
-                            $readonly5 = "";
-                            $readonly6 = "";
-                            $readonly7 = "";
-                            $readonly8 = "";
-                            $readonly9 = "";
-                            $readonly10 = "";
-                            $readonly11 = "";
-                            $readonly12 = "";
-                            $readonly13 = "";
-                            $readonly14 = "";
-                            $readonly15 = "";
-                            $readonly16 = "";
-
-                            if($sp1 == 1 && $seguimiento1 == 0){
-                                $readonly1 = "readonly";
-                            }
-                            if($sp2 == 1 && $seguimiento1 == 0){
-                                $readonly2 = "readonly";
-                            }
-                            if($sp3 == 1 && $seguimiento1 == 0){
-                                $readonly3 = "readonly";
-                            }
-                            if($sp4 == 1 && $seguimiento1 == 0){
-                                $readonly4 = "readonly";
-                            }
-                            if($sp5 == 1 && $seguimiento1 == 0){
-                                $readonly5 = "readonly";
-                            }
-                            if($sp6 == 1 && $seguimiento1 == 0){
-                                $readonly6 = "readonly";
-                            }
-                            if($sp7 == 1 && $seguimiento1 == 0){
-                                $readonly7 = "readonly";
-                            }
-                            if($sp8 == 1 && $seguimiento1 == 0){
-                                $readonly8 = "readonly";
-                            }
-                            if($sp9 == 1 && $seguimiento1 == 0){
-                                $readonly9 = "readonly";
-                            }
-                            if($sp10 == 1 && $seguimiento1 == 0){
-                                $readonly10 = "readonly";
-                            }
-                            if($sp11 == 1 && $seguimiento1 == 0){
-                                $readonly11 = "readonly";
-                            }
-                            if($sp12 == 1 && $seguimiento1 == 0){
-                                $readonly12 = "readonly";
-                            }
-                            if($sp13 == 1 && $seguimiento1 == 0){
-                                $readonly13 = "readonly";
-                            }
-                            if($sp14 == 1 && $seguimiento1 == 0){
-                                $readonly14 = "readonly";
-                            }
-                            if($sp15 == 1 && $seguimiento1 == 0){
-                                $readonly15 = "readonly";
-                            }
-                            if($sp16 == 1 && $seguimiento1 == 0){
-                                $readonly16 = "readonly";
-                            }
-
-                            if($sp1 == 2 && $seguimiento2 == 0){
-                                $readonly1 = "readonly";
-                            }
-                            if($sp2 == 2 && $seguimiento2 == 0){
-                                $readonly2 = "readonly";
-                            }
-                            if($sp3 == 2 && $seguimiento2 == 0){
-                                $readonly3 = "readonly";
-                            }
-                            if($sp4 == 2 && $seguimiento2 == 0){
-                                $readonly4 = "readonly";
-                            }
-                            if($sp5 == 2 && $seguimiento2 == 0){
-                                $readonly5 = "readonly";
-                            }
-                            if($sp6 == 2 && $seguimiento2 == 0){
-                                $readonly6 = "readonly";
-                            }
-                            if($sp7 == 2 && $seguimiento2 == 0){
-                                $readonly7 = "readonly";
-                            }
-                            if($sp8 == 2 && $seguimiento2 == 0){
-                                $readonly8 = "readonly";
-                            }
-                            if($sp9 == 2 && $seguimiento2 == 0){
-                                $readonly9 = "readonly";
-                            }
-                            if($sp10 == 2 && $seguimiento2 == 0){
-                                $readonly10 = "readonly";
-                            }
-                            if($sp11 == 2 && $seguimiento2 == 0){
-                                $readonly11 = "readonly";
-                            }
-                            if($sp12 == 2 && $seguimiento2 == 0){
-                                $readonly12 = "readonly";
-                            }
-                            if($sp13 == 2 && $seguimiento2 == 0){
-                                $readonly13 = "readonly";
-                            }
-                            if($sp14 == 2 && $seguimiento2 == 0){
-                                $readonly14 = "readonly";
-                            }
-                            if($sp15 == 2 && $seguimiento2 == 0){
-                                $readonly15 = "readonly";
-                            }
-                            if($sp16 == 2 && $seguimiento2 == 0){
-                                $readonly16 = "readonly";
-                            }
-
-                            if($sp1 == 3 && $seguimiento3 == 0){
-                                $readonly1 = "readonly";
-                            }
-                            if($sp2 == 3 && $seguimiento3 == 0){
-                                $readonly2 = "readonly";
-                            }
-                            if($sp3 == 3 && $seguimiento3 == 0){
-                                $readonly3 = "readonly";
-                            }
-                            if($sp4 == 3 && $seguimiento3 == 0){
-                                $readonly4 = "readonly";
-                            }
-                            if($sp5 == 3 && $seguimiento3 == 0){
-                                $readonly5 = "readonly";
-                            }
-                            if($sp6 == 3 && $seguimiento3 == 0){
-                                $readonly6 = "readonly";
-                            }
-                            if($sp7 == 3 && $seguimiento3 == 0){
-                                $readonly7 = "readonly";
-                            }
-                            if($sp8 == 3 && $seguimiento3 == 0){
-                                $readonly8 = "readonly";
-                            }
-                            if($sp9 == 3 && $seguimiento3 == 0){
-                                $readonly9 = "readonly";
-                            }
-                            if($sp10 == 3 && $seguimiento3 == 0){
-                                $readonly10 = "readonly";
-                            }
-                            if($sp11 == 3 && $seguimiento3 == 0){
-                                $readonly11 = "readonly";
-                            }
-                            if($sp12 == 3 && $seguimiento3 == 0){
-                                $readonly12 = "readonly";
-                            }
-                            if($sp13 == 3 && $seguimiento3 == 0){
-                                $readonly13 = "readonly";
-                            }
-                            if($sp14 == 3 && $seguimiento3 == 0){
-                                $readonly14 = "readonly";
-                            }
-                            if($sp15 == 3 && $seguimiento3 == 0){
-                                $readonly15 = "readonly";
-                            }
-                            if($sp16 == 3 && $seguimiento3 == 0){
-                                $readonly16 = "readonly";
-                            }
-
-                            if($sp1 == 4 && $seguimiento4 == 0){
-                                $readonly1 = "readonly";
-                            }
-                            if($sp2 == 4 && $seguimiento4 == 0){
-                                $readonly2 = "readonly";
-                            }
-                            if($sp3 == 4 && $seguimiento4 == 0){
-                                $readonly3 = "readonly";
-                            }
-                            if($sp4 == 4 && $seguimiento4 == 0){
-                                $readonly4 = "readonly";
-                            }
-                            if($sp5 == 4 && $seguimiento4 == 0){
-                                $readonly5 = "readonly";
-                            }
-                            if($sp6 == 4 && $seguimiento4 == 0){
-                                $readonly6 = "readonly";
-                            }
-                            if($sp7 == 4 && $seguimiento4 == 0){
-                                $readonly7 = "readonly";
-                            }
-                            if($sp8 == 4 && $seguimiento4 == 0){
-                                $readonly8 = "readonly";
-                            }
-                            if($sp9 == 4 && $seguimiento4 == 0){
-                                $readonly9 = "readonly";
-                            }
-                            if($sp10 == 4 && $seguimiento4 == 0){
-                                $readonly10 = "readonly";
-                            }
-                            if($sp11 == 4 && $seguimiento4 == 0){
-                                $readonly11 = "readonly";
-                            }
-                            if($sp12 == 4 && $seguimiento4 == 0){
-                                $readonly12 = "readonly";
-                            }
-                            if($sp13 == 4 && $seguimiento4 == 0){
-                                $readonly13 = "readonly";
-                            }
-                            if($sp14 == 4 && $seguimiento4 == 0){
-                                $readonly14 = "readonly";
-                            }
-                            if($sp15 == 4 && $seguimiento4 == 0){
-                                $readonly15 = "readonly";
-                            }
-                            if($sp16 == 4 && $seguimiento4 == 0){
-                                $readonly16 = "readonly";
-                            }
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
@@ -729,3 +503,70 @@ $(document).ready(function(){
     }
 })');
 ?>
+
+<!--
+if (is_numeric($row['p1']) || $row['p1'] == "NA") {
+    $promedio_p = round($p1, 0);
+    $r1 = "readonly";
+}
+if (is_numeric($row['p2']) || $row['p2'] == "NA") {
+    $promedio_p = round(($p1 + $p2) / 2, 0);
+    $r2 = "readonly";
+}
+if (is_numeric($row['p3']) || $row['p3'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
+    $r3 = "readonly";
+}
+if (is_numeric($row['p4']) || $row['p4'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
+    $r4 = "readonly";
+}
+if (is_numeric($row['p5']) || $row['p5'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
+    $r5 = "readonly";
+}
+if (is_numeric($row['p6']) || $row['p6'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
+    $r6 = "readonly";
+}
+if (is_numeric($row['p7']) || $row['p7'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
+    $r7 = "readonly";
+}
+if (is_numeric($row['p8']) || $row['p8'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
+    $r8 = "readonly";
+}
+if (is_numeric($row['p9']) || $row['p9'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
+    $r9 = "readonly";
+}
+if (is_numeric($row['p10']) || $row['p10'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10) / 10, 0);
+    $r10 = "readonly";
+}
+if (is_numeric($row['p11']) || $row['p11'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11) / 11, 0);
+    $r11 = "readonly";
+}
+if (is_numeric($row['p12']) || $row['p12'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12) / 12, 0);
+    $r12 = "readonly";
+}
+if (is_numeric($row['p13']) || $row['p13'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13) / 13, 0);
+    $r13 = "readonly";
+}
+if (is_numeric($row['p14']) || $row['p14'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14) / 14, 0);
+    $r14 = "readonly";
+}
+if (is_numeric($row['p15']) || $row['p15'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15) / 15, 0);
+    $r15 = "readonly";
+}
+if (is_numeric($row['p16']) || $row['p16'] == "NA") {
+    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
+    $r
+}
+-->

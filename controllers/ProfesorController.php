@@ -815,7 +815,6 @@ class ProfesorController extends Controller
                 $p15 = Html::encode($_POST["p15"][$i]);
                 $p16 = Html::encode($_POST["p16"][$i]);
 
-
                 /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
                 $s3 = Html::encode($_POST["s3"][$i]);
@@ -830,6 +829,69 @@ class ProfesorController extends Controller
 
                 if($table)
                 {
+                    $seguimiento = ($seguimiento1 == 1) ? 1 : (($seguimiento2 == 1) ? 2 : (($seguimiento3 == 1) ? 3 : (($seguimiento4 == 1) ? 4 : "")));
+                    $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor])->max("seguimiento");
+
+                    $sp2_sql = GrupoEstudiante::find()->select("sp2")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->one();
+                    $sp3_sql = GrupoEstudiante::find()->select("sp3")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->one();
+                    $sp4_sql = GrupoEstudiante::find()->select("sp4")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->one();
+                    $sp5_sql = GrupoEstudiante::find()->select("sp5")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->one();
+                    $sp6_sql = GrupoEstudiante::find()->select("sp6")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->one();
+                    $sp7_sql = GrupoEstudiante::find()->select("sp7")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->one();
+                    $sp8_sql = GrupoEstudiante::find()->select("sp8")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->one();
+                    $sp9_sql = GrupoEstudiante::find()->select("sp9")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->one();
+                    $sp10_sql = GrupoEstudiante::find()->select("sp10")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp10", [1, 2, 3, 4]])->one();
+                    $sp11_sql = GrupoEstudiante::find()->select("sp11")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp11", [1, 2, 3, 4]])->one();
+                    $sp12_sql = GrupoEstudiante::find()->select("sp12")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp12", [1, 2, 3, 4]])->one();
+                    $sp13_sql = GrupoEstudiante::find()->select("sp13")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp13", [1, 2, 3, 4]])->one();
+                    $sp14_sql = GrupoEstudiante::find()->select("sp14")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp14", [1, 2, 3, 4]])->one();
+                    $sp15_sql = GrupoEstudiante::find()->select("sp15")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp15", [1, 2, 3, 4]])->one();
+                    $sp16_sql = GrupoEstudiante::find()->select("sp16")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp16", [1, 2, 3, 4]])->one();
+
+                    $sp2_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->count();
+                    $sp3_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->count();
+                    $sp4_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->count();
+                    $sp5_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->count();
+                    $sp6_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->count();
+                    $sp7_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->count();
+                    $sp8_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->count();
+                    $sp9_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->count();
+                    $sp10_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp10", [1, 2, 3, 4]])->count();
+                    $sp11_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp11", [1, 2, 3, 4]])->count();
+                    $sp12_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp12", [1, 2, 3, 4]])->count();
+                    $sp13_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp13", [1, 2, 3, 4]])->count();
+                    $sp14_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp14", [1, 2, 3, 4]])->count();
+                    $sp15_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp15", [1, 2, 3, 4]])->count();
+                    $sp16_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp16", [1, 2, 3, 4]])->count();
+
+                    $sp1 = 1;
+                    $sp2 = ($p2 != "") ? (($sp2_sql_total > 0) ? $sp2_sql->sp2 : $seguimiento) : "";
+                    $sp3 = ($p3 != "") ? (($sp3_sql_total > 0) ? $sp3_sql->sp3 : $seguimiento) : "";
+                    $sp4 = ($p4 != "") ? (($sp4_sql_total > 0) ? $sp4_sql->sp4 : $seguimiento) : "";
+                    $sp5 = ($p5 != "") ? (($sp5_sql_total > 0) ? $sp5_sql->sp5 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp6 = ($p6 != "") ? (($sp6_sql_total > 0) ? $sp6_sql->sp6 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp10 = ($p10 != "") ? (($sp10_sql_total > 0) ? $sp10_sql->sp10 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp11 = ($p11 != "") ? (($sp11_sql_total > 0) ? $sp11_sql->sp11 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp12 = ($p12 != "") ? (($sp12_sql_total > 0) ? $sp12_sql->sp12 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp13 = ($p13 != "") ? (($sp13_sql_total > 0) ? $sp13_sql->sp13 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp14 = ($p14 != "") ? (($sp14_sql_total > 0) ? $sp14_sql->sp14 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp15 = ($p15 != "") ? (($sp15_sql_total > 0) ? $sp15_sql->sp15 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp16 = ($p16 != "") ? (($sp16_sql_total > 0) ? $sp16_sql->sp6 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+
+                    /*$sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : $seguimiento) : "";
+                    $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : $seguimiento) : "";
+                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : $seguimiento) : "";
+                    $sp10 = ($p10 != "") ? (($sp10_sql_total > 0) ? $sp10_sql->sp10 : $seguimiento) : "";
+                    $sp11 = ($p11 != "") ? (($sp11_sql_total > 0) ? $sp11_sql->sp11 : $seguimiento) : "";
+                    $sp12 = ($p12 != "") ? (($sp12_sql_total > 0) ? $sp12_sql->sp12 : $seguimiento) : "";
+                    $sp13 = ($p13 != "") ? (($sp13_sql_total > 0) ? $sp13_sql->sp13 : $seguimiento) : "";
+                    $sp14 = ($p14 != "") ? (($sp14_sql_total > 0) ? $sp14_sql->sp14 : $seguimiento) : "";
+                    $sp15 = ($p15 != "") ? (($sp15_sql_total > 0) ? $sp15_sql->sp15 : $seguimiento) : "";
+                    $sp16 = ($p16 != "") ? (($sp16_sql_total > 0) ? $sp16_sql->sp16 : $seguimiento) : "";*/
+
                     $table->p1 = $p1;
                     $table->p2 = $p2;
                     $table->p3 = $p3;
@@ -847,29 +909,27 @@ class ProfesorController extends Controller
                     $table->p15 = $p15;
                     $table->p16 = $p16;
 
-                    if($seguimiento1 == 1)
-                    {
-                        $table->sp1 = ($p1 != "") ? 1 : ""; 
-                        $table->sp2 = ($p2 != "") ? 1 : "";
-                        $table->sp3 = ($p3 != "") ? 1 : "";
-                        $table->sp4 = ($p4 != "") ? 1 : "";
-                    }
+                    $table->sp1 = $sp1;
+                    $table->sp2 = $sp2;
+                    $table->sp3 = $sp3;
+                    $table->sp4 = $sp4;
+                    $table->sp5 = $sp5;
+                    $table->sp6 = $sp6;
+                    $table->sp7 = $sp7;
+                    $table->sp8 = $sp8;
+                    $table->sp9 = $sp9;
+                    $table->sp10 = $sp10;
+                    $table->sp11 = $sp11;
+                    $table->sp12 = $sp12;
+                    $table->sp13 = $sp13;
+                    $table->sp14 = $sp14;
+                    $table->sp15 = $sp15;
+                    $table->sp16 = $sp16;
 
-                    if($seguimiento1 == 2)
-                    {
-                        $sp2 = GrupoEstudiante::find()->where([])->count();
-                        $table->sp2 = ($p2 != "") ? (($sp2 == "") ? 2 : "") : "";
-                        $table->sp3 = ($p3 != "") ? 2 : "";
-                        $table->sp4 = ($p4 != "") ? 2 : "";
-                    }
+                    $table->update();
 
-                    if($seguimiento1 == 1 || $seguimiento2 == 1 || $seguimiento3 == 1 || $seguimiento4 == 1){
-                        $table->fecha_actualizacion = date("Y-m-d h:i:s");
-                        $table->update();
-                    }
-
-                    
-                    /*$table->s1 = $s1;
+                    /*
+                    $table->s1 = $s1;
                     $table->s2 = $s2;
                     $table->s3 = $s3;
                     $table->s4 = $s4;
@@ -877,9 +937,8 @@ class ProfesorController extends Controller
                     $table->s6 = $s6;
                     $table->s7 = $s7;
                     $table->s8 = $s8;
-                    $table->s9 = $s9;*/
-                    
-                    
+                    $table->s9 = $s9;
+                    */
                 }    
             }
 
