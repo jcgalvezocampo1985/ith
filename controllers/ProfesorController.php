@@ -695,13 +695,6 @@ class ProfesorController extends Controller
 	                            "grupos_estudiantes.p7",
 	                            "grupos_estudiantes.p8",
 	                            "grupos_estudiantes.p9",
-                                "grupos_estudiantes.p10",
-                                "grupos_estudiantes.p11",
-                                "grupos_estudiantes.p12",
-                                "grupos_estudiantes.p13",
-                                "grupos_estudiantes.p14",
-                                "grupos_estudiantes.p15",
-                                "grupos_estudiantes.p16",
 	                            "grupos_estudiantes.s1",
 	                            "grupos_estudiantes.s2",
 	                            "grupos_estudiantes.s3",
@@ -711,13 +704,6 @@ class ProfesorController extends Controller
 	                            "grupos_estudiantes.s7",
 	                            "grupos_estudiantes.s8",
 	                            "grupos_estudiantes.s9",
-                                "grupos_estudiantes.s10",
-                                "grupos_estudiantes.s11",
-                                "grupos_estudiantes.s12",
-                                "grupos_estudiantes.s13",
-                                "grupos_estudiantes.s14",
-                                "grupos_estudiantes.s15",
-                                "grupos_estudiantes.s16",
                                 "grupos_estudiantes.sp1",
 	                            "grupos_estudiantes.sp2",
 	                            "grupos_estudiantes.sp3",
@@ -726,14 +712,7 @@ class ProfesorController extends Controller
 	                            "grupos_estudiantes.sp6",
 	                            "grupos_estudiantes.sp7",
 	                            "grupos_estudiantes.sp8",
-	                            "grupos_estudiantes.sp9",
-                                "grupos_estudiantes.sp10",
-                                "grupos_estudiantes.sp11",
-                                "grupos_estudiantes.sp12",
-                                "grupos_estudiantes.sp13",
-                                "grupos_estudiantes.sp14",
-                                "grupos_estudiantes.sp15",
-                                "grupos_estudiantes.sp16"
+	                            "grupos_estudiantes.sp9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -764,6 +743,8 @@ class ProfesorController extends Controller
             $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
             $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
 
+            $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor])->max("seguimiento");
+
             return $this->render("listaAlumnosCalificacion", ["model" => $model,
                                                               "model1" => $model1,
                                                               "idciclo" => $idciclo,
@@ -773,7 +754,8 @@ class ProfesorController extends Controller
                                                               "seguimiento1" => $seguimiento1,
                                                               "seguimiento2" => $seguimiento2,
                                                               "seguimiento3" => $seguimiento3,
-                                                              "seguimiento4" => $seguimiento4]);
+                                                              "seguimiento4" => $seguimiento4,
+                                                              "ultimo_seguimiento" => $ultimo_seguimiento]);
         }
     }
 
@@ -807,13 +789,6 @@ class ProfesorController extends Controller
                 $p7 = Html::encode($_POST["p7"][$i]);
                 $p8 = Html::encode($_POST["p8"][$i]);
                 $p9 = Html::encode($_POST["p9"][$i]);
-                $p10 = Html::encode($_POST["p10"][$i]);
-                $p11 = Html::encode($_POST["p11"][$i]);
-                $p12 = Html::encode($_POST["p12"][$i]);
-                $p13 = Html::encode($_POST["p13"][$i]);
-                $p14 = Html::encode($_POST["p14"][$i]);
-                $p15 = Html::encode($_POST["p15"][$i]);
-                $p16 = Html::encode($_POST["p16"][$i]);
 
                 /*$s1 = Html::encode($_POST["s1"][$i]);
                 $s2 = Html::encode($_POST["s2"][$i]);
@@ -840,13 +815,6 @@ class ProfesorController extends Controller
                     $sp7_sql = GrupoEstudiante::find()->select("sp7")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->one();
                     $sp8_sql = GrupoEstudiante::find()->select("sp8")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->one();
                     $sp9_sql = GrupoEstudiante::find()->select("sp9")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->one();
-                    $sp10_sql = GrupoEstudiante::find()->select("sp10")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp10", [1, 2, 3, 4]])->one();
-                    $sp11_sql = GrupoEstudiante::find()->select("sp11")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp11", [1, 2, 3, 4]])->one();
-                    $sp12_sql = GrupoEstudiante::find()->select("sp12")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp12", [1, 2, 3, 4]])->one();
-                    $sp13_sql = GrupoEstudiante::find()->select("sp13")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp13", [1, 2, 3, 4]])->one();
-                    $sp14_sql = GrupoEstudiante::find()->select("sp14")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp14", [1, 2, 3, 4]])->one();
-                    $sp15_sql = GrupoEstudiante::find()->select("sp15")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp15", [1, 2, 3, 4]])->one();
-                    $sp16_sql = GrupoEstudiante::find()->select("sp16")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp16", [1, 2, 3, 4]])->one();
 
                     $sp2_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->count();
                     $sp3_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->count();
@@ -856,13 +824,6 @@ class ProfesorController extends Controller
                     $sp7_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->count();
                     $sp8_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->count();
                     $sp9_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->count();
-                    $sp10_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp10", [1, 2, 3, 4]])->count();
-                    $sp11_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp11", [1, 2, 3, 4]])->count();
-                    $sp12_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp12", [1, 2, 3, 4]])->count();
-                    $sp13_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp13", [1, 2, 3, 4]])->count();
-                    $sp14_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp14", [1, 2, 3, 4]])->count();
-                    $sp15_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp15", [1, 2, 3, 4]])->count();
-                    $sp16_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp16", [1, 2, 3, 4]])->count();
 
                     $sp1 = 1;
                     $sp2 = ($p2 != "") ? (($sp2_sql_total > 0) ? $sp2_sql->sp2 : $seguimiento) : "";
@@ -873,13 +834,6 @@ class ProfesorController extends Controller
                     $sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
                     $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
                     $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp10 = ($p10 != "") ? (($sp10_sql_total > 0) ? $sp10_sql->sp10 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp11 = ($p11 != "") ? (($sp11_sql_total > 0) ? $sp11_sql->sp11 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp12 = ($p12 != "") ? (($sp12_sql_total > 0) ? $sp12_sql->sp12 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp13 = ($p13 != "") ? (($sp13_sql_total > 0) ? $sp13_sql->sp13 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp14 = ($p14 != "") ? (($sp14_sql_total > 0) ? $sp14_sql->sp14 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp15 = ($p15 != "") ? (($sp15_sql_total > 0) ? $sp15_sql->sp15 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp16 = ($p16 != "") ? (($sp16_sql_total > 0) ? $sp16_sql->sp6 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
 
                     /*$sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : $seguimiento) : "";
                     $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : $seguimiento) : "";
@@ -901,13 +855,6 @@ class ProfesorController extends Controller
                     $table->p7 = $p7;
                     $table->p8 = $p8;
                     $table->p9 = $p9;
-                    $table->p10 = $p10;
-                    $table->p11 = $p11;
-                    $table->p12 = $p12;
-                    $table->p13 = $p13;
-                    $table->p14 = $p14;
-                    $table->p15 = $p15;
-                    $table->p16 = $p16;
 
                     $table->sp1 = $sp1;
                     $table->sp2 = $sp2;
@@ -918,13 +865,6 @@ class ProfesorController extends Controller
                     $table->sp7 = $sp7;
                     $table->sp8 = $sp8;
                     $table->sp9 = $sp9;
-                    $table->sp10 = $sp10;
-                    $table->sp11 = $sp11;
-                    $table->sp12 = $sp12;
-                    $table->sp13 = $sp13;
-                    $table->sp14 = $sp14;
-                    $table->sp15 = $sp15;
-                    $table->sp16 = $sp16;
 
                     $table->update();
 

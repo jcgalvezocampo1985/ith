@@ -12,11 +12,37 @@ if($idciclo != $ultimo_ciclo){
     exit;
 }
 
+function promedioTotal(array $parciales)
+{
+    $total_parciales = 0;
+    $suma_calificaciones = 0;
+
+    for($i = 0; $i < count($parciales); $i++)
+    {
+        $parcial = $parciales[$i];
+        if (is_numeric($parcial) || $parcial == "NA")
+        {
+            $suma_calificaciones = $suma_calificaciones + $parcial;
+            $total_parciales = $total_parciales + 1;
+        }
+    }
+
+    $promedio_p = ($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "";
+
+    return $promedio_p;
+}
+
+function parcial(array $parciales)
+{
+    $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
+}
+
 $form = ActiveForm::begin([
     "method" => "post",
     "id" => "formulario",
     "action" => "guardarcalificacion"
 ]);
+
 $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 ?>
 <div class="panel panel-primary">
@@ -65,29 +91,41 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             <th>No. Control</th>
                             <th>Nombre</th>
                             <th>Opc.</th>
-                            <th class="text-center">C1</th>
-                            <th class="text-center">C2</th>
-                            <th class="text-center">C3</th>
-                            <th class="text-center">C4</th>
-                            <th class="text-center">C5</th>
-                            <th class="text-center">C6</th>
-                            <th class="text-center">C7</th>
-                            <th class="text-center">C8</th>
-                            <th class="text-center">C9</th>
-                            <th class="text-center">C10</th>
-                            <th class="text-center">C11</th>
-                            <th class="text-center">C12</th>
-                            <th class="text-center">C13</th>
-                            <th class="text-center">C14</th>
-                            <th class="text-center">C15</th>
-                            <th class="text-center">C16</th>
+                            <th class="text-center">T1</th>
+                            <th class="text-center">T2</th>
+                            <th class="text-center">T3</th>
+                            <th class="text-center">T4</th>
+                            <th class="text-center">T5</th>
+                            <th class="text-center">T6</th>
+                            <th class="text-center">T7</th>
+                            <th class="text-center">T8</th>
+                            <th class="text-center">T9</th>
                             <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
                     <tbody class="text-nowrap">
-                        <?php $i = 1;?>
-                        <?php foreach($model as $row): ?>
                         <?php
+                        $i = 1;
+                        
+                        foreach($model as $row):
+                            $sp1 = $row['sp1'];
+                            $sp2 = $row['sp2'];
+                            $sp3 = $row['sp3'];
+                            $sp4 = $row['sp4'];
+                            $sp5 = $row['sp5'];
+                            $sp6 = $row['sp6'];
+                            $sp7 = $row['sp7'];
+                            $sp8 = $row['sp8'];
+                            $sp9 = $row['sp9'];
+
+                            $promedio_p = "";
+
+                            $bloqueo5 = "";
+                            $bloqueo6 = "";
+                            $bloqueo7 = "";
+                            $bloqueo8 = "";
+                            $bloqueo9 = "";
+
                             $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
                             $p2 = (!is_numeric($row['p2'])) ? 0 : $row['p2'];
                             $p3 = (!is_numeric($row['p3'])) ? 0 : $row['p3'];
@@ -97,13 +135,6 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $p7 = (!is_numeric($row['p7'])) ? 0 : $row['p7'];
                             $p8 = (!is_numeric($row['p8'])) ? 0 : $row['p8'];
                             $p9 = (!is_numeric($row['p9'])) ? 0 : $row['p9'];
-                            $p10 = (!is_numeric($row['p10'])) ? 0 : $row['p10'];
-                            $p11 = (!is_numeric($row['p11'])) ? 0 : $row['p11'];
-                            $p12 = (!is_numeric($row['p12'])) ? 0 : $row['p12'];
-                            $p13 = (!is_numeric($row['p13'])) ? 0 : $row['p13'];
-                            $p14 = (!is_numeric($row['p14'])) ? 0 : $row['p14'];
-                            $p15 = (!is_numeric($row['p15'])) ? 0 : $row['p15'];
-                            $p16 = (!is_numeric($row['p16'])) ? 0 : $row['p16'];
 
                             $s1 = (!is_numeric($row['s1'])) ? 0 : $row['s1'];
                             $s2 = (!is_numeric($row['s2'])) ? 0 : $row['s2'];
@@ -114,32 +145,6 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $s7 = (!is_numeric($row['s7'])) ? 0 : $row['s7'];
                             $s8 = (!is_numeric($row['s8'])) ? 0 : $row['s8'];
                             $s9 = (!is_numeric($row['s9'])) ? 0 : $row['s9'];
-                            $s10 = (!is_numeric($row['s10'])) ? 0 : $row['s10'];
-                            $s11 = (!is_numeric($row['s11'])) ? 0 : $row['s11'];
-                            $s12 = (!is_numeric($row['s12'])) ? 0 : $row['s12'];
-                            $s13 = (!is_numeric($row['s13'])) ? 0 : $row['s13'];
-                            $s14 = (!is_numeric($row['s14'])) ? 0 : $row['s14'];
-                            $s15 = (!is_numeric($row['s15'])) ? 0 : $row['s15'];
-                            $s16 = (!is_numeric($row['s16'])) ? 0 : $row['s16'];
-
-                            $sp1 = $row['sp1'];
-                            $sp2 = $row['sp2'];
-                            $sp3 = $row['sp3'];
-                            $sp4 = $row['sp4'];
-                            $sp5 = $row['sp5'];
-                            $sp6 = $row['sp6'];
-                            $sp7 = $row['sp7'];
-                            $sp8 = $row['sp8'];
-                            $sp9 = $row['sp9'];
-                            $sp10 = $row['sp10'];
-                            $sp11 = $row['sp11'];
-                            $sp12 = $row['sp12'];
-                            $sp13 = $row['sp13'];
-                            $sp14 = $row['sp14'];
-                            $sp15 = $row['sp15'];
-                            $sp16 = $row['sp16'];
-
-                            $promedio_p = "";
 
                             $p1 = (is_numeric($row['s1'])) ? $s1 : $p1;
                             $p2 = (is_numeric($row['s2'])) ? $s2 : $p2;
@@ -150,63 +155,9 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $p7 = (is_numeric($row['s7'])) ? $s7 : $p7;
                             $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
                             $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
-                            $p10 = (is_numeric($row['s9'])) ? $s10 : $p10;
-                            $p11 = (is_numeric($row['s9'])) ? $s11 : $p11;
-                            $p12 = (is_numeric($row['s9'])) ? $s12 : $p12;
-                            $p13 = (is_numeric($row['s9'])) ? $s13 : $p13;
-                            $p14 = (is_numeric($row['s9'])) ? $s14 : $p14;
-                            $p15 = (is_numeric($row['s9'])) ? $s15 : $p15;
-                            $p16 = (is_numeric($row['s9'])) ? $s16 : $p16;
 
-                            if (is_numeric($row['p1']) || $row['p1'] == "NA") {
-                                $promedio_p = round($p1, 0);
-                            }
-                            if (is_numeric($row['p2']) || $row['p2'] == "NA") {
-                                $promedio_p = round(($p1 + $p2) / 2, 0);
-                            }
-                            if (is_numeric($row['p3']) || $row['p3'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
-                            }
-                            if (is_numeric($row['p4']) || $row['p4'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
-                            }
-                            if (is_numeric($row['p5']) || $row['p5'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
-                            }
-                            if (is_numeric($row['p6']) || $row['p6'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
-                            }
-                            if (is_numeric($row['p7']) || $row['p7'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
-                            }
-                            if (is_numeric($row['p8']) || $row['p8'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
-                            }
-                            if (is_numeric($row['p9']) || $row['p9'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
-                            }
-                            if (is_numeric($row['p10']) || $row['p10'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10) / 10, 0);
-                            }
-                            if (is_numeric($row['p11']) || $row['p11'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11) / 11, 0);
-                            }
-                            if (is_numeric($row['p12']) || $row['p12'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12) / 12, 0);
-                            }
-                            if (is_numeric($row['p13']) || $row['p13'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13) / 13, 0);
-                            }
-                            if (is_numeric($row['p14']) || $row['p14'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14) / 14, 0);
-                            }
-                            if (is_numeric($row['p15']) || $row['p15'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15) / 15, 0);
-                            }
-                            if (is_numeric($row['p16']) || $row['p16'] == "NA") {
-                                $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
-                            }
-                            
+                            $promedio_p = promedioTotal([$row['p1'], $row['p2'], $row['p3'], $row['p4'], $row['p5'], $row['p6'], $row['p7'], $row['p8'], $row['p9']]);
+
                             /**
                              * Evalua los seguimientos si estan abiertos o cerrados para captura de calificaciones
                              */
@@ -219,14 +170,15 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $readonly7 = ($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
                             $readonly8 = ($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
                             $readonly9 = ($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly10 = ($sp10 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp10 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp10 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp10 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly11 = ($sp11 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp11 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp11 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp11 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly12 = ($sp12 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp12 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp12 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp12 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly13 = ($sp13 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp13 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp13 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp13 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly14 = ($sp14 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp14 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp14 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp14 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly15 = ($sp15 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp15 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp15 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp15 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly16 = ($sp16 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp16 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp16 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp16 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
 
+                            if($ultimo_seguimiento == 4 && $seguimiento4 == 0)
+                            {
+                                $bloqueo5 = ($sp5 == "") ? "readonly" : "";
+                                $bloqueo6 = ($sp6 == "") ? "readonly" : "";
+                                $bloqueo7 = ($sp7 == "") ? "readonly" : "";
+                                $bloqueo8 = ($sp8 == "") ? "readonly" : "";
+                                $bloqueo9 = ($sp9 == "") ? "readonly" : "";
+                            }
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
@@ -236,23 +188,18 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?= $readonly ?> <?= $readonly2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?= $readonly ?> <?= $readonly3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?= $readonly ?> <?= $readonly4  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $readonly ?> <?= $readonly5  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $readonly ?> <?= $readonly6  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $readonly ?> <?= $readonly7  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $readonly ?> <?= $readonly8  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $readonly ?> <?= $readonly9  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p10[]" class="calificacion verificar_espacio_h verificar_espacio_v10" id="p10-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p10'] ?>" <?= $readonly ?> <?= $readonly10  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p11[]" class="calificacion verificar_espacio_h verificar_espacio_v11" id="p11-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p11'] ?>" <?= $readonly ?> <?= $readonly11  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p12[]" class="calificacion verificar_espacio_h verificar_espacio_v12" id="p12-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p12'] ?>" <?= $readonly ?> <?= $readonly12  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p13[]" class="calificacion verificar_espacio_h verificar_espacio_v13" id="p13-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p13'] ?>" <?= $readonly ?> <?= $readonly13  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p14[]" class="calificacion verificar_espacio_h verificar_espacio_v14" id="p14-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p14'] ?>" <?= $readonly ?> <?= $readonly14  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p15[]" class="calificacion verificar_espacio_h verificar_espacio_v15" id="p15-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p15'] ?>" <?= $readonly ?> <?= $readonly15  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p16[]" class="calificacion verificar_espacio_h verificar_espacio_v16" id="p16-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p16'] ?>" <?= $readonly ?> <?= $readonly16  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo5 ?> type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $readonly ?> <?= $readonly5  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo6 ?> type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $readonly ?> <?= $readonly6  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo7 ?> type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $readonly ?> <?= $readonly7  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo8 ?> type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $readonly ?> <?= $readonly8  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo9 ?> type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $readonly ?> <?= $readonly9  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
-                        <?php $i++; ?>
-                        <?php endforeach ?>
+                        <?php
+                        $i++;
+                        endforeach
+                        ?>
                         <input type="hidden" name="idgrupo" value="<?= $idgrupo ?>" readonly="true" />
                         <input type="hidden" name="idciclo" value="<?= $idciclo ?>" readonly="true" />
                         <input type="hidden" name="idprofesor" value="<?= $idprofesor ?>" readonly="true" />
@@ -357,13 +304,6 @@ $(document).ready(function(){
             inputs_vacios7 = evaluar_vacios(nFilas, 7);
             inputs_vacios8 = evaluar_vacios(nFilas, 8);
             inputs_vacios9 = evaluar_vacios(nFilas, 9);
-            inputs_vacios10 = evaluar_vacios(nFilas, 10);
-            inputs_vacios11 = evaluar_vacios(nFilas, 11);
-            inputs_vacios12 = evaluar_vacios(nFilas, 12);
-            inputs_vacios13 = evaluar_vacios(nFilas, 13);
-            inputs_vacios14 = evaluar_vacios(nFilas, 14);
-            inputs_vacios15 = evaluar_vacios(nFilas, 15);
-            inputs_vacios16 = evaluar_vacios(nFilas, 16);
 
             if (inputs_vacios1 < nFilas) {
                 filas = nFilas;
@@ -401,35 +341,6 @@ $(document).ready(function(){
                 filas = nFilas * 9;
                 total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9;
             }
-            if (inputs_vacios10 < nFilas) {
-                filas = nFilas * 10;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10;
-            }
-            if (inputs_vacios11 < nFilas) {
-                filas = nFilas * 11;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11;
-            }
-            if (inputs_vacios12 < nFilas) {
-                filas = nFilas * 12;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12;
-            }
-            if (inputs_vacios13 < nFilas) {
-                filas = nFilas * 13;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13;
-            }
-            if (inputs_vacios14 < nFilas) {
-                filas = nFilas * 14;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14;
-            }
-            if (inputs_vacios15 < nFilas) {
-                filas = nFilas * 15;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14 + inputs_vacios15;
-            }
-            if (inputs_vacios16 < nFilas) {
-                filas = nFilas * 16;
-                total_inputs_vacios = inputs_vacios1 + inputs_vacios2 + inputs_vacios3 + inputs_vacios4 + inputs_vacios5 + inputs_vacios6 + inputs_vacios7 + inputs_vacios8 + inputs_vacios9 + inputs_vacios10 + inputs_vacios11 + inputs_vacios12 + inputs_vacios13 + inputs_vacios14 + inputs_vacios15 + inputs_vacios16;
-            }
-
 
             evaluar_error(inputs_vacios1, 1, nFilas);
             evaluar_error(inputs_vacios2, 2, nFilas);
@@ -439,14 +350,6 @@ $(document).ready(function(){
             evaluar_error(inputs_vacios6, 6, nFilas);
             evaluar_error(inputs_vacios7, 7, nFilas);
             evaluar_error(inputs_vacios8, 8, nFilas);
-            evaluar_error(inputs_vacios9, 9, nFilas);
-            evaluar_error(inputs_vacios10, 10, nFilas);
-            evaluar_error(inputs_vacios11, 11, nFilas);
-            evaluar_error(inputs_vacios12, 12, nFilas);
-            evaluar_error(inputs_vacios13, 13, nFilas);
-            evaluar_error(inputs_vacios14, 14, nFilas);
-            evaluar_error(inputs_vacios15, 15, nFilas);
-            evaluar_error(inputs_vacios16, 16, nFilas);
 
             if (total_inputs_vacios == 0 && total_inputs_vacios < filas) {
                 $(".calificacion").removeClass("error_input");
@@ -502,9 +405,8 @@ $(document).ready(function(){
         return inputs_vacios;
     }
 })');
-?>
 
-<!--
+/*
 if (is_numeric($row['p1']) || $row['p1'] == "NA") {
     $promedio_p = round($p1, 0);
     $r1 = "readonly";
@@ -569,4 +471,4 @@ if (is_numeric($row['p16']) || $row['p16'] == "NA") {
     $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
     $r
 }
--->
+*/
