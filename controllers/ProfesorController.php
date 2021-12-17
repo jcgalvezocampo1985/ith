@@ -766,8 +766,8 @@ class ProfesorController extends Controller
             $idgrupo = Html::encode($_POST["idgrupo"]);
             $idciclo = Html::encode($_POST["idciclo"]);
             $idprofesor = Html::encode($_POST["idprofesor"]);
-            $r = Html::encode($_POST["r"]);
             $ultimo_ciclo = Ciclo::find()->max("idciclo");
+            $r = Html::encode($_POST["r"]);
 
             $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
             $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
@@ -789,16 +789,6 @@ class ProfesorController extends Controller
                 $p7 = Html::encode($_POST["p7"][$i]);
                 $p8 = Html::encode($_POST["p8"][$i]);
                 $p9 = Html::encode($_POST["p9"][$i]);
-
-                /*$s1 = Html::encode($_POST["s1"][$i]);
-                $s2 = Html::encode($_POST["s2"][$i]);
-                $s3 = Html::encode($_POST["s3"][$i]);
-                $s4 = Html::encode($_POST["s4"][$i]);
-                $s5 = Html::encode($_POST["s5"][$i]);
-                $s6 = Html::encode($_POST["s6"][$i]);
-                $s7 = Html::encode($_POST["s7"][$i]);
-                $s8 = Html::encode($_POST["s8"][$i]);
-                $s9 = Html::encode($_POST["s9"][$i]);*/
 
                 $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
 
@@ -835,17 +825,6 @@ class ProfesorController extends Controller
                     $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
                     $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
 
-                    /*$sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : $seguimiento) : "";
-                    $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : $seguimiento) : "";
-                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : $seguimiento) : "";
-                    $sp10 = ($p10 != "") ? (($sp10_sql_total > 0) ? $sp10_sql->sp10 : $seguimiento) : "";
-                    $sp11 = ($p11 != "") ? (($sp11_sql_total > 0) ? $sp11_sql->sp11 : $seguimiento) : "";
-                    $sp12 = ($p12 != "") ? (($sp12_sql_total > 0) ? $sp12_sql->sp12 : $seguimiento) : "";
-                    $sp13 = ($p13 != "") ? (($sp13_sql_total > 0) ? $sp13_sql->sp13 : $seguimiento) : "";
-                    $sp14 = ($p14 != "") ? (($sp14_sql_total > 0) ? $sp14_sql->sp14 : $seguimiento) : "";
-                    $sp15 = ($p15 != "") ? (($sp15_sql_total > 0) ? $sp15_sql->sp15 : $seguimiento) : "";
-                    $sp16 = ($p16 != "") ? (($sp16_sql_total > 0) ? $sp16_sql->sp16 : $seguimiento) : "";*/
-
                     $table->p1 = $p1;
                     $table->p2 = $p2;
                     $table->p3 = $p3;
@@ -867,23 +846,70 @@ class ProfesorController extends Controller
                     $table->sp9 = $sp9;
 
                     $table->update();
-
-                    /*
-                    $table->s1 = $s1;
-                    $table->s2 = $s2;
-                    $table->s3 = $s3;
-                    $table->s4 = $s4;
-                    $table->s5 = $s5;
-                    $table->s6 = $s6;
-                    $table->s7 = $s7;
-                    $table->s8 = $s8;
-                    $table->s9 = $s9;
-                    */
                 }    
             }
 
             header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
             exit;
+        }
+    }
+
+    public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    {
+        if(isset($idgrupo))
+        {
+            $idgrupo = Html::encode($idgrupo);
+            $idprofesor = Html::encode($idprofesor);
+            $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
+            $ultimo_ciclo = Html::encode($ultimo_ciclo);
+
+            $model = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+	                            "estudiantes.sexo",
+	                            "cat_opcion_curso.desc_opcion_curso",
+	                            "grupos_estudiantes.s1",
+	                            "grupos_estudiantes.s2",
+	                            "grupos_estudiantes.s3",
+	                            "grupos_estudiantes.s4",
+	                            "grupos_estudiantes.s5",
+	                            "grupos_estudiantes.s6",
+	                            "grupos_estudiantes.s7",
+	                            "grupos_estudiantes.s8",
+	                            "grupos_estudiantes.s9"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
+
+            $model1 = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                    "cat_materias.desc_materia",
+    	                            "cat_carreras.desc_carrera",
+                                    "grupos.num_semestre",
+                                    "grupos.desc_grupo",
+                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
+                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
+                            ->all();
+
+            return $this->render("listaAlumnosCalificacionRepeticion", ["model" => $model,
+                                                              "model1" => $model1,
+                                                              "idciclo" => $idciclo,
+                                                              "idgrupo" => $idgrupo,
+                                                              "idprofesor" => $idprofesor,
+                                                              "ultimo_ciclo" => $ultimo_ciclo]);
         }
     }
 

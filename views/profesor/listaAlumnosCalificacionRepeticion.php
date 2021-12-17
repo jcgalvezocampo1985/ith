@@ -32,37 +32,14 @@ function promedioTotal(array $parciales)
     return $promedio_p;
 }
 
-function parcial(array $parciales)
-{
-    $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
-    $p = array();
-
-    for($i = 0; $i < count($parciales); $i++)
-    {
-        $parcial = $parciales[$i];
-        if (is_numeric($parcial))
-        {
-            $p = [$parcial];
-        }
-        else
-        {
-            $p = [0];
-        }
-    }
-
-    return $p;
-}
-
 $form = ActiveForm::begin([
     "method" => "post",
     "id" => "formulario",
-    "action" => "guardarcalificacion"
+    "action" => "guardarcalificacionrepeticion"
 ]);
-
-$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 ?>
 <div class="panel panel-primary">
-    <div class="panel-heading">Captura de calificaciones</div>
+    <div class="panel-heading">Captura de calificaciones de regularización</div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-4">
@@ -107,15 +84,15 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             <th>No. Control</th>
                             <th>Nombre</th>
                             <th>Opc.</th>
-                            <th class="text-center">T1</th>
-                            <th class="text-center">T2</th>
-                            <th class="text-center">T3</th>
-                            <th class="text-center">T4</th>
-                            <th class="text-center">T5</th>
-                            <th class="text-center">T6</th>
-                            <th class="text-center">T7</th>
-                            <th class="text-center">T8</th>
-                            <th class="text-center">T9</th>
+                            <th class="text-center">R1</th>
+                            <th class="text-center">R2</th>
+                            <th class="text-center">R3</th>
+                            <th class="text-center">R4</th>
+                            <th class="text-center">R5</th>
+                            <th class="text-center">R6</th>
+                            <th class="text-center">R7</th>
+                            <th class="text-center">R8</th>
+                            <th class="text-center">R9</th>
                             <th class="text-center">Prom.</th>
                         </tr>
                     </thead>
@@ -124,33 +101,8 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                         $i = 1;
                         
                         foreach($model as $row):
-                            $sp1 = $row['sp1'];
-                            $sp2 = $row['sp2'];
-                            $sp3 = $row['sp3'];
-                            $sp4 = $row['sp4'];
-                            $sp5 = $row['sp5'];
-                            $sp6 = $row['sp6'];
-                            $sp7 = $row['sp7'];
-                            $sp8 = $row['sp8'];
-                            $sp9 = $row['sp9'];
-
                             $promedio_p = "";
 
-                            $bloqueo5 = "";
-                            $bloqueo6 = "";
-                            $bloqueo7 = "";
-                            $bloqueo8 = "";
-                            $bloqueo9 = "";
-
-                            $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
-                            $p2 = (!is_numeric($row['p2'])) ? 0 : $row['p2'];
-                            $p3 = (!is_numeric($row['p3'])) ? 0 : $row['p3'];
-                            $p4 = (!is_numeric($row['p4'])) ? 0 : $row['p4'];
-                            $p5 = (!is_numeric($row['p5'])) ? 0 : $row['p5'];
-                            $p6 = (!is_numeric($row['p6'])) ? 0 : $row['p6'];
-                            $p7 = (!is_numeric($row['p7'])) ? 0 : $row['p7'];
-                            $p8 = (!is_numeric($row['p8'])) ? 0 : $row['p8'];
-                            $p9 = (!is_numeric($row['p9'])) ? 0 : $row['p9'];
 
                             $s1 = (!is_numeric($row['s1'])) ? 0 : $row['s1'];
                             $s2 = (!is_numeric($row['s2'])) ? 0 : $row['s2'];
@@ -162,53 +114,21 @@ $readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $
                             $s8 = (!is_numeric($row['s8'])) ? 0 : $row['s8'];
                             $s9 = (!is_numeric($row['s9'])) ? 0 : $row['s9'];
 
-                            $p1 = (is_numeric($row['s1'])) ? $s1 : $p1;
-                            $p2 = (is_numeric($row['s2'])) ? $s2 : $p2;
-                            $p3 = (is_numeric($row['s3'])) ? $s3 : $p3;
-                            $p4 = (is_numeric($row['s4'])) ? $s4 : $p4;
-                            $p5 = (is_numeric($row['s5'])) ? $s5 : $p5;
-                            $p6 = (is_numeric($row['s6'])) ? $s6 : $p6;
-                            $p7 = (is_numeric($row['s7'])) ? $s7 : $p7;
-                            $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
-                            $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
-
-                            $promedio_p = promedioTotal([$row['p1'], $row['p2'], $row['p3'], $row['p4'], $row['p5'], $row['p6'], $row['p7'], $row['p8'], $row['p9']]);
-
-                            /**
-                             * Evalua los seguimientos si estan abiertos o cerrados para captura de calificaciones
-                             */
-                            $readonly1 = ($sp1 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp1 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp1 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp1 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly2 = ($sp2 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp2 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp2 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp2 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly3 = ($sp3 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp3 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp3 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp3 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly4 = ($sp4 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp4 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp4 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp4 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly5 = ($sp5 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp5 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp5 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp5 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly6 = ($sp6 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp6 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp6 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp6 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly7 = ($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly8 = ($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly9 = ($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-
-                            if($ultimo_seguimiento == 4 && $seguimiento4 == 0)
-                            {
-                                $bloqueo5 = ($sp5 == "") ? "readonly" : "";
-                                $bloqueo6 = ($sp6 == "") ? "readonly" : "";
-                                $bloqueo7 = ($sp7 == "") ? "readonly" : "";
-                                $bloqueo8 = ($sp8 == "") ? "readonly" : "";
-                                $bloqueo9 = ($sp9 == "") ? "readonly" : "";
-                            }
+                            $promedio_p = promedioTotal([$row['s1'], $row['s2'], $row['s3'], $row['s4'], $row['s5'], $row['s6'], $row['s7'], $row['s8'], $row['s9']]);
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
                             <td><?= $row['nombre_estudiante'] ?></td>
                             <td class="text-center">C</td>
-                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?= $readonly ?> <?= $readonly1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?= $readonly ?> <?= $readonly2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?= $readonly ?> <?= $readonly3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?= $readonly ?> <?= $readonly4  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo5 ?> type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $readonly ?> <?= $readonly5  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo6 ?> type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $readonly ?> <?= $readonly6  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo7 ?> type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $readonly ?> <?= $readonly7  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo8 ?> type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $readonly ?> <?= $readonly8  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo9 ?> type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $readonly ?> <?= $readonly9  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="s1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s1'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="s2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s2'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="s3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s3'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="s4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s4'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="s5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s5'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="s6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s6'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="s7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s7'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="s8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s8'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="s9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['s9'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
@@ -252,19 +172,7 @@ $this->registerCss('
 ');
 
 $this->registerJs('
-$(document).keyup(function(objEvent) {
-    if (objEvent.keyCode == 9) {  //tab pressed
-        objEvent.preventDefault(); // stops its action
-
-        var id = $(".valor1").attr("id");
-
-        //var hasFocus = $(".valor").is(":focus");
-        var valor = $(".valor1").val();
-    }
-})
-
 $(document).ready(function(){
-    $(".valor2:first").focus();
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");
@@ -279,14 +187,14 @@ $(document).ready(function(){
         let id = id_estudiante.split("-")[0];
         let idestudiante = id_estudiante.split("-")[1];
 
-        if (id != "p1") {
-            let i = (id.split("p")[1]) - 1;
-            let p = $("#p" + i + "-" + idestudiante).val();
+        if (id != "s1") {
+            let i = (id.split("s")[1]) - 1;
+            let s = $("#s" + i + "-" + idestudiante).val();
 
-            if (p == "") {
+            if (s == "") {
                 $("#mensaje_error").stop(true);
                 $("#" + id_estudiante).val("");
-                $("#p1-" + idestudiante).focus();
+                $("#s1-" + idestudiante).focus();
                 $("#alerta").removeClass("alert-success").addClass("alert-danger");
                 $("#mensaje_texto").html("El cuadro de texto correspondiente al <b>C" + i + "</b> del estudiante con <b>No. Control " + idestudiante + "</b> no debe quedar en blanco");
                 $("#mensaje_error").slideDown(1000).delay(5000).slideUp(1000);
@@ -397,9 +305,9 @@ $(document).ready(function(){
                 let calificacion = $("#p" + id + "-" + idestudiante).val();
 
                 if (calificacion == "") {
-                    $("#p" + id + "-" + idestudiante).addClass("error_input");
+                    $("#s" + id + "-" + idestudiante).addClass("error_input");
                 } else {
-                    $("#p" + id + "-" + idestudiante).removeClass("error_input");
+                    $("#s" + id + "-" + idestudiante).removeClass("error_input");
                 }
             }
         } else if (inputs_vacios == 0) {

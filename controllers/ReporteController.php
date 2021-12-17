@@ -587,8 +587,6 @@ class ReporteController extends Controller
 
     public function actionHorarioprofesor()
     {
-        //$idprofesor = Html::encode($_REQUEST['idprofesor']);
-        //$idciclo = Html::encode($_REQUEST['idciclo']);
         $idprofesor = 25;
         $idciclo = 1;
 
@@ -846,14 +844,12 @@ class ReporteController extends Controller
                             ->select([
                                 "estudiantes.idestudiante",
     	                        "estudiantes.nombre_estudiante",
-                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3", "grupos_estudiantes.p4",
-	                            "grupos_estudiantes.p5", "grupos_estudiantes.p6", "grupos_estudiantes.p7", "grupos_estudiantes.p8",
-	                            "grupos_estudiantes.p9", "grupos_estudiantes.p10", "grupos_estudiantes.p11","grupos_estudiantes.p12",
-                                "grupos_estudiantes.p13", "grupos_estudiantes.p14", "grupos_estudiantes.p15", "grupos_estudiantes.p16",
-                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3", "grupos_estudiantes.s4",
-                                "grupos_estudiantes.s5", "grupos_estudiantes.s6", "grupos_estudiantes.s7", "grupos_estudiantes.s8",
-                                "grupos_estudiantes.s9", "grupos_estudiantes.s10", "grupos_estudiantes.s11", "grupos_estudiantes.s12",
-                                "grupos_estudiantes.s13", "grupos_estudiantes.s14", "grupos_estudiantes.s15", "grupos_estudiantes.s16"
+                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3",
+                                "grupos_estudiantes.p4", "grupos_estudiantes.p5", "grupos_estudiantes.p6",
+                                "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
+                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
+                                "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -863,29 +859,6 @@ class ReporteController extends Controller
                             ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
                             ->all();
 
-        $total_calificaciones = (new \yii\db\Query())
-                                    ->select([
-                                        "COUNT(grupos_estudiantes.p1) AS p1_total",
-	                                    "COUNT(grupos_estudiantes.p2) AS p2_total",
-	                                    "COUNT(grupos_estudiantes.p3) AS p3_total",
-	                                    "COUNT(grupos_estudiantes.p4) AS p4_total",
-	                                    "COUNT(grupos_estudiantes.p5) AS p5_total",
-	                                    "COUNT(grupos_estudiantes.p6) AS p6_total",
-	                                    "COUNT(grupos_estudiantes.p7) AS p7_total",
-	                                    "COUNT(grupos_estudiantes.p8) AS p8_total",
-	                                    "COUNT(grupos_estudiantes.p9) AS p9_total",
-                                        "COUNT(grupos_estudiantes.p10) AS p10_total",
-                                        "COUNT(grupos_estudiantes.p11) AS p11_total",
-                                        "COUNT(grupos_estudiantes.p12) AS p12_total",
-                                        "COUNT(grupos_estudiantes.p13) AS p13_total",
-                                        "COUNT(grupos_estudiantes.p14) AS p14_total",
-                                        "COUNT(grupos_estudiantes.p15) AS p15_total",
-                                        "COUNT(grupos_estudiantes.p16) AS p16_total"
-                                    ])
-                                    ->from(["grupos_estudiantes"])
-                                    ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                                    ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                                    ->one();
 
         $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
         $fecha = date('Y-m-d');
@@ -928,56 +901,35 @@ class ReporteController extends Controller
         $y_encabezado = 77;
         $columnas = 0;
 
-        if ($total_calificaciones['p16_total'] > 0) {
-            $x_encabezado = 20;
-            $columnas = 16;
-        } else if ($total_calificaciones['p15_total'] > 0) {
-            $x_encabezado = 25;
-            $columnas = 15;
-        } else if ($total_calificaciones['p14_total'] > 0) {
-            $x_encabezado = 30;
-            $columnas = 14;
-        } else if ($total_calificaciones['p13_total'] > 0) {
-            $x_encabezado = 35;
-            $columnas = 13;
-        } else if ($total_calificaciones['p12_total'] > 0) {
-            $x_encabezado = 40;
-            $columnas = 12;
-        } else if ($total_calificaciones['p11_total'] > 0) {
+        if ($cuerpo[0]['p9'] > 0) {
             $x_encabezado = 45;
-            $columnas = 11;
-        } else if ($total_calificaciones['p10_total'] > 0) {
-            $x_encabezado = 50;
-            $columnas = 10;
-        } else if ($total_calificaciones['p9_total'] > 0) {
-            $x_encabezado = 55;
             $columnas = 9;
-        } else if ($total_calificaciones['p8_total'] > 0) {
-            $x_encabezado = 60;
+        } else if ($cuerpo[0]['p8'] > 0) {
+            $x_encabezado = 50;
             $columnas = 8;
-        } else if ($total_calificaciones['p7_total'] > 0) {
-            $x_encabezado = 65;
+        } else if ($cuerpo[0]['p7'] > 0) {
+            $x_encabezado = 55;
             $columnas = 7;
-        } else if ($total_calificaciones['p6_total'] > 0) {
-            $x_encabezado = 70;
+        } else if ($cuerpo[0]['p6'] > 0) {
+            $x_encabezado = 60;
             $columnas = 6;
-        } else if ($total_calificaciones['p5_total'] > 0) {
-            $x_encabezado = 75;
+        } else if ($cuerpo[0]['p5'] > 0) {
+            $x_encabezado = 65;
             $columnas = 5;
-        } else if ($total_calificaciones['p4_total'] > 0) {
-            $x_encabezado = 80;
+        } else if ($cuerpo[0]['p4'] > 0) {
+            $x_encabezado = 70;
             $columnas = 4;
-        } else if ($total_calificaciones['p3_total'] > 0) {
-            $x_encabezado = 85;
+        } else if ($cuerpo[0]['p3'] > 0) {
+            $x_encabezado = 75;
             $columnas = 3;
-        } else if ($total_calificaciones['p2_total'] > 0) {
-            $x_encabezado = 90;
+        } else if ($cuerpo[0]['p2'] > 0) {
+            $x_encabezado = 80;
             $columnas = 2;
-        } else if ($total_calificaciones['p1_total'] > 0) {
-            $x_encabezado = 95;
+        } else if ($cuerpo[0]['p1'] > 0) {
+            $x_encabezado = 85;
             $columnas = 1;
         } else {
-            $x_encabezado = 100;
+            $x_encabezado = 90;
         }
 
         $this->generarEncabezado($pdf, $x_encabezado, $y_encabezado, $columnas);
@@ -1004,34 +956,20 @@ class ReporteController extends Controller
             $p7 = $row['p7'];
             $p8 = $row['p8'];
             $p9 = $row['p9'];
-            $p10 = $row['p10'];
-            $p11 = $row['p11'];
-            $p12 = $row['p12'];
-            $p13 = $row['p13'];
-            $p14 = $row['p14'];
-            $p15 = $row['p15'];
-            $p16 = $row['p16'];
 
             $pdf->SetX($x_encabezado);
             $pdf->Cell(8, 5, $numero, 1, 0, 'C');
             $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
             $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
-            ($total_calificaciones['p1_total'] > 0) ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
-            ($total_calificaciones['p2_total'] > 0) ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
-            ($total_calificaciones['p3_total'] > 0) ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
-            ($total_calificaciones['p4_total'] > 0) ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
-            ($total_calificaciones['p5_total'] > 0) ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
-            ($total_calificaciones['p6_total'] > 0) ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
-            ($total_calificaciones['p7_total'] > 0) ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
-            ($total_calificaciones['p8_total'] > 0) ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
-            ($total_calificaciones['p9_total'] > 0) ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
-            ($total_calificaciones['p10_total'] > 0) ? $pdf->Cell(8, 5, $p10, 1, 0, 'C') : "";
-            ($total_calificaciones['p11_total'] > 0) ? $pdf->Cell(8, 5, $p11, 1, 0, 'C') : "";
-            ($total_calificaciones['p12_total'] > 0) ? $pdf->Cell(8, 5, $p12, 1, 0, 'C') : "";
-            ($total_calificaciones['p13_total'] > 0) ? $pdf->Cell(8, 5, $p13, 1, 0, 'C') : "";
-            ($total_calificaciones['p14_total'] > 0) ? $pdf->Cell(8, 5, $p14, 1, 0, 'C') : "";
-            ($total_calificaciones['p15_total'] > 0) ? $pdf->Cell(8, 5, $p15, 1, 0, 'C') : "";
-            ($total_calificaciones['p16_total'] > 0) ? $pdf->Cell(8, 5, $p16, 1, 0, 'C') : "";
+            ($p1 > 0) ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+            ($p2 > 0) ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+            ($p3 > 0) ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+            ($p4 > 0) ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+            ($p5 > 0) ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+            ($p6 > 0) ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+            ($p7 > 0) ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+            ($p8 > 0) ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+            ($p9 > 0) ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
             $pdf->Ln();
             $numero = $numero + 1;
         }
@@ -1245,13 +1183,6 @@ class ReporteController extends Controller
             $p7 = $row['p7'];
             $p8 = $row['p8'];
             $p9 = $row['p9'];
-            $p10 = $row['p10'];
-            $p11 = $row['p11'];
-            $p12 = $row['p12'];
-            $p13 = $row['p13'];
-            $p14 = $row['p14'];
-            $p15 = $row['p15'];
-            $p16 = $row['p16'];
 
             $pdf->SetX($x_encabezado);
             $pdf->Cell(8, 5, $numero, 1, 0, 'C');
@@ -1266,18 +1197,11 @@ class ReporteController extends Controller
             ($total_calificaciones['p7_total'] > 0) ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
             ($total_calificaciones['p8_total'] > 0) ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
             ($total_calificaciones['p9_total'] > 0) ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
-            ($total_calificaciones['p10_total'] > 0) ? $pdf->Cell(8, 5, $p10, 1, 0, 'C') : "";
-            ($total_calificaciones['p11_total'] > 0) ? $pdf->Cell(8, 5, $p11, 1, 0, 'C') : "";
-            ($total_calificaciones['p12_total'] > 0) ? $pdf->Cell(8, 5, $p12, 1, 0, 'C') : "";
-            ($total_calificaciones['p13_total'] > 0) ? $pdf->Cell(8, 5, $p13, 1, 0, 'C') : "";
-            ($total_calificaciones['p14_total'] > 0) ? $pdf->Cell(8, 5, $p14, 1, 0, 'C') : "";
-            ($total_calificaciones['p15_total'] > 0) ? $pdf->Cell(8, 5, $p15, 1, 0, 'C') : "";
-            ($total_calificaciones['p16_total'] > 0) ? $pdf->Cell(8, 5, $p16, 1, 0, 'C') : "";
             $pdf->Ln();
             $numero = $numero + 1;
         }
 
-        $pdf->Output('D', utf8_decode($encabezado[0]['desc_grupo'])."_".$periodo.'.pdf');
+        $pdf->Output('I', utf8_decode($encabezado[0]['desc_grupo'])."_".$periodo.'.pdf');
     }
 
     public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
@@ -1329,14 +1253,12 @@ class ReporteController extends Controller
                                 "estudiantes.idestudiante",
     	                        "estudiantes.nombre_estudiante",
                                 "cat_materias.desc_materia",
-                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3", "grupos_estudiantes.p4",
-	                            "grupos_estudiantes.p5", "grupos_estudiantes.p6", "grupos_estudiantes.p7", "grupos_estudiantes.p8",
-	                            "grupos_estudiantes.p9", "grupos_estudiantes.p10", "grupos_estudiantes.p11","grupos_estudiantes.p12",
-                                "grupos_estudiantes.p13", "grupos_estudiantes.p14", "grupos_estudiantes.p15", "grupos_estudiantes.p16",
-                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3", "grupos_estudiantes.s4",
-                                "grupos_estudiantes.s5", "grupos_estudiantes.s6", "grupos_estudiantes.s7", "grupos_estudiantes.s8",
-                                "grupos_estudiantes.s9", "grupos_estudiantes.s10", "grupos_estudiantes.s11", "grupos_estudiantes.s12",
-                                "grupos_estudiantes.s13", "grupos_estudiantes.s14", "grupos_estudiantes.s15", "grupos_estudiantes.s16"
+                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3",
+                                "grupos_estudiantes.p4", "grupos_estudiantes.p5", "grupos_estudiantes.p6",
+                                "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
+                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
+                                "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -1345,7 +1267,7 @@ class ReporteController extends Controller
                             ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
                             ->all();
 
-            $total_calificaciones = (new \yii\db\Query())
+           /*$total_calificaciones = (new \yii\db\Query())
                                     ->select([
                                         "COUNT(grupos_estudiantes.p1) AS p1_total",
 	                                    "COUNT(grupos_estudiantes.p2) AS p2_total",
@@ -1355,20 +1277,13 @@ class ReporteController extends Controller
 	                                    "COUNT(grupos_estudiantes.p6) AS p6_total",
 	                                    "COUNT(grupos_estudiantes.p7) AS p7_total",
 	                                    "COUNT(grupos_estudiantes.p8) AS p8_total",
-	                                    "COUNT(grupos_estudiantes.p9) AS p9_total",
-                                        "COUNT(grupos_estudiantes.p10) AS p10_total",
-                                        "COUNT(grupos_estudiantes.p11) AS p11_total",
-                                        "COUNT(grupos_estudiantes.p12) AS p12_total",
-                                        "COUNT(grupos_estudiantes.p13) AS p13_total",
-                                        "COUNT(grupos_estudiantes.p14) AS p14_total",
-                                        "COUNT(grupos_estudiantes.p15) AS p15_total",
-                                        "COUNT(grupos_estudiantes.p16) AS p16_total"
+	                                    "COUNT(grupos_estudiantes.p9) AS p9_total"
                                     ])
                                     ->from(["grupos_estudiantes"])
                                     ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
                                     ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                                    ->one();
-                                    
+                                    ->one();*/
+
             $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
             $fecha = date('Y-m-d');
             $carrera = $encabezado[0]['desc_carrera'];
@@ -1402,60 +1317,39 @@ class ReporteController extends Controller
             $pdf->Text(230, 60, 'FECHA:');
             $pdf->Text(245, 60, $fecha);
 
-            $x_encabezado = 100;
+            $x_encabezado = 90;
             $y_encabezado = 77;
             $columnas = 0;
 
-            if ($total_calificaciones['p16_total'] > 0) {
-                $x_encabezado = 20;
-                $columnas = 16;
-            } else if ($total_calificaciones['p15_total'] > 0) {
-                $x_encabezado = 25;
-                $columnas = 15;
-            } else if ($total_calificaciones['p14_total'] > 0) {
-                $x_encabezado = 30;
-                $columnas = 14;
-            } else if ($total_calificaciones['p13_total'] > 0) {
-                $x_encabezado = 35;
-                $columnas = 13;
-            } else if ($total_calificaciones['p12_total'] > 0) {
-                $x_encabezado = 40;
-                $columnas = 12;
-             } else if ($total_calificaciones['p11_total'] > 0) {
+            if ($cuerpo[0]['p9'] > 0) {
                 $x_encabezado = 45;
-                $columnas = 11;
-            } else if ($total_calificaciones['p10_total'] > 0) {
-                $x_encabezado = 50;
-                $columnas = 10;
-            } else if ($total_calificaciones['p9_total'] > 0) {
-                $x_encabezado = 55;
                 $columnas = 9;
-            } else if ($total_calificaciones['p8_total'] > 0) {
-                $x_encabezado = 60;
+            } else if ($cuerpo[0]['p8'] > 0) {
+                $x_encabezado = 50;
                 $columnas = 8;
-            } else if ($total_calificaciones['p7_total'] > 0) {
-                $x_encabezado = 65;
+            } else if ($cuerpo[0]['p7'] > 0) {
+                $x_encabezado = 55;
                 $columnas = 7;
-            } else if ($total_calificaciones['p6_total'] > 0) {
-                $x_encabezado = 70;
+            } else if ($cuerpo[0]['p6'] > 0) {
+                $x_encabezado = 60;
                 $columnas = 6;
-            } else if ($total_calificaciones['p5_total'] > 0) {
-                $x_encabezado = 75;
+            } else if ($cuerpo[0]['p5'] > 0) {
+                $x_encabezado = 65;
                 $columnas = 5;
-            } else if ($total_calificaciones['p4_total'] > 0) {
-                $x_encabezado = 80;
+            } else if ($cuerpo[0]['p4'] > 0) {
+                $x_encabezado = 70;
                 $columnas = 4;
-            } else if ($total_calificaciones['p3_total'] > 0) {
-                $x_encabezado = 85;
+            } else if ($cuerpo[0]['p3'] > 0) {
+                $x_encabezado = 75;
                 $columnas = 3;
-            } else if ($total_calificaciones['p2_total'] > 0) {
-                $x_encabezado = 90;
+            } else if ($cuerpo[0]['p2'] > 0) {
+                $x_encabezado = 80;
                 $columnas = 2;
-            } else if ($total_calificaciones['p1_total'] > 0) {
-                $x_encabezado = 95;
+            } else if ($cuerpo[0]['p1'] > 0) {
+                $x_encabezado = 85;
                 $columnas = 1;
             } else {
-                $x_encabezado = 100;
+                $x_encabezado = 90;
             }
 
             $this->generarEncabezado($pdf, $x_encabezado, $y_encabezado, $columnas);
@@ -1480,39 +1374,25 @@ class ReporteController extends Controller
                 $p7 = $row['p7'];
                 $p8 = $row['p8'];
                 $p9 = $row['p9'];
-                $p10 = $row['p10'];
-                $p11 = $row['p11'];
-                $p12 = $row['p12'];
-                $p13 = $row['p13'];
-                $p14 = $row['p14'];
-                $p15 = $row['p15'];
-                $p16 = $row['p16'];
 
                 $pdf->SetX($x_encabezado);
                 $pdf->Cell(8, 5, $numero, 1, 0, 'C');
                 $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
                 $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
-                ($total_calificaciones['p1_total'] > 0) ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
-                ($total_calificaciones['p2_total'] > 0) ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
-                ($total_calificaciones['p3_total'] > 0) ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
-                ($total_calificaciones['p4_total'] > 0) ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
-                ($total_calificaciones['p5_total'] > 0) ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
-                ($total_calificaciones['p6_total'] > 0) ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
-                ($total_calificaciones['p7_total'] > 0) ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
-                ($total_calificaciones['p8_total'] > 0) ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
-                ($total_calificaciones['p9_total'] > 0) ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
-                ($total_calificaciones['p10_total'] > 0) ? $pdf->Cell(8, 5, $p10, 1, 0, 'C') : "";
-                ($total_calificaciones['p11_total'] > 0) ? $pdf->Cell(8, 5, $p11, 1, 0, 'C') : "";
-                ($total_calificaciones['p12_total'] > 0) ? $pdf->Cell(8, 5, $p12, 1, 0, 'C') : "";
-                ($total_calificaciones['p13_total'] > 0) ? $pdf->Cell(8, 5, $p13, 1, 0, 'C') : "";
-                ($total_calificaciones['p14_total'] > 0) ? $pdf->Cell(8, 5, $p14, 1, 0, 'C') : "";
-                ($total_calificaciones['p15_total'] > 0) ? $pdf->Cell(8, 5, $p15, 1, 0, 'C') : "";
-                ($total_calificaciones['p16_total'] > 0) ? $pdf->Cell(8, 5, $p16, 1, 0, 'C') : "";
+                ($p1 > 0) ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+                ($p2 > 0) ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+                ($p3 > 0) ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+                ($p4 > 0) ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+                ($p5 > 0) ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+                ($p6 > 0) ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+                ($p7 > 0) ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+                ($p8 > 0) ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+                ($p9 > 0) ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
                 $pdf->Ln();
                 $numero = $numero + 1;
             }
         }
-        $pdf->Output('I', "Calificaciones ".utf8_decode($periodo).'.pdf');
+        $pdf->Output('D', "Calificaciones ".utf8_decode($periodo).'.pdf');
     }
 
     private function generarEncabezado($pdf, $x, $y, $columnas)
