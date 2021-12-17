@@ -63,6 +63,7 @@ if(!Yii::$app->user->isGuest){
                 [
                     ['label' => 'Profesores', 'url' => ['/profesor/index']],
                     ['label' => 'Estudiantes', 'url' => ['/estudiante/index']],
+                    ['label' => 'Seguimientos', 'url' => ['/profesor/seguimientos']],
                     ['label' => 'Carreras', 'url' => ['/carrera/index']],
                     ['label' => 'Materias', 'url' => ['/materia/index']],
                     ['label' => 'Opc. Curso', 'url' => ['/opcioncurso/index']],

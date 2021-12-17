@@ -11,6 +11,7 @@ $total_seguimientos1 = ($ts1 == 1) ? "checked" : "";
 $total_seguimientos2 = ($ts2 == 1) ? "checked" : "";
 $total_seguimientos3 = ($ts3 == 1) ? "checked" : "";
 $total_seguimientos4 = ($ts4 == 1) ? "checked" : "";
+$regularizacion = ($regular == 1) ? "checked" : "";
 ?>
 <?= Yii::$app->view->renderFile('@app/views/errors/error.php', ["msg" => $msg, "error" => $error]) ?>
 <div class="panel panel-primary">
@@ -40,6 +41,7 @@ $total_seguimientos4 = ($ts4 == 1) ? "checked" : "";
                             <th class="text-center"><input type="checkbox" name="seguimientos2" id="seguimientos2" <?= $total_seguimientos2 ?> />Seguimiento 2</th>
                             <th class="text-center"><input type="checkbox" name="seguimientos3" id="seguimientos3" <?= $total_seguimientos3 ?> />Seguimiento 3</th>
                             <th class="text-center"><input type="checkbox" name="seguimientos4" id="seguimientos4" <?= $total_seguimientos4 ?> />Seguimiento 4</th>
+                            <th class="text-center"><input type="checkbox" name="seguimientos5" id="seguimientos5" <?= $regularizacion ?> />Regularización</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,6 +51,7 @@ $total_seguimientos4 = ($ts4 == 1) ? "checked" : "";
                             $s2 = $row['seguimiento2'] == 1 ? "checked" : "";
                             $s3 = $row['seguimiento3'] == 1 ? "checked" : "";
                             $s4 = $row['seguimiento4'] == 1 ? "checked" : "";
+                            $s5 = $row['seguimiento5'] == 1 ? "checked" : "";
                         ?>
                         <tr>
                             <td><?= $row['apaterno']." ".$row['amaterno']." ".$row['nombre_profesor'] ?></td>
@@ -64,6 +67,9 @@ $total_seguimientos4 = ($ts4 == 1) ? "checked" : "";
                             <td class="text-center">
                                 <input type="checkbox" name="seguimiento4" id="seguimiento4" class="seguimiento4" value="<?= $row['idprofesor'] ?>" <?= $s4 ?>>
                             </td>
+                            <td class="text-center">
+                                <input type="checkbox" name="seguimiento5" id="seguimiento5" class="seguimiento5" value="<?= $row['idprofesor'] ?>" <?= $s5 ?>>
+                            </td>
                         </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -78,7 +84,7 @@ $total_seguimientos4 = ($ts4 == 1) ? "checked" : "";
 <?php
 $this->registerJs('
 $(document).ready(function(){
-    $(".seguimiento1, .seguimiento2, .seguimiento3, .seguimiento4").on("click", function() {
+    $(".seguimiento1, .seguimiento2, .seguimiento3, .seguimiento4, .seguimiento5").on("click", function() {
         let idprofesor = $(this).val();
         let clase = $(this).attr("class");
         let bandera = "0";
@@ -90,6 +96,8 @@ $(document).ready(function(){
             seguimiento = "3";
         }else if(clase === "seguimiento4"){
             seguimiento = "4";
+        }else if(clase === "seguimiento5"){
+            seguimiento = "5";
         }
 
         if($(this).is(":checked")){
@@ -107,7 +115,7 @@ $(document).ready(function(){
         });
     });
 
-    $("#seguimientos1, #seguimientos2, #seguimientos3, #seguimientos4").on("click", function(){
+    $("#seguimientos1, #seguimientos2, #seguimientos3, #seguimientos4, #seguimientos5").on("click", function(){
         let id = $(this).attr("id");
         let bandera = "0";
         let seguimiento = "1";
@@ -138,6 +146,13 @@ $(document).ready(function(){
             $(".seguimiento4").attr("checked", false);
             if($(this).is(":checked")){
                 $(".seguimiento4").attr("checked", true);
+                bandera = "1";
+            }
+        }else if(id === "seguimientos5"){
+            seguimiento = "5";
+            $(".seguimiento5").attr("checked", false);
+            if($(this).is(":checked")){
+                $(".seguimiento5").attr("checked", true);
                 bandera = "1";
             }
         }

@@ -22,6 +22,9 @@ function promedioTotal(array $parciales)
         $parcial = $parciales[$i];
         if (is_numeric($parcial) || $parcial == "NA")
         {
+            if($parcial == "NA"){
+                $parcial = 0;
+            }
             $suma_calificaciones = $suma_calificaciones + $parcial;
             $total_parciales = $total_parciales + 1;
         }
@@ -30,27 +33,6 @@ function promedioTotal(array $parciales)
     $promedio_p = ($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "";
 
     return $promedio_p;
-}
-
-function parcial(array $parciales)
-{
-    $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
-    $p = array();
-
-    for($i = 0; $i < count($parciales); $i++)
-    {
-        $parcial = $parciales[$i];
-        if (is_numeric($parcial))
-        {
-            $p = [$parcial];
-        }
-        else
-        {
-            $p = [0];
-        }
-    }
-
-    return $p;
 }
 
 $form = ActiveForm::begin([

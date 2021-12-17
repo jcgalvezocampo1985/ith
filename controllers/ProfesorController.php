@@ -666,8 +666,18 @@ class ProfesorController extends Controller
         }
 
         $ultimo_ciclo = Ciclo::find()->max("idciclo");
+        $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
-        return $this->render("horarioconsulta", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "ciclo_actual" => $ciclo, "idprofesor" => $idprofesor, "profesores" => $profesores, "ultimo_ciclo" => $ultimo_ciclo]);
+        return $this->render("horarioconsulta", ["model" => $model,
+                                                "form" => $form,
+                                                "ciclos" => $ciclos,
+                                                "idciclo" => $idciclo,
+                                                "ciclo_actual" => $ciclo,
+                                                "idprofesor" => $idprofesor,
+                                                "profesores" => $profesores,
+                                                "ultimo_ciclo" => $ultimo_ciclo,
+                                                "regularizacion_status" => $regularizacion_status
+                                            ]);
     }
 
     public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
@@ -742,8 +752,9 @@ class ProfesorController extends Controller
             $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
             $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
             $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
+            $regular = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
-            $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor])->max("seguimiento");
+            $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => "<5"])->max("seguimiento");
 
             return $this->render("listaAlumnosCalificacion", ["model" => $model,
                                                               "model1" => $model1,
@@ -845,6 +856,16 @@ class ProfesorController extends Controller
                     $table->sp8 = $sp8;
                     $table->sp9 = $sp9;
 
+                    $table->s1 = ($p1 == "NA") ? $p1 : "";
+                    $table->s2 = ($p2 == "NA") ? $p2 : "";
+                    $table->s3 = ($p3 == "NA") ? $p3 : "";
+                    $table->s4 = ($p4 == "NA") ? $p4 : "";
+                    $table->s5 = ($p5 == "NA") ? $p5 : "";
+                    $table->s6 = ($p6 == "NA") ? $p6 : "";
+                    $table->s7 = ($p7 == "NA") ? $p7 : "";
+                    $table->s8 = ($p8 == "NA") ? $p8 : "";
+                    $table->s9 = ($p9 == "NA") ? $p9 : "";
+
                     $table->update();
                 }    
             }
@@ -862,6 +883,7 @@ class ProfesorController extends Controller
             $idprofesor = Html::encode($idprofesor);
             $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
             $ultimo_ciclo = Html::encode($ultimo_ciclo);
+            $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
             $model = (new \yii\db\Query())
                             ->from(["estudiantes"])
@@ -870,6 +892,15 @@ class ProfesorController extends Controller
     	                        "estudiantes.nombre_estudiante",
 	                            "estudiantes.sexo",
 	                            "cat_opcion_curso.desc_opcion_curso",
+                                "grupos_estudiantes.p1",
+	                            "grupos_estudiantes.p2",
+	                            "grupos_estudiantes.p3",
+	                            "grupos_estudiantes.p4",
+	                            "grupos_estudiantes.p5",
+	                            "grupos_estudiantes.p6",
+	                            "grupos_estudiantes.p7",
+	                            "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p9",
 	                            "grupos_estudiantes.s1",
 	                            "grupos_estudiantes.s2",
 	                            "grupos_estudiantes.s3",
@@ -909,7 +940,62 @@ class ProfesorController extends Controller
                                                               "idciclo" => $idciclo,
                                                               "idgrupo" => $idgrupo,
                                                               "idprofesor" => $idprofesor,
-                                                              "ultimo_ciclo" => $ultimo_ciclo]);
+                                                              "ultimo_ciclo" => $ultimo_ciclo,
+                                                              "regularizacion_status" => $regularizacion_status
+                                                            ]);
+        }
+    }
+
+    public function actionGuardarcalificacionregularizacion()
+    {
+        if(Yii::$app->request->post())
+        {
+            $idgrupo = Html::encode($_POST["idgrupo"]);
+            $idciclo = Html::encode($_POST["idciclo"]);
+            $idprofesor = Html::encode($_POST["idprofesor"]);
+            $ultimo_ciclo = Ciclo::find()->max("idciclo");
+            $r = Html::encode($_POST["r"]);
+
+            $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
+
+            if($regularizacion_status == 1)
+            {
+                $total = count($_POST["s1"]);
+
+                for($i = 0; $i < $total; $i++)
+                {
+                    $idestudiante = Html::encode($_POST["idestudiante"][$i]);
+
+                    $s1 = Html::encode($_POST["s1"][$i]);
+                    $s2 = Html::encode($_POST["s2"][$i]);
+                    $s3 = Html::encode($_POST["s3"][$i]);
+                    $s4 = Html::encode($_POST["s4"][$i]);
+                    $s5 = Html::encode($_POST["s5"][$i]);
+                    $s6 = Html::encode($_POST["s6"][$i]);
+                    $s7 = Html::encode($_POST["s7"][$i]);
+                    $s8 = Html::encode($_POST["s8"][$i]);
+                    $s9 = Html::encode($_POST["s9"][$i]);
+
+                    $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
+
+                    if($table)
+                    {
+
+                        $table->s1 = $s1;
+                        $table->s2 = $s2;
+                        $table->s3 = $s3;
+                        $table->s4 = $s4;
+                        $table->s5 = $s5;
+                        $table->s6 = $s6;
+                        $table->s7 = $s7;
+                        $table->s8 = $s8;
+                        $table->s9 = $s9;
+                        $table->update();
+                    }    
+                }
+            }
+            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacionregularizacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
+            exit;
         }
     }
 
@@ -974,11 +1060,6 @@ class ProfesorController extends Controller
         echo $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
     }
 
-    public function actionTabs()
-    {
-        return $this->render("tabs");
-    }
-
     public function actionSeguimientos()
     {
         $form = new ProfesorSearch;
@@ -991,11 +1072,13 @@ class ProfesorController extends Controller
         $total_seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 2, "bandera" => 1])->count();
         $total_seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 3, "bandera" => 1])->count();
         $total_seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 4, "bandera" => 1])->count();
+        $total_seguimiento5 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 5, "bandera" => 1])->count();
 
         $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
         $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;
         $ts3 = ($total_seguimiento3 == $total_profesores) ? 1 : 0;
         $ts4 = ($total_seguimiento4 == $total_profesores) ? 1 : 0;
+        $regular = ($total_seguimiento5 == $total_profesores) ? 1 : 0;
 
         if($form->load(Yii::$app->request->get()))
         {
@@ -1011,7 +1094,8 @@ class ProfesorController extends Controller
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4"])
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
                             ->where(["like", "curp", $search])
                             ->orWhere(["like", "nombre_profesor", $search])
                             ->orWhere(["like", "apaterno", $search])
@@ -1035,7 +1119,8 @@ class ProfesorController extends Controller
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
                                        "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4"])
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
+                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
                             ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
         }
 
@@ -1061,7 +1146,9 @@ class ProfesorController extends Controller
                                               "ts1" => $ts1,
                                               "ts2" => $ts2,
                                               "ts3" => $ts3,
-                                              "ts4" => $ts4]);
+                                              "ts4" => $ts4,
+                                              "regular" => $regular
+                                            ]);
     }
 
     public function actionAsignarseguimiento()

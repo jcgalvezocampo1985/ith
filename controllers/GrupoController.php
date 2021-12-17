@@ -461,6 +461,9 @@ class GrupoController extends Controller
 
     public function actionGrupoalumnos()
     {
-        return $this->render("grupo_alumnos", []);
+        $idciclo = Ciclo::find()->max("idciclo");
+        $ciclo_actual = Ciclo::find()->select("desc_ciclo")->where(["idciclo" => $idciclo])->one();
+
+        return $this->render("grupo_alumnos",["ciclo_actual" => $ciclo_actual['desc_ciclo']]);
     }
 }

@@ -29,7 +29,7 @@ class GrupoForm extends model
         return [
             [["idciclo", "idcarrera", "idmateria", "idprofesor", "desc_grupo_corto", "desc_grupo", "aula"], "required", "message" => "Requerido"],
             [["num_semestre"], "integer", "message" => "Solo números"],
-            [["desc_grupo_corto", "desc_grupo", "aula"], "match", "pattern" => "/^.[a-zA-ZáéíóúÁÉÍÓÚ.\s]+$/i", "message" => "Solo letras"],
+            [["desc_grupo_corto", "desc_grupo", "aula"], "match", "pattern" => "/^.[0-9a-zA-ZáéíóúÁÉÍÓÚ.\s]+$/i", "message" => "Solo letras"],
             ["num_semestre", "string", "min" => 1, "max" => 2, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 2 caracteres"],
             ["desc_grupo_corto", "string", "min" => 1, "max" => 10, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 10 caracteres"],
             ["desc_grupo", "string", "min" => 2, "max" => 45, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 45 caracteres"],
