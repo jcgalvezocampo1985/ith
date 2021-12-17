@@ -33,11 +33,31 @@ class EstudianteController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones se van proteger
+                    'only' => ['index',
+                               'create',
+                               'update',
+                               'delete',
+                               'boletacalificacion',
+                               'horarioalumnos',
+                               'horariomodificar',
+                               'deletehorarioestudiante',
+                               'horarioagregar',
+                               'agregarmateria',
+                    ],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'create', 'update', 'delete', 'horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index',
+                                          'create',
+                                          'update',
+                                          'delete',
+                                          'boletacalificacion',
+                                          'horarioalumnos',
+                                          'horariomodificar',
+                                          'deletehorarioestudiante',
+                                          'horarioagregar',
+                                          'agregarmateria'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -51,8 +71,18 @@ class EstudianteController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => [''],//Especificar que acciones tiene permitidas este usuario
+                            //Servicios escolares tiene permisos sobre las siguientes acciones
+                            'actions' => ['index',
+                                          'create',
+                                          'update',
+                                          'delete',
+                                          'boletacalificacion',
+                                          'horarioalumnos',
+                                          'horariomodificar',
+                                          'deletehorarioestudiante',
+                                          'horarioagregar',
+                                          'agregarmateria'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -66,7 +96,7 @@ class EstudianteController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
+                            //El profesor tiene permisos sobre las siguientes acciones
                             'actions' => [''],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
@@ -81,8 +111,18 @@ class EstudianteController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['horariomodificar', 'deletehorarioestudiante', 'horarioagregar', 'agregarmateria'],//Especificar que acciones tiene permitidas este usuario
+                            //División de estudios tiene permisos sobre las siguientes acciones
+                            'actions' => ['index',
+                                          'create',
+                                          'update',
+                                          'delete',
+                                          'boletacalificacion',
+                                          'horarioalumnos',
+                                          'horariomodificar',
+                                          'deletehorarioestudiante',
+                                          'horarioagregar',
+                                          'agregarmateria'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -720,7 +760,7 @@ class EstudianteController extends Controller
         return $status;
     }
 
-    public function actionGrid()
+    /*public function actionGrid()
     {
         $this->layout = 'main2';
 
@@ -732,5 +772,5 @@ class EstudianteController extends Controller
             "dataProvider" => $dataProvider
         ]);
         
-    }
+    }*/
 }

@@ -34,11 +34,43 @@ class ProfesorController extends Controller
         return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones se van proteger
+                    'only' => ['index', 
+                               'create',
+                               'update',
+                               'delete',
+                               'horario',
+                               'listaalumnos',
+                               'horarioconsulta',
+                               'listaalumnoscalificacion',
+                               'guardarcalificacion',
+                               'listaalumnoscalificacionregularizacion',
+                               'guardarcalificacionregularizacion',
+                               'horarioprofesor',
+                               'horarioprofesorconsulta',
+                               'consultarprofesor',
+                               'seguimientos',
+                               'asignarseguimiento',
+                               'asignarseguimientos'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'create', 'update', 'delete', 'horario', 'listaalumnos', 'horarioconsulta', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
+                            'actions' => ['index', 
+                                          'create',
+                                          'update',
+                                          'delete',
+                                          'horario',
+                                          'listaalumnos',
+                                          'horarioconsulta',
+                                          'listaalumnoscalificacion',
+                                          'guardarcalificacion',
+                                          'listaalumnoscalificacionregularizacion',
+                                          'guardarcalificacionregularizacion',
+                                          'horarioprofesor',
+                                          'horarioprofesorconsulta',
+                                          'consultarprofesor',
+                                          'seguimientos',
+                                          'asignarseguimiento',
+                                          'asignarseguimientos'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -52,8 +84,14 @@ class ProfesorController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'horarioconsulta', 'listaalumnos'],//Especificar que acciones tiene permitidas este usuario
+                            //Servicios escolares tiene permisos sobre las siguientes acciones
+                            'actions' => ['index',
+                                          'horarioconsulta',
+                                          'listaalumnos',
+                                          'seguimientos',
+                                          'asignarseguimiento',
+                                          'asignarseguimientos'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -67,8 +105,15 @@ class ProfesorController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'horario', 'listaalumnos', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
+                            //El profesor tiene permisos sobre las siguientes acciones
+                            'actions' => ['index',
+                                          'horario',
+                                          'listaalumnos',
+                                          'listaalumnoscalificacion',
+                                          'guardarcalificacion',
+                                          'listaalumnoscalificacionregularizacion',
+                                          'guardarcalificacionregularizacion'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -82,8 +127,18 @@ class ProfesorController extends Controller
                             },  
                         ],
                         [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'horarioconsulta', 'listaalumnos', 'listaalumnoscalificacion', 'guardarcalificacion'],//Especificar que acciones tiene permitidas este usuario
+                            //División de estudios tiene permisos sobre las siguientes acciones
+                            'actions' => ['index',
+                                          'horarioconsulta',
+                                          'listaalumnos',
+                                          'seguimientos',
+                                          'asignarseguimiento',
+                                          'asignarseguimientos',
+                                          'listaalumnoscalificacion',
+                                          'guardarcalificacion', 
+                                          'listaalumnoscalificacionregularizacion',
+                                          'guardarcalificacionregularizacion'
+                            ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -111,7 +166,6 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        /*
         if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
         {
             return $this->redirect(["horarioconsulta"]);
@@ -128,7 +182,7 @@ class ProfesorController extends Controller
         {
             return $this->redirect(["horarioconsulta"]);
         }
-        */
+        
         $form = new ProfesorSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
