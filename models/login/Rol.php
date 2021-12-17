@@ -13,7 +13,7 @@ class Rol extends ActiveRecord{
     
     public static function tableName()
     {
-        return 'cat_roles';
+        return "cat_roles";
     }
     
 }

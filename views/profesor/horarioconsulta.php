@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $f->end() ?>
         <hr width="100%">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -51,13 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <th>Grupo</th>
                                 <th>Materia</th>
                                 <th>Créditos</th>
-                                <th style="width: 85px;">Lunes</th>
-                                <th style="width: 85px;">Martes</th>
-                                <th style="width: 85px;">Miércoles</th>
-                                <th style="width: 85px;">Jueves</th>
-                                <th style="width: 85px;">Viernes</th>
-                                <th style="width: 85px;">Sábado</th>
-                                <th style="width: 180px;">Acciones</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miércoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sábado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,10 +107,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="caret"></span>
                                         </button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu  pull-right">
                                             <li><?= Html::a("Lista Alumnos", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
                                             <li><?= Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <?php if($regularizacion_status == 1): ?>
+                                            <li><?= Html::a("Capturar Calificaciones Regularización", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
                                             <?php endif ?>
                                             <li><?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
                                         </ul>
@@ -141,3 +144,20 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php
+$this->registerCss('
+.table-responsive {
+  overflow-y: visible !important;
+}
+@media (max-width: 767px) {
+    .table-responsive .dropdown-menu {
+        position: static !important;
+    }
+}
+@media (min-width: 768px) {
+    .table-responsive {
+        overflow: inherit;
+    }
+}
+');
+?>

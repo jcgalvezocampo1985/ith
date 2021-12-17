@@ -50,16 +50,27 @@ if(!Yii::$app->user->isGuest){
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            //['label' => 'Sitio', 'url' => ['/site/']],
-            //['label' => 'Usuarios', 'url' => ['/usuario/']],
             Yii::$app->user->isGuest ? "" : (['label' => 'Profesores', 'url' => [$link]]),
-            //Yii::$app->user->isGuest ? "" : (['label' => 'ProfesoresH', 'url' => ['/profesor/horarioconsulta']]),
             ['label' => 'Horario Estudiantes', 'url' => ['/estudiante/horariomodificar']],
             ['label' => 'Boleta', 'url' => ['/estudiante/boleta']],
             ['label' => 'Horario', 'url' => ['/estudiante/horario']],
-            /*['label' => 'Home', 'url' => ['/site/index']],
+            /*['label' => 'Sitio', 'url' => ['/site/']],
+            ['label' => 'Usuarios', 'url' => ['/usuario/']],
+            ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],*/
+            ['label' => 'Admin', 'items' =>
+                [
+                    ['label' => 'Profesores', 'url' => ['/profesor/index']],
+                    ['label' => 'Estudiantes', 'url' => ['/estudiante/index']],
+                    ['label' => 'Seguimientos', 'url' => ['/profesor/seguimientos']],
+                    ['label' => 'Carreras', 'url' => ['/carrera/index']],
+                    ['label' => 'Materias', 'url' => ['/materia/index']],
+                    ['label' => 'Opc. Curso', 'url' => ['/opcioncurso/index']],
+                    ['label' => 'Ciclos', 'url' => ['/ciclo/index']],
+                    ['label' => 'Grupos', 'url' => ['/grupo/index']],
+                ]
+            ],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Acceder', 'url' => ['/site/login']]
             ) : (

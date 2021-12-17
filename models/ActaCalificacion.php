@@ -13,6 +13,6 @@ class ActaCalificacion extends ActiveRecord
 
     public static function tableName()
     {
-        return 'actas_calificaciones';
+        return "actas_calificaciones";
     }
 }
