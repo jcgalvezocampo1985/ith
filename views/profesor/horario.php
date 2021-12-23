@@ -155,4 +155,33 @@ $this->registerCss('
     }
 }
 ');
+
+$this->registerJs('$(document).ready(function(){
+    $(".idgrupo").on("click", function(e) {
+        e.preventDefault();
+
+        var idciclo1 = $("#ciclosearch-idciclo").val();
+        var idciclo2 = $("#cicloprofesorsearch-idciclo").val();
+        var idciclo = (idciclo1 === undefined) ? idciclo2 : idciclo1;
+        var valor = $(this).attr("href");
+        var url = valor.split("=")[0];
+        var idgrupo = valor.split("=")[1];
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                "idgrupo": idgrupo,
+                "idciclo": idciclo
+            },
+            beforeSend: function() {
+                $("#lista_alumnos").empty();
+            },
+            //data: "idgrupo=" + id + "&idciclo=" + idciclo,
+            success: function(respuesta) {
+                $("#lista_alumnos").html(respuesta);
+            }
+        });
+    });
+})');
 ?>

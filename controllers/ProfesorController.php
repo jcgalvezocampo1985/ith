@@ -50,7 +50,8 @@ class ProfesorController extends Controller
                                'consultarprofesor',
                                'seguimientos',
                                'asignarseguimiento',
-                               'asignarseguimientos'],//Especificar que acciones se van proteger
+                               'asignarseguimientos',
+                               'seguimientosactivos'],//Especificar que acciones se van proteger
                     'rules' => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
@@ -70,7 +71,8 @@ class ProfesorController extends Controller
                                           'consultarprofesor',
                                           'seguimientos',
                                           'asignarseguimiento',
-                                          'asignarseguimientos'],//Especificar que acciones tiene permitidas este usuario
+                                          'asignarseguimientos',
+                                          'seguimientosactivos'],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -90,7 +92,8 @@ class ProfesorController extends Controller
                                           'listaalumnos',
                                           'seguimientos',
                                           'asignarseguimiento',
-                                          'asignarseguimientos'
+                                          'asignarseguimientos',
+                                          'seguimientosactivos'
                             ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
@@ -112,7 +115,8 @@ class ProfesorController extends Controller
                                           'listaalumnoscalificacion',
                                           'guardarcalificacion',
                                           'listaalumnoscalificacionregularizacion',
-                                          'guardarcalificacionregularizacion'
+                                          'guardarcalificacionregularizacion',
+                                          'seguimientosactivos'
                             ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
@@ -137,7 +141,8 @@ class ProfesorController extends Controller
                                           'listaalumnoscalificacion',
                                           'guardarcalificacion', 
                                           'listaalumnoscalificacionregularizacion',
-                                          'guardarcalificacionregularizacion'
+                                          'guardarcalificacionregularizacion',
+                                          'seguimientosactivos'
                             ],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             'allow' => true,
@@ -166,23 +171,15 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
-        if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
-        {
-            return $this->redirect(["horarioconsulta"]);
-        }
-        else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2))
+        if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2) || User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
         {
             return $this->redirect(["horarioconsulta"]);
         }
         else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
         {
             return $this->redirect(["horario"]);
-        } 
-        else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
-        {
-            return $this->redirect(["horarioconsulta"]);
         }
-        
+
         $form = new ProfesorSearch;
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
@@ -1288,5 +1285,19 @@ class ProfesorController extends Controller
             }
             
         }
+    }
+
+    public function actionSeguimientosactivos()
+    {
+        $curp = Yii::$app->user->identity->curp;
+        $idciclo = Ciclo::find()->max("idciclo");
+
+        $model = (new \yii\db\Query())
+            ->from(["profesores"])
+            ->innerJoin(["profesores_seguimientos"], "profesores.idprofesor = profesores_seguimientos.idprofesor")
+            ->where(["profesores.curp" => $curp, "profesores_seguimientos.idciclo" => $idciclo, "profesores_seguimientos.bandera" => "1"])
+            ->count();
+
+        return $model;
     }
 }

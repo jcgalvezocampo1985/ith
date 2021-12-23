@@ -112,6 +112,7 @@ class GrupoController extends Controller
         $table = new \yii\db\Query();
         $model = $table->from(["grupos"])
                        ->select(["grupos.idgrupo",
+                                 "ciclo.idciclo",
                                  "ciclo.desc_ciclo AS ciclo",
                                  "cat_carreras.desc_carrera AS carrera",
                                  "cat_materias.desc_materia AS materia",
@@ -142,6 +143,7 @@ class GrupoController extends Controller
                 $model = $table->where(["like", "ciclo.desc_ciclo", $search])
                                ->orWhere(["like", "cat_carreras.desc_carrera", $search])
                                ->orWhere(["like", "cat_materias.desc_materia", $search])
+                               ->orWhere(["like", "CONCAT(profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor)", $search])
                                ->orWhere(["like", "profesores.apaterno", $search])
                                ->orWhere(["like", "profesores.amaterno", $search])
                                ->orWhere(["like", "profesores.nombre_profesor", $search])
@@ -461,9 +463,37 @@ class GrupoController extends Controller
 
     public function actionGrupoalumnos()
     {
-        $idciclo = Ciclo::find()->max("idciclo");
-        $ciclo_actual = Ciclo::find()->select("desc_ciclo")->where(["idciclo" => $idciclo])->one();
+        $this->layout = 1;
 
-        return $this->render("grupo_alumnos",["ciclo_actual" => $ciclo_actual['desc_ciclo']]);
+        if(Yii::$app->request->get())
+        {
+            $idgrupo = Html::encode($_GET["idgrupo"]);
+            $idciclo = Html::encode($_GET["idciclo"]);
+
+            //$ciclo_actual = Ciclo::find()->select("desc_ciclo")->where(["idciclo" => $idciclo])->one();
+            $table = new \yii\db\Query();
+            $model = $table->from(["grupos_estudiantes"])
+                        ->select(["estudiantes.idestudiante",
+                                  "estudiantes.nombre_estudiante",
+                                  "ciclo.desc_ciclo",
+                                  "grupos.desc_grupo",
+                                  "cat_materias.desc_materia",
+                                  "cat_carreras.desc_carrera",
+                                  "(SELECT IF(pri_opt = '', seg_opt, pri_opt)
+                                        FROM
+                                    actas_calificaciones
+                                        WHERE
+                                    idgrupo = grupos_estudiantes.idgrupo AND idestudiante = grupos_estudiantes.idestudiante) AS promedio"])
+                        ->innerJoin(["estudiantes"], "grupos_estudiantes.idestudiante = estudiantes.idestudiante")
+                        ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                        ->innerJoin(["ciclo"], "grupos.idciclo = ciclo.idciclo")
+                        ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                        ->innerJoin(["cat_carreras"], "grupos.idcarrera = cat_carreras.idcarrera")
+                        ->where(["grupos_estudiantes.idgrupo" => $idgrupo])
+                        ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                        ->all();
+
+            return $this->render("grupo_alumnos",["model" => $model]);
+        }
     }
 }

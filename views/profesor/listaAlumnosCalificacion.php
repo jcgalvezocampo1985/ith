@@ -1,5 +1,4 @@
 <?php
-
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -25,6 +24,7 @@ function promedioTotal(array $parciales)
             if($parcial == "NA"){
                 $parcial = 0;
             }
+
             $suma_calificaciones = $suma_calificaciones + $parcial;
             $total_parciales = $total_parciales + 1;
         }
@@ -34,14 +34,13 @@ function promedioTotal(array $parciales)
 
     return $promedio_p;
 }
+$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 
 $form = ActiveForm::begin([
     "method" => "post",
     "id" => "formulario",
     "action" => "guardarcalificacion"
 ]);
-
-$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 ?>
 <div class="panel panel-primary">
     <div class="panel-heading">Captura de calificaciones</div>
@@ -246,7 +245,6 @@ $(document).keyup(function(objEvent) {
 })
 
 $(document).ready(function(){
-    $(".valor2:first").focus();
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");
@@ -402,71 +400,20 @@ $(document).ready(function(){
         }
         return inputs_vacios;
     }
-})');
 
-/*
-if (is_numeric($row['p1']) || $row['p1'] == "NA") {
-    $promedio_p = round($p1, 0);
-    $r1 = "readonly";
-}
-if (is_numeric($row['p2']) || $row['p2'] == "NA") {
-    $promedio_p = round(($p1 + $p2) / 2, 0);
-    $r2 = "readonly";
-}
-if (is_numeric($row['p3']) || $row['p3'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3) / 3, 0);
-    $r3 = "readonly";
-}
-if (is_numeric($row['p4']) || $row['p4'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4) / 4, 0);
-    $r4 = "readonly";
-}
-if (is_numeric($row['p5']) || $row['p5'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5) / 5, 0);
-    $r5 = "readonly";
-}
-if (is_numeric($row['p6']) || $row['p6'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6) / 6, 0);
-    $r6 = "readonly";
-}
-if (is_numeric($row['p7']) || $row['p7'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7) / 7, 0);
-    $r7 = "readonly";
-}
-if (is_numeric($row['p8']) || $row['p8'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8) / 8, 0);
-    $r8 = "readonly";
-}
-if (is_numeric($row['p9']) || $row['p9'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9) / 9, 0);
-    $r9 = "readonly";
-}
-if (is_numeric($row['p10']) || $row['p10'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10) / 10, 0);
-    $r10 = "readonly";
-}
-if (is_numeric($row['p11']) || $row['p11'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11) / 11, 0);
-    $r11 = "readonly";
-}
-if (is_numeric($row['p12']) || $row['p12'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12) / 12, 0);
-    $r12 = "readonly";
-}
-if (is_numeric($row['p13']) || $row['p13'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13) / 13, 0);
-    $r13 = "readonly";
-}
-if (is_numeric($row['p14']) || $row['p14'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14) / 14, 0);
-    $r14 = "readonly";
-}
-if (is_numeric($row['p15']) || $row['p15'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15) / 15, 0);
-    $r15 = "readonly";
-}
-if (is_numeric($row['p16']) || $row['p16'] == "NA") {
-    $promedio_p = round(($p1 + $p2 + $p3 + $p4 + $p5 + $p6 + $p7 + $p8 + $p9 + $p10 + $p11 + $p12 + $p13 + $p14 + $p15 + $p16) / 16, 0);
-    $r
-}
-*/
+    $.ajax({
+        url: "seguimientosactivos",
+        success: function(resultado){
+            if(resultado > 0){
+                $("#guardar").removeAttr("disabled");
+            }else{
+                $("#alerta").removeClass("alert-success").addClass("alert-danger");
+                $("#guardar").attr("disabled", "disabled");
+                $("#mensaje_error").stop(true);
+                $("#mensaje_texto").html("No hay seguimientos activos para oder cargar calificaciones");
+                $("#mensaje_error").slideDown(1000).delay(4000).slideUp(1000);
+            } 
+        }
+    });
+    
+})');
