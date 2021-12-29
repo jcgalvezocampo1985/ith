@@ -133,18 +133,32 @@ $form = ActiveForm::begin([
                             //$promedio_p = promedioTotal([$row['s1'], $row['s2'], $row['s3'], $row['s4'], $row['s5'], $row['s6'], $row['s7'], $row['s8'], $row['s9']]);
                         ?>
                         <tr>
-                            <td><?= $row['idestudiante'] ?></td>
-                            <td><?= $row['nombre_estudiante'] ?></td>
-                            <td class="text-center">C</td>
+                            <td rowspan="3"><?= $row['idestudiante'] ?></td>
+                            <td rowspan="3"><?= $row['nombre_estudiante'] ?></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">T</td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p1 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p2 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p3 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p4 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p5 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p6 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p7 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p8 ?>" disabled="yes" /></td>
+                            <td class="text-center"><input type="text" class="calificacion" value="<?= $p9 ?>" disabled="yes" /></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">R</td>
                             <td class="text-center"><input type="text" name="s1[]" class="calificacion" id="s1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s1 ?>" <?= $bloqueo1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s2[]" class="calificacion verificar_espacio_v2" id="s2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s2 ?>" <?= $bloqueo2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s3[]" class="calificacion verificar_espacio_v3" id="s3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s3 ?>" <?= $bloqueo3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s4[]" class="calificacion verificar_espacio_v4" id="s4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s4 ?>" <?= $bloqueo4 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s5[]" class="calificacion verificar_espacio_v5" id="s5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s5 ?>" <?= $bloqueo5 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s6[]" class="calificacion verificar_espacio_v6" id="s6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s6 ?>" <?= $bloqueo6 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s7[]" class="calificacion verificar_espacio_v7" id="s7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s7 ?>" <?= $bloqueo7 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s8[]" class="calificacion verificar_espacio_v8" id="s8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s8 ?>" <?= $bloqueo8 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="s9[]" class="calificacion verificar_espacio_v9" id="s9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s9 ?>" <?= $bloqueo9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s2[]" class="calificacion" id="s2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s2 ?>" <?= $bloqueo2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s3[]" class="calificacion" id="s3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s3 ?>" <?= $bloqueo3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s4[]" class="calificacion" id="s4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s4 ?>" <?= $bloqueo4 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s5[]" class="calificacion" id="s5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s5 ?>" <?= $bloqueo5 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s6[]" class="calificacion" id="s6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s6 ?>" <?= $bloqueo6 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s7[]" class="calificacion" id="s7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s7 ?>" <?= $bloqueo7 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s8[]" class="calificacion" id="s8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s8 ?>" <?= $bloqueo8 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input type="text" name="s9[]" class="calificacion" id="s9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $s9 ?>" <?= $bloqueo9 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
                         <?php
