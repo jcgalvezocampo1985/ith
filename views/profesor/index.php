@@ -58,7 +58,6 @@ $this->params["breadcrumbs"][] = $this->title;
                                         <li><?= Html::a("Modificar", ["/profesor/edit?idprofesor=".$row->idprofesor]) ?></li>
                                         <li><?= Html::a("Eliminar", ["#"], ["data-toggle" => "modal", "data-target" => "#idprofesor_".$row->idprofesor.""]) ?></li>
                                         <li><?= Html::a("Horario", "horarioprofesor=".$row["idprofesor"], ["data-toggle" => "modal", "data-target" => "#modal_horario_profesor", "class" => "horario_profesor"]) ?></li>
-                                        <li><?= Html::a("Grupos", ["/reporte/boleta?id=".$row["idprofesor"]]) ?></li>
                                     </ul>
                                 </div>
                             </td>

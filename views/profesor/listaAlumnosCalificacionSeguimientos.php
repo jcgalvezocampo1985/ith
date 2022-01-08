@@ -34,7 +34,7 @@ function promedioTotal(array $parciales)
 
     return $promedio_p;
 }
-$readonly = "";//($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
+$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 
 $form = ActiveForm::begin([
     "method" => "post",
@@ -158,15 +158,15 @@ $form = ActiveForm::begin([
                             /**
                              * Evalua los seguimientos si estan abiertos o cerrados para captura de calificaciones
                              */
-                            $readonly1 = "";//($sp1 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp1 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp1 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp1 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly2 = "";//($sp2 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp2 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp2 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp2 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly3 = "";//($sp3 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp3 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp3 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp3 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly4 = "";//($sp4 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp4 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp4 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp4 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly5 = "";//($sp5 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp5 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp5 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp5 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly6 = "";//($sp6 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp6 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp6 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp6 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly7 = "";//($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly8 = "";//($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly9 = "";//($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly1 = ($sp1 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp1 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp1 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp1 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly2 = ($sp2 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp2 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp2 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp2 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly3 = ($sp3 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp3 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp3 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp3 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly4 = ($sp4 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp4 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp4 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp4 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly5 = ($sp5 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp5 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp5 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp5 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly6 = ($sp6 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp6 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp6 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp6 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly7 = ($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly8 = ($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
+                            $readonly9 = ($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
 
                             if($ultimo_seguimiento == 4 && $seguimiento4 == 0)
                             {
@@ -401,7 +401,7 @@ $(document).ready(function(){
         return inputs_vacios;
     }
 
-    /*$.ajax({
+    $.ajax({
         url: "seguimientosactivos",
         success: function(resultado){
             if(resultado > 0){
@@ -414,6 +414,6 @@ $(document).ready(function(){
                 $("#mensaje_error").slideDown(1000).delay(4000).slideUp(1000);
             } 
         }
-    });*/
+    });
     
 })');

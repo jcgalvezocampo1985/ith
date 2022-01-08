@@ -206,8 +206,8 @@ class ReporteController extends Controller
 
     public function actionBoleta()
     {
-        $idestudiante = Html::encode( $_REQUEST['id'] );
-        $idciclo = Html::encode( $_REQUEST['idciclo'] );
+        $idestudiante = Html::encode($_REQUEST['id']);
+        $idciclo = Html::encode($_REQUEST['idciclo']);
 
         $sql_encabezado = "SELECT
                                *

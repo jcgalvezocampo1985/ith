@@ -592,8 +592,17 @@ class ProfesorController extends Controller
                               ->queryAll();
 
         $ciclo_actual = ($idciclo) ? ((count($model) > 0) ? $model[0]["desc_ciclo"] : $ciclo["desc_ciclo"]) : $ciclo->desc_ciclo;
+        $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
-        return $this->render("horario", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor, "ciclo_actual" => $ciclo_actual, "ultimo_ciclo" => $ultimo_ciclo]);
+        return $this->render("horario", ["model" => $model,
+                             "form" => $form,
+                             "ciclos" => $ciclos,
+                             "idciclo" => $idciclo,
+                             "idprofesor" => $idprofesor,
+                             "ciclo_actual" => $ciclo_actual,
+                             "ultimo_ciclo" => $ultimo_ciclo,
+                             "regularizacion_status" => $regularizacion_status
+                             ]);
     }
 
     public function actionListaalumnos()
@@ -856,6 +865,7 @@ class ProfesorController extends Controller
 
                 if($table)
                 {
+                    /*
                     $seguimiento = ($seguimiento1 == 1) ? 1 : (($seguimiento2 == 1) ? 2 : (($seguimiento3 == 1) ? 3 : (($seguimiento4 == 1) ? 4 : "")));
                     $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor])->max("seguimiento");
 
@@ -885,7 +895,7 @@ class ProfesorController extends Controller
                     $sp6 = ($p6 != "") ? (($sp6_sql_total > 0) ? $sp6_sql->sp6 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
                     $sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
                     $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
-                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";
+                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : (($ultimo_seguimiento == 4) ? $ultimo_seguimiento : $seguimiento)) : "";*/
 
                     $table->p1 = $p1;
                     $table->p2 = $p2;
@@ -907,6 +917,7 @@ class ProfesorController extends Controller
                     $table->sp8 = $sp8;
                     $table->sp9 = $sp9;
 
+                    /** Asigna calificaciones para calificaciones de repetición */
                     $table->s1 = ($p1 == "NA") ? $p1 : "";
                     $table->s2 = ($p2 == "NA") ? $p2 : "";
                     $table->s3 = ($p3 == "NA") ? $p3 : "";
