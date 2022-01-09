@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $r = $_GET["r"];
+$seguimiento = $_GET["seguimiento"];
 $url = ($r == "true") ? "horario" : "horarioconsulta";
 
 if($idciclo != $ultimo_ciclo){
@@ -34,12 +35,11 @@ function promedioTotal(array $parciales)
 
     return $promedio_p;
 }
-$readonly = ($seguimiento1 == 0 && $seguimiento2 == 0 && $seguimiento3 == 0 && $seguimiento4 == 0) ? "readonly" : "";
 
 $form = ActiveForm::begin([
     "method" => "post",
     "id" => "formulario",
-    "action" => "guardarcalificacion"
+    "action" => "guardarcalificacionseguimientos"
 ]);
 ?>
 <div class="panel panel-primary">
@@ -117,12 +117,6 @@ $form = ActiveForm::begin([
 
                             $promedio_p = "";
 
-                            $bloqueo5 = "";
-                            $bloqueo6 = "";
-                            $bloqueo7 = "";
-                            $bloqueo8 = "";
-                            $bloqueo9 = "";
-
                             $p1 = (!is_numeric($row['p1'])) ? 0 : $row['p1'];
                             $p2 = (!is_numeric($row['p2'])) ? 0 : $row['p2'];
                             $p3 = (!is_numeric($row['p3'])) ? 0 : $row['p3'];
@@ -153,43 +147,31 @@ $form = ActiveForm::begin([
                             $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
                             $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
 
+                            $bloqueo1 = ($p1 == "") ? "" : (($sp1 == $seguimiento) ? "" : "readonly");
+                            $bloqueo2 = ($p2 == "") ? "" : (($sp2 == $seguimiento) ? "" : "readonly");
+                            $bloqueo3 = ($p3 == "") ? "" : (($sp3 == $seguimiento) ? "" : "readonly");
+                            $bloqueo4 = ($p4 == "") ? "" : (($sp4 == $seguimiento) ? "" : "readonly");
+                            $bloqueo5 = ($p5 == "") ? "" : (($sp5 == $seguimiento) ? "" : "readonly");
+                            $bloqueo6 = ($p6 == "") ? "" : (($sp6 == $seguimiento) ? "" : "readonly");
+                            $bloqueo7 = ($p7 == "") ? "" : (($sp7 == $seguimiento) ? "" : "readonly");
+                            $bloqueo8 = ($p8 == "") ? "" : (($sp8 == $seguimiento) ? "" : "readonly");
+                            $bloqueo9 = ($p9 == "") ? "" : (($sp9 == $seguimiento) ? "" : "readonly");
+
                             $promedio_p = promedioTotal([$row['p1'], $row['p2'], $row['p3'], $row['p4'], $row['p5'], $row['p6'], $row['p7'], $row['p8'], $row['p9']]);
-
-                            /**
-                             * Evalua los seguimientos si estan abiertos o cerrados para captura de calificaciones
-                             */
-                            $readonly1 = ($sp1 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp1 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp1 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp1 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly2 = ($sp2 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp2 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp2 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp2 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly3 = ($sp3 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp3 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp3 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp3 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly4 = ($sp4 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp4 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp4 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp4 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly5 = ($sp5 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp5 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp5 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp5 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly6 = ($sp6 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp6 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp6 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp6 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly7 = ($sp7 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp7 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp7 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp7 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly8 = ($sp8 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp8 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp8 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp8 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-                            $readonly9 = ($sp9 == 1 && $seguimiento1 == 0) ? "readonly" : (($sp9 == 2 && $seguimiento2 == 0) ? "readonly" : (($sp9 == 3 && $seguimiento3 == 0) ? "readonly" : (($sp9 == 4 && $seguimiento4 == 0) ? "readonly" : "")));
-
-                            if($ultimo_seguimiento == 4 && $seguimiento4 == 0)
-                            {
-                                $bloqueo5 = ($sp5 == "") ? "readonly" : "";
-                                $bloqueo6 = ($sp6 == "") ? "readonly" : "";
-                                $bloqueo7 = ($sp7 == "") ? "readonly" : "";
-                                $bloqueo8 = ($sp8 == "") ? "readonly" : "";
-                                $bloqueo9 = ($sp9 == "") ? "readonly" : "";
-                            }
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
                             <td><?= $row['nombre_estudiante'] ?></td>
                             <td class="text-center">C</td>
-                            <td class="text-center"><input type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" <?= $readonly ?> <?= $readonly1 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" <?= $readonly ?> <?= $readonly2 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" <?= $readonly ?> <?= $readonly3 ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" <?= $readonly ?> <?= $readonly4  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo5 ?> type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" <?= $readonly ?> <?= $readonly5  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo6 ?> type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" <?= $readonly ?> <?= $readonly6  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo7 ?> type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" <?= $readonly ?> <?= $readonly7  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo8 ?> type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" <?= $readonly ?> <?= $readonly8  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
-                            <td class="text-center"><input <?= $bloqueo9 ?> type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" <?= $readonly ?> <?= $readonly9  ?> autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo1 ?> type="text" name="p1[]" class="calificacion verificar_espacio_h verificar_espacio_v1" id="p1-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p1'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo2 ?> type="text" name="p2[]" class="calificacion verificar_espacio_h verificar_espacio_v2" id="p2-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p2'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo3 ?> type="text" name="p3[]" class="calificacion verificar_espacio_h verificar_espacio_v3" id="p3-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p3'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo4 ?> type="text" name="p4[]" class="calificacion verificar_espacio_h verificar_espacio_v4" id="p4-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p4'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo5 ?> type="text" name="p5[]" class="calificacion verificar_espacio_h verificar_espacio_v5" id="p5-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p5'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo6 ?> type="text" name="p6[]" class="calificacion verificar_espacio_h verificar_espacio_v6" id="p6-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p6'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo7 ?> type="text" name="p7[]" class="calificacion verificar_espacio_h verificar_espacio_v7" id="p7-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p7'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo8 ?> type="text" name="p8[]" class="calificacion verificar_espacio_h verificar_espacio_v8" id="p8-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p8'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
+                            <td class="text-center"><input <?= $bloqueo9 ?> type="text" name="p9[]" class="calificacion verificar_espacio_h verificar_espacio_v9" id="p9-<?= $row['idestudiante'] ?>" maxlength="3" value="<?= $row['p9'] ?>" autocomplete="off"  pattern="([N]{1}[A]{1})|([7-9]{1}[0-9]{1})|([1]{1}[0]{2})" /></td>
                             <td class="text-center"><span class="label label-<?= ($promedio_p < 70) ? "danger" : "primary" ?>" style="font-size: 14px;"><?= ($promedio_p == "NA" && $promedio_p < 70) ? "NA" : $promedio_p ?></span></td>
                         </tr>
                         <input type="hidden" name="idestudiante[]" value="<?= $row["idestudiante"] ?>" readonly="true" id="idestudiante<?= $i ?>" />
@@ -201,6 +183,7 @@ $form = ActiveForm::begin([
                         <input type="hidden" name="idciclo" value="<?= $idciclo ?>" readonly="true" />
                         <input type="hidden" name="idprofesor" value="<?= $idprofesor ?>" readonly="true" />
                         <input type="hidden" name="r" value="<?= $_GET["r"] ?>" readonly="true" />
+                        <input type="hidden" name="seguimiento" value="<?= $seguimiento ?>" readonly="true" />
                     </tbody>
                 </table>
             </div>
