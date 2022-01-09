@@ -501,7 +501,7 @@ class ReporteController extends Controller
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
-        $carrera = $cuerpo[0]['desc_carrera'];
+        $carrera = $encabezado['desc_carrera'];
         $plan = $encabezado['plan_estudios'];
         $materia = $cuerpo[0]['desc_materia'];
         $grupo = $encabezado['desc_grupo'];
