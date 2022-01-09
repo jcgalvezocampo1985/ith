@@ -10,19 +10,19 @@ use yii\helpers\Html;
 $this->title = $name;
 $exception = Yii::$app->getErrorHandler()->exception;
     $errorCode = $exception->statusCode;
-    switch ($errorCode){
-        case "404":
-            $message = "Ups lo sentimos creo que la pagina que busca ha cambiado o ya no existe";            
-        case "403":
-            $message = "Lo sentimos usted no tiene permitido entrar a esta página";
-    }  
+    if($errorCode == "404"){
+        $img = '404.png';
+        $message = "Lo sentimos la pagina que busca ha cambiado o ya no existe";
+    }else if($errorCode == "403"){
+        $img = '403.png';
+        $message = "Lo sentimos usted no tiene permitido entrar a esta página";
+    }
 ?>
 <div class="site-error">
-
-    <h1><?= Html::encode("Error: #" . $errorCode) ?></h1>
-
-    <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
+    <div>
+        <?= Html::img('@web/img/'.$img, ['alt' => 'My logo', 'style' => 'display:block;margin:auto;']) ?>
     </div>
-
+    <div class="alert alert-danger">
+        <h3 class="text-center"><?= nl2br(Html::encode($message)) ?></h3>
+    </div>
 </div>

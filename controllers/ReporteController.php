@@ -17,11 +17,13 @@ class PDF extends FPDF
 {
     public $reporte;
 
-    public function setReporte( $reporte ) {
+    public function setReporte($reporte)
+    {
         $this->reporte = $reporte;
     }
 
-    public function getReporte() {
+    public function getReporte()
+    {
         return $this->reporte;
     }
 
@@ -204,8 +206,8 @@ class ReporteController extends Controller
 
     public function actionBoleta()
     {
-        $idestudiante = Html::encode( $_REQUEST['id'] );
-        $idciclo = Html::encode( $_REQUEST['idciclo'] );
+        $idestudiante = Html::encode($_REQUEST['id']);
+        $idciclo = Html::encode($_REQUEST['idciclo']);
 
         $sql_encabezado = "SELECT
                                *
@@ -264,16 +266,8 @@ class ReporteController extends Controller
         $pdf->Text(49, 70, utf8_decode($no_control));
         $pdf->Text(12, 75, utf8_decode('ESTUDIANTE:'));
         $pdf->Text(49, 75, utf8_decode($estudiante));
-        //$pdf->Text( 12, 80, utf8_decode( 'SEMESTRE:' ) );
-        //$pdf->Text( 32, 80, utf8_decode( $semestre ) );
-        //$pdf->Text( 12, 85, utf8_decode( 'CARRERA:' ) );
-        //$pdf->Text( 30, 85, utf8_decode( $carrera ) );
         $pdf->Text(12, 80, utf8_decode('CARRERA:'));
         $pdf->Text(49, 80, utf8_decode($carrera));
-        //$pdf->Text( 12, 90, utf8_decode( 'ESPECIALIDAD:' ) );
-        //$pdf->Text( 38, 90, utf8_decode( $especialidad ) );
-        //$pdf->Text( 12, 95, utf8_decode( 'PLAN:' ) );
-        //$pdf->Text( 24, 95, utf8_decode( $plan ) );
         $pdf->Text(12, 85, utf8_decode('PLAN:'));
         $pdf->Text(49, 85, utf8_decode($plan));
 
@@ -476,51 +470,34 @@ class ReporteController extends Controller
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
         $idciclo = (Html::encode($_REQUEST['idciclo']) != "") ? Html::encode($_REQUEST['idciclo']) : Ciclo::find()->max("idciclo");
 
-        $sql_encabezado = "SELECT
-	                            ciclo.desc_ciclo,
-                            	cat_carreras.desc_carrera,
-	                            cat_carreras.plan_estudios,
-	                            grupos.desc_grupo,
-	                            grupos.desc_grupo_corto,
-	                            cat_materias.desc_materia 
-                           FROM
-	                            cat_carreras
-	                       INNER JOIN grupos ON cat_carreras.idcarrera = grupos.idcarrera
-	                       INNER JOIN ciclo ON ciclo.idciclo = grupos.idciclo
-	                       INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
-                           WHERE
-                                grupos.idgrupo = :idgrupo
-                           AND
-                                ciclo.idciclo = :idciclo";
-        $encabezado = Yii::$app->db->createCommand($sql_encabezado)
-                                   ->bindValue(':idgrupo', $idgrupo)
-                                   ->bindValue(':idciclo', $idciclo)
-                                   ->queryOne();
+        $encabezado = (new \yii\db\Query())->from(["cat_carreras"])
+                                           ->select(["ciclo.desc_ciclo",
+                                                    "cat_carreras.desc_carrera",
+                                                    "cat_carreras.plan_estudios",
+                                                    "grupos.desc_grupo",
+                                                    "grupos.desc_grupo_corto",
+                                                    "cat_materias.desc_materia"
+                                           ])
+                                           ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                                           ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
+                                           ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                                           ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                                           ->one();
 
-        $sql_estudiantes = "SELECT
-                                estudiantes.idestudiante,
-    	                        estudiantes.nombre_estudiante,
-	                            estudiantes.sexo,
-	                            cat_opcion_curso.desc_opcion_curso,
-                                cat_materias.desc_materia,
-                                cc.desc_carrera
-                            FROM
-    	                        estudiantes
-	                        INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
-	                        INNER JOIN cat_opcion_curso ON grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso
-	                        INNER JOIN grupos ON grupos_estudiantes.idgrupo = grupos.idgrupo
-	                        INNER JOIN cat_materias ON grupos.idmateria = cat_materias.idmateria
-                            INNER JOIN cat_carreras cc on cc.idcarrera = grupos.idcarrera 
-                            WHERE
-                                grupos_estudiantes.idgrupo = :idgrupo
-                            AND
-                                grupos.idciclo = :idciclo
-                            ORDER BY
-                                estudiantes.nombre_estudiante ASC";
-        $cuerpo = Yii::$app->db->createCommand($sql_estudiantes)
-                               ->bindValue(':idgrupo', $idgrupo)
-                               ->bindValue(':idciclo', $idciclo)
-                               ->queryAll();
+        $cuerpo = (new \yii\db\Query())->from(["estudiantes"])
+                                     ->select(["estudiantes.idestudiante",
+                                               "estudiantes.nombre_estudiante",
+                                               "estudiantes.sexo",
+                                               "cat_opcion_curso.desc_opcion_curso",
+                                               "cat_materias.desc_materia"
+                                     ])
+                                     ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                                     ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                                     ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                                     ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                                     ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                                     ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                                     ->all();
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
@@ -861,7 +838,6 @@ class ReporteController extends Controller
                             ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
                             ->all();
 
-
         $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
         $fecha = date('Y-m-d');
         $carrera = $encabezado[0]['desc_carrera'];
@@ -869,6 +845,9 @@ class ReporteController extends Controller
         $materia = $materia['desc_materia'];
         $grupo = $encabezado[0]['desc_grupo'];
         $profesor = utf8_decode($encabezado[0]['profesor']);
+
+        $x_encabezado = 45;
+        $y_encabezado = 77;
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -882,65 +861,20 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
-        $pdf->SetFont('Montserrat-SemiBold', '', 8);
-        $pdf->SettextColor(0, 0, 0);
-        $pdf->Text(12, 60, utf8_decode('PERIODO:'));
-        $pdf->Text(30, 60, utf8_decode($periodo));
-        $pdf->Text(12, 65, utf8_decode('CARRERA:'));
-        $pdf->Text(30, 65, utf8_decode($carrera));
-        $pdf->Text(12, 70, utf8_decode('PLAN:'));
-        $pdf->Text(30, 70, utf8_decode($plan));
-        $pdf->Text(115, 60, 'PROFESOR:');
-        $pdf->Text(135, 60, $profesor);
-        $pdf->Text(115, 65, utf8_decode('MATERIA:'));
-        $pdf->Text(135, 65, utf8_decode($materia));
-        $pdf->Text(115, 70, utf8_decode('GRUPO:'));
-        $pdf->Text(135, 70, utf8_decode($grupo));
-        $pdf->Text(230, 60, 'FECHA:');
-        $pdf->Text(245, 60, $fecha);
+        $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                           'carrera' => $carrera,
+                                                           'plan' => $plan,
+                                                           'profesor' => $profesor,
+                                                           'materia' => $materia,
+                                                           'grupo' => $grupo,
+                                                           'fecha' => $fecha)
+                                               );
 
         $x_encabezado = 45;
         $y_encabezado = 77;
-        $columnas = 9;
 
-        /*if ($cuerpo[0]['p9'] > 0) {
-            $x_encabezado = 45;
-            $columnas = 9;
-        } else if ($cuerpo[0]['p8'] > 0) {
-            $x_encabezado = 50;
-            $columnas = 8;
-        } else if ($cuerpo[0]['p7'] > 0) {
-            $x_encabezado = 55;
-            $columnas = 7;
-        } else if ($cuerpo[0]['p6'] > 0) {
-            $x_encabezado = 60;
-            $columnas = 6;
-        } else if ($cuerpo[0]['p5'] > 0) {
-            $x_encabezado = 65;
-            $columnas = 5;
-        } else if ($cuerpo[0]['p4'] > 0) {
-            $x_encabezado = 70;
-            $columnas = 4;
-        } else if ($cuerpo[0]['p3'] > 0) {
-            $x_encabezado = 75;
-            $columnas = 3;
-        } else if ($cuerpo[0]['p2'] > 0) {
-            $x_encabezado = 80;
-            $columnas = 2;
-        } else if ($cuerpo[0]['p1'] > 0) {
-            $x_encabezado = 85;
-            $columnas = 1;
-        } else {
-            $x_encabezado = 90;
-        }*/
+        $x = $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
 
-        $this->generarEncabezado($pdf, $x_encabezado, $y_encabezado, $columnas);
-
-        $pdf->SetFont('Montserrat-Bold', '', 8);
-        $pdf->SetXY($x_encabezado, $y_encabezado);
-        $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
-        $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
-        $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
         $pdf->Ln();
 
         $total_estudiantes = count($cuerpo);
@@ -969,20 +903,37 @@ class ReporteController extends Controller
             $p8 = ($row['p8'] == "NA") ? $s8 : $row['p8'];
             $p9 = ($row['p9'] == "NA") ? $s9 : $row['p9'];
 
-            $pdf->SetX($x_encabezado);
+            $pdf->SetX($x);
             $pdf->Cell(8, 5, $numero, 1, 0, 'C');
             $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
             $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
-            $pdf->Cell(8, 5, $p1, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p2, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p3, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p4, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p5, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p6, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p7, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p8, 1, 0, 'C');
-            $pdf->Cell(8, 5, $p9, 1, 0, 'C');
+            ($p1 > 0 || $p1 == "NA") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+            ($p2 > 0 || $p2 == "NA") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+            ($p3 > 0 || $p3 == "NA") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+            ($p4 > 0 || $p4 == "NA") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+            ($p5 > 0 || $p5 == "NA") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+            ($p6 > 0 || $p6 == "NA") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+            ($p7 > 0 || $p7 == "NA") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+            ($p8 > 0 || $p8 == "NA") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+            ($p9 > 0 || $p9 == "NA") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
             $pdf->Ln();
+
+            if($numero == 18 || $numero == 36 || $numero == 54)
+            {
+                $pdf->AddPage('L', 'Letter');
+                $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                                   'carrera' => $carrera,
+                                                                   'plan' => $plan,
+                                                                   'profesor' => $profesor,
+                                                                   'materia' => $materia,
+                                                                   'grupo' => $grupo,
+                                                                   'fecha' => $fecha)
+                                                      );
+                $pdf->SetXY($x, $y_encabezado);
+                $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+                $pdf->SetFont('Montserrat-regular', '', 8);
+                $pdf->Ln();
+            }
             $numero = $numero + 1;
         }
 
@@ -1068,65 +1019,20 @@ class ReporteController extends Controller
             $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
             $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
-            $pdf->SetFont('Montserrat-SemiBold', '', 8);
-            $pdf->SettextColor(0, 0, 0);
-            $pdf->Text(12, 60, utf8_decode('PERIODO:'));
-            $pdf->Text(30, 60, utf8_decode($periodo));
-            $pdf->Text(12, 65, utf8_decode('CARRERA:'));
-            $pdf->Text(30, 65, utf8_decode($carrera));
-            $pdf->Text(12, 70, utf8_decode('PLAN:'));
-            $pdf->Text(30, 70, utf8_decode($plan));
-            $pdf->Text(115, 60, 'PROFESOR:');
-            $pdf->Text(135, 60, $profesor);
-            $pdf->Text(115, 65, utf8_decode('MATERIA:'));
-            $pdf->Text(135, 65, utf8_decode($materia));
-            $pdf->Text(115, 70, utf8_decode('GRUPO:'));
-            $pdf->Text(135, 70, utf8_decode($grupo));
-            $pdf->Text(230, 60, 'FECHA:');
-            $pdf->Text(245, 60, $fecha);
+            $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                           'carrera' => $carrera,
+                                                           'plan' => $plan,
+                                                           'profesor' => $profesor,
+                                                           'materia' => $materia,
+                                                           'grupo' => $grupo,
+                                                           'fecha' => $fecha)
+                                               );
 
             $x_encabezado = 45;
             $y_encabezado = 77;
-            $columnas = 9;
 
-            /*if ($cuerpo[0]['p9'] > 0) {
-                $x_encabezado = 45;
-                $columnas = 9;
-            } else if ($cuerpo[0]['p8'] > 0) {
-                $x_encabezado = 50;
-                $columnas = 8;
-            } else if ($cuerpo[0]['p7'] > 0) {
-                $x_encabezado = 55;
-                $columnas = 7;
-            } else if ($cuerpo[0]['p6'] > 0) {
-                $x_encabezado = 60;
-                $columnas = 6;
-            } else if ($cuerpo[0]['p5'] > 0) {
-                $x_encabezado = 65;
-                $columnas = 5;
-            } else if ($cuerpo[0]['p4'] > 0) {
-                $x_encabezado = 70;
-                $columnas = 4;
-            } else if ($cuerpo[0]['p3'] > 0) {
-                $x_encabezado = 75;
-                $columnas = 3;
-            } else if ($cuerpo[0]['p2'] > 0) {
-                $x_encabezado = 80;
-                $columnas = 2;
-            } else if ($cuerpo[0]['p1'] > 0) {
-                $x_encabezado = 85;
-                $columnas = 1;
-            } else {
-                $x_encabezado = 90;
-            }*/
+            $x = $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
 
-            $this->generarEncabezado($pdf, $x_encabezado, $y_encabezado, $columnas);
-
-            $pdf->SetFont('Montserrat-Bold', '', 8);
-            $pdf->SetXY($x_encabezado, $y_encabezado);
-            $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
-            $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
-            $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
             $pdf->Ln();
 
             $numero = 1;
@@ -1153,33 +1059,98 @@ class ReporteController extends Controller
                 $p8 = ($row['p8'] == "NA") ? $s8 : $row['p8'];
                 $p9 = ($row['p9'] == "NA") ? $s9 : $row['p9'];
 
-                $pdf->SetX($x_encabezado);
+                $pdf->SetX($x);
                 $pdf->Cell(8, 5, $numero, 1, 0, 'C');
                 $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
                 $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
-                $pdf->Cell(8, 5, $p1, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p2, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p3, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p4, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p5, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p6, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p7, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p8, 1, 0, 'C');
-                $pdf->Cell(8, 5, $p9, 1, 0, 'C');
+                ($p1 > 0 || $p1 == "NA") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+                ($p2 > 0 || $p2 == "NA") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+                ($p3 > 0 || $p3 == "NA") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+                ($p4 > 0 || $p4 == "NA") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+                ($p5 > 0 || $p5 == "NA") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+                ($p6 > 0 || $p6 == "NA") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+                ($p7 > 0 || $p7 == "NA") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+                ($p8 > 0 || $p8 == "NA") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+                ($p9 > 0 || $p9 == "NA") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
                 $pdf->Ln();
+
+                if($numero == 18 || $numero == 36 || $numero == 54)
+                {
+                    $pdf->AddPage('L', 'Letter');
+                    $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                                    'carrera' => $carrera,
+                                                                    'plan' => $plan,
+                                                                    'profesor' => $profesor,
+                                                                    'materia' => $materia,
+                                                                    'grupo' => $grupo,
+                                                                    'fecha' => $fecha)
+                                                           );
+                    $pdf->SetXY($x, $y_encabezado);
+                    $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+                    $pdf->SetFont('Montserrat-regular', '', 8);
+                    $pdf->Ln();
+                }
                 $numero = $numero + 1;
             }
         }
         $pdf->Output('D', "Calificaciones ".utf8_decode($periodo).'.pdf');
     }
 
-    private function generarEncabezado($pdf, $x, $y, $columnas)
+    private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales)
     {
-        $pdf->SetXY($x + 108, $y);
+        $x_encabezado = $x;
+        $aumentar = 148;
+        $disminuir = $x;
+        $aumentar_encabezado = $x;
 
-        for($i = 1; $i <= $columnas; $i++)
+        for($i = 1; $i <= 9; $i++)
         {
-            $pdf->Cell(8, 5, 'C'.$i, 1, 0, 'C');
+            if ($parciales[0]['p'.$i] > 0 || $parciales[0]['p'.$i] == "NA")
+            {
+                $x_encabezado = $x_encabezado + 5;
+                if($i > 1){
+                    $aumentar = $aumentar - 10;
+                    $disminuir = $disminuir - 5;
+                }
+            }
         }
+
+        $pdf->SetXY($x_encabezado + $aumentar, $y);
+
+        for($j = 1; $j <= 9; $j++)
+        {
+            if ($parciales[0]['p'.$j] > 0 || $parciales[0]['p'.$j] == "NA")
+            {
+                $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+            }
+        }
+
+        $pdf->SetFont('Montserrat-Bold', '', 8);
+        $pdf->SetXY((45 + $disminuir), $y);
+        $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
+        $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
+        $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
+
+        return 45 + $disminuir;
+    }
+
+    private function generarEncabezadoCalificaciones($pdf, $datos = array())
+    {
+        $pdf->SetFont('Montserrat-SemiBold', '', 8);
+        $pdf->SettextColor(0, 0, 0);
+        $pdf->Text(12, 60, utf8_decode('PERIODO:'));
+        $pdf->Text(30, 60, utf8_decode($datos['periodo']));
+        $pdf->Text(12, 65, utf8_decode('CARRERA:'));
+        $pdf->Text(30, 65, utf8_decode($datos['carrera']));
+        $pdf->Text(12, 70, utf8_decode('PLAN:'));
+        $pdf->Text(30, 70, utf8_decode($datos['plan']));
+        $pdf->Text(115, 60, 'PROFESOR:');
+        $pdf->Text(135, 60, $datos['profesor']);
+        $pdf->Text(115, 65, utf8_decode('MATERIA:'));
+        $pdf->Text(135, 65, utf8_decode($datos['materia']));
+        $pdf->Text(115, 70, utf8_decode('GRUPO:'));
+        $pdf->Text(135, 70, utf8_decode($datos['grupo']));
+        $pdf->Text(230, 60, 'FECHA:');
+        $pdf->Text(245, 60, $datos['fecha']);
     }
 }

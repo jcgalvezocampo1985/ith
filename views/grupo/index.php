@@ -15,9 +15,9 @@ $this->params["breadcrumbs"][] = $this->title;
         <div class="col-md-4">
             <?php
                 $f = ActiveForm::begin([
-                        "method" => "get",
-                        "action" => Url::toRoute("grupo/index"),
-                        "enableClientValidation" => true
+                    "method" => "get",
+                    "action" => Url::toRoute("grupo/index"),
+                    "enableClientValidation" => true
                 ]);
             ?>
                 <?= $f->field($form, "buscar")->input("search", ["class" => "form-control", "placeholder" => "Buscar..."]) ?>
@@ -47,33 +47,6 @@ $this->params["breadcrumbs"][] = $this->title;
                     <tbody>
                         <?php
                         foreach($model as $row):
-                            $lunes = $row['lunes'];
-                            $martes = $row['martes'];
-                            $miercoles = $row['miercoles'];
-                            $jueves = $row['jueves'];
-                            $viernes = $row['viernes'];
-                            $sabado = $row['sabado'];
-/*
-                            if($row["lunes"] != ""){
-                                $lunes1 = explode("-", $row["lunes"]);
-                                $lunes = $lunes1[0]."-<br />".$lunes1[1];
-                            }
-                            if($row["martes"] != ""){
-                                $martes1 = explode("-", $row["martes"]);
-                                $martes = $martes1[0]."-<br />".$martes1[1];
-                            }
-                            if($row["miercoles"] != ""){
-                                $miercoles1 = explode("-", $row["miercoles"]);
-                                $miercoles = $miercoles1[0]."-<br />".$miercoles1[1];
-                            }
-                            if($row["jueves"] != ""){
-                                $jueves1 = explode("-", $row["jueves"]);
-                                $jueves = $jueves1[0]."-<br />".$jueves1[1];
-                            }
-                            if($row["viernes"] != ""){
-                                $viernes1 = explode("-", $row["viernes"]);
-                                $viernes = $viernes1[0]."-<br />".$viernes1[1];
-                            }*/
                         ?>
                         <tr>
                             <td><?= $row["ciclo"] ?></td>
@@ -92,7 +65,8 @@ $this->params["breadcrumbs"][] = $this->title;
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><?= Html::a("Alumnos", ["/grupo/grupoalumnos?id=".$row["idgrupo"]]) ?></li>
+                                        <li><?= Html::a("Estudiantes", ["/grupo/grupoalumnos=".$row["idgrupo"]."=".$row["idciclo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
+                                        <li><?= Html::a("Generar Acta", ["/grupo/generaracta=".$row["idgrupo"]], ["class" => "idgrupo"]) ?></li>
                                         <li><?= Html::a("Modificar", ["/grupo/edit?id=".$row["idgrupo"]]) ?></li>
                                         <li><?= Html::a("Eliminar", ["#"], ["data-toggle" => "modal", "data-target" => "#idgrupo_".$row["idgrupo"].""]) ?></li>
                                     </ul>
@@ -132,6 +106,22 @@ $this->params["breadcrumbs"][] = $this->title;
         </div>
     </div>
 </div>
+<div class="modal fade" id="grupos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="classModalLabel">Estudiantes</h4>
+            </div>
+            <div class="modal-body">
+                <div id="lista_alumnos"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?= LinkPager::widget(["pagination" => $pages]); ?>
 <?php
 $this->registerCss("
@@ -149,4 +139,30 @@ $this->registerCss("
         }
     }
 ");
+
+$this->registerJs('
+    $(".idgrupo").on("click", function(e) {
+        e.preventDefault();
+
+        var valor = $(this).attr("href");
+        var url = valor.split("=")[0];
+        var idgrupo = valor.split("=")[1];
+        var idciclo = valor.split("=")[2];
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                "idgrupo": idgrupo,
+                "idciclo": idciclo
+            },
+            beforeSend: function() {
+                $("#lista_alumnos").empty();
+            },
+            success: function(respuesta) {
+                $("#lista_alumnos").html(respuesta);
+            }
+        });
+    });
+');
 ?>

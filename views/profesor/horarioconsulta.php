@@ -111,6 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <li><?= Html::a("Lista Alumnos", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
                                             <li><?= Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <li><?= Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=1"], ["target" => "_parent"]) ?></li>
                                             <?php if($regularizacion_status == 1): ?>
                                             <li><?= Html::a("Capturar Calificaciones Regularización", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
@@ -159,5 +160,33 @@ $this->registerCss('
         overflow: inherit;
     }
 }
+');
+$this->registerJs('
+    $(".idgrupo").on("click", function(e) {
+        e.preventDefault();
+
+        var idciclo1 = $("#ciclosearch-idciclo").val();
+        var idciclo2 = $("#cicloprofesorsearch-idciclo").val();
+        var idciclo = (idciclo1 === undefined) ? idciclo2 : idciclo1;
+        var valor = $(this).attr("href");
+        var url = valor.split("=")[0];
+        var idgrupo = valor.split("=")[1];
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                "idgrupo": idgrupo,
+                "idciclo": idciclo
+            },
+            beforeSend: function() {
+                $("#lista_alumnos").empty();
+            },
+            //data: "idgrupo=" + id + "&idciclo=" + idciclo,
+            success: function(respuesta) {
+                $("#lista_alumnos").html(respuesta);
+            }
+        });
+    });
 ');
 ?>
