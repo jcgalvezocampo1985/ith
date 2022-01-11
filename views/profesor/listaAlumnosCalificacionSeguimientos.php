@@ -147,17 +147,34 @@ $form = ActiveForm::begin([
                             $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
                             $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
 
-                            $bloqueo1 = ($p1 == "") ? "" : (($sp1 == $seguimiento) ? "" : "readonly");
-                            $bloqueo2 = ($p2 == "") ? "" : (($sp2 == $seguimiento) ? "" : "readonly");
-                            $bloqueo3 = ($p3 == "") ? "" : (($sp3 == $seguimiento) ? "" : "readonly");
-                            $bloqueo4 = ($p4 == "") ? "" : (($sp4 == $seguimiento) ? "" : "readonly");
-                            $bloqueo5 = ($p5 == "") ? "" : (($sp5 == $seguimiento) ? "" : "readonly");
-                            $bloqueo6 = ($p6 == "") ? "" : (($sp6 == $seguimiento) ? "" : "readonly");
-                            $bloqueo7 = ($p7 == "") ? "" : (($sp7 == $seguimiento) ? "" : "readonly");
-                            $bloqueo8 = ($p8 == "") ? "" : (($sp8 == $seguimiento) ? "" : "readonly");
-                            $bloqueo9 = ($p9 == "") ? "" : (($sp9 == $seguimiento) ? "" : "readonly");
+                            $bloqueo1 = ($p1 != "") ? (($sp1 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo2 = ($p2 != "") ? (($sp2 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo3 = ($p3 != "") ? (($sp3 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo4 = ($p4 != "") ? (($sp4 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo5 = ($p5 != "") ? (($sp5 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo6 = ($p6 != "") ? (($sp6 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo7 = ($p7 != "") ? (($sp7 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo8 = ($p8 != "") ? (($sp8 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo9 = ($p9 != "") ? (($sp9 == $seguimiento) ? "" : "readonly") : "";
+
+                            /*if($p1 != "")
+                            {
+                                if($sp1 == $seguimiento)
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    "readonly";
+                                }
+                            }
+                            else
+                            {
+                                "";
+                            }*/
 
                             $promedio_p = promedioTotal([$row['p1'], $row['p2'], $row['p3'], $row['p4'], $row['p5'], $row['p6'], $row['p7'], $row['p8'], $row['p9']]);
+
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>

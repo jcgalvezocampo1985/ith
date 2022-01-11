@@ -1298,7 +1298,7 @@ class ProfesorController extends Controller
         $idprofesor = Html::encode($_GET["idprofesor"]);
         $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
 
-        echo $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
+        return $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
     }
 
     public function actionSeguimientos()
@@ -1489,5 +1489,10 @@ class ProfesorController extends Controller
             ->count();
 
         return $model;
+    }
+
+    public function actionGeneraracta()
+    {
+        
     }
 }
