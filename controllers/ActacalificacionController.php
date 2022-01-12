@@ -94,23 +94,16 @@ class ActacalificacionController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionGeneraracta($idgrupo, $idprofesor)
     {
-        echo "hola";
-    }
-
-    public function actionGeneraracta($idgrupo)
-    {
-        $sql = GrupoEstudiante::find()->select("*")->where(["idgrupo" => $idgrupo])->all();
+        $sql = GrupoEstudiante::find()->select("idestudiante,idopcion_curso,cve_estatus,idciclo,p1,p2,p3,p4,p5,p6,p7,p8,p9,s1,s2,s3,s4,s5,s6,s7,s8,s9")->where(["idgrupo" => $idgrupo])->all();
 
         foreach($sql as $row)
         {
-            $idgrupo = $row["idgrupo"];
             $idestudiante = $row["idestudiante"];
             $idopcion_curso = $row["idopcion_curso"];
             $cve_estatus = $row["cve_estatus"];
             $idciclo = $row["idciclo"];
-            $idgrupoidestudiante = $row["idgrupoidestudiante"];
 
             $p1 = $row["p1"];
             $p2 = $row["p2"];
@@ -142,11 +135,15 @@ class ActacalificacionController extends Controller
             $calificacion8 = ($s8 == "") ? $p8 : $s8;
             $calificacion9 = ($s9 == "") ? $p9 : $s9;
 
+            //Array con las calificaciones de los 9  parciales
             $calificaciones_parciales = [$calificacion1, $calificacion2, $calificacion3, $calificacion4, $calificacion5, $calificacion6, $calificacion7, $calificacion8, $calificacion9];
+            $calificaciones_parciales_verificacion_NA = [$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9];
 
+            //Devuelve el promedio final por estudiante y materia
             $promedio_final = $this->promedioTotal($calificaciones_parciales);
 
-            $promedio_primera_segunda_oportunidad = $this->vertificarOpcionCalificacion($calificaciones_parciales);
+            //Identifica los parciales reprobados con NA, con este valor se discretiza si el promedio final es para primera o segunda oportunidad
+            $promedio_primera_segunda_oportunidad = $this->vertificarOpcionCalificacion($calificaciones_parciales_verificacion_NA);
 
             $existe = ActaCalificacion::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->count();
 
@@ -156,12 +153,14 @@ class ActacalificacionController extends Controller
                 $table->idgrupo = $idgrupo;
                 $table->idestudiante = $idestudiante;
                 $table->idopcion_curso = $idopcion_curso;
-                $table->pri_opt = ($promedio_primera_segunda_oportunidad > 0) ? "" : $promedio_final;
-                $table->seg_opt = ($promedio_primera_segunda_oportunidad > 0) ? $promedio_final : "";
+                $table->pri_opt = ($promedio_final != "") ? (($promedio_primera_segunda_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final)) : "";
+                $table->seg_opt = ($promedio_final != "") ? (($promedio_primera_segunda_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "") : "";
                 $table->fecha_registro = date("Y-m-d h:i:s");
                 $table->fecha_actualizacion = "";
                 $table->cve_estatus = $cve_estatus;
                 $table->insert();
+
+                $status_acta = 1;
             }
             else
             {
@@ -169,13 +168,17 @@ class ActacalificacionController extends Controller
                 $idacta_cal = $sql->idacta_cal;
 
                 $table = ActaCalificacion::findOne($idacta_cal);
-                $table->pri_opt = ($promedio_primera_segunda_oportunidad > 0) ? "" : $promedio_final;
-                $table->seg_opt = ($promedio_primera_segunda_oportunidad > 0) ? $promedio_final : "";
+                $table->pri_opt = ($promedio_primera_segunda_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final);
+                $table->seg_opt = ($promedio_primera_segunda_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "";
                 $table->fecha_actualizacion = date("Y-m-d h:i:s");
                 $table->cve_estatus = $cve_estatus;
                 $table->update();
+
+                $status_acta = 2;
             }
         }
+        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
+        exit;
     }
 
     private function promedioTotal(array $parciales)
@@ -206,6 +209,7 @@ class ActacalificacionController extends Controller
     private function vertificarOpcionCalificacion(array $parciales)
     {
         $total_reprobados = 0;
+
         for($i = 0; $i < count($parciales); $i++)
         {
             $parcial = $parciales[$i];

@@ -909,6 +909,85 @@ class ProfesorController extends Controller
         }
     }
 
+    public function actionListaalumnoscalificacionseguimientosadmin($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    {
+        if(isset($idgrupo))
+        {
+            $idgrupo = Html::encode($idgrupo);
+            $idprofesor = Html::encode($idprofesor);
+            $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
+            $ultimo_ciclo = Html::encode($ultimo_ciclo);
+
+            $model = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+	                            "estudiantes.sexo",
+	                            "cat_opcion_curso.desc_opcion_curso",
+                                "grupos_estudiantes.p1",
+	                            "grupos_estudiantes.p2",
+	                            "grupos_estudiantes.p3",
+	                            "grupos_estudiantes.p4",
+	                            "grupos_estudiantes.p5",
+	                            "grupos_estudiantes.p6",
+	                            "grupos_estudiantes.p7",
+	                            "grupos_estudiantes.p8",
+	                            "grupos_estudiantes.p9",
+	                            "grupos_estudiantes.s1",
+	                            "grupos_estudiantes.s2",
+	                            "grupos_estudiantes.s3",
+	                            "grupos_estudiantes.s4",
+	                            "grupos_estudiantes.s5",
+	                            "grupos_estudiantes.s6",
+	                            "grupos_estudiantes.s7",
+	                            "grupos_estudiantes.s8",
+	                            "grupos_estudiantes.s9",
+                                "grupos_estudiantes.sp1",
+	                            "grupos_estudiantes.sp2",
+	                            "grupos_estudiantes.sp3",
+	                            "grupos_estudiantes.sp4",
+	                            "grupos_estudiantes.sp5",
+	                            "grupos_estudiantes.sp6",
+	                            "grupos_estudiantes.sp7",
+	                            "grupos_estudiantes.sp8",
+	                            "grupos_estudiantes.sp9"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
+
+            $model1 = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                    "cat_materias.desc_materia",
+    	                            "cat_carreras.desc_carrera",
+                                    "grupos.num_semestre",
+                                    "grupos.desc_grupo",
+                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
+                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
+                            ->all();
+
+            $regular = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
+
+            return $this->render("listaAlumnosCalificacionSeguimientosAdmin", ["model" => $model,
+                                                              "model1" => $model1,
+                                                              "idciclo" => $idciclo,
+                                                              "idgrupo" => $idgrupo,
+                                                              "idprofesor" => $idprofesor,
+                                                              "ultimo_ciclo" => $ultimo_ciclo]);
+        }
+    }
+
     public function actionGuardarcalificacion()
     {
         if(Yii::$app->request->post())

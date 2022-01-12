@@ -94,7 +94,7 @@ $form = ActiveForm::begin([
                             <th>No. Control</th>
                             <th>Nombre</th>
                             <th>Opc.</th>
-                            <th class="text-center">T1</th>
+                            <th class="text-center"><button id="btn_reiniciar1">T1</button></th>
                             <th class="text-center">T2</th>
                             <th class="text-center">T3</th>
                             <th class="text-center">T4</th>
@@ -223,18 +223,12 @@ $this->registerCss('
 ');
 
 $this->registerJs('
-$(document).keyup(function(objEvent) {
-    if (objEvent.keyCode == 9) {  //tab pressed
-        objEvent.preventDefault(); // stops its action
-
-        var id = $(".valor1").attr("id");
-
-        //var hasFocus = $(".valor").is(":focus");
-        var valor = $(".valor1").val();
-    }
-})
-
 $(document).ready(function(){
+    $("#btn_reiniciar1").on("click", function(e){
+        e.preventDefault();
+
+        $(".verificar_espacio_v1").val("");
+    });
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");
