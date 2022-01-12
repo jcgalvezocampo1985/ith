@@ -109,7 +109,7 @@ $form = ActiveForm::begin([
                     <tbody class="text-nowrap">
                         <?php
                         $i = 1;
-                        
+
                         foreach($model as $row):
                             $sp1 = $row['sp1'];
                             $sp2 = $row['sp2'];
@@ -391,7 +391,7 @@ $(document).ready(function(){
         return inputs_vacios;
     }
 
-    $.ajax({
+    /*$.ajax({
         url: "seguimientosactivos",
         success: function(resultado){
             if(resultado > 0){
@@ -404,6 +404,6 @@ $(document).ready(function(){
                 $("#mensaje_error").slideDown(1000).delay(4000).slideUp(1000);
             } 
         }
-    });
+    });*/
     
 })');
