@@ -154,7 +154,7 @@ class ActacalificacionController extends Controller
                 $table->idgrupo = $idgrupo;
                 $table->idestudiante = $idestudiante;
                 $table->idopcion_curso = $idopcion_curso;
-                $table->pri_opt = ($verificar_oportunidad_calificacion == 0) ? (($verificar_oportunidad_calificacion == 1) ? $promedio_final : "") : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "";
                 $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_registro = date("Y-m-d h:i:s");
                 $table->fecha_actualizacion = "";
@@ -169,7 +169,7 @@ class ActacalificacionController extends Controller
                 $idacta_cal = $sql->idacta_cal;
 
                 $table = ActaCalificacion::findOne($idacta_cal);
-                $table->pri_opt = ($verificar_oportunidad_calificacion == 0) ? (($verificar_oportunidad_calificacion == 1) ? $promedio_final : "") : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "";
                 $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_actualizacion = date("Y-m-d h:i:s");
                 $table->cve_estatus = $cve_estatus;
@@ -214,7 +214,7 @@ class ActacalificacionController extends Controller
     {
         $total_reprobados_primera = 0;
         $total_reprobados_segunda = 0;
-        $opcion = 0;
+        $opcion = 1;
 
         for($i = 0; $i < count($calificaciones_primera_oportunidad); $i++)
         {
