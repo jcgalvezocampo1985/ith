@@ -41,7 +41,7 @@ $regularizacion = ($regular == 1) ? "checked" : "";
                             <th class="text-center"><input type="checkbox" name="seguimientos2" id="seguimientos2" <?= $total_seguimientos2 ?> />Seguimiento 2</th>
                             <th class="text-center"><input type="checkbox" name="seguimientos3" id="seguimientos3" <?= $total_seguimientos3 ?> />Seguimiento 3</th>
                             <th class="text-center"><input type="checkbox" name="seguimientos4" id="seguimientos4" <?= $total_seguimientos4 ?> />Seguimiento 4</th>
-                            <th class="text-center"><input type="checkbox" name="seguimientos5" id="seguimientos5" <?= $regularizacion ?> />Regularización</th>
+                            <th class="text-center"><input type="checkbox" name="seguimientos5" id="seguimientos5" <?= $regularizacion ?> />2da. Opción</th>
                         </tr>
                     </thead>
                     <tbody>
