@@ -137,24 +137,31 @@ class ActacalificacionController extends Controller
 
             //Array con las calificaciones de los 9  parciales
             $calificaciones_parciales = [$calificacion1, $calificacion2, $calificacion3, $calificacion4, $calificacion5, $calificacion6, $calificacion7, $calificacion8, $calificacion9];
-            $calificaciones_parciales_verificacion_NA = [$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9];
+            $calificaciones_primera_oportunidad = [$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8, $p9];
+            $calificaciones_segunda_oportunidad = [$s1, $s2, $s3, $s4, $s5, $s6, $s7, $s8, $s9];
 
             //Devuelve el promedio final por estudiante y materia
             $promedio_final = $this->promedioTotal($calificaciones_parciales);
 
             //Identifica los parciales reprobados con NA, con este valor se discretiza si el promedio final es para primera o segunda oportunidad
-            $promedio_primera_segunda_oportunidad = $this->vertificarOpcionCalificacion($calificaciones_parciales_verificacion_NA);
+            $verificar_oportunidad_calificacion = $this->vertificarOportunidadCalificacion($calificaciones_primera_oportunidad, $calificaciones_segunda_oportunidad, 1);
 
             $existe = ActaCalificacion::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->count();
 
-            if($existe == 0)
+            if($verificar_oportunidad_calificacion == 1 || $verificar_oportunidad_calificacion == 0){
+                echo "Primera: ".$promedio_final;
+            }else if($verificar_oportunidad_calificacion == 2){
+                echo "Segunda: ".$promedio_final;
+            }
+echo "<br />";
+            /*if($existe == 0)
             {
                 $table = new ActaCalificacion();
                 $table->idgrupo = $idgrupo;
                 $table->idestudiante = $idestudiante;
                 $table->idopcion_curso = $idopcion_curso;
-                $table->pri_opt = ($promedio_final != "") ? (($promedio_primera_segunda_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final)) : "";
-                $table->seg_opt = ($promedio_final != "") ? (($promedio_primera_segunda_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "") : "";
+                $table->pri_opt = ($promedio_final != "") ? (($primera_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final)) : "";
+                $table->seg_opt = ($promedio_final != "") ? (($primera_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "") : "";
                 $table->fecha_registro = date("Y-m-d h:i:s");
                 $table->fecha_actualizacion = "";
                 $table->cve_estatus = $cve_estatus;
@@ -175,16 +182,16 @@ class ActacalificacionController extends Controller
                 $table->update();
 
                 $status_acta = 2;
-            }
+            }*/
         }
-        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
-        exit;
+        //header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
     }
 
     private function promedioTotal(array $parciales)
     {
         $total_parciales = 0;
         $suma_calificaciones = 0;
+        $total_reprobados = 0;
 
         for($i = 0; $i < count($parciales); $i++)
         {
@@ -192,8 +199,10 @@ class ActacalificacionController extends Controller
 
             if (is_numeric($parcial) || $parcial == "NA")
             {
-                if($parcial == "NA"){
+                if($parcial == "NA")
+                {
                     $parcial = 0;
+                    $total_reprobados = $total_reprobados + 1;
                 }
 
                 $suma_calificaciones = $suma_calificaciones + $parcial;
@@ -201,25 +210,46 @@ class ActacalificacionController extends Controller
             }
         }
 
-        $promedio_p = ($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "";
+        $promedio_p = ($total_parciales > 0) ? (($total_reprobados > 0) ? "NA" : round($suma_calificaciones / $total_parciales, 0)) : "";
 
         return $promedio_p;
     }
 
-    private function vertificarOpcionCalificacion(array $parciales)
+    private function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad)
     {
-        $total_reprobados = 0;
+        $total_reprobados_primera = 0;
+        $total_reprobados_segunda = 0;
+        $opcion = 0;
 
-        for($i = 0; $i < count($parciales); $i++)
+        for($i = 0; $i < count($calificaciones_primera_oportunidad); $i++)
         {
-            $parcial = $parciales[$i];
+            $primera = $calificaciones_primera_oportunidad[$i];
 
-            if($parcial == "NA")
+            if($primera == "NA")//Solo cuando el valor sea NA se toma como candidato para segunda oportunidad
             {
-                $total_reprobados = $total_reprobados + 1;
+                $total_reprobados_primera = $total_reprobados_primera + 1;
             }
         }
 
-        return $total_reprobados;
+        for($j = 0; $j < count($calificaciones_segunda_oportunidad); $j++)
+        {
+            $segunda = $calificaciones_segunda_oportunidad[$j];
+
+            if($segunda != "")//Solo cuando el valor sea NA se toma como candidato para segunda oportunidad
+            {
+                $total_reprobados_segunda = $total_reprobados_segunda + 1;
+            }
+        }
+
+        if($total_reprobados_primera > 0)
+        {
+            $opcion = 1;
+        }
+        if($total_reprobados_segunda > 0)
+        {
+            $opcion = 2;
+        }
+
+        return $opcion;
     }
 }

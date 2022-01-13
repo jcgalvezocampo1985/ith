@@ -631,10 +631,10 @@ class EstudianteController extends Controller
         $table2 = new \yii\db\Query();
         $model2 = $table2->from(['cat_carreras'])
                          ->select(['cat_carreras.idcarrera','cat_carreras.desc_carrera', 'estudiantes.nombre_estudiante'])
-                         ->innerJoin(['estudiantes'], 'cat_carreras.idcarrera=estudiantes.idcarrera`')
+                         ->innerJoin(['estudiantes'], 'cat_carreras.idcarrera=estudiantes.idcarrera')
                          ->where(["estudiantes.idestudiante" => $idestudiante])
                          ->all();
-
+ 
         $creditos = $model1[0]['creditos'];
         $idcarrera = (count($model2) > 0) ? $model2[0]['idcarrera'] : "";
         $desc_carrera = (count($model2) > 0) ? $model2[0]['desc_carrera'] : "";

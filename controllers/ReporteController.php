@@ -893,15 +893,15 @@ class ReporteController extends Controller
             $s8 = $row['s8'];
             $s9 = $row['s9'];
 
-            $p1 = ($row['p1'] == "NA") ? $s1 : $row['p1'];
-            $p2 = ($row['p2'] == "NA") ? $s2 : $row['p2'];
-            $p3 = ($row['p3'] == "NA") ? $s3 : $row['p3'];
-            $p4 = ($row['p4'] == "NA") ? $s4 : $row['p4'];
-            $p5 = ($row['p5'] == "NA") ? $s5 : $row['p5'];
-            $p6 = ($row['p6'] == "NA") ? $s6 : $row['p6'];
-            $p7 = ($row['p7'] == "NA") ? $s7 : $row['p7'];
-            $p8 = ($row['p8'] == "NA") ? $s8 : $row['p8'];
-            $p9 = ($row['p9'] == "NA") ? $s9 : $row['p9'];
+            $p1 = ($row['p1'] == "NA") ? (($s1 == "") ? $row['p1'] : $s1) : $row['p1'];
+            $p2 = ($row['p2'] == "NA") ? (($s2 == "") ? $row['p2'] : $s2) : $row['p2'];
+            $p3 = ($row['p3'] == "NA") ? (($s3 == "") ? $row['p3'] : $s3) : $row['p3'];
+            $p4 = ($row['p4'] == "NA") ? (($s4 == "") ? $row['p4'] : $s4) : $row['p4'];
+            $p5 = ($row['p5'] == "NA") ? (($s5 == "") ? $row['p5'] : $s5) : $row['p5'];
+            $p6 = ($row['p6'] == "NA") ? (($s6 == "") ? $row['p6'] : $s6) : $row['p6'];
+            $p7 = ($row['p7'] == "NA") ? (($s7 == "") ? $row['p7'] : $s7) : $row['p7'];
+            $p8 = ($row['p8'] == "NA") ? (($s8 == "") ? $row['p8'] : $s8) : $row['p8'];
+            $p9 = ($row['p9'] == "NA") ? (($s9 == "") ? $row['p9'] : $s9) : $row['p9'];
 
             $pdf->SetX($x);
             $pdf->Cell(8, 5, $numero, 1, 0, 'C');
@@ -1049,15 +1049,15 @@ class ReporteController extends Controller
                 $s8 = $row['s8'];
                 $s9 = $row['s9'];
 
-                $p1 = ($row['p1'] == "NA") ? $s1 : $row['p1'];
-                $p2 = ($row['p2'] == "NA") ? $s2 : $row['p2'];
-                $p3 = ($row['p3'] == "NA") ? $s3 : $row['p3'];
-                $p4 = ($row['p4'] == "NA") ? $s4 : $row['p4'];
-                $p5 = ($row['p5'] == "NA") ? $s5 : $row['p5'];
-                $p6 = ($row['p6'] == "NA") ? $s6 : $row['p6'];
-                $p7 = ($row['p7'] == "NA") ? $s7 : $row['p7'];
-                $p8 = ($row['p8'] == "NA") ? $s8 : $row['p8'];
-                $p9 = ($row['p9'] == "NA") ? $s9 : $row['p9'];
+                $p1 = ($row['p1'] == "NA") ? (($s1 == "") ? $row['p1'] : $s1) : $row['p1'];
+                $p2 = ($row['p2'] == "NA") ? (($s2 == "") ? $row['p2'] : $s2) : $row['p2'];
+                $p3 = ($row['p3'] == "NA") ? (($s3 == "") ? $row['p3'] : $s3) : $row['p3'];
+                $p4 = ($row['p4'] == "NA") ? (($s4 == "") ? $row['p4'] : $s4) : $row['p4'];
+                $p5 = ($row['p5'] == "NA") ? (($s5 == "") ? $row['p5'] : $s5) : $row['p5'];
+                $p6 = ($row['p6'] == "NA") ? (($s6 == "") ? $row['p6'] : $s6) : $row['p6'];
+                $p7 = ($row['p7'] == "NA") ? (($s7 == "") ? $row['p7'] : $s7) : $row['p7'];
+                $p8 = ($row['p8'] == "NA") ? (($s8 == "") ? $row['p8'] : $s8) : $row['p8'];
+                $p9 = ($row['p9'] == "NA") ? (($s9 == "") ? $row['p9'] : $s9) : $row['p9'];
 
                 $pdf->SetX($x);
                 $pdf->Cell(8, 5, $numero, 1, 0, 'C');

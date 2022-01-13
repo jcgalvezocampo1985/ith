@@ -16,22 +16,27 @@ function promedioTotal(array $parciales)
 {
     $total_parciales = 0;
     $suma_calificaciones = 0;
+    $total_reprobados = 0;
 
     for($i = 0; $i < count($parciales); $i++)
     {
         $parcial = $parciales[$i];
         if (is_numeric($parcial) || $parcial == "NA")
         {
-            if($parcial == "NA"){
+            if($parcial == "NA")
+            {
                 $parcial = 0;
+                $total_reprobados = $total_reprobados + 1;
             }
-
-            $suma_calificaciones = $suma_calificaciones + $parcial;
-            $total_parciales = $total_parciales + 1;
+            else
+            {
+                $suma_calificaciones = $suma_calificaciones + $parcial;
+                $total_parciales = $total_parciales + 1;
+            }
         }
     }
 
-    $promedio_p = ($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "";
+    $promedio_p = ($total_reprobados == 0) ? (($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "") : "NA";
 
     return $promedio_p;
 }
@@ -67,7 +72,7 @@ $form = ActiveForm::begin([
             <div class="col-md-5">
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
                 <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
-                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
+                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r."&seguimiento=".$seguimiento], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
                 <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
@@ -81,8 +86,7 @@ $form = ActiveForm::begin([
         </div>
         <div id="mensaje">
             <div class="alert alert-warning" role="warning">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <b>Captura de calificaciones correspondiente al Seguimiento <?= $seguimiento ?></b>
+                <h4><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;&nbsp;<b>Captura de calificaciones correspondiente al Seguimiento <?= $seguimiento ?></b></h4>
             </div>
         </div>  
         <div class="row">

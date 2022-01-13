@@ -53,7 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <thead>
                         <tr>
                             <th>Materia</th>
-                            <th>Profesor</th>
                             <th>REP</th>
                             <th>CR</th>
                             <th>Lunes</th>
@@ -68,7 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tbody>
                         <?php foreach($model as $row): ?>
                         <tr>
-                            <td><?= $row['desc_materia'] ?></td>
                             <td><?= $row['desc_materia'] ?></td>
                             <td><?= $row['desc_opcion_curso_corto'] ?></td>
                             <td><?= $row['creditos'] ?></td>
