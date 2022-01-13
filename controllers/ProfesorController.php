@@ -1097,15 +1097,15 @@ class ProfesorController extends Controller
                     $table->sp9 = $sp9;
 
                     /** Asigna calificaciones para calificaciones de repetición */
-                    $table->s1 = ($p1 == "NA") ? $p1 : "";
-                    $table->s2 = ($p2 == "NA") ? $p2 : "";
-                    $table->s3 = ($p3 == "NA") ? $p3 : "";
-                    $table->s4 = ($p4 == "NA") ? $p4 : "";
-                    $table->s5 = ($p5 == "NA") ? $p5 : "";
-                    $table->s6 = ($p6 == "NA") ? $p6 : "";
-                    $table->s7 = ($p7 == "NA") ? $p7 : "";
-                    $table->s8 = ($p8 == "NA") ? $p8 : "";
-                    $table->s9 = ($p9 == "NA") ? $p9 : "";
+                    $table->s1 = ($p1 == "NA") ? "" : "";
+                    $table->s2 = ($p2 == "NA") ? "" : "";
+                    $table->s3 = ($p3 == "NA") ? "" : "";
+                    $table->s4 = ($p4 == "NA") ? "" : "";
+                    $table->s5 = ($p5 == "NA") ? "" : "";
+                    $table->s6 = ($p6 == "NA") ? "" : "";
+                    $table->s7 = ($p7 == "NA") ? "" : "";
+                    $table->s8 = ($p8 == "NA") ? "" : "";
+                    $table->s9 = ($p9 == "NA") ? "" : "";
 
                     $table->update();
                 }    
@@ -1298,7 +1298,7 @@ class ProfesorController extends Controller
         $idprofesor = Html::encode($_GET["idprofesor"]);
         $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
 
-        echo $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
+        return $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
     }
 
     public function actionSeguimientos()
@@ -1489,5 +1489,10 @@ class ProfesorController extends Controller
             ->count();
 
         return $model;
+    }
+
+    public function actionGeneraracta()
+    {
+        
     }
 }

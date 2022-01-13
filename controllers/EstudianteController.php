@@ -623,18 +623,18 @@ class EstudianteController extends Controller
         $table1 = new \yii\db\Query();
         $model1 = $table1->from(['grupos_estudiantes'])
                          ->select(['IF(COUNT(cat_materias.creditos) > 0, SUM(cat_materias.creditos), "") AS creditos'])
-                         ->innerJoin(['grupos'], '`grupos_estudiantes`.`idgrupo`=`grupos`.`idgrupo`')
-                         ->innerJoin(['cat_materias'], '`grupos`.`idmateria`=`cat_materias`.`idmateria`')
+                         ->innerJoin(['grupos'], 'grupos_estudiantes.idgrupo=grupos.idgrupo')
+                         ->innerJoin(['cat_materias'], 'grupos.idmateria=cat_materias.idmateria')
                          ->where(["grupos.idciclo" => $idciclo, "grupos_estudiantes.idestudiante" => $idestudiante])
                          ->all();
 
         $table2 = new \yii\db\Query();
         $model2 = $table2->from(['cat_carreras'])
                          ->select(['cat_carreras.idcarrera','cat_carreras.desc_carrera', 'estudiantes.nombre_estudiante'])
-                         ->innerJoin(['estudiantes'], '`cat_carreras`.`idcarrera`=`estudiantes`.`idcarrera`')
+                         ->innerJoin(['estudiantes'], 'cat_carreras.idcarrera=estudiantes.idcarrera')
                          ->where(["estudiantes.idestudiante" => $idestudiante])
                          ->all();
-
+ 
         $creditos = $model1[0]['creditos'];
         $idcarrera = (count($model2) > 0) ? $model2[0]['idcarrera'] : "";
         $desc_carrera = (count($model2) > 0) ? $model2[0]['desc_carrera'] : "";
@@ -645,7 +645,18 @@ class EstudianteController extends Controller
             $msg = "No se encontraron registros relacionados con el No. Control ". $idestudiante;
         }
 
-        return $this->render("horariomodificar", ["model" => $model, "form" => $form, "ciclos" => $ciclos, "idestudiante" => $idestudiante, "estudiante" => $estudiante, "idciclo" => $idciclo, "idciclo_actual" => $idciclo_actual, "creditos" => $creditos, "idcarrera" => $idcarrera, "carrera" => $desc_carrera, "status" => $status, "msg" => $msg]);
+        return $this->render("horariomodificar", ["model" => $model, 
+                                                  "form" => $form, 
+                                                  "ciclos" => $ciclos, 
+                                                  "idestudiante" => $idestudiante, 
+                                                  "estudiante" => $estudiante, 
+                                                  "idciclo" => $idciclo, 
+                                                  "idciclo_actual" => $idciclo_actual, 
+                                                  "creditos" => $creditos, 
+                                                  "idcarrera" => $idcarrera, 
+                                                  "carrera" => $desc_carrera, 
+                                                  "status" => $status, 
+                                                  "msg" => $msg]);
     }
 
     public function actionDeletehorarioestudiante()

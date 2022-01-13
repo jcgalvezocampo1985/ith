@@ -16,22 +16,27 @@ function promedioTotal(array $parciales)
 {
     $total_parciales = 0;
     $suma_calificaciones = 0;
+    $total_reprobados = 0;
 
     for($i = 0; $i < count($parciales); $i++)
     {
         $parcial = $parciales[$i];
         if (is_numeric($parcial) || $parcial == "NA")
         {
-            if($parcial == "NA"){
+            if($parcial == "NA")
+            {
                 $parcial = 0;
+                $total_reprobados = $total_reprobados + 1;
             }
-
-            $suma_calificaciones = $suma_calificaciones + $parcial;
-            $total_parciales = $total_parciales + 1;
+            else
+            {
+                $suma_calificaciones = $suma_calificaciones + $parcial;
+                $total_parciales = $total_parciales + 1;
+            }
         }
     }
 
-    $promedio_p = ($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "";
+    $promedio_p = ($total_reprobados == 0) ? (($total_parciales > 0) ? round($suma_calificaciones / $total_parciales, 0) : "") : "NA";
 
     return $promedio_p;
 }
@@ -67,7 +72,7 @@ $form = ActiveForm::begin([
             <div class="col-md-5">
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
                 <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
-                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
+                <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r."&seguimiento=".$seguimiento], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
                 <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
@@ -79,6 +84,11 @@ $form = ActiveForm::begin([
                 <span id="mensaje_texto"></span>
             </div>
         </div>
+        <div id="mensaje">
+            <div class="alert alert-warning" role="warning">
+                <h4><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;&nbsp;<b>Captura de calificaciones correspondiente al Seguimiento <?= $seguimiento ?></b></h4>
+            </div>
+        </div>  
         <div class="row">
             <div class="col-md-12">
             <div class="table-responsive">
@@ -103,7 +113,7 @@ $form = ActiveForm::begin([
                     <tbody class="text-nowrap">
                         <?php
                         $i = 1;
-                        
+
                         foreach($model as $row):
                             $sp1 = $row['sp1'];
                             $sp2 = $row['sp2'];
@@ -147,17 +157,18 @@ $form = ActiveForm::begin([
                             $p8 = (is_numeric($row['s8'])) ? $s8 : $p8;
                             $p9 = (is_numeric($row['s9'])) ? $s9 : $p9;
 
-                            $bloqueo1 = ($p1 == "") ? "" : (($sp1 == $seguimiento) ? "" : "readonly");
-                            $bloqueo2 = ($p2 == "") ? "" : (($sp2 == $seguimiento) ? "" : "readonly");
-                            $bloqueo3 = ($p3 == "") ? "" : (($sp3 == $seguimiento) ? "" : "readonly");
-                            $bloqueo4 = ($p4 == "") ? "" : (($sp4 == $seguimiento) ? "" : "readonly");
-                            $bloqueo5 = ($p5 == "") ? "" : (($sp5 == $seguimiento) ? "" : "readonly");
-                            $bloqueo6 = ($p6 == "") ? "" : (($sp6 == $seguimiento) ? "" : "readonly");
-                            $bloqueo7 = ($p7 == "") ? "" : (($sp7 == $seguimiento) ? "" : "readonly");
-                            $bloqueo8 = ($p8 == "") ? "" : (($sp8 == $seguimiento) ? "" : "readonly");
-                            $bloqueo9 = ($p9 == "") ? "" : (($sp9 == $seguimiento) ? "" : "readonly");
+                            $bloqueo1 = ($p1 != "") ? (($sp1 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo2 = ($p2 != "") ? (($sp2 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo3 = ($p3 != "") ? (($sp3 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo4 = ($p4 != "") ? (($sp4 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo5 = ($p5 != "") ? (($sp5 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo6 = ($p6 != "") ? (($sp6 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo7 = ($p7 != "") ? (($sp7 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo8 = ($p8 != "") ? (($sp8 == $seguimiento) ? "" : "readonly") : "";
+                            $bloqueo9 = ($p9 != "") ? (($sp9 == $seguimiento) ? "" : "readonly") : "";
 
                             $promedio_p = promedioTotal([$row['p1'], $row['p2'], $row['p3'], $row['p4'], $row['p5'], $row['p6'], $row['p7'], $row['p8'], $row['p9']]);
+
                         ?>
                         <tr>
                             <td><?= $row['idestudiante'] ?></td>
@@ -384,7 +395,7 @@ $(document).ready(function(){
         return inputs_vacios;
     }
 
-    $.ajax({
+    /*$.ajax({
         url: "seguimientosactivos",
         success: function(resultado){
             if(resultado > 0){
@@ -397,6 +408,6 @@ $(document).ready(function(){
                 $("#mensaje_error").slideDown(1000).delay(4000).slideUp(1000);
             } 
         }
-    });
+    });*/
     
 })');
