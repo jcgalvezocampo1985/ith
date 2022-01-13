@@ -148,20 +148,14 @@ class ActacalificacionController extends Controller
 
             $existe = ActaCalificacion::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->count();
 
-            if($verificar_oportunidad_calificacion == 1 || $verificar_oportunidad_calificacion == 0){
-                echo "Primera: ".$promedio_final;
-            }else if($verificar_oportunidad_calificacion == 2){
-                echo "Segunda: ".$promedio_final;
-            }
-echo "<br />";
-            /*if($existe == 0)
+            if($existe == 0)
             {
                 $table = new ActaCalificacion();
                 $table->idgrupo = $idgrupo;
                 $table->idestudiante = $idestudiante;
                 $table->idopcion_curso = $idopcion_curso;
-                $table->pri_opt = ($promedio_final != "") ? (($primera_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final)) : "";
-                $table->seg_opt = ($promedio_final != "") ? (($primera_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "") : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 0) ? (($verificar_oportunidad_calificacion == 1) ? $promedio_final : "") : "";
+                $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_registro = date("Y-m-d h:i:s");
                 $table->fecha_actualizacion = "";
                 $table->cve_estatus = $cve_estatus;
@@ -175,16 +169,17 @@ echo "<br />";
                 $idacta_cal = $sql->idacta_cal;
 
                 $table = ActaCalificacion::findOne($idacta_cal);
-                $table->pri_opt = ($promedio_primera_segunda_oportunidad > 0) ? "" : (($promedio_final < 70) ? "NA" : $promedio_final);
-                $table->seg_opt = ($promedio_primera_segunda_oportunidad > 0) ? (($promedio_final < 70) ? "NA" : $promedio_final) : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 0) ? (($verificar_oportunidad_calificacion == 1) ? $promedio_final : "") : "";
+                $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_actualizacion = date("Y-m-d h:i:s");
                 $table->cve_estatus = $cve_estatus;
                 $table->update();
 
                 $status_acta = 2;
-            }*/
+            }
         }
-        //header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
+        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
+        exit;
     }
 
     private function promedioTotal(array $parciales)
