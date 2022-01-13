@@ -2,8 +2,10 @@
 
 namespace app\models\estudiante;
 
-use yii\base\model;
 use app\models\estudiante\Estudiante;
+
+use Yii;
+use yii\base\model;
 
 class EstudianteForm extends model
 {
@@ -24,20 +26,17 @@ class EstudianteForm extends model
             [["estado", "idestudiante", "nombre_estudiante", "email", "sexo", "num_semestre", "fecha_registro", "cve_estatus", "idcarrera"], "required", "message" => "Requerido"],
             ["idestudiante", "match", "pattern" => "/^.[0-9A-Za-z]+$/i", "message" => "Sólo valores alfanuméricos"],
             ["idestudiante", "string", "min" => 3, "max" => 15, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 15 caracteres"],
-            ["idestudiante", "idestudiante_existe"],
+            ["idestudiante_existe"],
             ["nombre_estudiante", "match", "pattern" => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", "message" => "Sólo letras"],
             ["nombre_estudiante", "string", "min" => 3, "max" => 200, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 200 caracteres"],
             ["email", "email", "message" =>"Formato no válido"],
             ["email", "string", "min" => 10, "max" => 45, "tooShort" => "Mínimo 10 caracteres", "tooLong" => "Máximo 45 caracteres"],
-            ["email", "email_existe"],
+            ["email_existe"],
             ["sexo", "match", "pattern" => "/^[a-zA-z]+$/i", "message" => "Sólo letras"],
             ["num_semestre", "string", "min" => 1, "max" => 1, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 1 caracter"],
             ["num_semestre", "integer", "message" => "Sólo números"],
             ["num_semestre", "string", "min" => 1, "max" => 2, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 2 caracteres"],
             [["fecha_registro", "fecha_actualizacion"], "string", "min" => 10, "max" => 19, "tooShort" => "Mínimo 10 caracteres", "tooLong" => "Máximo 19 caracteres"],
-            //["fecha_registro", "date", "format" => "php:Y-m-d", "message" => "Requerido"],
-            //["fecha_actualizacion", "required", "message" => "Requerido"],
-            ["idcarrera", "integer", "message" => "Sólo números"]
         ];
     }
 

@@ -23,7 +23,7 @@ use app\models\grupoestudiante\GrupoEstudianteSearch;
 use app\models\carrera\Carrera;
 use app\models\opcioncurso\OpcionCurso;
 use app\models\ciclo\Ciclo;
-use app\models\ActaCalificacion;
+use app\models\actacalificacion\ActaCalificacion;
 use app\models\User;
 
 class EstudianteController extends Controller
@@ -770,18 +770,4 @@ class EstudianteController extends Controller
 
         return $status;
     }
-
-    /*public function actionGrid()
-    {
-        $this->layout = 'main2';
-
-        $searchModel = new GrupoEstudianteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render("grid", [
-            "searchModel" => $searchModel,
-            "dataProvider" => $dataProvider
-        ]);
-        
-    }*/
 }

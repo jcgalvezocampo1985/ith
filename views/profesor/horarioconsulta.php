@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <li><?= Html::a("Capturar Seguimiento4", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=4"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
                                             <?php if($regularizacion_status == 1): ?>
-                                            <li><?= Html::a("Capturar 2da. Oportunidad", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                            <li><?= Html::a("Capturar 2da. Opción", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
                                             <?php endif ?>
                                             <li><?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
