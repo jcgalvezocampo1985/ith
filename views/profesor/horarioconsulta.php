@@ -111,10 +111,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <li><?= Html::a("Lista Alumnos", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
                                             <?php //Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?>
+                                            <?php if($seguimiento1 == 1): ?>
                                             <li><?= Html::a("Capturar Seguimiento1", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=1"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
+                                            <?php if($seguimiento2 == 1): ?>
                                             <li><?= Html::a("Capturar Seguimiento2", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=2"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
+                                            <?php if($seguimiento3 == 1): ?>
                                             <li><?= Html::a("Capturar Seguimiento3", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=3"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
+                                            <?php if($seguimiento4 == 1): ?>
                                             <li><?= Html::a("Capturar Seguimiento4", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=4"], ["target" => "_parent"]) ?></li>
+                                            <?php endif ?>
                                             <?php if($regularizacion_status == 1): ?>
                                             <li><?= Html::a("Capturar 2da. Oportunidad", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
                                             <?php endif ?>
