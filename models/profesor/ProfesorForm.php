@@ -3,11 +3,11 @@
 namespace app\models\profesor;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 use app\models\profesor\Profesor;
 use app\models\login\Usuario;
 
-class ProfesorForm extends model
+class ProfesorForm extends Model
 {
     public $idprofesor;
     public $curp;

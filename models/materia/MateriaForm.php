@@ -3,9 +3,9 @@
 namespace app\models\materia;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class MateriaForm extends model
+class MateriaForm extends Model
 {
     public $idmateria;
     public $cve_materia;

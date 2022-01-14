@@ -2,9 +2,9 @@
 
 namespace app\models\grupo;
 
-use yii\base\model;
+use yii\base\Model;
 
-class GrupoForm extends model
+class GrupoForm extends Model
 {
     public $idgrupo;
     public $idciclo;

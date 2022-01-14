@@ -2,10 +2,12 @@
 
 namespace app\models\estudiante;
 
-use yii\base\model;
 use app\models\estudiante\Estudiante;
 
-class EstudianteForm extends model
+use Yii;
+use yii\base\Model;
+
+class EstudianteForm extends Model
 {
     public $idestudiante;
     public $nombre_estudiante;
@@ -35,9 +37,6 @@ class EstudianteForm extends model
             ["num_semestre", "integer", "message" => "Sólo números"],
             ["num_semestre", "string", "min" => 1, "max" => 2, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 2 caracteres"],
             [["fecha_registro", "fecha_actualizacion"], "string", "min" => 10, "max" => 19, "tooShort" => "Mínimo 10 caracteres", "tooLong" => "Máximo 19 caracteres"],
-            //["fecha_registro", "date", "format" => "php:Y-m-d", "message" => "Requerido"],
-            //["fecha_actualizacion", "required", "message" => "Requerido"],
-            ["idcarrera", "integer", "message" => "Sólo números"]
         ];
     }
 

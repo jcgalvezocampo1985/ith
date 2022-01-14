@@ -3,9 +3,9 @@
 namespace app\models\grupoestudiante;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class GrupoEstudianteForm extends model
+class GrupoEstudianteForm extends Model
 {
     public $idgrupo;
     public $idestudiante;

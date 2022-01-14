@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models\actacalificacion;
+
 use Yii;
 use yii\db\ActiveRecord;
 

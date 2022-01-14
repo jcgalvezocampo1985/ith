@@ -593,6 +593,10 @@ class ProfesorController extends Controller
 
         $ciclo_actual = ($idciclo) ? ((count($model) > 0) ? $model[0]["desc_ciclo"] : $ciclo["desc_ciclo"]) : $ciclo->desc_ciclo;
         $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
+        $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
+        $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
+        $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
+        $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
 
         return $this->render("horario", ["model" => $model,
                              "form" => $form,
@@ -601,7 +605,11 @@ class ProfesorController extends Controller
                              "idprofesor" => $idprofesor,
                              "ciclo_actual" => $ciclo_actual,
                              "ultimo_ciclo" => $ultimo_ciclo,
-                             "regularizacion_status" => $regularizacion_status
+                             "regularizacion_status" => $regularizacion_status,
+                             "seguimiento1" => $seguimiento1,
+                            "seguimiento2" => $seguimiento2,
+                            "seguimiento3" => $seguimiento3,
+                            "seguimiento4" => $seguimiento4
                              ]);
     }
 
@@ -728,6 +736,11 @@ class ProfesorController extends Controller
         $ultimo_ciclo = Ciclo::find()->max("idciclo");
         $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
+        $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
+        $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
+        $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
+        $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
+
         return $this->render("horarioconsulta", ["model" => $model,
                                                 "form" => $form,
                                                 "ciclos" => $ciclos,
@@ -736,7 +749,11 @@ class ProfesorController extends Controller
                                                 "idprofesor" => $idprofesor,
                                                 "profesores" => $profesores,
                                                 "ultimo_ciclo" => $ultimo_ciclo,
-                                                "regularizacion_status" => $regularizacion_status
+                                                "regularizacion_status" => $regularizacion_status,
+                                                "seguimiento1" => $seguimiento1,
+                                                "seguimiento2" => $seguimiento2,
+                                                "seguimiento3" => $seguimiento3,
+                                                "seguimiento4" => $seguimiento4,
                                             ]);
     }
 
@@ -808,10 +825,6 @@ class ProfesorController extends Controller
                             ->andFilterWhere(["grupos.idciclo" => $idciclo])
                             ->all();
 
-            $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
-            $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
-            $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
-            $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
             $regular = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
             $ultimo_seguimiento = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => "<5"])->max("seguimiento");
@@ -822,10 +835,6 @@ class ProfesorController extends Controller
                                                               "idgrupo" => $idgrupo,
                                                               "idprofesor" => $idprofesor,
                                                               "ultimo_ciclo" => $ultimo_ciclo,
-                                                              "seguimiento1" => $seguimiento1,
-                                                              "seguimiento2" => $seguimiento2,
-                                                              "seguimiento3" => $seguimiento3,
-                                                              "seguimiento4" => $seguimiento4,
                                                               "ultimo_seguimiento" => $ultimo_seguimiento]);
         }
     }
@@ -900,12 +909,21 @@ class ProfesorController extends Controller
 
             $regular = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
 
+            $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
+            $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
+            $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
+            $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count(); 
+
             return $this->render("listaAlumnosCalificacionSeguimientos", ["model" => $model,
-                                                              "model1" => $model1,
-                                                              "idciclo" => $idciclo,
-                                                              "idgrupo" => $idgrupo,
-                                                              "idprofesor" => $idprofesor,
-                                                              "ultimo_ciclo" => $ultimo_ciclo]);
+                                                                          "model1" => $model1,
+                                                                          "idciclo" => $idciclo,
+                                                                          "idgrupo" => $idgrupo,
+                                                                          "idprofesor" => $idprofesor,
+                                                                          "seguimiento1" => $seguimiento1,
+                                                                          "seguimiento2" => $seguimiento2,
+                                                                          "seguimiento3" => $seguimiento3,
+                                                                          "seguimiento4" => $seguimiento4,
+                                                                          "ultimo_ciclo" => $ultimo_ciclo]);
         }
     }
 

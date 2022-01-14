@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\base\model;
 use app\models\login\Usuario;
 use app\models\login\Rol;
 use app\models\login\UsuarioRol;
