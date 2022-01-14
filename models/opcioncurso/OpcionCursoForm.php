@@ -3,9 +3,9 @@
 namespace app\models\opcioncurso;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class OpcionCursoForm extends model
+class OpcionCursoForm extends Model
 {
     public $idopcion_curso;
     public $desc_opcion_curso;
