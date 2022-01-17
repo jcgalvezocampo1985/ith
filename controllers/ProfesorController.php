@@ -223,7 +223,13 @@ class ProfesorController extends Controller
             $msg = "No se encontró información relacionada con el criterio de búsqueda";
         }
 
-        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages, "ciclos" => $ciclos, "ultimo_ciclo" => $idciclo]);
+        return $this->render("index", ["model" => $model,
+                                      "form" => $form,
+                                      "msg" => $msg,
+                                      "error" => $error,
+                                      "pages" => $pages,
+                                      "ciclos" => $ciclos,
+                                      "ultimo_ciclo" => $idciclo]);
     }
 
     public function actionCreate($msg = "", $error = "")
@@ -607,9 +613,9 @@ class ProfesorController extends Controller
                              "ultimo_ciclo" => $ultimo_ciclo,
                              "regularizacion_status" => $regularizacion_status,
                              "seguimiento1" => $seguimiento1,
-                            "seguimiento2" => $seguimiento2,
-                            "seguimiento3" => $seguimiento3,
-                            "seguimiento4" => $seguimiento4
+                             "seguimiento2" => $seguimiento2,
+                             "seguimiento3" => $seguimiento3,
+                             "seguimiento4" => $seguimiento4
                              ]);
     }
 
@@ -665,6 +671,8 @@ class ProfesorController extends Controller
             return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
         });
         $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
+        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
+        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
         if($form->load(Yii::$app->request->get()))
         {
@@ -754,6 +762,8 @@ class ProfesorController extends Controller
                                                 "seguimiento2" => $seguimiento2,
                                                 "seguimiento3" => $seguimiento3,
                                                 "seguimiento4" => $seguimiento4,
+                                                "msg" => $msg,
+                                                "error" => $error
                                             ]);
     }
 

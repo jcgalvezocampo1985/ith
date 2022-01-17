@@ -7,7 +7,7 @@ use yii\helpers\Url;
 $this->title = 'Profesores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<?= Yii::$app->view->renderFile("@app/views/errors/error.php", ["msg" => $msg, "error" => $error]) ?>
 <div class="panel panel-primary">
     <div class="panel-heading">Profesores</div>
     <div class="panel-body">
