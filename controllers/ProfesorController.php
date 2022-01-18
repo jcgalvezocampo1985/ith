@@ -346,42 +346,6 @@ class ProfesorController extends Controller
         $error = Html::encode($error);
         $clave_estatus = ["VIG" => "VIG", "BAJA TEMPORAL" => "BAJA TEMPORAL", "BAJA DEFINITIVA" => "BAJA DEFINITIVA"];
 
-        /*if(Yii::$app->request->get())
-        {
-            $model = new ProfesorForm;
-
-            if($idprofesor)
-            {
-                $table = Profesor::findOne($idprofesor);
-
-                if($table)
-                {
-                    $model->idprofesor = $table->idprofesor;
-                    $model->curp = $table->curp;
-                    $model->nombre_profesor = $table->nombre_profesor;
-                    $model->apaterno = $table->apaterno;
-                    $model->amaterno = $table->amaterno;
-                    $model->fecha_registro = Carbon::parse(strtotime($table->fecha_registro))->format('Y-m-d');
-                    $model->fecha_actualizacion = Carbon::parse(strtotime($table->fecha_actualizacion))->format('Y-m-d');
-                    $model->cve_estatus = $table->cve_estatus;
-                }
-                else
-                {
-                    return $this->redirect(["profesor/index"]);
-                }
-            }
-            else
-            {
-                return $this->redirect(["profesor/index"]);
-            }
-        }
-        else
-        {
-            return $this->redirect(["profesor/index"]);
-        }
-
-        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error, "clave_estatus" => $clave_estatus]);*/
-
         if(Yii::$app->request->get("idprofesor"))
         {
             $id = Html::encode($_GET["idprofesor"]);
@@ -401,10 +365,7 @@ class ProfesorController extends Controller
                     $model->fecha_actualizacion = Carbon::parse(strtotime($table->fecha_actualizacion))->format('Y-m-d');
                     $model->cve_estatus = $table->cve_estatus;
 
-                    $usuario = Usuario::find()->select("email")->where(["curp" => $table->curp])->all();
-                    echo "<pre>";
-                    echo $usuario[0]->email;
-                    exit;
+                    $usuario = Usuario::find()->where(["curp" => $table->curp])->one();
                 }
                 else
                 {
@@ -451,11 +412,15 @@ class ProfesorController extends Controller
                     $table->nombre_profesor = $model->nombre_profesor;
                     $table->apaterno = $model->apaterno;
                     $table->amaterno = $model->amaterno;
-                    //$table->fecha_registro = "";//Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
                     $table->fecha_actualizacion = $model->fecha_actualizacion; //Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
                     $table->cve_estatus = $model->cve_estatus;
 
-                    if($table->update())
+                    $idusuario = Usuario::find()->select("idusuario")->where(["curp" => $model->curp])->one();
+                    $table1 = Usuario::findOne($idusuario->idusuario);
+                    $table1->email = $model->email;
+                    $table1->password = crypt($model->password, Yii::$app->params['salt']);
+
+                    if($table->update() || $table1->update())
                     {
                         $msg = "Registro actualizado";
                     }

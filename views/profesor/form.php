@@ -106,12 +106,14 @@ $form = ActiveForm::begin([
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "email")->input("email", ["maxlength" => 100, "autocomplete" => "off", "value" => $usuario->email]) ?>
+                    <?php $email = ($model->idprofesor != "") ? $usuario->email : ""; ?>
+                    <?= $form->field($model, "email")->input("email", ["maxlength" => 100, "autocomplete" => "off", "value" => $email]) ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "password")->input("password", ["maxlength" => 15, "autocomplete" => "off"]) ?>
+                    <?php $password = ($model->idprofesor != "") ? $model->curp : ""; ?>
+                    <?= $form->field($model, "password")->input("password", ["maxlength" => 15, "autocomplete" => "off", "value" => $password]) ?>
                 </div>
             </div>
         </div>

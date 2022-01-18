@@ -135,7 +135,7 @@ $(document).ready(function(){
                 bandera = "1";
             }
         }else if(id === "seguimientos3"){
-            seguimiento = "1";
+            seguimiento = "3";
             $(".seguimiento3").attr("checked", false);
             if($(this).is(":checked")){
                 $(".seguimiento3").attr("checked", true);

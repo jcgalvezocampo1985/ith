@@ -24,7 +24,7 @@ class ProfesorForm extends Model
     public function rules()
     {
         return [
-            [["estado", "email", "password", "curp", "nombre_profesor", "apaterno", "amaterno", "fecha_registro", "cve_estatus"], "required", "message" => "Requerido"],
+            [["estado", "password", "curp", "nombre_profesor", "apaterno", "amaterno", "fecha_registro", "cve_estatus"], "required", "message" => "Requerido"],
             ["idprofesor", "integer", "message" => "Solo números"],
             ["curp", "string", "min" => 3, "max" => 20, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 20 caracteres"],
             ["curp", "match", "pattern" => "/^.[0-9A-Za-z.]+$/i", "message" => "Solo valores alfanuméricos"],
