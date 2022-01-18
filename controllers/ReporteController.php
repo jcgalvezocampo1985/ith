@@ -864,13 +864,14 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
-        $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                           'carrera' => $carrera,
-                                                           'plan' => $plan,
-                                                           'profesor' => $profesor,
-                                                           'materia' => $materia,
-                                                           'grupo' => $grupo,
-                                                           'fecha' => $fecha)
+        $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                           "carrera" => $carrera,
+                                                           "plan" => $plan,
+                                                           "profesor" => $profesor,
+                                                           "materia" => $materia,
+                                                           "grupo" => $grupo,
+                                                           "fecha" => $fecha,
+                                                           "seguimiento" => "")
                                                );
 
         $x_encabezado = 45;
@@ -924,13 +925,14 @@ class ReporteController extends Controller
             if($numero == 18 || $numero == 36 || $numero == 54)
             {
                 $pdf->AddPage('L', 'Letter');
-                $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                                   'carrera' => $carrera,
-                                                                   'plan' => $plan,
-                                                                   'profesor' => $profesor,
-                                                                   'materia' => $materia,
-                                                                   'grupo' => $grupo,
-                                                                   'fecha' => $fecha)
+                $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                                   "carrera" => $carrera,
+                                                                   "plan" => $plan,
+                                                                   "profesor" => $profesor,
+                                                                   "materia" => $materia,
+                                                                   "grupo" => $grupo,
+                                                                   "fecha" => $fecha,
+                                                                   "seguimiento" => "")
                                                       );
                 $pdf->SetXY($x, $y_encabezado);
                 $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
@@ -1090,13 +1092,14 @@ class ReporteController extends Controller
             if($numero == 18 || $numero == 36 || $numero == 54)
             {
                 $pdf->AddPage('L', 'Letter');
-                $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                                   'carrera' => $carrera,
-                                                                   'plan' => $plan,
-                                                                   'profesor' => $profesor,
-                                                                   'materia' => $materia,
-                                                                   'grupo' => $grupo,
-                                                                   'fecha' => $fecha)
+                $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                                   "carrera" => $carrera,
+                                                                   "plan" => $plan,
+                                                                   "profesor" => $profesor,
+                                                                   "materia" => $materia,
+                                                                   "grupo" => $grupo,
+                                                                   "fecha" => $fecha,
+                                                                   "seguimiento" => $seguimiento)
                                                       );
                 $pdf->SetXY($x, $y_encabezado);
                 $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo, $seguimiento);
@@ -1163,7 +1166,10 @@ class ReporteController extends Controller
                                 "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
                                 "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
                                 "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9",
+                                "grupos_estudiantes.sp1", "grupos_estudiantes.sp2", "grupos_estudiantes.sp3",
+                                "grupos_estudiantes.sp4", "grupos_estudiantes.sp5", "grupos_estudiantes.sp6",
+                                "grupos_estudiantes.sp7", "grupos_estudiantes.sp8", "grupos_estudiantes.sp9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -1188,14 +1194,15 @@ class ReporteController extends Controller
             $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
             $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
-            $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                           'carrera' => $carrera,
-                                                           'plan' => $plan,
-                                                           'profesor' => $profesor,
-                                                           'materia' => $materia,
-                                                           'grupo' => $grupo,
-                                                           'fecha' => $fecha)
-                                               );
+            $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                               "carrera" => $carrera,
+                                                               "plan" => $plan,
+                                                               "profesor" => $profesor,
+                                                               "materia" => $materia,
+                                                               "grupo" => $grupo,
+                                                               "fecha" => $fecha,
+                                                               "seguimiento" => "")
+                                                    );
 
             $x_encabezado = 45;
             $y_encabezado = 77;
@@ -1246,13 +1253,14 @@ class ReporteController extends Controller
                 if($numero == 18 || $numero == 36 || $numero == 54)
                 {
                     $pdf->AddPage('L', 'Letter');
-                    $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                                    'carrera' => $carrera,
-                                                                    'plan' => $plan,
-                                                                    'profesor' => $profesor,
-                                                                    'materia' => $materia,
-                                                                    'grupo' => $grupo,
-                                                                    'fecha' => $fecha)
+                    $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                                       "carrera" => $carrera,
+                                                                       "plan" => $plan,
+                                                                       "profesor" => $profesor,
+                                                                       "materia" => $materia,
+                                                                       "grupo" => $grupo,
+                                                                       "fecha" => $fecha,
+                                                                       "seguimiento" => "")
                                                            );
                     $pdf->SetXY($x, $y_encabezado);
                     $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
@@ -1361,7 +1369,9 @@ class ReporteController extends Controller
         $pdf->Text(135, 70, utf8_decode($datos['grupo']));
         $pdf->Text(219, 60, 'FECHA:');
         $pdf->Text(243, 60, $datos['fecha']);
+        if($datos['seguimiento'] != ""){
         $pdf->Text(219, 65, 'SEGUIMIENTO:');
         $pdf->Text(243, 65, $datos['seguimiento']);
+        }
     }
 }
