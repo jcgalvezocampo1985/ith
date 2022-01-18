@@ -940,6 +940,158 @@ class ReporteController extends Controller
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
 
+    public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento)
+    {
+        $idgrupo = Html::encode($idgrupo);
+        $idciclo = Html::encode($idciclo);
+
+        $materia = (new \yii\db\Query())
+                            ->from(["grupos"])
+                            ->select(["cat_materias.desc_materia"])
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->one();
+
+        $encabezado = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                "ciclo.desc_ciclo",
+                            	"cat_carreras.desc_carrera",
+	                            "cat_carreras.plan_estudios",
+	                            "grupos.desc_grupo",
+	                            "grupos.desc_grupo_corto",
+	                            "cat_materias.desc_materia",
+                                "CONCAT(profesores.apaterno, ' ', profesores.amaterno, ' ', profesores.nombre_profesor) AS profesor"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo, "ciclo.idciclo" => $idciclo])
+                            ->all();
+
+        $cuerpo = (new \yii\db\Query())
+                            ->from(["estudiantes"])
+                            ->select([
+                                "estudiantes.idestudiante",
+    	                        "estudiantes.nombre_estudiante",
+                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3",
+                                "grupos_estudiantes.p4", "grupos_estudiantes.p5", "grupos_estudiantes.p6",
+                                "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
+                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
+                                "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
+                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
+                            ->all();
+
+        $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
+        $fecha = date('Y-m-d');
+        $carrera = $encabezado[0]['desc_carrera'];
+        $plan = $encabezado[0]['plan_estudios'];
+        $materia = $materia['desc_materia'];
+        $grupo = $encabezado[0]['desc_grupo'];
+        $profesor = utf8_decode($encabezado[0]['profesor']);
+
+        $x_encabezado = 45;
+        $y_encabezado = 77;
+
+        header('Content-type: application/pdf');
+        $pdf = new PDF();
+        $pdf->setReporte('Lista Calificacion');
+        $pdf->AliasNbPages();
+        $pdf->AddPage('L', 'Letter');
+        $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-MediumItalic', '', 'Montserrat-MediumItalic.php');
+        $pdf->AddFont('Montserrat-LightItalic', '', 'Montserrat-LightItalic.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
+
+        $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                           'carrera' => $carrera,
+                                                           'plan' => $plan,
+                                                           'profesor' => $profesor,
+                                                           'materia' => $materia,
+                                                           'grupo' => $grupo,
+                                                           'fecha' => $fecha)
+                                               );
+
+        $x_encabezado = 45;
+        $y_encabezado = 77;
+
+        $x = $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+
+        $pdf->Ln();
+
+        $total_estudiantes = count($cuerpo);
+
+        $numero = 1;
+        $pdf->SetFont('Montserrat-regular', '', 8);
+        foreach ($cuerpo as $row)
+        {
+            $s1 = $row['s1'];
+            $s2 = $row['s2'];
+            $s3 = $row['s3'];
+            $s4 = $row['s4'];
+            $s5 = $row['s5'];
+            $s6 = $row['s6'];
+            $s7 = $row['s7'];
+            $s8 = $row['s8'];
+            $s9 = $row['s9'];
+
+            $p1 = ($row['p1'] == "NA") ? (($s1 == "") ? $row['p1'] : $s1) : $row['p1'];
+            $p2 = ($row['p2'] == "NA") ? (($s2 == "") ? $row['p2'] : $s2) : $row['p2'];
+            $p3 = ($row['p3'] == "NA") ? (($s3 == "") ? $row['p3'] : $s3) : $row['p3'];
+            $p4 = ($row['p4'] == "NA") ? (($s4 == "") ? $row['p4'] : $s4) : $row['p4'];
+            $p5 = ($row['p5'] == "NA") ? (($s5 == "") ? $row['p5'] : $s5) : $row['p5'];
+            $p6 = ($row['p6'] == "NA") ? (($s6 == "") ? $row['p6'] : $s6) : $row['p6'];
+            $p7 = ($row['p7'] == "NA") ? (($s7 == "") ? $row['p7'] : $s7) : $row['p7'];
+            $p8 = ($row['p8'] == "NA") ? (($s8 == "") ? $row['p8'] : $s8) : $row['p8'];
+            $p9 = ($row['p9'] == "NA") ? (($s9 == "") ? $row['p9'] : $s9) : $row['p9'];
+
+            $pdf->SetX($x);
+            $pdf->Cell(8, 5, $numero, 1, 0, 'C');
+            $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
+            $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
+            ($p1 > 0 || $p1 == "NA") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
+            ($p2 > 0 || $p2 == "NA") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
+            ($p3 > 0 || $p3 == "NA") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
+            ($p4 > 0 || $p4 == "NA") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
+            ($p5 > 0 || $p5 == "NA") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
+            ($p6 > 0 || $p6 == "NA") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
+            ($p7 > 0 || $p7 == "NA") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
+            ($p8 > 0 || $p8 == "NA") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
+            ($p9 > 0 || $p9 == "NA") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
+            $pdf->Ln();
+
+            if($numero == 18 || $numero == 36 || $numero == 54)
+            {
+                $pdf->AddPage('L', 'Letter');
+                $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
+                                                                   'carrera' => $carrera,
+                                                                   'plan' => $plan,
+                                                                   'profesor' => $profesor,
+                                                                   'materia' => $materia,
+                                                                   'grupo' => $grupo,
+                                                                   'fecha' => $fecha)
+                                                      );
+                $pdf->SetXY($x, $y_encabezado);
+                $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+                $pdf->SetFont('Montserrat-regular', '', 8);
+                $pdf->Ln();
+            }
+            $numero = $numero + 1;
+        }
+
+        $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
+    }
+
     public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
     {
         $idciclo = Html::encode($idciclo);

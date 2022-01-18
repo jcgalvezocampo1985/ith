@@ -13,6 +13,6 @@ class RolUsuario extends ActiveRecord
 
     public static function tableName()
     {
-        return "roles_usuario";
+        return "roles_usuarios";
     }
 }

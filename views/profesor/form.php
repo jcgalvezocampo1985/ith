@@ -25,7 +25,8 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "curp")->input("text", ["maxlength" => 20, "autocomplete" => "off"]) ?>
+                    <?php $bloqueado_curp = ($model->idprofesor != "") ? true : false; ?>
+                    <?= $form->field($model, "curp")->input("text", ["maxlength" => 20, "autocomplete" => "off", "readonly" => $bloqueado_curp]) ?>
                 </div>
             </div>
             <div class="col-md-4">
@@ -47,7 +48,13 @@ $form = ActiveForm::begin([
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "fecha_registro")
+                    <?php
+                    $fecha_registro = ($model->idprofesor != "") ? $model->fecha_registro : $fecha = date("Y-m-d");
+
+                    echo $form->field($model, "fecha_registro")->input("text", ["maxlength" => 10, "autocomplete" => "off", "value" => $fecha_registro, "readonly" => true])
+                    ?>
+                    <?php
+                    /* $form->field($model, "fecha_registro")
                              ->widget(DatePicker::className(),[
                                 "dateFormat" => "yyyy-MM-dd",
                                 "clientOptions" => [
@@ -60,13 +67,19 @@ $form = ActiveForm::begin([
                                     "autocomplete" => "off",
                                     "readonly" => true
                                 ]
-                        ])
+                        ])*/
                     ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "fecha_actualizacion")
+                    <?php
+                    $fecha_actualizacion = ($model->idprofesor != "") ? $fecha = date("Y-m-d") : "";
+
+                    echo $form->field($model, "fecha_actualizacion")->input("text", ["maxlength" => 10, "autocomplete" => "off", "value" => $fecha_actualizacion, "readonly" => true])
+                    ?>
+                    <?php
+                    /* $form->field($model, "fecha_actualizacion")
                              ->widget(DatePicker::className(),[
                                 "dateFormat" => "yyyy-MM-dd",
                                 "clientOptions" => [
@@ -80,7 +93,7 @@ $form = ActiveForm::begin([
                                     "autocomplete" => "off",
                                     "readonly" => true
                                 ]
-                             ])
+                             ])*/
                     ?>
                 </div>
             </div>
@@ -88,17 +101,19 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "cve_estatus")->input("text", ["maxlength" => 3, "autocomplete" => "off"]) ?>
+                <?= $form->field($model, "cve_estatus")->dropDownList($clave_estatus)?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "email")->input("email", ["maxlength" => 100, "autocomplete" => "off"]) ?>
+                    <?php $email = ($model->idprofesor != "") ? $usuario->email : ""; ?>
+                    <?= $form->field($model, "email")->input("email", ["maxlength" => 100, "autocomplete" => "off", "value" => $email]) ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <?= $form->field($model, "password")->input("password", ["maxlength" => 15, "autocomplete" => "off"]) ?>
+                    <?php $password = ($model->idprofesor != "") ? $model->curp : ""; ?>
+                    <?= $form->field($model, "password")->input("password", ["maxlength" => 15, "autocomplete" => "off", "value" => $password]) ?>
                 </div>
             </div>
         </div>

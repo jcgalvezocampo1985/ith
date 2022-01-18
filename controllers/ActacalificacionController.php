@@ -97,6 +97,8 @@ class ActacalificacionController extends Controller
     public function actionGeneraracta($idgrupo, $idprofesor)
     {
         $sql = GrupoEstudiante::find()->select("idestudiante,idopcion_curso,cve_estatus,idciclo,p1,p2,p3,p4,p5,p6,p7,p8,p9,s1,s2,s3,s4,s5,s6,s7,s8,s9")->where(["idgrupo" => $idgrupo])->all();
+        $status = "";
+        $msg = "";
 
         foreach($sql as $row)
         {
@@ -161,7 +163,8 @@ class ActacalificacionController extends Controller
                 $table->cve_estatus = $cve_estatus;
                 $table->insert();
 
-                $status_acta = 1;
+                $status = 1;
+                $msg = "Acta de calificaciones generada correctamente";
             }
             else
             {
@@ -175,10 +178,11 @@ class ActacalificacionController extends Controller
                 $table->cve_estatus = $cve_estatus;
                 $table->update();
 
-                $status_acta = 2;
+                $status = 1;
+                $msg = "Acta de calificaciones modificada correctamente";
             }
         }
-        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&status_acta=$status_acta"));
+        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&error=1&msg=$msg"));
         exit;
     }
 

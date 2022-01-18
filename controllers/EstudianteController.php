@@ -217,9 +217,10 @@ class EstudianteController extends Controller
     public function actionCreate($msg = "", $error = "")
     {
         $model = new EstudianteForm;
-        $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
-        $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
-        $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
+        $sexo = ["M" => "Masculino", "F" => "Femenino"];
+        $num_semestre = ["1" => "1", "2" => "2", "3" => "3", "4" => "4", "5" => "5", "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"];
+        $clave_estatus = ["VIG" => "VIG"];
+        $carrera = ArrayHelper::map(Carrera::find()->all(), "idcarrera", "desc_carrera");
 
         if(Yii::$app->request->get() && $error != 1)
         {
@@ -235,7 +236,14 @@ class EstudianteController extends Controller
             $model->cve_estatus = $modelo["cve_estatus"];
         }
 
-        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
+        return $this->render("form", ["model" => $model,
+                                      "status" => 0,
+                                      "msg" => $msg,
+                                      "error" => $error,
+                                      "sexo" => $sexo,
+                                      "num_semestre" => $num_semestre,
+                                      "carrera" => $carrera,
+                                      "clave_estatus" => $clave_estatus]);
     }
 
     public function actionStore()
@@ -269,8 +277,8 @@ class EstudianteController extends Controller
                         $table->sexo = $model->sexo;
                         $table->idcarrera = $model->idcarrera;
                         $table->num_semestre = $model->num_semestre;
-                        $table->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
-                        $table->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
+                        $table->fecha_registro = $model->fecha_registro; //Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                        $table->fecha_actualizacion = "";//Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
                         $table->cve_estatus = $model->cve_estatus;
 
                         if ($table->insert())
@@ -332,6 +340,7 @@ class EstudianteController extends Controller
             $model = new EstudianteForm;
             $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
             $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
+            $clave_estatus = ["VIG" => "VIG", "BAJA TEMPORAL" => "BAJA TEMPORAL", "BAJA DEFINITIVA" => "BAJA DEFINITIVA"];
             $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
 
             if($idestudiante)
@@ -365,7 +374,15 @@ class EstudianteController extends Controller
             return $this->redirect(["estudiante/index"]);
         }
 
-        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error, "sexo" => $sexo, "num_semestre" => $num_semestre, "carrera" => $carrera]);
+        return $this->render("form", ["model" => $model,
+                                      "status" => 1,
+                                      "msg" => $msg,
+                                      "error" => $error,
+                                      "sexo" => $sexo,
+                                      "num_semestre" => $num_semestre,
+                                      "carrera" => $carrera,
+                                      "clave_estatus" => $clave_estatus
+                                    ]);
     }
 
     public function actionUpdate()
@@ -394,8 +411,8 @@ class EstudianteController extends Controller
                     $table->sexo = $model->sexo;
                     $table->idcarrera = $model->idcarrera;
                     $table->num_semestre = $model->num_semestre;
-                    $table->fecha_registro = Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
-                    $table->fecha_actualizacion = Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
+                    //$table->fecha_registro = "";//Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d');
+                    $table->fecha_actualizacion = $model->fecha_actualizacion; //Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
                     $table->cve_estatus = $model->cve_estatus;
 
                     if($table->update())
