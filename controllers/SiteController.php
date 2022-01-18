@@ -24,6 +24,7 @@ use app\models\login\UsuarioRol;
 
 class SiteController extends Controller
  {
+     /*
     public function behaviors()
     {
         return [
@@ -103,7 +104,7 @@ class SiteController extends Controller
                 ],
         ];
     }
-
+*/
     /**
     * {
     @inheritdoc}
@@ -257,7 +258,9 @@ class SiteController extends Controller
             if($model->validate())
             {
                 //Preparamos la consulta para guardar el usuario
+                $idusuario = Usuario::find()->max("idusuario");
                 $table = new Usuario;
+                $table->idusuario = $idusuario + 1;
                 $table->nombre_usuario = $model->nombre_usuario;
                 $table->curp = $model->curp;
                 $table->email = $model->email;
@@ -265,38 +268,38 @@ class SiteController extends Controller
                 $table->password = crypt($model->password, Yii::$app->params['salt']);
                 //Creamos una cookie para autenticar al usuario cuando decida recordar la sesión, esta misma
                 //clave será utilizada para activar el usuario
-                $table->authKey = $this->randKey('abcdef0123456789', 200);
+                //$table->authKey = $this->randKey('abcdef0123456789', 200);
                 //Creamos un token de acceso único para el usuario
-                $table->accessToken = $this->randKey('abcdef0123456789', 200);
+                //$table->accessToken = $this->randKey('abcdef0123456789', 200);
 
                 //Si el registro es guardado correctamente
                 if($table->insert())
                 {
                     //Nueva consulta para obtener el id del usuario
                     //Para confirmar al usuario se requiere su id y su authKey
-                    $user = $table->find()->where(['email' => $model->email])->one();
-                    $idusuario = urlencode($user->idusuario);
-                    $authKey = urlencode($user->authKey);
+                    //$user = $table->find()->where(['email' => $model->email])->one();
+                   // $idusuario = urlencode($user->idusuario);
+                    //$authKey = urlencode($user->authKey);
 
-                    $subject = 'Confirmar registro';
+                    /*$subject = 'Confirmar registro';
                     $body = '<h1>Haga click en el siguiente enlace para finalizar tu registro</h1>';
-                    $body .= "<a href='http://ithuimanguillo.test/site/confirm?idusuario=".$idusuario.'&authKey='.$authKey."'>Confirmar</a>";
+                    $body .= "<a href='http://ithuimanguillo.test/site/confirm?idusuario=".$idusuario.'&authKey='.$authKey."'>Confirmar</a>";*/
 
                     //Enviamos el correo
-                    Yii::$app->mailer->compose()
+                    /*Yii::$app->mailer->compose()
                                      ->setTo($user->email)
                                      ->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->params['title']])
                                      ->setSubject($subject)
                                      ->setHtmlBody($body)
-                                     ->send();
+                                     ->send();*/
 
-                    $model->nombre_usuario = null;
+                   /* $model->nombre_usuario = null;
                     $model->curp = null;
                     $model->email = null;
                     $model->password = null;
                     $model->password_repeat = null;
 
-                    $msg = 'Enhorabuena, ahora sólo falta que confirmes tu registro en tu cuenta de correo';
+                    $msg = 'Enhorabuena, ahora sólo falta que confirmes tu registro en tu cuenta de correo';*/
                 }
                 else
                 {

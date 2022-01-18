@@ -213,6 +213,9 @@ $this->registerCss('
 
 $this->registerJs('
 $(document).ready(function(){
+    let url_regresar = $("#regresar").attr("href");
+    let url_refrescar = $("#refrescar").attr("href");
+
     $("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");
@@ -227,10 +230,13 @@ $(document).ready(function(){
 
 		if ($("#formulario")[0].checkValidity()) {
 			$("#guardar").attr("disabled", "disabled");
+            $("#regresar, #refrescar").attr("href", "#");
 			$("#alerta").addClass("alert-success");
 			$("#mensaje_texto").html("Las calificaciones han sido cargadas correctamente");
 			$("#mensaje_error").slideDown(1000).delay(1000).slideUp(1000, function() {
 			$("#guardar").removeAttr("disabled");
+            $("#regresar").attr("href", url_regresar);
+            $("#refrescar").attr("href", url_refrescar);
 			$("#formulario").submit();
 			});
 		} else {

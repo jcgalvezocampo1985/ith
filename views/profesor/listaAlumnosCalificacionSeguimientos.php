@@ -73,7 +73,7 @@ $form = ActiveForm::begin([
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
                 <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
                 <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r."&seguimiento=".$seguimiento], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
-                <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$idgrupo."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
+                <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacionseguimientos?idgrupo=".$idgrupo."&idciclo=".$idciclo."&seguimiento=".$seguimiento], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
             </div>
         </div>
         <hr width="100%">
@@ -239,14 +239,17 @@ $(document).keyup(function(objEvent) {
 })
 
 $(document).ready(function(){
-    $("#refrescar").on("click", function(e) {
+    let url_regresar = $("#regresar").attr("href");
+    let url_refrescar = $("#refrescar").attr("href");
+
+    /*$("#refrescar").on("click", function(e) {
         e.preventDefault();
         let url = $(this).attr("href");
 
         if (confirm("¿Desea refrescar la ventana?")) {
             $(location).attr("href", url)
         }
-    });
+    });*/
 
     $(".verificar_espacio_h").on("keyup", function() {
         let id_estudiante = $(this).attr("id");
@@ -344,10 +347,13 @@ $(document).ready(function(){
             if (total_inputs_vacios == 0 && total_inputs_vacios < filas) {
                 $(".calificacion").removeClass("error_input");
                 $("#guardar").attr("disabled", "disabled");
+                $("#regresar, #refrescar").attr("href", "#");
                 $("#alerta").removeClass("alert-danger").addClass("alert-success");
                 $("#mensaje_texto").html("Las calificaciones han sido cargadas correctamente");
                 $("#mensaje_error").slideDown(1000).delay(1000).slideUp(1000, function() {
                     $("#guardar").removeAttr("disabled");
+                    $("#regresar").attr("href", url_regresar);
+                    $("#refrescar").attr("href", url_refrescar);
                     $("#formulario").submit();
                 });
             } else if (total_inputs_vacios > 0) {

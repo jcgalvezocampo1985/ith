@@ -828,7 +828,10 @@ class ReporteController extends Controller
                                 "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
                                 "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
                                 "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9",
+                                "grupos_estudiantes.sp1", "grupos_estudiantes.sp2", "grupos_estudiantes.sp3",
+                                "grupos_estudiantes.sp4", "grupos_estudiantes.sp5", "grupos_estudiantes.sp6",
+                                "grupos_estudiantes.sp7", "grupos_estudiantes.sp8", "grupos_estudiantes.sp9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -980,7 +983,10 @@ class ReporteController extends Controller
                                 "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
                                 "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
                                 "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9"
+                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9",
+                                "grupos_estudiantes.sp1", "grupos_estudiantes.sp2", "grupos_estudiantes.sp3",
+                                "grupos_estudiantes.sp4", "grupos_estudiantes.sp5", "grupos_estudiantes.sp6",
+                                "grupos_estudiantes.sp7", "grupos_estudiantes.sp8", "grupos_estudiantes.sp9"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
@@ -1013,19 +1019,20 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
-        $this->generarEncabezadoCalificaciones($pdf, array('periodo' => $periodo,
-                                                           'carrera' => $carrera,
-                                                           'plan' => $plan,
-                                                           'profesor' => $profesor,
-                                                           'materia' => $materia,
-                                                           'grupo' => $grupo,
-                                                           'fecha' => $fecha)
+        $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                           "carrera" => $carrera,
+                                                           "plan" => $plan,
+                                                           "profesor" => $profesor,
+                                                           "materia" => $materia,
+                                                           "grupo" => $grupo,
+                                                           "fecha" => $fecha,
+                                                           "seguimiento" => $seguimiento)
                                                );
 
         $x_encabezado = 45;
         $y_encabezado = 77;
 
-        $x = $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+        $x = $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo, $seguimiento);
 
         $pdf->Ln();
 
@@ -1045,6 +1052,16 @@ class ReporteController extends Controller
             $s8 = $row['s8'];
             $s9 = $row['s9'];
 
+            $sp1 = $row['sp1'];
+            $sp2 = $row['sp2'];
+            $sp3 = $row['sp3'];
+            $sp4 = $row['sp4'];
+            $sp5 = $row['sp5'];
+            $sp6 = $row['sp6'];
+            $sp7 = $row['sp7'];
+            $sp8 = $row['sp8'];
+            $sp9 = $row['sp9'];
+
             $p1 = ($row['p1'] == "NA") ? (($s1 == "") ? $row['p1'] : $s1) : $row['p1'];
             $p2 = ($row['p2'] == "NA") ? (($s2 == "") ? $row['p2'] : $s2) : $row['p2'];
             $p3 = ($row['p3'] == "NA") ? (($s3 == "") ? $row['p3'] : $s3) : $row['p3'];
@@ -1059,15 +1076,15 @@ class ReporteController extends Controller
             $pdf->Cell(8, 5, $numero, 1, 0, 'C');
             $pdf->Cell(25, 5, $row['idestudiante'], 1, 0, 'C');
             $pdf->Cell(75, 5, utf8_decode($row['nombre_estudiante']), 1, 0, 'L');
-            ($p1 > 0 || $p1 == "NA") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "";
-            ($p2 > 0 || $p2 == "NA") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "";
-            ($p3 > 0 || $p3 == "NA") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "";
-            ($p4 > 0 || $p4 == "NA") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "";
-            ($p5 > 0 || $p5 == "NA") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "";
-            ($p6 > 0 || $p6 == "NA") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "";
-            ($p7 > 0 || $p7 == "NA") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "";
-            ($p8 > 0 || $p8 == "NA") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "";
-            ($p9 > 0 || $p9 == "NA") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "";
+            ($sp1 == $seguimiento) ? (($p1 > 0 || $p1 == "NA") ? $pdf->Cell(8, 5, $p1, 1, 0, 'C') : "") : "";
+            ($sp2 == $seguimiento) ? (($p2 > 0 || $p2 == "NA") ? $pdf->Cell(8, 5, $p2, 1, 0, 'C') : "") : "";
+            ($sp3 == $seguimiento) ? (($p3 > 0 || $p3 == "NA") ? $pdf->Cell(8, 5, $p3, 1, 0, 'C') : "") : "";
+            ($sp4 == $seguimiento) ? (($p4 > 0 || $p4 == "NA") ? $pdf->Cell(8, 5, $p4, 1, 0, 'C') : "") : "";
+            ($sp5 == $seguimiento) ? (($p5 > 0 || $p5 == "NA") ? $pdf->Cell(8, 5, $p5, 1, 0, 'C') : "") : "";
+            ($sp6 == $seguimiento) ? (($p6 > 0 || $p6 == "NA") ? $pdf->Cell(8, 5, $p6, 1, 0, 'C') : "") : "";
+            ($sp7 == $seguimiento) ? (($p7 > 0 || $p7 == "NA") ? $pdf->Cell(8, 5, $p7, 1, 0, 'C') : "") : "";
+            ($sp8 == $seguimiento) ? (($p8 > 0 || $p8 == "NA") ? $pdf->Cell(8, 5, $p8, 1, 0, 'C') : "") : "";
+            ($sp9 == $seguimiento) ? (($p9 > 0 || $p9 == "NA") ? $pdf->Cell(8, 5, $p9, 1, 0, 'C') : "") : "";
             $pdf->Ln();
 
             if($numero == 18 || $numero == 36 || $numero == 54)
@@ -1082,7 +1099,7 @@ class ReporteController extends Controller
                                                                    'fecha' => $fecha)
                                                       );
                 $pdf->SetXY($x, $y_encabezado);
-                $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo);
+                $this->generarEncabezadoTablaCalificaciones($pdf, $x_encabezado, $y_encabezado, $cuerpo, $seguimiento);
                 $pdf->SetFont('Montserrat-regular', '', 8);
                 $pdf->Ln();
             }
@@ -1248,7 +1265,7 @@ class ReporteController extends Controller
         $pdf->Output('D', "Calificaciones ".utf8_decode($periodo).'.pdf');
     }
 
-    private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales)
+    private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "")
     {
         $x_encabezado = $x;
         $aumentar = 148;
@@ -1257,23 +1274,63 @@ class ReporteController extends Controller
 
         for($i = 1; $i <= 9; $i++)
         {
-            if ($parciales[0]['p'.$i] > 0 || $parciales[0]['p'.$i] == "NA")
+            $parcial = $parciales[0]['p'.$i];
+            $sp = $parciales[0]['sp'.$i];
+
+            if($seguimiento == "")
             {
-                $x_encabezado = $x_encabezado + 5;
-                if($i > 1){
-                    $aumentar = $aumentar - 10;
-                    $disminuir = $disminuir - 5;
+                if ($parcial > 0 || $parcial == "NA")
+                {
+                    $x_encabezado = $x_encabezado + 5;
+                    if($i > 1)
+                    {
+                        $aumentar = $aumentar - 10;
+                        $disminuir = $disminuir - 5;
+                    }
+                }
+            }
+            else
+            {
+                if ($sp == $seguimiento)
+                {
+                    if ($parcial > 0 || $parcial == "NA")
+                    {
+                        $x_encabezado = $x_encabezado + 5;
+                        if ($i > 1)
+                        {
+                            $aumentar = $aumentar - 10;
+                            $disminuir = $disminuir - 5;
+                        }
+                    }
                 }
             }
         }
+        
+        $adicional = ($seguimiento > 1) ? 5 : 0;
 
-        $pdf->SetXY($x_encabezado + $aumentar, $y);
+        $pdf->SetXY($x_encabezado + $aumentar + $adicional, $y);
 
         for($j = 1; $j <= 9; $j++)
         {
-            if ($parciales[0]['p'.$j] > 0 || $parciales[0]['p'.$j] == "NA")
+            $parcial = $parciales[0]['p'.$j];
+            $sp = $parciales[0]['sp'.$j];
+
+            if($seguimiento == "")
             {
-                $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+                if ($parcial > 0 || $parcial == "NA")
+                {
+                    $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+                }
+            }
+            else
+            {
+                if ($sp == $seguimiento)
+                {
+                    if ($parcial > 0 || $parcial == "NA")
+                    {
+                        $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+                    }
+                }
             }
         }
 
@@ -1302,7 +1359,9 @@ class ReporteController extends Controller
         $pdf->Text(135, 65, utf8_decode($datos['materia']));
         $pdf->Text(115, 70, utf8_decode('GRUPO:'));
         $pdf->Text(135, 70, utf8_decode($datos['grupo']));
-        $pdf->Text(230, 60, 'FECHA:');
-        $pdf->Text(245, 60, $datos['fecha']);
+        $pdf->Text(219, 60, 'FECHA:');
+        $pdf->Text(243, 60, $datos['fecha']);
+        $pdf->Text(219, 65, 'SEGUIMIENTO:');
+        $pdf->Text(243, 65, $datos['seguimiento']);
     }
 }

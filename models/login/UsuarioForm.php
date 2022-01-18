@@ -13,17 +13,17 @@ class UsuarioForm extends model
     public $email;
     public $password;
     public $password_repeat;
-/**/ */
+
     public function rules()
     {
         return [
             [["curp", "nombre_usuario", "email", "password", "password_repeat"], "required", "message" => "Requerido"],
             ["curp", "string", "min" => 3, "max" => 20, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 20 caracteres"],
-            ["curp", "match", "pattern" => "/^.[0-9A-Za-z]+$/i", "message" => "Sólo valores alfanuméricos"],
+            //["curp", "match", "pattern" => "/^.[0-9A-Za-z]+$/i", "message" => "Sólo valores alfanuméricos"],
             ["curp", "curp_existe"],
             ["nombre_usuario", "required", "message" => "Requerido"],
             ["nombre_usuario", "string", "min" => 8, "max" => 45, "tooShort" => "Mínimo 8 caracteres", "tooLong" => "Máximo 45 caracteres"],
-            ["nombre_usuario", "match", "pattern" => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", "message" => "Sólo letras"],
+            //["nombre_usuario", "match", "pattern" => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", "message" => "Sólo letras"],
             ["email", "string", "min" => 8, "max" => 100, "tooShort" => "Mínimo 8 caracteres", "tooLong" => "Máximo 100 caracteres"],
             ["email", "email", "message" => "Formato no válido"],
             ["email", "email_existe"],
