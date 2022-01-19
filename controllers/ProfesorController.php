@@ -171,6 +171,15 @@ class ProfesorController extends Controller
 
     public function actionIndex()
     {
+        /*
+        $idusuario = Yii::$app->user->identity->idusuario;
+        $roles = RolUsuario::find()->where(["idusuario" => $idusuario])->all();
+
+        foreach($roles as $row)
+        {
+            echo $row['idrol']."<br />";
+        }
+        */
         if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2) || User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
         {
             return $this->redirect(["horarioconsulta"]);
