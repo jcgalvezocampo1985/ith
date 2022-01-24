@@ -182,7 +182,8 @@ class ActacalificacionController extends Controller
                 $msg = "Acta de calificaciones modificada correctamente";
             }
         }
-        header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&error=1&msg=$msg"));
+        header("Location: ".Url::toRoute("/reporte/actacalificaciones?idgrupo=$idgrupo"));
+        //header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&error=1&msg=$msg"));
         exit;
     }
 

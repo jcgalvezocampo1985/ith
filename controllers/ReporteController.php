@@ -80,8 +80,17 @@ class PDF extends FPDF
             $this->Text(180, 45, utf8_decode('SES'));
             $this->Text(220, 45, utf8_decode('TNM'));
         }
-
-        
+        if($this->getReporte() == 'Acta Calificaciones')
+        {
+            $url_header = Yii::$app->basePath.'/web/img/header.png';
+            $this->Image($url_header, 10, 5, 150);
+            $this->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+            $this->SetFont('Montserrat-Bold', '', 9);
+            $this->SetTextColor(125, 125, 125);
+            $this->Text(90, 38, utf8_decode('ACTA DE CALIFICACIONES'));
+            $this->Text(130, 30, utf8_decode('Instituto Tecnológico de Huimanguillo'));
+            $this->Text(160, 35, utf8_decode('CLAVE: 27DIT0004E'));
+        }
     }
 
     public function Footer()
@@ -89,7 +98,7 @@ class PDF extends FPDF
         //$this->SetXY( 100, 100 );
         //$this->SetFont( 'Arial', 'I', 8 );
         //$this->Cell( 0, 10, 'Page '.$this->PageNo().'/{nb}', 0, 0, 'C' );
-        if($this->getReporte() == 'Boleta')
+        if($this->getReporte() == 'Boleta' || $this->getReporte() == 'Acta Calificaciones')
         {
             $url_footer = Yii::$app->basePath.'/web/img/footer.png';
             $this->Image($url_footer, 12, 245, 185);
@@ -1038,8 +1047,6 @@ class ReporteController extends Controller
 
         $pdf->Ln();
 
-        $total_estudiantes = count($cuerpo);
-
         $numero = 1;
         $pdf->SetFont('Montserrat-regular', '', 8);
         foreach ($cuerpo as $row)
@@ -1351,27 +1358,288 @@ class ReporteController extends Controller
         return 45 + $disminuir;
     }
 
-    private function generarEncabezadoCalificaciones($pdf, $datos = array())
+    public function actionActacalificaciones($idgrupo)
+    {
+        $idgrupo = Html::encode($idgrupo);
+
+        $materia = (new \yii\db\Query())
+                            ->from(["grupos"])
+                            ->select(["cat_materias.desc_materia"])
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->one();
+
+        $encabezado = (new \yii\db\Query())
+                            ->from(["cat_carreras"])
+                            ->select([
+                                "ciclo.desc_ciclo",
+                            	"cat_carreras.desc_carrera",
+	                            "cat_carreras.plan_estudios",
+	                            "grupos.desc_grupo",
+	                            "grupos.desc_grupo_corto",
+	                            "cat_materias.desc_materia",
+                                "cat_materias.creditos",
+                                "CONCAT(profesores.apaterno, ' ', profesores.amaterno, ' ', profesores.nombre_profesor) AS profesor",
+                                "(SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo) AS total_estudiantes"
+                            ])
+                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
+                            ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
+                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                            ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
+                            ->where(["grupos.idgrupo" => $idgrupo])
+                            ->all();
+
+        $cuerpo = (new \yii\db\Query())
+                            ->from(["actas_calificaciones"])
+                            ->select([
+                                "estudiantes.sexo",
+                                "actas_calificaciones.idestudiante",
+                                "estudiantes.nombre_estudiante",
+                                "actas_calificaciones.pri_opt", 
+                                "actas_calificaciones.seg_opt",
+                                "(CASE
+                                    WHEN actas_calificaciones.idopcion_curso = 2 THEN
+                                    'REP'
+                                    WHEN actas_calificaciones.idopcion_curso = 3 THEN
+                                    'ESP'
+                                    WHEN actas_calificaciones.idopcion_curso = 4 THEN
+                                    'DUAL'
+                                    WHEN actas_calificaciones.idopcion_curso = 5 THEN
+                                    'AUT' ELSE 'ORD'
+                                END) AS opc_curso",
+                                "(SELECT lunes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS lunes",
+                                "(SELECT martes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS martes",
+                                "(SELECT miercoles FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS miercoles",
+                                "(SELECT jueves FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS jueves",
+                                "(SELECT viernes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS viernes",
+                                "(SELECT sabado FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS sabado"
+                            ])
+                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
+                            ->innerJoin(["estudiantes"], "estudiantes.idestudiante = actas_calificaciones.idestudiante")
+                            ->where(["actas_calificaciones.idgrupo" => $idgrupo])
+                            ->all();
+
+        $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
+        $fecha = date('Y-m-d');
+        $carrera = $encabezado[0]['desc_carrera'];
+        $plan_estudios = $encabezado[0]['plan_estudios'];
+        $materia = $materia['desc_materia'];
+        $grupo = $encabezado[0]['desc_grupo'];
+        $profesor = utf8_decode($encabezado[0]['profesor']);
+        $creditos = $encabezado[0]['creditos'];
+        $total_estudiantes = $encabezado[0]['total_estudiantes'];
+
+        $lunes = (count($cuerpo) > 0) ? $cuerpo[0]['lunes'] : "";
+        $martes = (count($cuerpo) > 0) ? $cuerpo[0]['martes'] : "";
+        $miercoles = (count($cuerpo) > 0) ? $cuerpo[0]['miercoles'] : "";
+        $jueves = (count($cuerpo) > 0) ? $cuerpo[0]['jueves'] : "";
+        $viernes = (count($cuerpo) > 0) ? $cuerpo[0]['viernes'] : "";
+        $sabado = (count($cuerpo) > 0) ? $cuerpo[0]['sabado'] : "";
+
+        if($sabado != ""){
+            $horario = "SABADO ".$sabado;
+        }else{
+            if($viernes != ""){
+                $horario = "LUNES - VIERNES ".$lunes;
+            }else{
+                if($jueves != ""){
+                    $horario = "LUNES - JUEVES ".$lunes;
+                }else{
+                    if($miercoles != ""){
+                        $horario = "LUNES - MIERCOLES ".$lunes;
+                    }else{
+                        if($martes != ""){
+                            $horario = "LUNES - MARTES ".$lunes;
+                        }else{
+                            if($lunes != ""){
+                                $horario = "LUNES".$lunes;
+                            }else{
+                                $horario = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        header('Content-type: application/pdf');
+        $pdf = new PDF();
+        $pdf->setReporte('Acta Calificaciones');
+        $pdf->AliasNbPages();
+        $pdf->AddPage('P', 'Letter');
+        $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-MediumItalic', '', 'Montserrat-MediumItalic.php');
+        $pdf->AddFont('Montserrat-LightItalic', '', 'Montserrat-LightItalic.php');
+        $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
+        $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
+
+        $this->generarEncabezadoCalificaciones($pdf, array("periodo" => $periodo,
+                                                           "carrera" => $carrera,
+                                                           "plan_estudios" => $plan_estudios,
+                                                           "profesor" => $profesor,
+                                                           "materia" => $materia,
+                                                           "grupo" => $grupo,
+                                                           "fecha" => $fecha,
+                                                           "creditos" => $creditos,
+                                                           "total_estudiantes" => $total_estudiantes,
+                                                           "horario" => $horario,
+                                                           "seguimiento" => ""),
+                                                           "Vertical"
+                                               );
+
+        $pdf->SetFont('Montserrat-Bold', '', 8);
+        $pdf->SetXY(5, 63);
+        $pdf->Cell(8, 8, 'NO.', 1, 0, 'C');
+        $pdf->Cell(13, 8, utf8_decode('GÉNERO'), 1, 0, 'C');
+        $pdf->Cell(22, 8, 'NO. CONTROL', 1, 0, 'C');
+        $pdf->Cell(90, 8, 'NOMBRE DEL ESTUDIANTE', 1, 0, 'C');
+
+        $pdf->SetFont('Montserrat-regular', '', 7);
+        $pdf->Cell(8, 8, 'Dual', 1, 0, 'C');
+        $pdf->Cell(8, 8, 'Aut.', 1, 0, 'C');
+        $pdf->Cell(8, 8, 'Ord.', 1, 0, 'C');
+        $pdf->Cell(8, 8, 'Rep.', 1, 0, 'C');
+        $pdf->Cell(8, 8, 'Esp.', 1, 0, 'C');
+
+        $pdf->SetFont('Montserrat-Bold', '', 7);
+        $pdf->Cell(30, 4, utf8_decode('CALIFICACIÓN'), 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetX(178);
+        $pdf->Cell(15, 4, utf8_decode('PO'), 1, 0, 'C');
+        $pdf->Cell(15, 4, utf8_decode('SO'), 1, 0, 'C');
+        $pdf->Ln();
+
+        $numero = 1;
+        $pdf->SetFont('Montserrat-regular', '', 8);
+
+        $porcentaje_aprobados = 0;
+        $porcentaje_reprobados = 0;
+        $total_reprobados = 0;
+        $total_aprobados = 0;
+        $total_alumnos = count($cuerpo);
+        foreach ($cuerpo as $row)
+        {
+            $genero = $row['sexo'];
+            $idestudiante = $row['idestudiante'];
+            $estudiante = $row['nombre_estudiante'];
+            $opc_curso = $row['opc_curso'];
+            $pri_opt = $row['pri_opt'];
+            $seg_opt = $row['seg_opt'];
+
+            $dual = ($opc_curso == "DUAL") ? "X" : "";
+            $aut = ($opc_curso == "AUT") ? "X" : "";
+            $ord = ($opc_curso == "ORD") ? "X" : "";
+            $rep = ($opc_curso == "REP") ? "X" : "";
+            $esp = ($opc_curso == "ESP") ? "X" : "";
+
+            $calificacion = ($pri_opt != "") ? $pri_opt : $seg_opt;
+
+            $reprobados = ($calificacion == "NA") ? 1 : 0;
+            $total_reprobados = $total_reprobados + $reprobados;
+
+            $aprobados = ($calificacion != "NA") ? 1 : 0;
+            $total_aprobados = $total_aprobados + $aprobados;
+
+            $pdf->SetX(5);
+            $pdf->Cell(8, 4, $numero, 1, 0, 'C');
+            $pdf->Cell(13, 4, $genero, 1, 0, 'C');
+            $pdf->Cell(22, 4, $idestudiante, 1, 0, 'C');
+            $pdf->Cell(90, 4, utf8_decode($estudiante), 1, 0, 'L');
+            $pdf->Cell(8, 4, $dual, 1, 0, 'C');
+            $pdf->Cell(8, 4, $aut, 1, 0, 'C');
+            $pdf->Cell(8, 4, $ord, 1, 0, 'C');
+            $pdf->Cell(8, 4, $rep, 1, 0, 'C');
+            $pdf->Cell(8, 4, $esp, 1, 0, 'C');
+            $pdf->Cell(15, 4, $pri_opt, 1, 0, 'C');
+            $pdf->Cell(15, 4, $seg_opt, 1, 0, 'C');
+            $pdf->Ln();
+
+            $numero = $numero + 1;
+        }
+        $porcentaje_aprobados = ($total_aprobados > 0) ? round(($total_aprobados * 100) / $total_alumnos, 0) : 0;
+        $porcentaje_reprobados = ($total_reprobados > 0) ? round(($total_reprobados * 100) / $total_alumnos, 0) : 0;
+
+        $pdf->SetX(5);
+        $pdf->Cell(173, 4, utf8_decode("% APROBACIÓN"), 0, 0, 'R');
+        $pdf->Cell(15, 4, "%", 1, 0, 'C');
+        $pdf->Cell(15, 4, $porcentaje_aprobados, 1, 0, 'C');
+        $pdf->Ln();
+        $pdf->SetX(5);
+        $pdf->Cell(173, 4, utf8_decode("% REPROBACIÓN"), 0, 0, 'R');
+        $pdf->Cell(15, 4, "%", 1, 0, 'C');
+        $pdf->Cell(15, 4, $porcentaje_reprobados, 1, 0, 'C');
+
+        $pdf->SetFont('Montserrat-regular', '', 9);
+        $pdf->Ln(5);
+        $pdf->SetX(5);
+        $pdf->Cell(174, 4, utf8_decode("Este documento no es válido si tiene tachaduras o enmendaduras"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetX(5);
+        $pdf->Cell(174, 4, utf8_decode("PO = 1ra. Oportunidad  SO = 2da oportunidad"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetX(5);
+        $pdf->Cell(174, 4, utf8_decode("Aut.(curso global o autodidacta) Rep. (curso de repeticion) Esp.(curso especial)"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetX(5);
+        $pdf->Cell(174, 4, utf8_decode("Carretera del Golfo Malpaso – El Bellote, Km. 98.1, R/A Libertad, Huimanguillo, Tabasco, México. A 14 de julio de 2021"), 0, 0, 'L');
+
+        $pdf->Ln(15);
+        $pdf->SetX(60);
+        $pdf->Cell(85, 4, utf8_decode("FIRMA DEL PROFESOR: _______________________________"), 0, 0, 'L');
+
+        $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
+    }
+
+    private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "Horizontal")
     {
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
         $pdf->SettextColor(0, 0, 0);
-        $pdf->Text(12, 60, utf8_decode('PERIODO:'));
-        $pdf->Text(30, 60, utf8_decode($datos['periodo']));
-        $pdf->Text(12, 65, utf8_decode('CARRERA:'));
-        $pdf->Text(30, 65, utf8_decode($datos['carrera']));
-        $pdf->Text(12, 70, utf8_decode('PLAN:'));
-        $pdf->Text(30, 70, utf8_decode($datos['plan']));
-        $pdf->Text(115, 60, 'PROFESOR:');
-        $pdf->Text(135, 60, $datos['profesor']);
-        $pdf->Text(115, 65, utf8_decode('MATERIA:'));
-        $pdf->Text(135, 65, utf8_decode($datos['materia']));
-        $pdf->Text(115, 70, utf8_decode('GRUPO:'));
-        $pdf->Text(135, 70, utf8_decode($datos['grupo']));
-        $pdf->Text(219, 60, 'FECHA:');
-        $pdf->Text(243, 60, $datos['fecha']);
-        if($datos['seguimiento'] != ""){
-        $pdf->Text(219, 65, 'SEGUIMIENTO:');
-        $pdf->Text(243, 65, $datos['seguimiento']);
+
+        if($orientacion_hoja == "Horizontal")
+        {
+            $pdf->Text(12, 60, utf8_decode('PERIODO:'));
+            $pdf->Text(30, 60, utf8_decode($datos['periodo']));
+            $pdf->Text(12, 65, utf8_decode('CARRERA:'));
+            $pdf->Text(30, 65, utf8_decode($datos['carrera']));
+            $pdf->Text(12, 70, utf8_decode('PLAN:'));
+            $pdf->Text(30, 70, utf8_decode($datos['plan']));
+            $pdf->Text(115, 60, 'PROFESOR:');
+            $pdf->Text(135, 60, $datos['profesor']);
+            $pdf->Text(115, 65, utf8_decode('MATERIA:'));
+            $pdf->Text(135, 65, utf8_decode($datos['materia']));
+            $pdf->Text(115, 70, utf8_decode('GRUPO:'));
+            $pdf->Text(135, 70, utf8_decode($datos['grupo']));
+            $pdf->Text(219, 60, 'FECHA:');
+            $pdf->Text(243, 60, $datos['fecha']);
+
+            if($datos['seguimiento'] != "")
+            {
+                $pdf->Text(219, 65, 'SEGUIMIENTO:');
+                $pdf->Text(243, 65, $datos['seguimiento']);
+            }
+        }
+        else if($orientacion_hoja == "Vertical")
+        {
+            $pdf->Text(12, 45, utf8_decode('CARRERA:'));
+            $pdf->Text(37, 45, utf8_decode($datos['carrera']));
+            $pdf->Text(12, 49, utf8_decode('MATERIA:'));
+            $pdf->Text(37, 49, utf8_decode("PROBABILIDAD Y ESTADÍSTICA APLICADA AL CAMPO PETROLERO"));
+            $pdf->Text(12, 53, utf8_decode('HORARIO:'));
+            $pdf->Text(37, 53, $datos['horario']);
+            $pdf->Text(12, 57, utf8_decode('CATEDRÁTICO:'));
+            $pdf->Text(37, 57, strtoupper($datos['profesor']));
+
+            $pdf->Text(150, 45, utf8_decode('PERIODO:'));
+            $pdf->Text(175, 45, utf8_decode($datos['periodo']));
+            $pdf->Text(150, 49, 'FECHA:');
+            $pdf->Text(175, 49, $datos['fecha']);
+            $pdf->Text(150, 53, 'ESTUDIANTES:');
+            $pdf->Text(175, 53, $datos['total_estudiantes']);
+            $pdf->Text(150, 57, 'PAQUETE:');
+            $pdf->Text(175, 57, utf8_decode($datos['plan_estudios']));
+            $pdf->Text(150, 61, utf8_decode('CRÉDITOS:'));
+            $pdf->Text(175, 61, $datos['creditos']);
         }
     }
 }
