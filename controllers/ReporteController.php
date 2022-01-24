@@ -1406,7 +1406,13 @@ class ReporteController extends Controller
                                     'DUAL'
                                     WHEN actas_calificaciones.idopcion_curso = 5 THEN
                                     'AUT' ELSE 'ORD'
-                                END) AS opc_curso"
+                                END) AS opc_curso",
+                                "(SELECT lunes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS lunes",
+                                "(SELECT martes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS martes",
+                                "(SELECT miercoles FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS miercoles",
+                                "(SELECT jueves FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS jueves",
+                                "(SELECT viernes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS viernes",
+                                "(SELECT sabado FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS sabado"
                             ])
                             ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
                             ->innerJoin(["estudiantes"], "estudiantes.idestudiante = actas_calificaciones.idestudiante")
@@ -1422,6 +1428,39 @@ class ReporteController extends Controller
         $profesor = utf8_decode($encabezado[0]['profesor']);
         $creditos = $encabezado[0]['creditos'];
         $total_estudiantes = $encabezado[0]['total_estudiantes'];
+
+        $lunes = (count($cuerpo) > 0) ? $cuerpo[0]['lunes'] : "";
+        $martes = (count($cuerpo) > 0) ? $cuerpo[0]['martes'] : "";
+        $miercoles = (count($cuerpo) > 0) ? $cuerpo[0]['miercoles'] : "";
+        $jueves = (count($cuerpo) > 0) ? $cuerpo[0]['jueves'] : "";
+        $viernes = (count($cuerpo) > 0) ? $cuerpo[0]['viernes'] : "";
+        $sabado = (count($cuerpo) > 0) ? $cuerpo[0]['sabado'] : "";
+
+        if($sabado != ""){
+            $horario = "SABADO ".$sabado;
+        }else{
+            if($viernes != ""){
+                $horario = "LUNES - VIERNES ".$lunes;
+            }else{
+                if($jueves != ""){
+                    $horario = "LUNES - JUEVES ".$lunes;
+                }else{
+                    if($miercoles != ""){
+                        $horario = "LUNES - MIERCOLES ".$lunes;
+                    }else{
+                        if($martes != ""){
+                            $horario = "LUNES - MARTES ".$lunes;
+                        }else{
+                            if($lunes != ""){
+                                $horario = "LUNES".$lunes;
+                            }else{
+                                $horario = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -1444,6 +1483,7 @@ class ReporteController extends Controller
                                                            "fecha" => $fecha,
                                                            "creditos" => $creditos,
                                                            "total_estudiantes" => $total_estudiantes,
+                                                           "horario" => $horario,
                                                            "seguimiento" => ""),
                                                            "Vertical"
                                                );
@@ -1586,7 +1626,7 @@ class ReporteController extends Controller
             $pdf->Text(12, 49, utf8_decode('MATERIA:'));
             $pdf->Text(37, 49, utf8_decode("PROBABILIDAD Y ESTADÍSTICA APLICADA AL CAMPO PETROLERO"));
             $pdf->Text(12, 53, utf8_decode('HORARIO:'));
-            $pdf->Text(37, 53, "");
+            $pdf->Text(37, 53, $datos['horario']);
             $pdf->Text(12, 57, utf8_decode('CATEDRÁTICO:'));
             $pdf->Text(37, 57, strtoupper($datos['profesor']));
 
