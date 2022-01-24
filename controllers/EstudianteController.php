@@ -219,7 +219,7 @@ class EstudianteController extends Controller
         $model = new EstudianteForm;
         $sexo = ["M" => "Masculino", "F" => "Femenino"];
         $num_semestre = ["1" => "1", "2" => "2", "3" => "3", "4" => "4", "5" => "5", "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"];
-        $clave_estatus = ["VIG" => "VIG"];
+        $clave_estatus = ["VIG" => "VIGENTE"];
         $carrera = ArrayHelper::map(Carrera::find()->all(), "idcarrera", "desc_carrera");
 
         if(Yii::$app->request->get() && $error != 1)
@@ -340,7 +340,7 @@ class EstudianteController extends Controller
             $model = new EstudianteForm;
             $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
             $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
-            $clave_estatus = ["VIG" => "VIG", "BAJA TEMPORAL" => "BAJA TEMPORAL", "BAJA DEFINITIVA" => "BAJA DEFINITIVA"];
+            $clave_estatus = ["VIG" => "VIGENTE", "bt" => "BAJA TEMPORAL", "BD" => "BAJA DEFINITIVA"];
             $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
 
             if($idestudiante)
