@@ -2,9 +2,9 @@
 
 namespace app\models\opcioncurso;
 
-use yii\base\model;
+use yii\base\Model;
 
-class OpcionCursoSearch extends model
+class OpcionCursoSearch extends Model
 {
     public $buscar;
 

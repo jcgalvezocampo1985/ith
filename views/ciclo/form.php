@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = ($status == 1) ? "Modificar Ciclo" : "Nueva Ciclo";
-$this->params["breadcrumbs"][] = ["label" => "Carrera", "url" => ["index"]];
+$this->title = ($status == 1) ? "Modificar Ciclo" : "Nuevo Ciclo";
+$this->params["breadcrumbs"][] = ["label" => "Ciclo", "url" => ["index"]];
 $this->params["breadcrumbs"][] = $this->title;
 
 $action = ($status == 1) ? "update" : "store";

@@ -52,20 +52,10 @@ class ProfesorForm extends Model
             "amaterno" => "Apellido Materno",
             "fecha_registro" => "Fecha Registro",
             "fecha_actualizacion" => "Fecha Actualización",
-            "cve_estatus" => "Clave Status",
+            "cve_estatus" => "Estatus",
             "password" => "Contraseña",
             "email" => "Email"
         ];
-    }
-
-    public function curp_existe($attribute, $params)
-    {
-        $table = Profesor::find()->where("curp=:curp", [":curp" => $this->curp]);
-
-        if ($table->count() >= 1 && $this->estado == 0)
-        {
-            $this->addError($attribute, "La CURP ingresada ya existe");
-        }
     }
 
     public function email_existe($attribute, $params)
@@ -75,6 +65,16 @@ class ProfesorForm extends Model
         if ($table->count() == 1 && $this->estado == 0)
         {
             $this->addError($attribute, "El email ingresado ya existe");
+        }
+    }
+
+    public function curp_existe($attribute, $params)
+    {
+        $table = Profesor::find()->where("curp=:curp", [":curp" => $this->curp]);
+
+        if ($table->count() >= 1 && $this->estado == 0)
+        {
+            $this->addError($attribute, "La CURP ingresada ya existe");
         }
     }
 }

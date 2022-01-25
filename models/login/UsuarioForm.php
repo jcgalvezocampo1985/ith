@@ -3,10 +3,10 @@
 namespace app\models\login;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 use app\models\login\Usuario;
 
-class UsuarioForm extends model
+class UsuarioForm extends Model
 {
     public $curp;
     public $nombre_usuario;

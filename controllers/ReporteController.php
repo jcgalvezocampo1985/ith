@@ -1624,7 +1624,7 @@ class ReporteController extends Controller
             $pdf->Text(12, 45, utf8_decode('CARRERA:'));
             $pdf->Text(37, 45, utf8_decode($datos['carrera']));
             $pdf->Text(12, 49, utf8_decode('MATERIA:'));
-            $pdf->Text(37, 49, utf8_decode("PROBABILIDAD Y ESTADÍSTICA APLICADA AL CAMPO PETROLERO"));
+            $pdf->Text(37, 49, utf8_decode($datos['materia']));
             $pdf->Text(12, 53, utf8_decode('HORARIO:'));
             $pdf->Text(37, 53, $datos['horario']);
             $pdf->Text(12, 57, utf8_decode('CATEDRÁTICO:'));

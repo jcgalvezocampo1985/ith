@@ -2,9 +2,9 @@
 
 namespace app\models\ciclo;
 
-use yii\base\model;
+use yii\base\Model;
 
-class CicloForm extends model
+class CicloForm extends Model
 {
     public $idciclo;
     public $desc_ciclo;

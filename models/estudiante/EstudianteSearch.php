@@ -2,9 +2,9 @@
 
 namespace app\models\estudiante;
 
-use yii\base\model;
+use yii\base\Model;
 
-class EstudianteSearch extends model
+class EstudianteSearch extends Model
 {
     public $buscar;
 
