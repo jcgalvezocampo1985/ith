@@ -2,10 +2,13 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\User as Usuario;
 
 $r = $_GET["r"];
 $seguimiento = $_GET["seguimiento"];
 $url = ($r == "true") ? "horario" : "horarioconsulta";
+
+$isProfesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
 
 if($idciclo != $ultimo_ciclo){
     header("Location: ".Url::toRoute("/profesor/".$url."?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
@@ -70,7 +73,11 @@ $form = ActiveForm::begin([
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-5">
+                <?php
+                if($isProfesor == 1):
+                ?>
                 <input type="submit" class="btn btn-success" name="guardar" id="guardar" value="Guardar" />
+                <?php endif ?>
                 <?= Html::a("Regresar", ["profesor/".$url."?idciclo=".$idciclo."&idprofesor=".$idprofesor], ["class" => "btn btn-primary", "id" => "regresar"]) ?>
                 <?= Html::a("Refrescar", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=".$r."&seguimiento=".$seguimiento], ["class" => "btn btn-info", "id" => "refrescar"]) ?>
                 <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacionseguimientos?idgrupo=".$idgrupo."&idciclo=".$idciclo."&seguimiento=".$seguimiento], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
