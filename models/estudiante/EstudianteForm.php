@@ -49,7 +49,7 @@ class EstudianteForm extends Model
             "sexo" => "Sexo",
             "num_semestre" => "Semestre",
             "fecha_registro" => "Fecha Registro",
-            "fecha_actualizacion" => "Fecha Actuaización",
+            "fecha_actualizacion" => "Fecha Actualización",
             "cve_estatus" => "Estatus",
             "idcarrera" => "Carrera",
             "estado" => "Estado"
