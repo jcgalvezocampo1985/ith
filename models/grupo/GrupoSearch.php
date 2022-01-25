@@ -2,9 +2,9 @@
 
 namespace app\models\grupo;
 
-use yii\base\model;
+use yii\base\Model;
 
-class GrupoSearch extends model
+class GrupoSearch extends Model
 {
     public $buscar;
 

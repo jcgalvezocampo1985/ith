@@ -2,9 +2,9 @@
 namespace app\models\login;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class RecoverPassForm extends model
+class RecoverPassForm extends Model
 {
     public $email;
 

@@ -3,7 +3,7 @@
 namespace app\models\materia;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\materia\Materia;
 

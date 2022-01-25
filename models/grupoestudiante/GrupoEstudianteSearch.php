@@ -3,11 +3,11 @@
 namespace app\models\grupoestudiante;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 //use yii\data\ActiveDataProvider;
 //use yii\data\ArrayDataProvider;
 
-class GrupoEstudianteSearch extends model
+class GrupoEstudianteSearch extends Model
 {
     public $idgrupo;
     public $idmateria;

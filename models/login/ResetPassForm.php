@@ -2,9 +2,9 @@
 namespace app\models\login;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class ResetPassForm extends model
+class ResetPassForm extends Model
 {
     public $email;
     public $password;

@@ -2,9 +2,9 @@
 
 namespace app\models\estudiante;
 
-use yii\base\model;
+use yii\base\Model;
 
-class EstudianteHorarioSearch extends model
+class EstudianteHorarioSearch extends Model
 {
     public $idestudiante;
     public $idciclo;

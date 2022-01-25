@@ -2,9 +2,9 @@
 
 namespace app\models\ciclo;
 
-use yii\base\model;
+use yii\base\Model;
 
-class CicloSearch extends model
+class CicloSearch extends Model
 {
     public $idciclo;
 

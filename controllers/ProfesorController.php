@@ -12,7 +12,6 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\data\Pagination;
-use Carbon\Carbon;
 
 use app\models\profesor\Profesor;
 use app\models\profesor\ProfesorForm;

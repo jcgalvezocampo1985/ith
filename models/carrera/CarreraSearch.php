@@ -2,9 +2,9 @@
 
 namespace app\models\carrera;
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class CarreraSearch extends model
+class CarreraSearch extends Model
 {
     public $buscar;
 

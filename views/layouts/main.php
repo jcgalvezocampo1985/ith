@@ -65,6 +65,7 @@ if(!Yii::$app->user->isGuest){
                     ['label' => 'Opc. Curso', 'url' => ['/opcioncurso/index']],
                     ['label' => 'Ciclos', 'url' => ['/ciclo/index']],
                     ['label' => 'Grupos', 'url' => ['/grupo/index']],
+                    ['label' => 'Usuarios', 'url' => ['/usuario/index']],
                 ]
             ]),
             Yii::$app->user->isGuest ? (

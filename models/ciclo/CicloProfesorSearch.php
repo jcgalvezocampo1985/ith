@@ -1,9 +1,9 @@
 <?php
 
 namespace app\models\ciclo;
-use yii\base\model;
+use yii\base\Model;
 
-class CicloProfesorSearch extends model
+class CicloProfesorSearch extends Model
 {
     public $idciclo;
     public $idprofesor;

@@ -2,25 +2,23 @@
 
 namespace app\models\login;
 
-use Yii;
 use yii\base\Model;
-use app\models\login\Usuario;
 
-class UsuarioFormGenerar extends Model
+class UsuarioSearch extends Model
 {
-    public $curp;
+    public $idusuario;
 
     public function rules()
     {
         return [
-            [["curp"], "required", "message" => "Requerido"],
+            ["idusuario", "required", "message" => "Requerido"]
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            "curp" => "Password"
+            "idusuario" => "Buscar"
         ];
     }
 }

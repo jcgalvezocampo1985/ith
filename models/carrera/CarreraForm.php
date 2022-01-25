@@ -3,9 +3,9 @@
 namespace app\models\carrera;
 
 use Yii;
-use yii\base\model;
+use yii\base\Model;
 
-class CarreraForm extends model
+class CarreraForm extends Model
 {
     public $idcarrera;
     public $cve_carrera;

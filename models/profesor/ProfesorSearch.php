@@ -1,9 +1,9 @@
 <?php
 
 namespace app\models\profesor;
-use yii\base\model;
+use yii\base\Model;
 
-class ProfesorSearch extends model
+class ProfesorSearch extends Model
 {
     public $buscar;
 
