@@ -243,7 +243,7 @@ class ProfesorController extends Controller
     public function actionCreate($msg = "", $error = "")
     {
         $model = new ProfesorForm;
-        $clave_estatus = ["VIG" => "VIG"];
+        $clave_estatus = ["VIG" => "VIGENTE"];
 
         if(Yii::$app->request->get() && $error != 1)
         {
@@ -352,7 +352,7 @@ class ProfesorController extends Controller
         $idprofesor = Html::encode($idprofesor);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
-        $clave_estatus = ["VIG" => "VIG", "BAJA TEMPORAL" => "BAJA TEMPORAL", "BAJA DEFINITIVA" => "BAJA DEFINITIVA"];
+        $clave_estatus = ["VIG" => "VIGENTE", "BT" => "BAJA TEMPORAL", "BD" => "BAJA DEFINITIVA"];
 
         if(Yii::$app->request->get("idprofesor"))
         {
