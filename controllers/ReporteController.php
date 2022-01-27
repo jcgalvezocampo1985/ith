@@ -1607,25 +1607,27 @@ class ReporteController extends Controller
             $pdf->Text(50, 42, utf8_decode('INSTITUTO TECNOLÓGICO DE: ________________________________'));
             $pdf->Text(73, 50, utf8_decode('SUBDIRECCIÓN ACADÉMICA'));
 
+            $y = 60;
             $pdf->SetFont('Montserrat-Regular', '', 10);
-            $pdf->Text(10, 53, utf8_decode('DEPARTAMENTO DE: _______________________________________________________'));
-            $pdf->Text(10, 59, utf8_decode('REPORTE FINAL DEL SEMESTRE: ___________________________'));
-            $pdf->Text(10, 65, utf8_decode('PERIODO: _____________ AL _____________'));
-            $pdf->Text(10, 71, utf8_decode('PROFESOR(A): ______________________________________________________________'));
-            $pdf->Text(10, 77, utf8_decode('No. DE GRUPOS ATENDIDOS: _____________ No. DE ASIGNATURAS DIFERENTES _____________'));
+            $pdf->Text(10, $y, utf8_decode('DEPARTAMENTO DE: _______________________________________________________'));
+            $pdf->Text(10, $y + 6, utf8_decode('REPORTE FINAL DEL SEMESTRE: ___________________________'));
+            $pdf->Text(10, $y + 12, utf8_decode('PERIODO: _____________ AL _____________'));
+            $pdf->Text(10, $y + 18, utf8_decode('PROFESOR(A): ______________________________________________________________'));
+            $pdf->Text(10, $y + 24, utf8_decode('No. DE GRUPOS ATENDIDOS: _____________ No. DE ASIGNATURAS DIFERENTES _____________'));
 
             $pdf->SetFont('Montserrat-SemiBold', '', 10);
-            $pdf->Text(75, 58, $ciclo);
-            $pdf->Text(34, 64, $periodo1);
-            $pdf->Text(62, 64, $periodo2);
-            $pdf->Text(40, 70, $profesor);
-            $pdf->Text(73, 76, $grupos_atendidos);
-            $pdf->Text(160, 76, $materias_impartidas);
+            $pdf->Text(55, $y - 1, utf8_decode("INGENIERÍAS"));
+            $pdf->Text(75, $y + 5, $ciclo);
+            $pdf->Text(34, $y + 11, $periodo1);
+            $pdf->Text(62, $y + 11, $periodo2);
+            $pdf->Text(40, $y + 17, $profesor);
+            $pdf->Text(73, $y + 23, $grupos_atendidos);
+            $pdf->Text(160, $y + 23, $materias_impartidas);
 
             $pdf->Ln();
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
-            $pdf->SetXY(5, 83);
+            $pdf->SetXY(5, $y + 30);
             $pdf->Cell(77, 10, 'ASIGNATURA', 1, 0, 'C');
             $pdf->Cell(55, 10, 'CARRERA', 1, 0, 'C');
             $pdf->Cell(9, 10, 'A', 1, 0, 'C');
@@ -1635,7 +1637,7 @@ class ReporteController extends Controller
             $pdf->Cell(9, 10, 'E', 1, 0, 'C');
             $pdf->Cell(9, 10, 'F', 1, 0, 'C');
             $pdf->Cell(9, 10, 'G', 1, 0, 'C');
-            $pdf->SetXY(146, 88);
+            $pdf->SetXY(146, $y + 35);
             $pdf->Cell(9, 5, 'PO', 1, 0, 'C');
             $pdf->Cell(9, 5, 'SO', 1, 0, 'C');
             $pdf->Ln();
@@ -1752,7 +1754,7 @@ class ReporteController extends Controller
             $pdf->SetX(10);
             $pdf->Cell(195, 4, utf8_decode("2.	Este registro deberá de acompañarse con sus respectivos instrumentos de evaluación y listas de calificaciones que avalen los datos aquí presentados."), 0, 0, 'L');
 
-            $pdf->Output('D', 'Reporte_Final_'.$profesor.'.pdf');
+            $pdf->Output('I', 'Reporte_Final_'.$profesor.'.pdf');
         }
         else
         {
