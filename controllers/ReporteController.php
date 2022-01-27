@@ -1548,8 +1548,9 @@ class ReporteController extends Controller
         $idciclo = Html::encode($idciclo);
 
         $total_profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->count();
+        $total_ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->count();
 
-        if($total_profesor == 1)
+        if($total_profesor == 1 && $total_ciclo == 1)
         {
             $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
             $profesor = utf8_decode($profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor);
@@ -1566,7 +1567,7 @@ class ReporteController extends Controller
 
             $cuerpo = (new \yii\db\Query())->from(["grupos"])
                                         ->select(["cat_materias.desc_materia",
-                                                "cat_carreras.desc_carrera",
+                                                "cat_carreras.cve_carrera",
                                                 "(SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo) AS total_estudiantes",
                                                 "(SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE pri_opt <> 'NA' AND pri_opt <> '' AND idgrupo = grupos.idgrupo) AS po",
                                                 "ROUND(((SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE pri_opt <> 'NA' AND pri_opt <> '' AND idgrupo = grupos.idgrupo) / (SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo)) * 100)  AS po_porcentaje",
@@ -1604,7 +1605,7 @@ class ReporteController extends Controller
 
             $pdf->SetFont('Montserrat-Bold', '', 10);
             $pdf->SettextColor(0, 0, 0);
-            $pdf->Text(50, 42, utf8_decode('INSTITUTO TECNOLÓGICO DE: ________________________________'));
+            $pdf->Text(50, 42, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $pdf->Text(73, 50, utf8_decode('SUBDIRECCIÓN ACADÉMICA'));
 
             $y = 60;
@@ -1653,7 +1654,7 @@ class ReporteController extends Controller
 
             foreach($cuerpo as $row)
             {
-                $carrera = $row["desc_carrera"];
+                $carrera = $row["cve_carrera"];
                 $materia = $row["desc_materia"];
                 $total_estudiantes = $row["total_estudiantes"];
                 $primera_oportunidad_acreditados = $row["po"];
@@ -1689,7 +1690,7 @@ class ReporteController extends Controller
                 $pdf->SetX(5);
                 $pdf->SetFont('Montserrat-Regular', '', 6);
                 $pdf->Cell(77, 7, utf8_decode($materia), 1, 0, 'L');
-                $pdf->Cell(55, 7, utf8_decode($carrera), 1, 0, 'L');
+                $pdf->Cell(55, 7, utf8_decode($carrera), 1, 0, 'C');
                 $pdf->Cell(9, 7, $total_estudiantes, 1, 0, 'C');
                 $pdf->Cell(9, 7, ($primera_oportunidad_acreditados > 0) ? $primera_oportunidad_acreditados : "---", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($segunda_oportunidad_acreditados > 0) ? $segunda_oportunidad_acreditados : "---", 1, 0, 'C');
@@ -1754,7 +1755,7 @@ class ReporteController extends Controller
             $pdf->SetX(10);
             $pdf->Cell(195, 4, utf8_decode("2.	Este registro deberá de acompañarse con sus respectivos instrumentos de evaluación y listas de calificaciones que avalen los datos aquí presentados."), 0, 0, 'L');
 
-            $pdf->Output('D', 'Reporte_Final_'.$profesor.'.pdf');
+            $pdf->Output('D', 'Reporte_Final_'.$ciclo.'_'.$profesor.'.pdf');
         }
         else
         {
