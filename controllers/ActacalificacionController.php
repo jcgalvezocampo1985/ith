@@ -156,7 +156,7 @@ class ActacalificacionController extends Controller
                 $table->idgrupo = $idgrupo;
                 $table->idestudiante = $idestudiante;
                 $table->idopcion_curso = $idopcion_curso;
-                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "NA";
                 $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_registro = date("Y-m-d h:i:s");
                 $table->fecha_actualizacion = "";
@@ -196,7 +196,10 @@ class ActacalificacionController extends Controller
         for($i = 0; $i < count($parciales); $i++)
         {
             $parcial = $parciales[$i];
-
+/**
+ * if (is_numeric($parcial) || $parcial == "NA" || $parcial == "")
+ * if($parcial == "NA" || $parcial == "")
+ */
             if (is_numeric($parcial) || $parcial == "NA")
             {
                 if($parcial == "NA")
