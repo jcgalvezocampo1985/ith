@@ -394,7 +394,7 @@ class ReporteController extends Controller
         {
             foreach($cuerpo as $row)
             {
-                $calificacion = ($row['calificacion'] == 'N/A' || $row['calificacion'] == '') ? 0 : $row['calificacion'];
+                $calificacion = ($row['calificacion'] == 'NA' || $row['calificacion'] == '') ? 0 : $row['calificacion'];
                 //Convierte a 0 cuando el valor de la calificación es NA
                 $calificacion_acumulada = $calificacion_acumulada + $calificacion;
                 $creditos_acumulados = $creditos_acumulados + $row['creditos'];
@@ -442,7 +442,7 @@ class ReporteController extends Controller
         $url_firma = Yii::$app->basePath.'/web/img/sello_boleta.png';
         $pdf->Image($url_firma, 130, 190, 45);
 
-        $pdf->Output('D', $Ddestudiante.'_'.$periodo.'.pdf');
+        $pdf->Output('D', $estudiante.'_'.$periodo.'.pdf');
     }
 
     public function actionHorario()
