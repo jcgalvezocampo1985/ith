@@ -1754,7 +1754,7 @@ class ReporteController extends Controller
             $pdf->SetX(10);
             $pdf->Cell(195, 4, utf8_decode("2.	Este registro deberá de acompañarse con sus respectivos instrumentos de evaluación y listas de calificaciones que avalen los datos aquí presentados."), 0, 0, 'L');
 
-            $pdf->Output('I', 'Reporte_Final_'.$profesor.'.pdf');
+            $pdf->Output('D', 'Reporte_Final_'.$profesor.'.pdf');
         }
         else
         {
