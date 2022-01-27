@@ -172,7 +172,7 @@ class ActacalificacionController extends Controller
                 $idacta_cal = $sql->idacta_cal;
 
                 $table = ActaCalificacion::findOne($idacta_cal);
-                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "";
+                $table->pri_opt = ($verificar_oportunidad_calificacion == 1) ? $promedio_final : "NA";
                 $table->seg_opt = ($verificar_oportunidad_calificacion == 2) ? $promedio_final : "";
                 $table->fecha_actualizacion = date("Y-m-d h:i:s");
                 $table->cve_estatus = $cve_estatus;
@@ -200,9 +200,9 @@ class ActacalificacionController extends Controller
  * if (is_numeric($parcial) || $parcial == "NA" || $parcial == "")
  * if($parcial == "NA" || $parcial == "")
  */
-            if (is_numeric($parcial) || $parcial == "NA")
+            if (is_numeric($parcial) || $parcial == "NA" || $parcial == "")
             {
-                if($parcial == "NA")
+                if($parcial == "NA" || $parcial == "")
                 {
                     $parcial = 0;
                     $total_reprobados = $total_reprobados + 1;
