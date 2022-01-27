@@ -340,7 +340,7 @@ class EstudianteController extends Controller
             $model = new EstudianteForm;
             $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
             $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
-            $clave_estatus = ["VIG" => "VIGENTE", "bt" => "BAJA TEMPORAL", "BD" => "BAJA DEFINITIVA"];
+            $clave_estatus = ["VIG" => "VIGENTE", "BT" => "BAJA TEMPORAL", "BD" => "BAJA DEFINITIVA", "DES" => "DESERTOR"];
             $carrera = ArrayHelper::map(Carrera::find()->all(), 'idcarrera', 'desc_carrera');
 
             if($idestudiante)

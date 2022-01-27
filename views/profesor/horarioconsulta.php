@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a('Refrescar', ['profesor/horarioconsulta'], ['class' => 'btn btn-info']) ?>
                 <?php if($idciclo): ?>
                 <?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacionprofesor?idprofesor=".$idprofesor."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-warning"]) ?>
+                <?= Html::a("Reporte Final", ["reporte/reportefinalprofesor?idprofesor=".$idprofesor."&idciclo=".$idciclo], ["target" => "_parent", "class" => "btn btn-success"]) ?>
                 <?php endif ?>
             </div>
         </div>
