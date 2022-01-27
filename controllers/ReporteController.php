@@ -1682,7 +1682,7 @@ class ReporteController extends Controller
                 //Devuelve el porcentaje de estudiantes que no acreditaron la materia
                 $porcentaje_no_acreditados = 100 - ($primera_oportunidad_porcentaje_acreditados + $segunda_oportunidad_porcentaje_acreditados);
                 //Devuelve el porcentaje de desertores de estudiantes por materia
-                $porcentaje_desertores = round(($desertores / $total_estudiantes) * 100);
+                $porcentaje_desertores = ($row["total_estudiantes"] > 0) ? round(($desertores / $total_estudiantes) * 100) : 0;
 
                 //Acumula la suma total de estudiantes
                 $total_estudiantes_acumulado = $total_estudiantes_acumulado + $total_estudiantes;
@@ -1710,7 +1710,7 @@ class ReporteController extends Controller
                 $pdf->Cell(9, 7, ($segunda_oportunidad_acreditados > 0) ? $segunda_oportunidad_acreditados : "---", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($primera_oportunidad_porcentaje_acreditados + $segunda_oportunidad_porcentaje_acreditados)."%", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($no_acreditados > 0) ? $no_acreditados : "---", 1, 0, 'C');
-                $pdf->Cell(9, 7, ($porcentaje_no_acreditados > 0) ? $porcentaje_no_acreditados."%" : "---", 1, 0, 'C');
+                $pdf->Cell(9, 7, ($row["total_estudiantes"] > 0) ? (($porcentaje_no_acreditados > 0) ? $porcentaje_no_acreditados."%" : "---") : "---", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($desertores > 0) ? $desertores : "---", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($porcentaje_desertores > 0) ? $porcentaje_desertores."%" : "---", 1, 0, 'C');
 
