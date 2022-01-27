@@ -14,6 +14,7 @@ use app\models\grupoestudiante\GrupoEstudiante;
 
 class ActacalificacionController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -93,7 +94,9 @@ class ActacalificacionController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionGeneraracta($idgrupo, $idprofesor)
     public function actionGeneraracta($idgrupo, $idprofesor)
     {
         $sql = GrupoEstudiante::find()->select("idestudiante,idopcion_curso,cve_estatus,idciclo,p1,p2,p3,p4,p5,p6,p7,p8,p9,s1,s2,s3,s4,s5,s6,s7,s8,s9")->where(["idgrupo" => $idgrupo])->all();
@@ -186,7 +189,9 @@ class ActacalificacionController extends Controller
         //header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&error=1&msg=$msg"));
         exit;
     }
+    #endregion
 
+    #region private function promedioTotal(array $parciales)
     private function promedioTotal(array $parciales)
     {
         $total_parciales = 0;
@@ -217,7 +222,9 @@ class ActacalificacionController extends Controller
 
         return $promedio_p;
     }
+    #endregion
 
+    #region private function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad)
     private function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad)
     {
         $total_reprobados_primera = 0;
@@ -255,4 +262,5 @@ class ActacalificacionController extends Controller
 
         return $opcion;
     }
+    #endregion
 }

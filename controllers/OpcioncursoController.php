@@ -18,6 +18,7 @@ use app\models\opcioncurso\OpcionCursoSearch;
 
 class OpcioncursoController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -97,7 +98,9 @@ class OpcioncursoController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         $form = new OpcionCursoSearch;
@@ -142,7 +145,9 @@ class OpcioncursoController extends Controller
 
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new OpcionCursoForm();
@@ -156,7 +161,9 @@ class OpcioncursoController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new OpcionCursoForm;
@@ -197,7 +204,9 @@ class OpcioncursoController extends Controller
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($id, $msg = "", $error = "")
     public function actionEdit($id, $msg = "", $error = "")
     {
         $idopcion_curso = Html::encode($id);
@@ -235,7 +244,9 @@ class OpcioncursoController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {
         $model = new OpcionCursoForm;
@@ -280,7 +291,9 @@ class OpcioncursoController extends Controller
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -317,4 +330,5 @@ class OpcioncursoController extends Controller
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 }

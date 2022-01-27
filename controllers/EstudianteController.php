@@ -28,6 +28,7 @@ use app\models\User;
 
 class EstudianteController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -147,7 +148,9 @@ class EstudianteController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         $form = new EstudianteSearch;
@@ -213,7 +216,9 @@ class EstudianteController extends Controller
         
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new EstudianteForm;
@@ -245,7 +250,9 @@ class EstudianteController extends Controller
                                       "carrera" => $carrera,
                                       "clave_estatus" => $clave_estatus]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new EstudianteForm;
@@ -328,7 +335,9 @@ class EstudianteController extends Controller
             return $this->redirect(["estudiante/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($idestudiante, $msg = "", $error = "")
     public function actionEdit($idestudiante, $msg = "", $error = "")
     {
         $idestudiante = Html::encode($idestudiante);
@@ -384,7 +393,9 @@ class EstudianteController extends Controller
                                       "clave_estatus" => $clave_estatus
                                     ]);
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {
         $model = new EstudianteForm;
@@ -442,7 +453,9 @@ class EstudianteController extends Controller
             return $this->redirect(["estudiante/index"]);
         }
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -478,7 +491,9 @@ class EstudianteController extends Controller
             return $this->redirect(["estudiante/index"]);
         }
     }
+    #endregion
 
+    #region public function actionHorario()
     public function actionHorario()
     {
         $table = new Estudiante;
@@ -516,7 +531,9 @@ class EstudianteController extends Controller
 
         return $this->render("horario", ["model" => $model, "form" => $form, "status" => $status]);
     }
+    #endregion
 
+    #region public function actionBoleta()
     public function actionBoleta()
     {
         $table = new Estudiante;
@@ -554,7 +571,9 @@ class EstudianteController extends Controller
 
         return $this->render("boleta", ["model" => $model, "form" => $form, "status" => $status]);
     }
+    #endregion
 
+    #region public function actionBoletacalificacion()
     public function actionBoletacalificacion()
     {
         $this->layout = 'main2';
@@ -573,7 +592,9 @@ class EstudianteController extends Controller
                             ->queryAll();
         return $this->render("boleta_calificacion", ["model" => $model]);
     }
+    #endregion
 
+    #region public function actionHorarioalumnos()
     public function actionHorarioalumnos()
     {
         $this->layout = 'main2';
@@ -592,7 +613,9 @@ class EstudianteController extends Controller
                             ->queryAll();
         return $this->render("horario_alumno", ["model" => $model]);
     }
+    #endregion
 
+    #region public function actionHorariomodificar()
     public function actionHorariomodificar()
     {
         $idciclo_actual = Ciclo::find()->max("idciclo");
@@ -675,7 +698,9 @@ class EstudianteController extends Controller
                                                   "status" => $status, 
                                                   "msg" => $msg]);
     }
+    #endregion
 
+    #region public function actionDeletehorarioestudiante()
     public function actionDeletehorarioestudiante()
     {
         if(Yii::$app->request->get())
@@ -708,7 +733,9 @@ class EstudianteController extends Controller
             exit;
         }
     }
+    #endregion
 
+    #region public function actionHorarioagregar()
     public function actionHorarioagregar()
     {
         $this->layout = 'main2';//Cambio de layout
@@ -753,7 +780,9 @@ class EstudianteController extends Controller
             return $this->render("horarioagregar", ["materias" => $materias, "opcion_curso" => $opcion_curso, "idestudiante" => $idestudiante, "idciclo" => $idciclo, "idcarrera" => $idcarrera]);
         }
     }
+    #endregion
 
+    #region public function actionAgregarmateria()
     public function actionAgregarmateria()
     {
         if (Yii::$app->request->get())
@@ -787,4 +816,5 @@ class EstudianteController extends Controller
 
         return $status;
     }
+    #endregion
 }
