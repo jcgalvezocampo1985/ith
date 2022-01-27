@@ -14,12 +14,12 @@ use app\models\ciclo\Ciclo;
 use app\models\materia\Materia;
 use app\models\profesor\Profesor;
 use app\models\grupo\Grupo;
-use app\models\grupoestudiante\GrupoEstudiante;
 
 class PDF extends FPDF
 {
     public $header;
     public $footer;
+    public $profesor;
 
     public function setHeader($header)
     {
@@ -39,6 +39,16 @@ class PDF extends FPDF
     public function getFooter()
     {
         return $this->footer;
+    }
+
+    public function setProfesor($profesor)
+    {
+        $this->profesor = $profesor;
+    }
+
+    public function getProfesor()
+    {
+        return $this->profesor;
     }
 
     public function Header()
@@ -201,10 +211,13 @@ class PDF extends FPDF
         {
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 10);
-            $this->Line(35, 245, 80, 245);
+            $this->Line(25, 245, 95, 245);
             $this->Text(48, 225, utf8_decode('DOCENTE'));
+            $this->SetXY(20, 237);
+            $this->Cell(80, 5, $this->getProfesor(), 0, 0, 'C');
             $this->Line(120, 245, 190, 245);
             $this->Text(130, 225, utf8_decode('JEFE DEL ÁREA ACADÉMICA'));
+            $this->Text(135, 240, utf8_decode('ALEXIS PIÑA MARCIAL'));
             $this->SetTextColor(125, 125, 125);
             $this->Text(12, 265, '181240065');
             $this->Text(190, 265, 'Rev. O');
@@ -1594,6 +1607,7 @@ class ReporteController extends Controller
             $pdf = new PDF();
             $pdf->setHeader('Reporte Final Profesor');
             $pdf->setFooter('Reporte Final Profesor');
+            $pdf->setProfesor($profesor);
             $pdf->AliasNbPages();
             $pdf->AddPage('P', 'Letter');
             $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
@@ -1605,8 +1619,8 @@ class ReporteController extends Controller
 
             $pdf->SetFont('Montserrat-Bold', '', 10);
             $pdf->SettextColor(0, 0, 0);
-            $pdf->Text(50, 42, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
-            $pdf->Text(73, 50, utf8_decode('SUBDIRECCIÓN ACADÉMICA'));
+            $pdf->Text(70, 42, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
+            $pdf->Text(85, 48, utf8_decode('SUBDIRECCIÓN ACADÉMICA'));
 
             $y = 60;
             $pdf->SetFont('Montserrat-Regular', '', 10);
@@ -1629,8 +1643,8 @@ class ReporteController extends Controller
 
             $pdf->SetFont('Montserrat-Bold', '', 8);
             $pdf->SetXY(5, $y + 30);
-            $pdf->Cell(77, 10, 'ASIGNATURA', 1, 0, 'C');
-            $pdf->Cell(55, 10, 'CARRERA', 1, 0, 'C');
+            $pdf->Cell(102, 10, 'ASIGNATURA', 1, 0, 'C');
+            $pdf->Cell(30, 10, 'CARRERA', 1, 0, 'C');
             $pdf->Cell(9, 10, 'A', 1, 0, 'C');
             $pdf->Cell(18, 5, 'B', 1, 0, 'C');
             $pdf->Cell(9, 10, 'C', 1, 0, 'C');
@@ -1688,9 +1702,9 @@ class ReporteController extends Controller
                 $total_porcentaje_estudiantes_desertores_acumulado = $total_porcentaje_estudiantes_desertores_acumulado + $porcentaje_desertores;
 
                 $pdf->SetX(5);
-                $pdf->SetFont('Montserrat-Regular', '', 6);
-                $pdf->Cell(77, 7, utf8_decode($materia), 1, 0, 'L');
-                $pdf->Cell(55, 7, utf8_decode($carrera), 1, 0, 'C');
+                $pdf->SetFont('Montserrat-Regular', '', 8);
+                $pdf->Cell(102, 7, utf8_decode($materia), 1, 0, 'L');
+                $pdf->Cell(30, 7, utf8_decode($carrera), 1, 0, 'C');
                 $pdf->Cell(9, 7, $total_estudiantes, 1, 0, 'C');
                 $pdf->Cell(9, 7, ($primera_oportunidad_acreditados > 0) ? $primera_oportunidad_acreditados : "---", 1, 0, 'C');
                 $pdf->Cell(9, 7, ($segunda_oportunidad_acreditados > 0) ? $segunda_oportunidad_acreditados : "---", 1, 0, 'C');
@@ -1747,13 +1761,13 @@ class ReporteController extends Controller
             $pdf->SetFont('Montserrat-Regular', '', 6);
             $pdf->Ln();
             $pdf->SetX(10);
-            $pdf->Cell(195, 4, utf8_decode("1.	Los estudiantes que se incluirán en la columna D son todos los estudiantes no acreditados incluyendo los desertores."), 0, 0, 'L');
+            $pdf->Cell(195, 4, utf8_decode("1. Los estudiantes que se incluirán en la columna D son todos los estudiantes no acreditados incluyendo los desertores."), 0, 0, 'L');
             $pdf->Ln();
             $pdf->SetX(15);
-            $pdf->Cell(190, 4, utf8_decode("a.	Entendiendo como estudiante desertor al que toma la decisión de no presentar exámenes de regularización o extraordinarios aun teniendo derecho a ellos."), 0, 0, 'L');
+            $pdf->Cell(190, 4, utf8_decode("a. Entendiendo como estudiante desertor al que toma la decisión de no presentar exámenes de regularización o extraordinarios aun teniendo derecho a ellos."), 0, 0, 'L');
             $pdf->Ln();
             $pdf->SetX(10);
-            $pdf->Cell(195, 4, utf8_decode("2.	Este registro deberá de acompañarse con sus respectivos instrumentos de evaluación y listas de calificaciones que avalen los datos aquí presentados."), 0, 0, 'L');
+            $pdf->Cell(195, 4, utf8_decode("2. Este registro deberá de acompañarse con sus respectivos instrumentos de evaluación y listas de calificaciones que avalen los datos aquí presentados."), 0, 0, 'L');
 
             $pdf->Output('D', 'Reporte_Final_'.$ciclo.'_'.$profesor.'.pdf');
         }
