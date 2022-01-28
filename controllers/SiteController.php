@@ -110,6 +110,7 @@ class SiteController extends Controller
     @inheritdoc}
     */
 
+    #region public function actions()
     public function actions()
     {
         return [
@@ -122,6 +123,7 @@ class SiteController extends Controller
             ],
         ];
     }
+    #endregion
 
     /**
     * Displays homepage.
@@ -129,11 +131,13 @@ class SiteController extends Controller
     * @return string
     */
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         //return $this->render('index');
         return $this->redirect(["profesor/index"]);
     }
+    #endregion
 
     /**
     * Login action.
@@ -141,6 +145,7 @@ class SiteController extends Controller
     * @return Response|string
     */
 
+    #region public function actionLogin()
     public function actionLogin()
     {
         if(!\Yii::$app->user->isGuest)
@@ -198,6 +203,7 @@ class SiteController extends Controller
             return $this->render("login", ["model" => $model]);
         }
     }
+    #endregion
 
     /**
     * Logout action.
@@ -205,13 +211,16 @@ class SiteController extends Controller
     * @return Response
     */
 
+    #region public function actionLogout()
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
+    #endregion
 
+    #region private function randKey($str = '', $long = 0)
     private function randKey($str = '', $long = 0)
     {
         $key = null;
@@ -226,7 +235,9 @@ class SiteController extends Controller
 
         return $key;
     }
+    #endregion
 
+    #region public function actionRegister()
     public function actionRegister()
     {
         //Creamos la instancia con el model de validación
@@ -309,7 +320,9 @@ class SiteController extends Controller
 
         return $this->render('registro', ['model' => $model, 'msg' => $msg]);
     }
+    #endregion
 
+    #region public function actionConfirm()
     public function actionConfirm()
     {
         $table = new Usuario;
@@ -357,7 +370,9 @@ class SiteController extends Controller
             }
         }
     }
+    #endregion
 
+    #region public function actionRecoverpass()
     public function actionRecoverpass()
     {
         //Instancia para validar el formulario
@@ -432,7 +447,9 @@ class SiteController extends Controller
         }
         return $this->render("recoverpass", ["model" => $model, "msg" => $msg]);
     }
+    #endregion
  
+    #region public function actionResetpass()
     public function actionResetpass()
     {
         //Instancia para validar el formulario
@@ -507,7 +524,9 @@ class SiteController extends Controller
 
         return $this->render("resetpass", ["model" => $model, "msg" => $msg]);
     }
+    #endregion
 
+    #region public function actionGenerarpassword()
     public function actionGenerarpassword()
     {
         //Creamos la instancia con el model de validación
@@ -595,4 +614,5 @@ class SiteController extends Controller
 
         return $this->render('generarpassword', ['model' => $model, 'msg' => $msg, 'password' => $password]);
     }
+    #endregion
 }
