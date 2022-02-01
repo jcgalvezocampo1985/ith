@@ -608,7 +608,7 @@ class ReporteController extends Controller
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
         $pdf->Text(138, 85, utf8_decode($creditos_acumulados));
 
-        $pdf->Output('I', $idestudiante.'_'.$periodo.'.pdf');
+        $pdf->Output('D', $idestudiante.'_'.$periodo.'.pdf');
     }
     #endregion
 
