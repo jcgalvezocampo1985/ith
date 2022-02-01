@@ -20,37 +20,65 @@ class PDF extends FPDF
     public $header;
     public $footer;
     public $profesor;
+    public $noControl;
 
+    #region public function setNoControl($noControl)
+    public function setNoControl($noControl)
+    {
+        $this->noControl = $noControl;
+    }
+    #endregion
+
+    #region public function getNoControl()
+    public function getNoControl()
+    {
+        return $this->noControl;
+    }
+    #endregion
+
+    #region public function setHeader($header)
     public function setHeader($header)
     {
         $this->header = $header;
     }
+    #endregion
 
+    #region public function getHeader()
     public function getHeader()
     {
         return $this->header;
     }
+    #endregion
 
+    #region public function setFooter($footer)
     public function setFooter($footer)
     {
         $this->footer = $footer;
     }
+    #endregion
 
+    #region public function getFooter()
     public function getFooter()
     {
         return $this->footer;
     }
+    #endregion
 
+    #region public function setProfesor($profesor)
     public function setProfesor($profesor)
     {
         $this->profesor = $profesor;
     }
+    #endregion
 
+    #region public function getProfesor()
     public function getProfesor()
     {
         return $this->profesor;
     }
+    #endregion
 
+    #region public function Header()
     public function Header()
     {
         if($this->getHeader() == 'Boleta')
@@ -66,7 +94,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -79,11 +107,16 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
-            $this->Text(155, 50, utf8_decode('TNM'));
+
+            $this->SetFont('Arial', 'B', 9);
+            $this->SetFillColor(255,255,255);
+            $this->SetTextColor(127, 127, 127);
+            $this->SetXY(161, 5.5);
+            $this->Cell(30, 5, $this->getNoControl(), 0, 1, 'L', 1);
         }
         else if($this->getHeader() == 'Lista Alumnos')
         {
@@ -98,7 +131,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -117,7 +150,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -149,7 +182,6 @@ class PDF extends FPDF
             $this->Text(180, 30, utf8_decode('Instituto Tecnológico de Huimanguillo'));
             $this->SetFontSize(8);
             $this->Text(120, 37, utf8_decode('"2021: Año de la Independencia"'));
-
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
             $this->SettextColor(76, 76, 76);
@@ -159,7 +191,9 @@ class PDF extends FPDF
             $this->Text(220, 45, utf8_decode('TNM'));
         }*/
     }
+    #endregion
 
+    #region public function Footer()
     public function Footer()
     {
         //Imprime el número de páginas en el pie de cada página
@@ -189,7 +223,7 @@ class PDF extends FPDF
             $this->Line(130, 235, 180, 235);
             $this->Text(147, 240, 'ESTUDIANTE');
             $this->SetTextColor(125, 125, 125);
-            $this->Text(12, 265, '181240065');
+            $this->Text(12, 265, $this->getNoControl());
             $this->Text(190, 265, 'Rev. O');
         }
         else if($this->getFooter() == 'Lista Alumnos')
@@ -223,10 +257,12 @@ class PDF extends FPDF
             $this->Text(190, 265, 'Rev. O');
         }
     }
+    #endregion
 }
 
 class ReporteController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -306,7 +342,9 @@ class ReporteController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionBoleta()
     public function actionBoleta()
     {
         $idestudiante = Html::encode($_REQUEST['id']);
@@ -394,7 +432,7 @@ class ReporteController extends Controller
         {
             foreach($cuerpo as $row)
             {
-                $calificacion = ($row['calificacion'] == 'N/A' || $row['calificacion'] == '') ? 0 : $row['calificacion'];
+                $calificacion = ($row['calificacion'] == 'NA' || $row['calificacion'] == '') ? 0 : $row['calificacion'];
                 //Convierte a 0 cuando el valor de la calificación es NA
                 $calificacion_acumulada = $calificacion_acumulada + $calificacion;
                 $creditos_acumulados = $creditos_acumulados + $row['creditos'];
@@ -442,9 +480,11 @@ class ReporteController extends Controller
         $url_firma = Yii::$app->basePath.'/web/img/sello_boleta.png';
         $pdf->Image($url_firma, 130, 190, 45);
 
-        $pdf->Output('D', $Ddestudiante.'_'.$periodo.'.pdf');
+        $pdf->Output('D', $estudiante.'_'.$periodo.'.pdf');
     }
+    #endregion
 
+    #region public function actionHorario()
     public function actionHorario()
     {
         $idestudiante = Html::encode($_REQUEST['id']);
@@ -489,8 +529,9 @@ class ReporteController extends Controller
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
-        $pdf->setHeader('Horario');
-        $pdf->setFooter('Horario');
+        $pdf->SetHeader('Horario');
+        $pdf->SetFooter('Horario');
+        $pdf->SetNoControl($no_control);
         $pdf->AliasNbPages();
         $pdf->AddPage('P', 'Letter');
         $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
@@ -501,7 +542,7 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
-        $pdf->SettextColor(0, 0, 0);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->Text(60, 58, utf8_decode('CARGA ACADÉMICA AL PERIODO:'));
         $pdf->Text(115, 58, $periodo);
         $pdf->Text(12, 65, 'FECHA:');
@@ -567,9 +608,11 @@ class ReporteController extends Controller
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
         $pdf->Text(138, 85, utf8_decode($creditos_acumulados));
 
-        $pdf->Output('D', $idestudiante.'_'.$periodo.'.pdf');
+        $pdf->Output('I', $idestudiante.'_'.$periodo.'.pdf');
     }
+    #endregion
 
+    #region public function actionListaalumnos()
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
@@ -669,7 +712,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacion($idgrupo, $idciclo)
     public function actionListaalumnoscalificacion($idgrupo, $idciclo)
     {
         $idgrupo = Html::encode($idgrupo);
@@ -828,7 +873,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento)
     public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento)
     {
         $idgrupo = Html::encode($idgrupo);
@@ -996,7 +1043,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
     public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
     {
         $idciclo = Html::encode($idciclo);
@@ -1162,7 +1211,9 @@ class ReporteController extends Controller
         }
         $pdf->Output('D', "Calificaciones ".utf8_decode($periodo).'.pdf');
     }
+    #endregion
 
+    #region public function actionActacalificaciones($idgrupo)
     public function actionActacalificaciones($idgrupo)
     {
         $idgrupo = Html::encode($idgrupo);
@@ -1396,7 +1447,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
+    #endregion
 
+    #region private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "")
     private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "")
     {
         $x_encabezado = $x;
@@ -1474,7 +1527,9 @@ class ReporteController extends Controller
 
         return 45 + $disminuir;
     }
+    #endregion
 
+    #region private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "")
     private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "")
     {
         $pdf->SetFont('Montserrat-SemiBold', '', 7);
@@ -1554,7 +1609,9 @@ class ReporteController extends Controller
             }
         }
     }
+    #endregion
 
+    #region public function actionReportefinalprofesor($idprofesor, $idciclo)
     public function actionReportefinalprofesor($idprofesor, $idciclo)
     {
         $idprofesor = Html::encode($idprofesor);
@@ -1776,13 +1833,13 @@ class ReporteController extends Controller
             throw new \yii\web\HttpException(404,'Oops. Not logged in.');
         }
     }
+    #endregion
 
     /*
     public function actionHorarioprofesor()
     {
         $idprofesor = 25;
         $idciclo = 1;
-
         $sql_materias = "SELECT
                             *
                          FROM
@@ -1795,7 +1852,6 @@ class ReporteController extends Controller
                                ->bindValue(':idprofesor', $idprofesor)
                                ->bindValue(':idciclo', $idciclo)
                                ->queryAll();
-
         header('Content-type: application/pdf');
         $pdf = new PDF();
         $pdf->setReporte('Horario Profesor');
@@ -1807,7 +1863,6 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-LightItalic', '', 'Montserrat-LightItalic.php');
         $pdf->AddFont('Montserrat-Bold', '', 'Montserrat-Bold.php');
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
-
         $pdf->SetFont('Montserrat-SemiBold', '', 14);
         $pdf->SettextColor(0, 0, 0);
         $url_header = Yii::$app->basePath.'/web/img/SEP1.png';
@@ -1828,7 +1883,6 @@ class ReporteController extends Controller
         $pdf->Text(245, 16, "0");
         $pdf->Text(202, 23, utf8_decode("Página"));
         $pdf->Text(242, 23, utf8_decode("1 de 2"));
-
         $pdf->Rect(5, 30, 270, 41);
         $pdf->Line(5, 36, 275, 36);//HORIZONTAL
         $pdf->Text(7, 34, utf8_decode("INSTITUTO TECNOLÓGICO DE:"));
@@ -1840,39 +1894,30 @@ class ReporteController extends Controller
         $pdf->Line(180, 30, 180, 36);//VERTICAL
         $pdf->Text(181, 34, utf8_decode("PERIODO ESCOLAR"));
         $pdf->Line(225, 30, 225, 36);//VERTICAL
-
         $pdf->SetFont('Montserrat-SemiBold', '', 7);
         $pdf->Text(6, 39, utf8_decode("NOMBRE COMPLETO:"));
         $pdf->Text(165, 39, utf8_decode("CLAVE COMPLETA DE LA(S) PLAZA(S):"));
         $pdf->Line(5, 41, 164, 41);//HORIZONTAL
-
         $pdf->Text(6, 44, utf8_decode("ESCOLARIDAD DEL PERSONAL"));
         $pdf->Text(131, 44, utf8_decode("PASANTE"));
         $pdf->Text(148, 44, utf8_decode("TITULADO"));
         $pdf->Line(5, 46, 164, 46);//HORIZONTAL
-
         $pdf->Text(6, 49, utf8_decode("LICENCIATURA EN:"));
         $pdf->Line(5, 51, 275, 51);//HORIZONTAL
-
         $pdf->Text(6, 54, utf8_decode("ESPECIALIZACIÓN EN:"));
         $pdf->Text(165, 54, utf8_decode("TIPO DE NOMBRAMIENTO:"));
         $pdf->Text(222, 54, utf8_decode("FECHA DE INGRESO A LA S.E.P.:"));
         $pdf->Line(221, 51, 221, 71);//VERTICAL
         $pdf->Line(5, 56, 164, 56);//HORIZONTAL
-
         $pdf->Text(6, 59, utf8_decode("MAESTRÍA EN:"));
         $pdf->Line(5, 61, 275, 61);//HORIZONTAL
-
         $pdf->Text(6, 64, utf8_decode("DOCTORADO EN:"));
         $pdf->Text(165, 64, utf8_decode("NO. DE TARJETA DE CONTROL:"));
         $pdf->Text(222, 64, utf8_decode("FECHA DE INGRESO A LA INSTITUCIÓN:"));
         $pdf->Line(5, 66, 164, 66);//HORIZONTAL
-
         $pdf->Text(6, 69, utf8_decode("UNIDAD ORGÁNICA DE ADSCRIPCIÓN:"));
-
         $pdf->SetFont('Montserrat-SemiBold', '', 10);
         $pdf->Text(6, 77, utf8_decode("I.- CARGA ACADÉMICA"));
-
         $pdf->SetFont('Montserrat-Bold', '', 7);
         $pdf->SetFillColor(191, 191, 191);
         $pdf->SetXY(6, 80);
@@ -1897,7 +1942,6 @@ class ReporteController extends Controller
         $pdf->SetXY(255, 80);
         $pdf->MultiCell(20, 6, "TOTAL HRS\nSEMANALES", 1, 'C', true);
         $pdf->Ln();
-
         $pdf->SetY(92);
         $pdf->SetFont('Montserrat-regular', '', 6.5);
         foreach($cuerpo as $row)
@@ -1935,11 +1979,9 @@ class ReporteController extends Controller
         $pdf->Cell(16, 5, "", 1, 0, 'C');
         $pdf->Cell(16, 5, "", 1, 0, 'C');
         $pdf->Cell(20, 5, "", 1, 0, 'C');
-
         $y = $pdf->GetY();
         $pdf->SetFont('Montserrat-SemiBold', '', 10);
         $pdf->Text(6, $y+10, utf8_decode("II.- ACTIVIDADES DE APOYO A LA DOCENCIA"));
-
         $pdf->SetFont('Montserrat-Bold', '', 7);
         $pdf->SetXY(6, $y+13);
         $pdf->Cell(140, 12, "NOMBRE DE LA ACTIVIDAD", 1, 0, 'C', true);
@@ -1955,7 +1997,6 @@ class ReporteController extends Controller
         $pdf->SetXY(255, $y+13);
         $pdf->MultiCell(20, 6, "TOTAL HRS\nSEMANALES", 1, 'C', true);
         $pdf->Ln();
-
         $actividades = array('ORGANIZAR Y REALIZAR ACTIVIDADES DE CAPACITACIÓN Y SUPERACIÓN DOCENTE',
                              'PRESTAR ASESORÍAS DOCENTES A ESTUDIANTES Y PASANTES',
                              'DEFINIR, ADECUAR, PLANEAR, DIRIGIR, COORDINAR Y EVALUAR PROYECTOS Y PROGRAMAS DOCENTES',
@@ -1964,7 +2005,6 @@ class ReporteController extends Controller
                              'PRESTAR  ASESORÍAS EN PROYECTOS EXTERNOS Y LABORES DE EXTENSIÓN',
                              'PRESTAR ASESORÍAS EN SERVICIO SOCIAL'
                             );
-
         $pdf->SetXY(6, $y+25);
         $pdf->SetFont('Montserrat-regular', '', 7);
         for($i = 0; $i < count($actividades); $i++)
@@ -1998,7 +2038,6 @@ class ReporteController extends Controller
         $pdf->Cell(16, 5, "", 1, 0, 'C');
         $pdf->Cell(20, 5, "", 1, 0, 'C');
         
-
         $pdf->Output('I', 'horario.pdf');
     }*/
 }
