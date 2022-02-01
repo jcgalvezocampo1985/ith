@@ -20,6 +20,21 @@ class PDF extends FPDF
     public $header;
     public $footer;
     public $profesor;
+    public $noControl;
+
+    #region public function setNoControl($noControl)
+    public function setNoControl($noControl)
+    {
+        $this->noControl = $noControl;
+    }
+    #endregion
+
+    #region public function getNoControl()
+    public function getNoControl()
+    {
+        return $this->noControl;
+    }
+    #endregion
 
     #region public function setHeader($header)
     public function setHeader($header)
@@ -79,7 +94,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -92,11 +107,16 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
-            $this->Text(155, 50, utf8_decode('TNM'));
+
+            $this->SetFont('Arial', 'B', 9);
+            $this->SetFillColor(255,255,255);
+            $this->SetTextColor(127, 127, 127);
+            $this->SetXY(161, 5.5);
+            $this->Cell(30, 5, $this->getNoControl(), 0, 1, 'L', 1);
         }
         else if($this->getHeader() == 'Lista Alumnos')
         {
@@ -111,7 +131,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -130,7 +150,7 @@ class PDF extends FPDF
 
             $this->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
             $this->SetFont('Montserrat-SemiBold', '', 8);
-            $this->SettextColor(76, 76, 76);
+            $this->SetTextColor(76, 76, 76);
             $this->Text(12, 50, utf8_decode('SEP'));
             $this->Text(50, 50, utf8_decode('INSTITUTO TECNOLÓGICO DE HUIMANGUILLO'));
             $this->Text(140, 50, utf8_decode('SES'));
@@ -204,7 +224,7 @@ class PDF extends FPDF
             $this->Line(130, 235, 180, 235);
             $this->Text(147, 240, 'ESTUDIANTE');
             $this->SetTextColor(125, 125, 125);
-            $this->Text(12, 265, '181240065');
+            $this->Text(12, 265, $this->getNoControl());
             $this->Text(190, 265, 'Rev. O');
         }
         else if($this->getFooter() == 'Lista Alumnos')
@@ -510,8 +530,9 @@ class ReporteController extends Controller
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
-        $pdf->setHeader('Horario');
-        $pdf->setFooter('Horario');
+        $pdf->SetHeader('Horario');
+        $pdf->SetFooter('Horario');
+        $pdf->SetNoControl($no_control);
         $pdf->AliasNbPages();
         $pdf->AddPage('P', 'Letter');
         $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
@@ -522,7 +543,7 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
-        $pdf->SettextColor(0, 0, 0);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->Text(60, 58, utf8_decode('CARGA ACADÉMICA AL PERIODO:'));
         $pdf->Text(115, 58, $periodo);
         $pdf->Text(12, 65, 'FECHA:');
@@ -588,7 +609,7 @@ class ReporteController extends Controller
         $pdf->SetFont('Montserrat-SemiBold', '', 8);
         $pdf->Text(138, 85, utf8_decode($creditos_acumulados));
 
-        $pdf->Output('D', $idestudiante.'_'.$periodo.'.pdf');
+        $pdf->Output('I', $idestudiante.'_'.$periodo.'.pdf');
     }
     #endregion
 
