@@ -28,6 +28,7 @@ use app\models\User;
 
 class ProfesorController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -167,7 +168,9 @@ class ProfesorController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         /*
@@ -239,7 +242,9 @@ class ProfesorController extends Controller
                                       "ciclos" => $ciclos,
                                       "ultimo_ciclo" => $idciclo]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new ProfesorForm;
@@ -260,7 +265,9 @@ class ProfesorController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error, "clave_estatus" => $clave_estatus]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new ProfesorForm;
@@ -346,7 +353,9 @@ class ProfesorController extends Controller
             return $this->redirect(["profesor/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($idprofesor, $msg = "", $error = "")
     public function actionEdit($idprofesor, $msg = "", $error = "")
     {
         $idprofesor = Html::encode($idprofesor);
@@ -392,7 +401,9 @@ class ProfesorController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error, "clave_estatus" => $clave_estatus, "usuario" => $usuario]);
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {
         $model = new ProfesorForm;
@@ -455,7 +466,9 @@ class ProfesorController extends Controller
             return $this->redirect(["profesor/index"]);
         }
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -492,7 +505,9 @@ class ProfesorController extends Controller
             return $this->redirect(["profesor/index"]);
         }
     }
+    #endregion
 
+    #region public function actionHorario()
     public function actionHorario()
     {
         $form = new CicloSearch;
@@ -554,7 +569,9 @@ class ProfesorController extends Controller
                              "seguimiento4" => $seguimiento4
                              ]);
     }
+    #endregion
 
+    #region public function actionListaalumnos()
     public function actionListaalumnos()
     {
         $this->layout = 'main1';//Cambio de layout
@@ -596,7 +613,9 @@ class ProfesorController extends Controller
             return $this->render("listaAlumnos", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo]);
         }
     }
+    #endregion
 
+    #region public function actionHorarioconsulta()
     public function actionHorarioconsulta()
     {
         $form = new CicloProfesorSearch;
@@ -702,7 +721,9 @@ class ProfesorController extends Controller
                                                 "error" => $error
                                             ]);
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -784,7 +805,9 @@ class ProfesorController extends Controller
                                                               "ultimo_seguimiento" => $ultimo_seguimiento]);
         }
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -872,7 +895,9 @@ class ProfesorController extends Controller
                                                                           "ultimo_ciclo" => $ultimo_ciclo]);
         }
     }
+    #endregion
 
+    #region public function actionGuardarcalificacion()
     public function actionGuardarcalificacion()
     {
         if(Yii::$app->request->post())
@@ -978,7 +1003,9 @@ class ProfesorController extends Controller
             exit;
         }
     }
+    #endregion
 
+    #region public function actionGuardarcalificacionseguimientos()
     public function actionGuardarcalificacionseguimientos()
     {
         if(Yii::$app->request->post())
@@ -1079,7 +1106,9 @@ class ProfesorController extends Controller
             exit;
         }
     }
+    #endregion
 
+    #region public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -1150,7 +1179,9 @@ class ProfesorController extends Controller
                                                             ]);
         }
     }
+    #endregion
 
+    #region public function actionGuardarcalificacionregularizacion()
     public function actionGuardarcalificacionregularizacion()
     {
         if(Yii::$app->request->post())
@@ -1203,7 +1234,9 @@ class ProfesorController extends Controller
             exit;
         }
     }
+    #endregion
 
+    #region public function actionHorarioprofesor()
     public function actionHorarioprofesor()
     {
         $this->layout = 'main2';
@@ -1230,7 +1263,9 @@ class ProfesorController extends Controller
 
         return $this->render("horario_profesor", ["model" => $model, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor]);
     }
+    #endregion
 
+    #region public function actionHorarioprofesorconsulta()
     public function actionHorarioprofesorconsulta()
     {
         $this->layout = 'main2';
@@ -1256,7 +1291,9 @@ class ProfesorController extends Controller
 
         return $this->render("horario_profesor", ["model" => $model, "idciclo" => $idciclo]);
     }
+    #endregion
 
+    #region public function actionConsultarprofesor()
     public function actionConsultarprofesor()
     {
         $idprofesor = Html::encode($_GET["idprofesor"]);
@@ -1264,7 +1301,9 @@ class ProfesorController extends Controller
 
         return $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
     }
+    #endregion
 
+    #region public function actionSeguimientos()
     public function actionSeguimientos()
     {
         $form = new ProfesorSearch;
@@ -1355,7 +1394,9 @@ class ProfesorController extends Controller
                                               "regular" => $regular
                                             ]);
     }
+    #endregion
 
+    #region public function actionAsignarseguimiento()
     public function actionAsignarseguimiento()
     {
         $idprofesor = (Html::encode(isset($_GET["idprofesor"]))) ? Html::encode($_GET["idprofesor"]) : null;
@@ -1393,7 +1434,9 @@ class ProfesorController extends Controller
             }
         }
     }
+    #endregion
 
+    #region public function actionAsignarseguimientos()
     public function actionAsignarseguimientos()
     {
         $idciclo = Ciclo::find()->max("idciclo");
@@ -1440,7 +1483,9 @@ class ProfesorController extends Controller
             
         }
     }
+    #endregion
 
+    #region public function actionSeguimientosactivos()
     public function actionSeguimientosactivos()
     {
         $curp = Yii::$app->user->identity->curp;
@@ -1454,4 +1499,5 @@ class ProfesorController extends Controller
 
         return $model;
     }
+    #endregion
 }

@@ -23,86 +23,86 @@ use app\models\login\Rol;
 use app\models\login\UsuarioRol;
 
 class SiteController extends Controller
- {
-     /*
+{
+    /*
     public function behaviors()
     {
-        return [
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'only' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones se van proteger
-                    'rules' => [
-                        [
-                            //El administrador tiene permisos sobre las siguientes acciones
-                            'actions' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones tiene permitidas este usuario
-                            //Esta propiedad establece que tiene permisos
-                            'allow' => true,
-                            //Usuarios autenticados, el signo ? es para invitados
-                            'roles' => ['@'],
-                            //Este método nos permite crear un filtro sobre la identidad del usuario
-                            //y así establecer si tiene permisos o no
-                            'matchCallback' => function ($rule, $action) {
-                                //Llamada al método que comprueba si es un administrador
-                                //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
-                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
-                            },  
-                        ],
-                        [
-                            //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
-                            //Esta propiedad establece que tiene permisos
-                            'allow' => true,
-                            //Usuarios autenticados, el signo ? es para invitados
-                            'roles' => ['@'],
-                            //Este método nos permite crear un filtro sobre la identidad del usuario
-                            //y así establecer si tiene permisos o no
-                            'matchCallback' => function ($rule, $action) {
-                                //Llamada al método que comprueba si es un usuario simple
-                                //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
-                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
-                            },
-                        ],
-                        [
-                            //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
-                            //Esta propiedad establece que tiene permisos
-                            'allow' => true,
-                            //Usuarios autenticados, el signo ? es para invitados
-                            'roles' => ['@'],
-                            //Este método nos permite crear un filtro sobre la identidad del usuario
-                            //y así establecer si tiene permisos o no
-                            'matchCallback' => function ($rule, $action) {
-                                //Llamada al método que comprueba si es un usuario simple
-                                //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
-                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
-                            },
-                        ],
-                        [
-                            //Los usuarios simples tienen permisos sobre las siguientes acciones
-                            'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
-                            //Esta propiedad establece que tiene permisos
-                            'allow' => true,
-                            //Usuarios autenticados, el signo ? es para invitados
-                            'roles' => ['@'],
-                            //Este método nos permite crear un filtro sobre la identidad del usuario
-                            //y así establecer si tiene permisos o no
-                            'matchCallback' => function ($rule, $action) {
-                                //Llamada al método que comprueba si es un usuario simple
-                                //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
-                                return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
-                            },
-                        ],
-                    ],
-                ],
-                //Controla el modo en que se accede a las acciones, en este ejemplo a la acción logout
-                //sólo se puede acceder a través del método post
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'logout' => ['post'],
-                    ],
-                ],
-        ];
+       return [
+               'access' => [
+                   'class' => AccessControl::className(),
+                   'only' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones se van proteger
+                   'rules' => [
+                       [
+                           //El administrador tiene permisos sobre las siguientes acciones
+                           'actions' => ['index', 'resetpass', 'recoverpass', 'confirm', 'register', 'generarpassword'],//Especificar que acciones tiene permitidas este usuario
+                           //Esta propiedad establece que tiene permisos
+                           'allow' => true,
+                           //Usuarios autenticados, el signo ? es para invitados
+                           'roles' => ['@'],
+                           //Este método nos permite crear un filtro sobre la identidad del usuario
+                           //y así establecer si tiene permisos o no
+                           'matchCallback' => function ($rule, $action) {
+                               //Llamada al método que comprueba si es un administrador
+                               //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
+                               return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
+                           },
+                       ],
+                       [
+                           //Los usuarios simples tienen permisos sobre las siguientes acciones
+                           'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
+                           //Esta propiedad establece que tiene permisos
+                           'allow' => true,
+                           //Usuarios autenticados, el signo ? es para invitados
+                           'roles' => ['@'],
+                           //Este método nos permite crear un filtro sobre la identidad del usuario
+                           //y así establecer si tiene permisos o no
+                           'matchCallback' => function ($rule, $action) {
+                               //Llamada al método que comprueba si es un usuario simple
+                               //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
+                               return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
+                           },
+                       ],
+                       [
+                           //Los usuarios simples tienen permisos sobre las siguientes acciones
+                           'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
+                           //Esta propiedad establece que tiene permisos
+                           'allow' => true,
+                           //Usuarios autenticados, el signo ? es para invitados
+                           'roles' => ['@'],
+                           //Este método nos permite crear un filtro sobre la identidad del usuario
+                           //y así establecer si tiene permisos o no
+                           'matchCallback' => function ($rule, $action) {
+                               //Llamada al método que comprueba si es un usuario simple
+                               //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
+                               return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
+                           },
+                       ],
+                       [
+                           //Los usuarios simples tienen permisos sobre las siguientes acciones
+                           'actions' => ['index'],//Especificar que acciones tiene permitidas este usuario
+                           //Esta propiedad establece que tiene permisos
+                           'allow' => true,
+                           //Usuarios autenticados, el signo ? es para invitados
+                           'roles' => ['@'],
+                           //Este método nos permite crear un filtro sobre la identidad del usuario
+                           //y así establecer si tiene permisos o no
+                           'matchCallback' => function ($rule, $action) {
+                               //Llamada al método que comprueba si es un usuario simple
+                               //return User::isUserProfesor(Yii::$app->user->identity->idusuario);
+                               return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
+                           },
+                       ],
+                   ],
+               ],
+               //Controla el modo en que se accede a las acciones, en este ejemplo a la acción logout
+               //sólo se puede acceder a través del método post
+               'verbs' => [
+                   'class' => VerbFilter::className(),
+                   'actions' => [
+                       'logout' => ['post'],
+                   ],
+               ],
+       ];
     }
 */
     /**
@@ -110,6 +110,7 @@ class SiteController extends Controller
     @inheritdoc}
     */
 
+    #region public function actions()
     public function actions()
     {
         return [
@@ -122,6 +123,7 @@ class SiteController extends Controller
             ],
         ];
     }
+    #endregion
 
     /**
     * Displays homepage.
@@ -129,11 +131,13 @@ class SiteController extends Controller
     * @return string
     */
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         //return $this->render('index');
         return $this->redirect(["profesor/index"]);
     }
+    #endregion
 
     /**
     * Login action.
@@ -141,11 +145,11 @@ class SiteController extends Controller
     * @return Response|string
     */
 
+    #region public function actionLogin()
     public function actionLogin()
     {
-        if(!\Yii::$app->user->isGuest)
-        {
-             return $this->redirect(["site/index"]);
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect(["site/index"]);
             /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
             {
                 return $this->redirect(["site/index"]);
@@ -174,30 +178,21 @@ class SiteController extends Controller
  
         $model = new LoginForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->login())
-        {
-            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
-            {
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1)) {
+                return $this->redirect(["site/index"]);
+            } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2)) {
+                return $this->redirect(["site/index"]);
+            } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3)) {
+                return $this->redirect(["site/index"]);
+            } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4)) {
                 return $this->redirect(["site/index"]);
             }
-            else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2))
-            {
-                return $this->redirect(["site/index"]);
-            }
-            else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
-            {
-                return $this->redirect(["site/index"]);
-            } 
-            else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
-            {
-                return $this->redirect(["site/index"]);
-            }
-        }
-        else
-        {
+        } else {
             return $this->render("login", ["model" => $model]);
         }
     }
+    #endregion
 
     /**
     * Logout action.
@@ -205,13 +200,16 @@ class SiteController extends Controller
     * @return Response
     */
 
+    #region public function actionLogout()
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
+    #endregion
 
+    #region public function randKey($str = '', $long = 0)
     private function randKey($str = '', $long = 0)
     {
         $key = null;
@@ -219,14 +217,15 @@ class SiteController extends Controller
         $start = 0;
         $limit = count($str)-1;
 
-        for($x = 0; $x<$long; $x++)
-        {
+        for ($x = 0; $x<$long; $x++) {
             $key .= $str[rand($start, $limit)];
         }
 
         return $key;
     }
+    #endregion
 
+    #region public function actionRegister()
     public function actionRegister()
     {
         //Creamos la instancia con el model de validación
@@ -236,8 +235,7 @@ class SiteController extends Controller
         $msg = null;
 
         //Validación mediante ajax
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
-        {
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             
             return ActiveForm::validate($model);
@@ -247,10 +245,8 @@ class SiteController extends Controller
         //Esto sucede cuando la validación ajax se ha llevado a cabo correctamente
         //También previene por si el usuario tiene desactivado javascript y la
         //validación mediante ajax no puede ser llevada a cabo
-        if($model->load( Yii::$app->request->post()))
-        {
-            if($model->validate())
-            {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
                 //Preparamos la consulta para guardar el usuario
                 $idusuario = Usuario::find()->max("idusuario");
                 $table = new Usuario;
@@ -267,8 +263,7 @@ class SiteController extends Controller
                 $table->accessToken = $this->randKey('abcdef0123456789', 200);
 
                 //Si el registro es guardado correctamente
-                if($table->insert())
-                {
+                if ($table->insert()) {
                     //Nueva consulta para obtener el id del usuario
                     //Para confirmar al usuario se requiere su id y su authKey
                     $user = $table->find()->where(['email' => $model->email])->one();
@@ -287,42 +282,37 @@ class SiteController extends Controller
                                      ->setHtmlBody($body)
                                      ->send();
 
-                   $model->nombre_usuario = null;
+                    $model->nombre_usuario = null;
                     $model->curp = null;
                     $model->email = null;
                     $model->password = null;
                     $model->password_repeat = null;
 
                     $msg = 'Enhorabuena, ahora sólo falta que confirmes tu registro en tu cuenta de correo';
-                }
-                else
-                {
+                } else {
                     $msg = 'Ha ocurrido un error al llevar a cabo tu registro';
                 }
-
-            }
-            else
-            {
+            } else {
                 $model->getErrors();
             }
         }
 
         return $this->render('registro', ['model' => $model, 'msg' => $msg]);
     }
+    #endregion
 
+    #region public function actionConfirm()
     public function actionConfirm()
     {
         $table = new Usuario;
         $msg = null;
 
-        if(Yii::$app->request->get())
-        {
+        if (Yii::$app->request->get()) {
             //Obtenemos el valor de los parámetros get
             $idusuario = Html::encode($_GET['idusuario']);
             $authKey = $_GET['authKey'];
 
-            if ((int)$idusuario)
-            {
+            if ((int)$idusuario) {
                 //Realizamos la consulta para obtener el registro
                 $model = $table
                         ->find()
@@ -330,34 +320,28 @@ class SiteController extends Controller
                         ->andWhere('authKey=:authKey', [':authKey' => $authKey]);
 
                 //Si el registro existe
-                if($model->count() == 1)
-                {
+                if ($model->count() == 1) {
                     $activar = Usuario::findOne($idusuario);
                     $activar->activate = 1;
 
-                    if($activar->update())
-                    {
+                    if ($activar->update()) {
                         $msg = 'Enhorabuena registro llevado a cabo correctamente';
-                    }
-                    else
-                    {
+                    } else {
                         $msg = 'Ha ocurrido un error al realizar el registro';
                     }
  
                     return $this->render('confirm', ['msg' => $msg]);
-                }
-                else
-                { //Si no existe redireccionamos a login
+                } else { //Si no existe redireccionamos a login
                     return $this->redirect(['site/login']);
                 }
-            }
-            else //Si id no es un número entero redireccionamos a login
-            {
+            } else { //Si id no es un número entero redireccionamos a login
                 return $this->redirect(['site/login']);
             }
         }
     }
+    #endregion
 
+    #region public function actionRecoverpass()
     public function actionRecoverpass()
     {
         //Instancia para validar el formulario
@@ -366,16 +350,13 @@ class SiteController extends Controller
         //Mensaje que será mostrado al usuario en la vista
         $msg = null;
   
-        if ($model->load(Yii::$app->request->post()))
-        {
-            if ($model->validate())
-            {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
                 //Buscar al usuario a través del email
                 $table = Usuario::find()->where("email=:email", [":email" => $model->email]);
     
                 //Si el usuario existe
-                if ($table->count() == 1)
-                {
+                if ($table->count() == 1) {
                     //Crear variables de sesión para limitar el tiempo de restablecido del password
                     //hasta que el navegador se cierre
                     $session = new Session;
@@ -386,12 +367,12 @@ class SiteController extends Controller
                     $recover = $session["recover"];
      
                     //También almacenaremos el id del usuario en una variable de sesión
-                    //El id del usuario es requerido para generar la consulta a la tabla users y 
+                    //El id del usuario es requerido para generar la consulta a la tabla users y
                     //restablecer el password del usuario
                     $table = Usuario::find()->where("email=:email", [":email" => $model->email])->one();
                     $session["id_recover"] = $table->idusuario;
      
-                    //Esta variable contiene un número hexadecimal que será enviado en el correo al usuario 
+                    //Esta variable contiene un número hexadecimal que será enviado en el correo al usuario
                     //para que lo introduzca en un campo del formulario de reseteado
                     //Es guardada en el registro correspondiente de la tabla users
                     $verification_code = $this->randKey("abcdef0123456789", 8);
@@ -419,20 +400,18 @@ class SiteController extends Controller
      
                     //Mostrar el mensaje al usuario
                     $msg = "Le hemos enviado un mensaje a su cuenta de correo para que pueda restablecer su contraseña";
-                }
-                else //El usuario no existe
-                {
+                } else { //El usuario no existe
                     $msg = "Ha ocurrido un error";
                 }
-            }
-            else
-            {
+            } else {
                 $model->getErrors();
             }
         }
         return $this->render("recoverpass", ["model" => $model, "msg" => $msg]);
     }
+    #endregion
  
+    #region public function actionResetpass()
     public function actionResetpass()
     {
         //Instancia para validar el formulario
@@ -507,7 +486,9 @@ class SiteController extends Controller
 
         return $this->render("resetpass", ["model" => $model, "msg" => $msg]);
     }
+    #endregion
 
+    #region public function actionGenerarpassword()
     public function actionGenerarpassword()
     {
         //Creamos la instancia con el model de validación
@@ -595,4 +576,5 @@ class SiteController extends Controller
 
         return $this->render('generarpassword', ['model' => $model, 'msg' => $msg, 'password' => $password]);
     }
+    #endregion
 }
