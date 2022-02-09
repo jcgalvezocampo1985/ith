@@ -8,10 +8,10 @@ use app\models\User as Usuario;
 $r = $_GET["r"];
 $url = ($r == "true") ? "horario" : "horarioconsulta";
 
-if($idciclo != $ultimo_ciclo || $regularizacion_status == 0){
+/*if($idciclo != $ultimo_ciclo || $regularizacion_status == 0){
     header("Location: ".Url::toRoute("/profesor/".$url."?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
     exit;
-}
+}*/
 
 $isProfesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
 

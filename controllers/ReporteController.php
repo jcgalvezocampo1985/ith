@@ -587,13 +587,13 @@ class ReporteController extends Controller
 
             $pdf->SetX(8);
             $pdf->SetFont('Montserrat-Regular', '', 6);
-            $pdf->MultiCell(75, 5, utf8_decode( $row['desc_materia'])."\n".utf8_decode($row['profesor']), 1, 'L', 0);
+            $pdf->MultiCell(75, 5, utf8_decode( $row['desc_materia'])."\n".utf8_decode($row['profesor'])." - Aula: ".utf8_decode($row['aula']), 1, 'L', 0);
 
             $y = $pdf->GetY() - 10;
             $pdf->SetXY(83, $y);
 
             $pdf->Cell(13, 10, utf8_decode($row['cve_materia'] ), 1, 0, 'C');
-            $pdf->Cell(12, 10, utf8_decode($row['desc_grupo_corto'] ), 1, 0, 'C');
+            $pdf->Cell(12, 10, utf8_decode($row['desc_grupo'] ), 1, 0, 'C');
             $pdf->Cell(9, 10, utf8_decode($row['desc_opcion_curso_corto']), 1, 0, 'C');
             $pdf->Cell(7, 10, utf8_decode($row['creditos'] ), 1, 0, 'C');
             $pdf->Cell(14, 10, $lunes, 1, 0, 'C');

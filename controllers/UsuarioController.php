@@ -19,6 +19,7 @@ use app\models\login\UsuarioSearch;
 
 class UsuarioController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -53,7 +54,9 @@ class UsuarioController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         $form = new UsuarioSearch;
@@ -110,7 +113,9 @@ class UsuarioController extends Controller
 
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new UsuarioFormCRUD();
@@ -127,7 +132,9 @@ class UsuarioController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error, "clave_estatus" => $clave_estatus]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new UsuarioFormCRUD;
@@ -183,7 +190,9 @@ class UsuarioController extends Controller
             return $this->redirect(["usuario/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($id, $msg = "", $error = "")
     public function actionEdit($id, $msg = "", $error = "")
     {/*
         $idciclo = Html::encode($id);
@@ -223,7 +232,9 @@ class UsuarioController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);*/
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {/*
         $model = new CicloForm;
@@ -271,7 +282,9 @@ class UsuarioController extends Controller
             return $this->redirect(["ciclo/index"]);
         }*/
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {/*
         if(Yii::$app->request->post())
@@ -307,4 +320,5 @@ class UsuarioController extends Controller
             return $this->redirect(["ciclo/index"]);
         }*/
     }
+    #endregion
 }

@@ -10,10 +10,10 @@ $url = ($r == "true") ? "horario" : "horarioconsulta";
 
 $isProfesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
 
-if($idciclo != $ultimo_ciclo){
+/*if($idciclo != $ultimo_ciclo){
     header("Location: ".Url::toRoute("/profesor/".$url."?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor"));
     exit;
-}
+}*/
 
 function promedioTotal(array $parciales)
 {

@@ -18,6 +18,7 @@ use app\models\opcioncurso\OpcionCursoSearch;
 
 class OpcioncursoController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -38,7 +39,7 @@ class OpcioncursoController extends Controller
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1);
-                            },  
+                            },
                         ],
                         [
                             //Servicios escolares tiene permisos sobre las siguientes acciones
@@ -53,7 +54,7 @@ class OpcioncursoController extends Controller
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2);
-                            },  
+                            },
                         ],
                         [
                             //El profesor tiene permisos sobre las siguientes acciones
@@ -68,7 +69,7 @@ class OpcioncursoController extends Controller
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
-                            },  
+                            },
                         ],
                         [
                             //División de estudios tiene permisos sobre las siguientes acciones
@@ -83,7 +84,7 @@ class OpcioncursoController extends Controller
                                 //Llamada al método que comprueba si es un administrador
                                 //return User::isUserAdministrador(Yii::$app->user->identity->idusuario);
                                 return User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4);
-                            },  
+                            },
                         ]
                     ],
                 ],
@@ -97,7 +98,9 @@ class OpcioncursoController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         $form = new OpcionCursoSearch;
@@ -106,21 +109,17 @@ class OpcioncursoController extends Controller
 
         $table = new \yii\db\Query();
         $model = $table->from(["cat_opcion_curso"])
-                       ->select(["idopcion_curso", 
-	                             "desc_opcion_curso", 
-	                             "desc_opcion_curso_corto"])
+                       ->select(["idopcion_curso",
+                                 "desc_opcion_curso",
+                                 "desc_opcion_curso_corto"])
                        ->orderBy("desc_opcion_curso");
 
-        if($form->load(Yii::$app->request->get()))
-        {
-            if($form->validate())
-            {
+        if ($form->load(Yii::$app->request->get())) {
+            if ($form->validate()) {
                 $search = Html::encode($form->buscar);
                 $model = $table->where(["like", "desc_opcion_curso", $search])
                                ->orWhere(["like", "desc_opcion_curso_corto", $search]);
-            }
-            else
-            {
+            } else {
                 $form->getErrors();
             }
         }
@@ -135,20 +134,21 @@ class OpcioncursoController extends Controller
                        ->limit($pages->limit)
                        ->all();
 
-        if(count($model) == 0){
+        if (count($model) == 0) {
             $error = 2;
             $msg = "No se encontró información relacionada con el criterio de búsqueda";
         }
 
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new OpcionCursoForm();
 
-        if(Yii::$app->request->get() && $error != 1)
-        {
+        if (Yii::$app->request->get() && $error != 1) {
             $modelo = $_GET["modelo"];
             $model->desc_opcion_curso = $modelo["desc_opcion_curso"];
             $model->desc_opcion_curso_corto = $modelo["desc_opcion_curso_corto"];
@@ -156,26 +156,23 @@ class OpcioncursoController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new OpcionCursoForm;
 
-        if ($model->load(Yii::$app->request->post()))
-        {
-            if ($model->validate())
-            {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
                 $table = new OpcionCurso();
                 $table->desc_opcion_curso = $model->desc_opcion_curso;
                 $table->desc_opcion_curso_corto = $model->desc_opcion_curso_corto;
 
-                if ($table->insert())
-                {
+                if ($table->insert()) {
                     $msg = "Opción Curso agregada";
                     $error = 1;
-                }
-                else
-                {
+                } else {
                     $msg = "Ocurrió un error al intentar agregar la Opción Curso, intenta nuevamente";
                     $error = 3;
                 }
@@ -186,135 +183,108 @@ class OpcioncursoController extends Controller
                 ];
 
                 return $this->redirect(["opcioncurso/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
-            }
-            else
-            {
+            } else {
                 $model->getErrors();
-            } 
-        }
-        else
-        {
+            }
+        } else {
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($id, $msg = "", $error = "")
     public function actionEdit($id, $msg = "", $error = "")
     {
         $idopcion_curso = Html::encode($id);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
 
-        if(Yii::$app->request->get())
-        {
+        if (Yii::$app->request->get()) {
             $model = new OpcionCursoForm;
 
-            if($idopcion_curso)
-            {
+            if ($idopcion_curso) {
                 $table = OpcionCurso::findOne($idopcion_curso);
 
-                if($table)
-                {
+                if ($table) {
                     $model->idopcion_curso = $table->idopcion_curso;
                     $model->desc_opcion_curso = $table->desc_opcion_curso;
                     $model->desc_opcion_curso_corto = $table->desc_opcion_curso_corto;
-                }
-                else
-                {
+                } else {
                     return $this->redirect(["opcioncurso/index"]);
                 }
-            }
-            else
-            {
+            } else {
                 return $this->redirect(["opcioncurso/index"]);
             }
-        }
-        else
-        {
+        } else {
             return $this->redirect(["opcioncurso/index"]);
         }
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {
         $model = new OpcionCursoForm;
 
-        if($model->load(Yii::$app->request->post()))
-        {
+        if ($model->load(Yii::$app->request->post())) {
             $idopcion_curso = $model->idopcion_curso;
 
-            if($model->validate())
-            {
+            if ($model->validate()) {
                 $table = OpcionCurso::findOne($idopcion_curso);
 
-                if ($table)
-                {
+                if ($table) {
                     $table->desc_opcion_curso = $model->desc_opcion_curso;
                     $table->desc_opcion_curso_corto = $model->desc_opcion_curso_corto;
 
-                    if($table->update())
-                    {
+                    if ($table->update()) {
                         $msg = "Registro actualizado";
-                    }
-                    else
-                    {
+                    } else {
                         $msg = "No detectaron cambios en el registro";
                     }
                     $error = 1;
-                }
-                else
-                {
+                } else {
                     $msg = "Registro no encontrado";
                     $error = 2;
                 }
-            }
-            else
-            {
+            } else {
                 return $this->getErrors();
             }
             return $this->redirect(["opcioncurso/edit", "id" => $idopcion_curso, "msg" => $msg, "error" => $error]);
-        }
-        else
-        {
+        } else {
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {
-        if(Yii::$app->request->post())
-        {
+        if (Yii::$app->request->post()) {
             $idopcion_curso = Html::encode($_POST["idopcion_curso"]);
 
             $total_relacion = GrupoEstudiante::find()
                                             ->where(["idopcion_curso" => $idopcion_curso])
                                             ->count();
 
-            if($total_relacion == 0)
-            {
-                if(OpcionCurso::deleteAll("idopcion_curso=:idopcion_curso", [":idopcion_curso" => $idopcion_curso]))
-                {
+            if ($total_relacion == 0) {
+                if (OpcionCurso::deleteAll("idopcion_curso=:idopcion_curso", [":idopcion_curso" => $idopcion_curso])) {
                     $error = 1;
                     $msg = "Registro eliminado";
-                }
-                else
-                {
+                } else {
                     $error = 3;
                     $msg = "Error al eliminar el registro";
                 }
-            }
-            else
-            {
+            } else {
                 $error = 3;
                 $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
             }
             header("Location: ".Url::toRoute("/opcioncurso/index?msg=$msg&error=$error"));
             exit;
-        }
-        else
-        {
+        } else {
             return $this->redirect(["opcioncurso/index"]);
         }
     }
+    #endregion
 }

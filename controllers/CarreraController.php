@@ -18,6 +18,7 @@ use app\models\carrera\CarreraSearch;
 
 class CarreraController extends Controller
 {
+    #region public function behaviors()
     public function behaviors()
     {
         return [
@@ -97,7 +98,9 @@ class CarreraController extends Controller
                 ],
         ];
     }
+    #endregion
 
+    #region public function actionIndex()
     public function actionIndex()
     {
         $form = new CarreraSearch;
@@ -146,7 +149,9 @@ class CarreraController extends Controller
         
         return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
     }
+    #endregion
 
+    #region public function actionCreate($msg = "", $error = "")
     public function actionCreate($msg = "", $error = "")
     {
         $model = new CarreraForm();
@@ -162,7 +167,9 @@ class CarreraController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionStore()
     public function actionStore()
     {
         $model = new CarreraForm;
@@ -207,7 +214,9 @@ class CarreraController extends Controller
             return $this->redirect(["carrera/index"]);
         }
     }
+    #endregion
 
+    #region public function actionEdit($id, $msg = "", $error = "")
     public function actionEdit($id, $msg = "", $error = "")
     {
         $idcarrera = Html::encode($id);
@@ -247,7 +256,9 @@ class CarreraController extends Controller
 
         return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
     }
+    #endregion
 
+    #region public function actionUpdate()
     public function actionUpdate()
     {
         $model = new CarreraForm;
@@ -294,7 +305,9 @@ class CarreraController extends Controller
             return $this->redirect(["carrera/index"]);
         }
     }
+    #endregion
 
+    #region public function actionDelete()
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -330,4 +343,5 @@ class CarreraController extends Controller
             return $this->redirect(["carrera/index"]);
         }
     }
+    #endregion
 }
