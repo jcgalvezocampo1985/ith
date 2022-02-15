@@ -205,7 +205,7 @@ class ActacalificacionController extends Controller
  * if (is_numeric($parcial) || $parcial == "NA" || $parcial == "")
  * if($parcial == "NA" || $parcial == "")
  */
-            if (is_numeric($parcial) || $parcial == "NA" || $parcial == "")
+            if (is_numeric($parcial) || $parcial == "NA")
             {
                 if($parcial == "NA" || $parcial == "")
                 {
