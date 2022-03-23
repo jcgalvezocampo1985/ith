@@ -54,6 +54,7 @@ if(!Yii::$app->user->isGuest){
             Yii::$app->user->isGuest ? "" : (['label' => 'Horario Estudiantes', 'url' => ['/estudiante/horariomodificar']]),
             ['label' => 'Boleta', 'url' => ['/estudiante/boleta']],
             ['label' => 'Horario', 'url' => ['/estudiante/horario']],
+            ['label' => 'Calificaciones ', 'url' => ['/estudiante/calificaciones']],
             Yii::$app->user->isGuest ? "" :(
             ['label' => 'Admin', 'items' =>
                 [

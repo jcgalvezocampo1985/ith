@@ -573,6 +573,142 @@ class EstudianteController extends Controller
     }
     #endregion
 
+    #region public function actionCalificaciones1()
+    public function actionCalificaciones()
+    {
+        $table = new Estudiante;
+        $model = $table->find()->where(["idestudiante" => 99999])->orderBy("nombre_estudiante")->all();
+
+        $form = new EstudianteSearch;
+        $idestudiante = null;
+
+        $status = 0;
+
+        if($form->load(Yii::$app->request->get()))
+        {
+            if($form->validate())
+            {
+                $idestudiante = Html::encode($form->buscar);
+                $query = "SELECT
+                            *
+                          FROM
+                            boleta_estudiante_encabezado
+                          WHERE
+                            idestudiante = :idestudiante
+                          GROUP BY idciclo
+                          ORDER BY idciclo DESC";
+                $model = Yii::$app->db->createCommand($query)
+                                      ->bindValue(":idestudiante", $idestudiante)
+                                      ->queryAll();
+
+                $status = 1;
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+        
+        return $this->render("calificaciones", ["model" => $model, "form" => $form, "status" => $status]);
+    }
+    #endregion
+
+    #region public function actionCalificacionesporciclo()
+    public function actionCalificacionesporciclo()
+    {
+        $this->layout = 1;
+
+        if (Yii::$app->request->get("idestudiante") && Yii::$app->request->get("idciclo"))
+        {
+            $idestudiante = Html::encode($_GET["idestudiante"]);
+            $idciclo = Html::encode($_GET["idciclo"]);
+
+            $idciclo_actual = Ciclo::find()->max("idciclo");
+
+            $table = new \yii\db\Query();
+
+            if($idciclo_actual == $idciclo)
+            {
+                $model = $table->from(["grupos_estudiantes"])
+                                ->select([
+                                    "estudiantes.idestudiante",
+                                    "estudiantes.nombre_estudiante",
+                                    "ciclo.desc_ciclo",
+                                    "cat_carreras.desc_carrera",
+                                    "grupos.num_semestre",
+                                    "cat_materias.desc_materia",
+                                    "cat_materias.creditos",
+                                    "cat_opcion_curso.desc_opcion_curso_corto",
+                                    "grupos_estudiantes.p1",
+                                    "grupos_estudiantes.p2",
+                                    "grupos_estudiantes.p3",
+                                    "grupos_estudiantes.p4",
+                                    "grupos_estudiantes.p5",
+                                    "grupos_estudiantes.p6",
+                                    "grupos_estudiantes.p7",
+                                    "grupos_estudiantes.p8",
+                                    "grupos_estudiantes.p9",
+                                    "grupos_estudiantes.s1",
+                                    "grupos_estudiantes.s2",
+                                    "grupos_estudiantes.s3",
+                                    "grupos_estudiantes.s4",
+                                    "grupos_estudiantes.s5",
+                                    "grupos_estudiantes.s6",
+                                    "grupos_estudiantes.s7",
+                                    "grupos_estudiantes.s8",
+                                    "grupos_estudiantes.s9"
+                                ])
+                                ->orderBy(["cat_materias.desc_materia" => SORT_ASC])
+                                ->innerJoin(["estudiantes"], "grupos_estudiantes.idestudiante = estudiantes.idestudiante")
+                                ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                                ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                                ->innerJoin(["cat_carreras"], "estudiantes.idcarrera = cat_carreras.idcarrera AND grupos.idcarrera = cat_carreras.idcarrera")
+                                ->innerJoin(["ciclo"], "grupos.idciclo = ciclo.idciclo")
+                                ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                                ->where(["estudiantes.idestudiante" => $idestudiante])
+                                ->andWhere(["ciclo.idciclo" => $idciclo])
+                                ->all();
+
+                $view = $this->render("calificaciones_por_ciclo_actual", ["model" => $model]);
+            }
+            else
+            {
+                $model = $table->from(["actas_calificaciones"])
+                                ->select([
+                                    "estudiantes.idestudiante",
+                                    "estudiantes.nombre_estudiante",
+                                    "ciclo.desc_ciclo",
+                                    "cat_carreras.desc_carrera",
+                                    "grupos.num_semestre",
+                                    "cat_materias.desc_materia",
+                                    "cat_materias.creditos",
+                                    "cat_opcion_curso.desc_opcion_curso",
+                                    "IF(actas_calificaciones.pri_opt <> '', actas_calificaciones.pri_opt, actas_calificaciones.seg_opt ) AS calificacion"
+                                ])
+                                ->orderBy(["ciclo.idciclo" => SORT_DESC])
+                                ->innerJoin(["grupos_estudiantes"], "actas_calificaciones.idestudiante = grupos_estudiantes.idestudiante AND actas_calificaciones.idgrupo = grupos_estudiantes.idgrupo")
+                                ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
+                                ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
+                                ->innerJoin(["cat_carreras"], "grupos.idcarrera = cat_carreras.idcarrera")
+                                ->innerJoin(["ciclo"], "grupos.idciclo = ciclo.idciclo")
+                                ->innerJoin(["cat_opcion_curso"], "actas_calificaciones.idopcion_curso = cat_opcion_curso.idopcion_curso AND grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
+                                ->innerJoin(["estudiantes"], "cat_carreras.idcarrera = estudiantes.idcarrera AND grupos_estudiantes.idestudiante = estudiantes.idestudiante")
+                                ->where(["actas_calificaciones.idestudiante" => $idestudiante])
+                                ->andWhere(["ciclo.idciclo" => $idciclo])
+                                ->all();
+
+                $view = $this->render("calificaciones_por_ciclo", ["model" => $model]);
+            }
+
+            return $view;
+        }
+        else
+        {
+            throw new \yii\web\HttpException(404,'Oops. Not logged in.');
+        }
+    }
+    #endregion
+
     #region public function actionBoletacalificacion()
     public function actionBoletacalificacion()
     {

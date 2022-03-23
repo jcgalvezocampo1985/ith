@@ -41,18 +41,11 @@ $this->params["breadcrumbs"][] = $this->title;
                         <?php 
                         foreach($model as $row):
                             $promedio = $row["promedio"];
-                            $color = "";
-                            if($promedio == "NA" || $promedio == "N/A"){
-                                $color = "bg-danger text-danger";
-                            }else if($promedio >= 70){
-                                $color = "bg-success text-success";
-                            }
-
                         ?>
                             <tr>
                                 <td><?= $row["idestudiante"] ?></td>
                                 <td><?= $row["nombre_estudiante"] ?></td>
-                                <td class="<?= $color ?>"><?= $row["promedio"] ?></td>
+                                <td class="text-center <?= ($promedio >= 70) ? "bg-success text-success" : "bg-danger text-danger" ?>"><?= $row["promedio"] ?></td>
                             </tr>
                         <?php endforeach ?>
                         </tbody>
