@@ -35,10 +35,10 @@ $this->params["breadcrumbs"][] = $this->title;
                             <th>Ciclo</th>
                             <th>Carrera</th>
                             <th>Materia</th>
+                            <th>Créditos</th>
                             <th>Profesor</th>
                             <th>No. Semestre</th>
                             <th>Grupo</th>
-                            <th>Desc. Corta</th>
                             <th>Aula</th>
                             <th>Fecha Envío Acta</th>
                             <th>Acciones</th>
@@ -52,9 +52,9 @@ $this->params["breadcrumbs"][] = $this->title;
                             <td><?= $row["ciclo"] ?></td>
                             <td><?= $row["carrera"] ?></td>
                             <td><?= $row["materia"] ?></td>
+                            <td><?= $row["creditos"] ?></td>
                             <td><?= $row["profesor"] ?></td>
                             <td><?= $row["num_semestre"] ?></td>
-                            <td><?= $row["desc_grupo"] ?></td>
                             <td><?= $row["desc_grupo_corto"] ?></td>
                             <td><?= $row["aula"] ?></td>
                             <td><?= $row["fecha_envio_acta"] ?></td>
