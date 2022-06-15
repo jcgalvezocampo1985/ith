@@ -119,6 +119,7 @@ class GrupoController extends Controller
                                  "ciclo.desc_ciclo AS ciclo",
                                  "cat_carreras.desc_carrera AS carrera",
                                  "cat_materias.desc_materia AS materia",
+                                 "cat_materias.creditos",
                                  "CONCAT(profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor",
                                  "grupos.num_semestre",
                                  "grupos.desc_grupo_corto",
