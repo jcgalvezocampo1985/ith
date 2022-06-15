@@ -8,16 +8,19 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\data\Pagination;
 
 use app\models\User;
-use app\models\grupo\Grupo;
-use app\models\ciclo\Ciclo;
 use app\models\ciclo\CicloForm;
 use app\models\ciclo\CicloSearch;
 
+use app\repositories\CicloRepository;
+use app\repositories\GrupoRepository;
+
 class CicloController extends Controller
 {
+    private $cicloRepository;
+    private $grupoRepository;
+
     #region public function behaviors()
     public function behaviors()
     {
@@ -100,34 +103,34 @@ class CicloController extends Controller
     }
     #endregion
 
+    #region public function __construct()
+    public function __construct($id, $module, $config = [],
+                                CicloRepository $cicloRepository,
+                                GrupoRepository $grupoRepository
+                                )
+    {
+        parent::__construct($id, $module, $config);
+        $this->cicloRepository = $cicloRepository;
+        $this->grupoRepository = $grupoRepository;
+    }
+    #endregion
+
     #region public function actionIndex()
     public function actionIndex()
     {
         $form = new CicloSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
+        $msg = (Html::encode(isset($_GET['msg']))) ? Html::encode($_GET['msg']) : null;
+        $error = (Html::encode(isset($_GET['error']))) ? Html::encode($_GET['error']) : null;
 
-        $table = new \yii\db\Query();
-        $model = $table->from(["ciclo"])
-                       ->select(["idciclo",
-                                 "desc_ciclo",
-	                             "semestre", 
-	                             "anio", 
-	                             "fecha_registro", 
-	                             "fecha_actualizacion",
-                                 "cve_estatus"])
-                       ->orderBy("desc_ciclo");
+        $model = $this->cicloRepository->all();//Se ejecuta consulta de todos los registgros
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $search = Html::encode($form->idciclo);
-                $model = $table->where(["like", "desc_ciclo", $search])
-                               ->orWhere(["like", "semestre", $search])
-                               ->orWhere(["like", "anio", $search])
-                               ->orWhere(["like", "fecha_registro", $search])
-                               ->orWhere(["like", "cve_estatus", $search]);
+                $this->cicloRepository->search = Html::encode($form->idciclo);//Pasamos parámetro para la búsqueda
+
+                $model = $this->cicloRepository->all(true);//Se ejecuta consulta con parámetro de búsqueda
             }
             else
             {
@@ -135,40 +138,30 @@ class CicloController extends Controller
             }
         }
 
-        $count = clone $table;
-        $pages = new Pagination([
-                    "pageSize" => 20,
-                    "totalCount" => $count->count(),
-                ]);
+        $pages = $this->cicloRepository->getPages();
 
-        $model = $table->offset($pages->offset)
-                       ->limit($pages->limit)
-                       ->all();
-
-        if(count($model) == 0){
+        if(count($model) == 0)
+        {
             $error = 2;
-            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+            $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
-        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
+        return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
     #endregion
 
-    #region public function actionCreate($msg = "", $error = "")
-    public function actionCreate($msg = "", $error = "")
+    #region public function actionCreate($msg = '', $error = '')
+    public function actionCreate($msg = '', $error = '')
     {
         $model = new CicloForm();
+        $status = 0;
 
         if(Yii::$app->request->get() && $error != 1)
         {
-            $modelo = $_GET["modelo"];
-            $model->desc_ciclo = $modelo["desc_ciclo"];
-            $model->semestre = $modelo["semestre"];
-            $model->anio = $modelo["anio"];
-            $model->cve_estatus = $modelo["cve_estatus"];
+            $model->attributes = $_GET['modelo'];
         }
 
-        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error]);
+        return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
     #endregion
 
@@ -181,32 +174,25 @@ class CicloController extends Controller
         {
             if ($model->validate())
             {
-                $table = new Ciclo();
-                $table->desc_ciclo = $model->desc_ciclo;
-                $table->semestre = $model->semestre;
-                $table->anio = $model->anio;
-                $table->cve_estatus = $model->cve_estatus;
-                $table->fecha_registro = date("Y-m-d h:i:s");
-
-                if ($table->insert())
+                if ($this->cicloRepository->store($model))
                 {
-                    $msg = "Ciclo agregado";
+                    $msg = 'Ciclo agregado';
                     $error = 1;
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar el ciclo, intenta nuevamente";
+                    $msg = 'Ocurrió un error al intentar agregar el ciclo, intenta nuevamente';
                     $error = 3;
                 }
 
                 $modelo = [
-                    "desc_ciclo" => $model->desc_ciclo,
-                    "semestre" => $model->semestre,
-                    "anio" => $model->anio,
-                    "cve_estatus" => $model->cve_estatus
+                    'desc_ciclo' => $model->desc_ciclo,
+                    'semestre' => $model->semestre,
+                    'anio' => $model->anio,
+                    'cve_estatus' => $model->cve_estatus
                 ];
 
-                return $this->redirect(["ciclo/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
+                return $this->redirect(['ciclo/create', 'msg' => $msg, 'error' => $error, 'modelo' => $modelo]);
             }
             else
             {
@@ -215,17 +201,18 @@ class CicloController extends Controller
         }
         else
         {
-            return $this->redirect(["ciclo/index"]);
+            return $this->redirect(['ciclo/index']);
         }
     }
     #endregion
 
-    #region public function actionEdit($id, $msg = "", $error = "")
-    public function actionEdit($id, $msg = "", $error = "")
+    #region public function actionEdit($id, $msg = '', $error = ')
+    public function actionEdit($id, $msg = '', $error = '')
     {
         $idciclo = Html::encode($id);
         $msg = Html::encode($msg);
         $error = Html::encode($error);
+        $status = 1;
 
         if(Yii::$app->request->get())
         {
@@ -233,32 +220,28 @@ class CicloController extends Controller
 
             if($idciclo)
             {
-                $table = Ciclo::findOne($idciclo);
+                $table = $this->cicloRepository->get($idciclo);
 
                 if($table)
                 {
-                    $model->idciclo = $table->idciclo;
-                    $model->desc_ciclo = $table->desc_ciclo;
-                    $model->semestre = $table->semestre;
-                    $model->anio = $table->anio;
-                    $model->cve_estatus = $table->cve_estatus;
+                    $model->attributes = $table->attributes;
                 }
                 else
                 {
-                    return $this->redirect(["ciclo/index"]);
+                    return $this->redirect(['ciclo/index']);
                 }
             }
             else
             {
-                return $this->redirect(["ciclo/index"]);
+                return $this->redirect(['ciclo/index']);
             }
         }
         else
         {
-            return $this->redirect(["ciclo/index"]);
+            return $this->redirect(['ciclo/index']);
         }
 
-        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);
+        return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
     #endregion
 
@@ -273,29 +256,23 @@ class CicloController extends Controller
 
             if($model->validate())
             {
-                $table = Ciclo::findOne($idciclo);
+                $table = $this->cicloRepository->get($idciclo);
 
                 if ($table)
                 {
-                    $table->desc_ciclo = $model->desc_ciclo;
-                    $table->semestre = $model->semestre;
-                    $table->anio = $model->anio;
-                    $table->fecha_actualizacion = date("Y-m-d h:i:s");
-                    $table->cve_estatus = $model->cve_estatus;
-
-                    if($table->update())
+                    if($this->cicloRepository->update($model, $idciclo))
                     {
-                        $msg = "Registro actualizado";
+                        $msg = 'Registro actualizado';
                     }
                     else
                     {
-                        $msg = "No detectaron cambios en el registro";
+                        $msg = 'No detectaron cambios en el registro';
                     }
                     $error = 1;
                 }
                 else
                 {
-                    $msg = "Registro no encontrado";
+                    $msg = 'Registro no encontrado';
                     $error = 2;
                 }
             }
@@ -303,11 +280,11 @@ class CicloController extends Controller
             {
                 return $this->getErrors();
             }
-            return $this->redirect(["ciclo/edit", "id" => $idciclo, "msg" => $msg, "error" => $error]);
+            return $this->redirect(['ciclo/edit', 'id' => $idciclo, 'msg' => $msg, 'error' => $error]);
         }
         else
         {
-            return $this->redirect(["ciclo/index"]);
+            return $this->redirect(['ciclo/index']);
         }
     }
     #endregion
@@ -317,35 +294,34 @@ class CicloController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $idciclo = Html::encode($_POST["idciclo"]);
+            $idciclo = Html::encode($_POST['idciclo']);
 
-            $total_relacion = Grupo::find()
-                                    ->where(["idciclo" => $idciclo])
-                                    ->count();
+            $total_relacion = $this->grupoRepository->totalRelacionCiclos($idciclo);
+
             if($total_relacion == 0)
             {
-                if(Ciclo::deleteAll("idciclo=:idciclo", [":idciclo" => $idciclo]))
+                if($this->cicloRepository->destroy($idciclo))
                 {
                     $error = 1;
-                    $msg = "Registro eliminado";
+                    $msg = 'Registro eliminado';
                 }
                 else
                 {
                     $error = 3;
-                    $msg = "Error al eliminar el registro";
+                    $msg = 'Error al eliminar el registro';
                 }
             }
             else
             {
                 $error = 3;
-                $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
+                $msg = 'El registro no puede ser eliminado, debido a que contiene información relacionada';
             }
-            header("Location: ".Url::toRoute("/ciclo/index?msg=$msg&error=$error"));
+            header('Location: '.Url::toRoute('/ciclo/index?msg='.$msg.'&error='.$error));
             exit;
         }
         else
         {
-            return $this->redirect(["ciclo/index"]);
+            return $this->redirect(['ciclo/index']);
         }
     }
     #endregion

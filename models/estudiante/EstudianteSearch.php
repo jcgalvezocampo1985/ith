@@ -12,7 +12,7 @@ class EstudianteSearch extends Model
     {
         return [
             ["buscar", "required", "message" => "Requerido"],
-            ["buscar", "match", "pattern" => "/^[0-9a-zA-Z]+$/i", "message" => "Solo números y letras"]
+            ["buscar", "match", "pattern" => "/^[0-9a-zA-ZaéíóúÁÉÍÓÚ]+$/i", "message" => "Solo números y letras"]
         ];
     }
 

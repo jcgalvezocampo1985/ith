@@ -18,11 +18,20 @@ use app\models\profesor\ProfesorSearch;
 use app\models\ciclo\CicloProfesorSearch;
 use app\models\ciclo\Ciclo;
 use app\models\ciclo\CicloSearch;
+use app\models\profesorseguimiento\ProfesorSeguimientoForm;
 use app\models\profesorseguimiento\ProfesorSeguimiento;
 use app\models\User;
 
-class SeguimientoController extends Controller
+use app\repositories\ProfesorSeguimientoRepository;
+use app\repositories\CicloRepository;
+use app\repositories\ProfesorRepository;
+
+class ProfesorseguimientoController extends Controller
 {
+    private $profesorSeguimientoRepository;
+    private $cicloRepository;
+    private $profesorRepository;
+
     #region public function behaviors()
     public function behaviors()
     {
@@ -165,80 +174,65 @@ class SeguimientoController extends Controller
     }
     #endregion
 
+    #region public function __construct()
+    public function __construct($id, $module, $config = [],
+                                profesorSeguimientoRepository $profesorSeguimientoRepository,
+                                cicloRepository $cicloRepository,
+                                ProfesorRepository $profesorRepository
+                                )
+    {
+        parent::__construct($id, $module, $config);
+        $this->profesorSeguimientoRepository = $profesorSeguimientoRepository;
+        $this->cicloRepository = $cicloRepository;
+        $this->profesorRepository = $profesorRepository;
+    }
+    #endregion
+
     #region public function actionIndex()
     public function actionIndex()
     {
         $form = new CicloSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
-        $idciclo = Ciclo::find()->max("idciclo");
-        $profesores = ArrayHelper::map(Profesor::find()->orderBy(["apaterno" => SORT_ASC, "amaterno" => SORT_ASC, "nombre_profesor" => SORT_ASC])->asArray()->all(),'idprofesor', function($model){
-            return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
-        });
-        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
+        $msg = (Html::encode(isset($_GET['msg']))) ? Html::encode($_GET['msg']) : null;
+        $error = (Html::encode(isset($_GET['error']))) ? Html::encode($_GET['error']) : null;
+
+        $idciclo = $this->cicloRepository->maxId();
+
+        $ciclos = \MyGlobalFunctions::dropDownList($this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]), 'idciclo', ['desc_ciclo']);
+        $profesores = \MyGlobalFunctions::dropDownList($this->profesorRepository->listaRegistros(['apaterno' => SORT_ASC, 'amaterno' => SORT_ASC, 'nombre_profesor' => SORT_ASC]), 'idprofesor', ['apaterno', 'amaterno', 'nombre_profesor']);
+
+        $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
                 $idciclo = Html::encode($form->idciclo);
-                $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor",
-                                       "profesores.nombre_profesor",
-                                       "profesores.apaterno",
-                                       "profesores.amaterno",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
-                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
+
+                $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);//Se ejecuta consulta de todos los registgros
             }
             else
             {
                 $form->getErrors();
             }
         }
-        else
+
+        $pages = $this->profesorSeguimientoRepository->getPages();
+
+        if(count($model) == 0)
         {
-            $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor",
-                                       "profesores.nombre_profesor",
-                                       "profesores.apaterno",
-                                       "profesores.amaterno",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idciclo = $idciclo AND idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
-                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
-        }
-
-        $count = clone $table;
-        $pages = new Pagination([
-                    "pageSize" => 10,
-                    "totalCount" => $count->count(),
-                ]);
-        $model = $table->offset($pages->offset)
-                       ->limit($pages->limit)
-                       ->all();
-
-        if(count($model) == 0){
             $error = 2;
-            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+            $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
         $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
-        $ciclo = $sql['desc_ciclo'];
+        $ciclo_actual = $sql['desc_ciclo'];
 
         $total_profesores = Profesor::find()->count();
-        $total_seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 1, "bandera" => 1])->count();
-        $total_seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 2, "bandera" => 1])->count();
-        $total_seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 3, "bandera" => 1])->count();
-        $total_seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 4, "bandera" => 1])->count();
-        $total_seguimiento5 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 5, "bandera" => 1])->count();
+        $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 1, 1);
+        $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 2, 1);
+        $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 3, 1);
+        $total_seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 4, 1);
+        $total_seguimiento5 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 5, 1);
 
         $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
         $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;
@@ -246,38 +240,23 @@ class SeguimientoController extends Controller
         $ts4 = ($total_seguimiento4 == $total_profesores) ? 1 : 0;
         $regular = ($total_seguimiento5 == $total_profesores) ? 1 : 0;
 
-        return $this->render("seguimientos", ["model" => $model,
-                                              "form" => $form,
-                                              "msg" => $msg,
-                                              "error" => $error,
-                                              "pages" => $pages,
-                                              "ts1" => $ts1,
-                                              "ts2" => $ts2,
-                                              "ts3" => $ts3,
-                                              "ts4" => $ts4,
-                                              "regular" => $regular,
-                                              "profesores" => $profesores,
-                                              "ciclos" => $ciclos,
-                                              "ciclo_actual" => $ciclo,
-                                            ]);
+        return $this->render('seguimientos', compact('model', 'form', 'msg', 'error', 'pages', 'ts1', 'ts2', 'ts3','ts4', 'regular', 'profesores', 'ciclos', 'ciclo_actual'));
     }
     #endregion
 
     #region public function actionAsignarseguimiento()
     public function actionAsignarseguimiento()
     {
-        $idprofesor = (Html::encode(isset($_GET["idprofesor"]))) ? Html::encode($_GET["idprofesor"]) : null;
-        $idciclo = (Html::encode(isset($_GET["idciclo"]))) ? Html::encode($_GET["idciclo"]) : null;
-        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
-        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
+        $idprofesor = (Html::encode(isset($_GET['idprofesor']))) ? Html::encode($_GET['idprofesor']) : null;
+        $idciclo = (Html::encode(isset($_GET['idciclo']))) ? Html::encode($_GET['idciclo']) : null;
+        $bandera = (Html::encode(isset($_GET['bandera']))) ? Html::encode($_GET['bandera']) : null;
+        $seguimiento = (Html::encode(isset($_GET['seguimiento']))) ? Html::encode($_GET['seguimiento']) : null;
 
-        if($bandera != "" && $idprofesor != "" && $seguimiento != "" && $idciclo != "")
+        if($bandera != '' && $idprofesor != '' && $seguimiento != '' && $idciclo != '')
         {
-            $total_registro = ProfesorSeguimiento::find()
-                                                 ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                 ->count();
+            $total_registro = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
 
-            if($total_registro == 0)
+            if ($total_registro == 0)
             {
                 $table = new ProfesorSeguimiento();
                 $table->idciclo = $idciclo;
@@ -288,11 +267,7 @@ class SeguimientoController extends Controller
             }
             else
             {
-                $total_registro = ProfesorSeguimiento::find()
-                                                     ->select('idseguimiento')
-                                                     ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                     ->one();
-
+                $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
                 $idseguimiento = $total_registro->idseguimiento;
 
                 $table = ProfesorSeguimiento::findOne($idseguimiento);
@@ -306,11 +281,11 @@ class SeguimientoController extends Controller
     #region public function actionAsignarseguimientos()
     public function actionAsignarseguimientos()
     {
-        $idciclo = (Html::encode(isset($_GET["idciclo"]))) ? Html::encode($_GET["idciclo"]) : null;
-        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
-        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
+        $idciclo = (Html::encode(isset($_GET['idciclo']))) ? Html::encode($_GET['idciclo']) : null;
+        $bandera = (Html::encode(isset($_GET['bandera']))) ? Html::encode($_GET['bandera']) : null;
+        $seguimiento = (Html::encode(isset($_GET['seguimiento']))) ? Html::encode($_GET['seguimiento']) : null;
 
-        if($bandera != "" && $seguimiento != "" && $idciclo != "")
+        if($bandera != '' && $seguimiento != '' && $idciclo != '')
         {
             $table = (new \yii\db\Query())
                             ->from(["profesores"])

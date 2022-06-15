@@ -53,4 +53,6 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <?= $form->field($model, "idciclo")->hiddenInput(["value"=> $model->idciclo, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_registro")->hiddenInput(["value"=> ($model->fecha_registro == '') ? date('Y-m-d h:i:s') : $model->fecha_registro, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_actualizacion")->hiddenInput(["value"=> ($model->idciclo != '') ? date('Y-m-d h:i:s') : $model->fecha_actualizacion, "readonly" => true])->label(false) ?>
 <?php $form->end() ?>

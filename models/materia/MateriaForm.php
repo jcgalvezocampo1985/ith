@@ -25,7 +25,8 @@ class MateriaForm extends Model
             ["creditos", "integer", "message" => "Solo números"],
             ["creditos", "string", "min" => 1, "max" => 2, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 2 caracteres"],
             ["cve_estatus", "string", "min" => 1, "max" => 3, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 3 caracteres"],
-            ["idmateria", "integer"]
+            ["idmateria", "integer"],
+            [["fecha_registro", "fecha_actualizacion"], "string", "min" => 1]
         ];
     }
 

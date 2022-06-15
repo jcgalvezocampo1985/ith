@@ -5,8 +5,9 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 $this->title = 'Horario';
-
 $this->params['breadcrumbs'][] = $this->title;
+
+$idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
 ?>
 
 <div class="panel panel-primary">
@@ -31,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="col-md-12">
                     <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+                    <?= Html::a('Refrescar', ['estudiante/horariomodificar'], ['class' => 'btn btn-info']) ?>
             <?php $f->end() ?>
                 <?php if($idciclo_actual == $idciclo): ?>
                 <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar=".$idestudiante."=".$idciclo."=".$idcarrera ?>" id="horario_agregar" class="btn btn-info" data-toggle="modal" data-target="#materias">Asignar Materia</a>

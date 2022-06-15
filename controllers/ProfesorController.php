@@ -26,8 +26,14 @@ use app\models\login\Usuario;
 use app\models\login\RolUsuario;
 use app\models\User;
 
+use app\repositories\ProfesorRepository;
+use app\repositories\CicloRepository;
+
 class ProfesorController extends Controller
 {
+    private $profesorRepository;
+    private $cicloRepository;
+
     #region public function behaviors()
     public function behaviors()
     {
@@ -170,6 +176,18 @@ class ProfesorController extends Controller
     }
     #endregion
 
+    #region public function __construct()
+    public function __construct($id, $module, $config = [],
+                                ProfesorRepository $profesorRepository,
+                                CicloRepository $cicloRepository
+                                )
+    {
+        parent::__construct($id, $module, $config);
+        $this->profesorRepository = $profesorRepository;
+        $this->cicloRepository = $cicloRepository;
+    }
+    #endregion
+
     #region public function actionIndex()
     public function actionIndex()
     {
@@ -184,63 +202,44 @@ class ProfesorController extends Controller
         */
         if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2) || User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
         {
-            return $this->redirect(["horarioconsulta"]);
+            return $this->redirect(['horarioconsulta']);
         }
         else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
         {
-            return $this->redirect(["horario"]);
+            return $this->redirect(['horario']);
         }
 
         $form = new ProfesorSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
-        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
-        $idciclo = Ciclo::find()->max("idciclo");
+        $msg = (Html::encode(isset($_GET['msg']))) ? Html::encode($_GET['msg']) : null;
+        $error = (Html::encode(isset($_GET['error']))) ? Html::encode($_GET['error']) : null;
+        $ciclos = $this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]);
+        $ultimo_ciclo = $this->cicloRepository->maxId();
+
+        $model = $this->profesorRepository->all();//Se ejecuta consulta de todos los registgros
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $search = Html::encode($form->buscar);
-                $table = Profesor::find()
-                                 ->where(["like", "curp", $search])
-                                 ->orWhere(["like", "nombre_profesor", $search])
-                                 ->orWhere(["like", "apaterno", $search])
-                                 ->orWhere(["like", "amaterno", $search])
-                                 ->orWhere(["like", "cve_estatus", $search]);
+                $this->profesorRepository->search = Html::encode($form->buscar);//Pasamos parámetro para la búsqueda
+
+                $model = $this->profesorRepository->all(true);//Se ejecuta consulta con parámetro de búsqueda
             }
             else
             {
                 $form->getErrors();
             }
         }
-        else
+
+        $pages = $this->profesorRepository->getPages();
+
+        if(count($model) == 0)
         {
-            $table = Profesor::find();
-                 
-        }
-
-        $count = clone $table;
-        $pages = new Pagination([
-                    "pageSize" => 10,
-                    "totalCount" => $count->count(),
-                ]);
-        $model = $table->offset($pages->offset)
-                       ->limit($pages->limit)
-                       ->all();
-
-        if(count($model) == 0){
             $error = 2;
-            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+            $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
-        return $this->render("index", ["model" => $model,
-                                      "form" => $form,
-                                      "msg" => $msg,
-                                      "error" => $error,
-                                      "pages" => $pages,
-                                      "ciclos" => $ciclos,
-                                      "ultimo_ciclo" => $idciclo]);
+        return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages', 'ciclos', 'ultimo_ciclo'));
     }
     #endregion
 

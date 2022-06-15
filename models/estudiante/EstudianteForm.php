@@ -27,7 +27,7 @@ class EstudianteForm extends Model
             ["idestudiante", "match", "pattern" => "/^.[0-9A-Za-z]+$/i", "message" => "Sólo valores alfanuméricos"],
             ["idestudiante", "string", "min" => 3, "max" => 15, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 15 caracteres"],
             ["idestudiante", "idestudiante_existe"],
-            ["nombre_estudiante", "match", "pattern" => "/^.[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/i", "message" => "Sólo letras"],
+            ["nombre_estudiante", "match", "pattern" => "/^[a-zA-Z\sáéíóúñÁÉÍÓÚÑ]+$/i", "message" => "Sólo letras"],
             ["nombre_estudiante", "string", "min" => 3, "max" => 200, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 200 caracteres"],
             ["email", "email", "message" =>"Formato no válido"],
             ["email", "string", "min" => 10, "max" => 45, "tooShort" => "Mínimo 10 caracteres", "tooLong" => "Máximo 45 caracteres"],
@@ -36,7 +36,7 @@ class EstudianteForm extends Model
             ["num_semestre", "string", "min" => 1, "max" => 1, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 1 caracter"],
             ["num_semestre", "integer", "message" => "Sólo números"],
             ["num_semestre", "string", "min" => 1, "max" => 2, "tooShort" => "Mínimo 1 caracter", "tooLong" => "Máximo 2 caracteres"],
-            [["fecha_registro", "fecha_actualizacion"], "string", "min" => 10, "max" => 19, "tooShort" => "Mínimo 10 caracteres", "tooLong" => "Máximo 19 caracteres"],
+            [["fecha_registro", "fecha_actualizacion"], "string"]
         ];
     }
 
@@ -48,8 +48,6 @@ class EstudianteForm extends Model
             "email" => "Email",
             "sexo" => "Sexo",
             "num_semestre" => "Semestre",
-            "fecha_registro" => "Fecha Registro",
-            "fecha_actualizacion" => "Fecha Actualización",
             "cve_estatus" => "Estatus",
             "idcarrera" => "Carrera",
             "estado" => "Estado"

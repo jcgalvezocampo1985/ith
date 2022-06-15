@@ -20,7 +20,7 @@ $regularizacion = ($regular == 1) ? "checked" : "";
         <?php
         $f = ActiveForm::begin([
                 "method" => "get",
-                "action" => Url::toRoute("seguimiento/index"),
+                "action" => Url::toRoute("profesorseguimiento/index"),
                 "enableClientValidation" => true
             ]);
         ?>
@@ -35,7 +35,7 @@ $regularizacion = ($regular == 1) ? "checked" : "";
          <div class="row">
             <div class="col-md-12">
                 <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
-                <?= Html::a("Refrescar", ["seguimiento/index"], ["class" => "btn btn-info"]) ?>
+                <?= Html::a("Refrescar", ["profesorseguimiento/index"], ["class" => "btn btn-info"]) ?>
             </div>
         </div>
         <?php $f->end() ?>
