@@ -10,10 +10,20 @@ use yii\helpers\Html;
 use Fpdf\Fpdf;
 
 use app\models\User;
+use app\models\login\Usuario;
 use app\models\ciclo\Ciclo;
 use app\models\materia\Materia;
 use app\models\profesor\Profesor;
 use app\models\grupo\Grupo;
+
+use app\repositories\EstudianteRepository;
+use app\repositories\ProfesorRepository;
+use app\repositories\CarreraRepository;
+use app\repositories\GrupoRepository;
+use app\repositories\MateriaRepository;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PDF extends FPDF
 {
@@ -262,6 +272,12 @@ class PDF extends FPDF
 
 class ReporteController extends Controller
 {
+    private $estudianteRepository;
+    private $profesorRepository;
+    private $carreraRepository;
+    private $grupoRepository;
+    private $materiaRepository;
+
     #region public function behaviors()
     public function behaviors()
     {
@@ -341,6 +357,24 @@ class ReporteController extends Controller
                     ],
                 ],
         ];
+    }
+    #endregion
+
+    #region public function __construct()
+    public function __construct($id, $module, $config = [],
+                                EstudianteRepository $estudianteRepository,
+                                ProfesorRepository $profesorRepository,
+                                CarreraRepository $carreraRepository,
+                                GrupoRepository $grupoRepository,
+                                MateriaRepository $materiaRepository
+                                )
+    {
+        parent::__construct($id, $module, $config);
+        $this->estudianteRepository = $estudianteRepository;
+        $this->profesorRepository = $profesorRepository;
+        $this->carreraRepository = $carreraRepository;
+        $this->grupoRepository = $grupoRepository;
+        $this->materiaRepository = $materiaRepository;
     }
     #endregion
 
@@ -2040,4 +2074,251 @@ class ReporteController extends Controller
         
         $pdf->Output('I', 'horario.pdf');
     }*/
+
+    public function actionDalu($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'ALU_CTR');
+        $sheet->setCellValue('B1', 'ALU_NOM');
+        $sheet->setCellValue('C1', 'ALU_ESP');
+        $sheet->setCellValue('D1', 'ALU_PLA');
+        $sheet->setCellValue('E1', 'ALU_SEM');
+        $sheet->setCellValue('F1', 'ELE_CRE');
+        $sheet->setCellValue('G1', 'ALU_PAS');
+
+        $model = $this->estudianteRepository->listadoAlumnosCiclo($idciclo);
+
+        $i = 2;
+        foreach($model as $row)
+        {
+            $idestudiante = $row['idestudiante'];
+            $nombre_estudiante = $row['nombre_estudiante'];
+            $idcarrera = $row['idcarrera'];
+            $plan_estudios = $row['plan_estudios'];
+            $num_semestre = $row['num_semestre'];
+
+            $sheet->setCellValue('A'.$i, $idestudiante);
+            $sheet->setCellValue('B'.$i, $nombre_estudiante);
+            $sheet->setCellValue('C'.$i, $idcarrera);
+            $sheet->setCellValue('D'.$i, $plan_estudios);
+            $sheet->setCellValue('E'.$i, $num_semestre);
+            $sheet->setCellValue('F'.$i, 0);
+            $sheet->setCellValue('G'.$i, md5($idestudiante));
+
+            $i++;
+        }
+
+        $fileName = 'DALU.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDcat($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'CAT_CVE');
+        $sheet->setCellValue('B1', 'CAT_DEP');
+        $sheet->setCellValue('C1', 'CAT_NOM');
+
+        $model = $this->profesorRepository->listaRegistros(['CONCAT(nombre_profesor," ",apaterno," ",amaterno)' => SORT_ASC]);
+
+        $i = 2;
+        foreach($model as $row)
+        {
+            $idprofesor = $row['idprofesor'];
+            $nombre_profesor = $row['nombre_profesor'].' '.$row['apaterno'].' '.$row['amaterno'];
+            $cat_dep = $row['cat_dep'];
+
+            $sheet->setCellValue('A'.$i, $idprofesor);
+            $sheet->setCellValue('B'.$i, $cat_dep);
+            $sheet->setCellValue('C'.$i, $nombre_profesor);
+
+            $i++;
+        }
+
+        $fileName = 'DCAT.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDdep($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'DEP_CVE');
+        $sheet->setCellValue('B1', 'DEP_NOM');
+        $sheet->setCellValue('C1', 'DEP_NCO');
+
+        $sheet->setCellValue('A2', '1');
+        $sheet->setCellValue('B2', 'CIENCIAS BASICAS');
+        $sheet->setCellValue('C2', 'CIENCIAS BASICAS');
+
+        $sheet->setCellValue('A3', '2');
+        $sheet->setCellValue('B3', 'DEPTO INGENIERIAS');
+        $sheet->setCellValue('C3', 'DEPTO INGENIERIAS');
+
+        $fileName = 'DDEP.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDesp($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'ESP_CVE');
+        $sheet->setCellValue('B1', 'ESP_NOM');
+        $sheet->setCellValue('C1', 'ESP_NCO');
+
+        $model = $this->carreraRepository->listaRegistros(['desc_carrera' => SORT_ASC]);
+
+        $i = 2;
+        foreach($model as $row)
+        {
+            $idcarrera = $row['idcarrera'];
+            $cve_carrera = $row['cve_carrera'];
+            $desc_carrera = $row['desc_carrera'];
+
+            $sheet->setCellValue('A'.$i, $idcarrera);
+            $sheet->setCellValue('B'.$i, $desc_carrera);
+            $sheet->setCellValue('C'.$i, $desc_carrera);
+
+            $i++;
+        }
+
+        $fileName = 'DESP.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDgau($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'GPO_MAT');
+        $sheet->setCellValue('B1', 'GPO_GPO');
+        $sheet->setCellValue('C1', 'GPO_CAT');
+        $sheet->setCellValue('D1', 'GPO_NUM');
+        $sheet->setCellValue('E1', 'GPO_LHR');
+        $sheet->setCellValue('F1', 'GPO_AUL');
+
+        $model = $this->grupoRepository->listadoGrupo($idciclo);
+
+        $i = 2;
+        $j = 1;
+        foreach($model as $row)
+        {
+            $cve_materia = $row['cve_materia'];
+            $idgrupo = $row['idgrupo'];
+            $idprofesor = $row['idprofesor'];
+
+            $sheet->setCellValue('A'.$i, $cve_materia);
+            $sheet->setCellValue('B'.$i, $idgrupo);
+            $sheet->setCellValue('C'.$i, $idprofesor);
+            $sheet->setCellValue('D'.$i, $j);
+            $sheet->setCellValue('E'.$i, '');
+            $sheet->setCellValue('F'.$i, '');
+
+            $i++;
+            $j++;
+        }
+
+        $fileName = 'DGAU.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDlis($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'LIS_CTR');
+        $sheet->setCellValue('B1', 'LIS_MAT');
+        $sheet->setCellValue('C1', 'LIS_GPO');
+
+        $model = $this->estudianteRepository->listadoAlumnosGrupoCiclo($idciclo);
+
+        $i = 2;
+        foreach($model as $row)
+        {
+            $idestudiante = $row['idestudiante'];
+            $cve_materia = $row['cve_materia'];
+            $idgrupo = $row['idgrupo'];
+
+            $sheet->setCellValue('A'.$i, $idestudiante);
+            $sheet->setCellValue('B'.$i, $cve_materia);
+            $sheet->setCellValue('C'.$i, $idgrupo);
+
+            $i++;
+        }
+
+        $fileName = 'DLIS.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function actionDret($idciclo)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'RET_CVE');
+        $sheet->setCellValue('B1', 'RET_NOM');
+        $sheet->setCellValue('C1', 'RET_NCO');
+
+        $model = $this->materiaRepository->listadoMateriaCiclo($idciclo);
+
+        $i = 2;
+        foreach($model as $row)
+        {
+            $cve_materia = $row['cve_materia'];
+            $desc_materia = $row['desc_materia'];
+
+            $sheet->setCellValue('A'.$i, $cve_materia);
+            $sheet->setCellValue('B'.$i, $desc_materia);
+            $sheet->setCellValue('C'.$i, $desc_materia);
+
+            $i++;
+        }
+
+        $fileName = 'DRET.xlsx';
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        exit;
+    }
 }
