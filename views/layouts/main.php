@@ -54,18 +54,20 @@ if(!Yii::$app->user->isGuest){
             Yii::$app->user->isGuest ? "" : (['label' => 'Horario Estudiantes', 'url' => ['/estudiante/horariomodificar']]),
             ['label' => 'Boleta', 'url' => ['/estudiante/boleta']],
             ['label' => 'Horario', 'url' => ['/estudiante/horario']],
+            ['label' => 'Calificaciones ', 'url' => ['/estudiante/calificaciones']],
             Yii::$app->user->isGuest ? "" :(
             ['label' => 'Admin', 'items' =>
                 [
                     ['label' => 'Profesores', 'url' => ['/profesor/index']],
                     ['label' => 'Estudiantes', 'url' => ['/estudiante/index']],
-                    ['label' => 'Seguimientos', 'url' => ['/seguimiento/index']],
+                    ['label' => 'Seguimientos', 'url' => ['/profesorseguimiento/index']],
                     ['label' => 'Carreras', 'url' => ['/carrera/index']],
                     ['label' => 'Materias', 'url' => ['/materia/index']],
                     ['label' => 'Opc. Curso', 'url' => ['/opcioncurso/index']],
                     ['label' => 'Ciclos', 'url' => ['/ciclo/index']],
                     ['label' => 'Grupos', 'url' => ['/grupo/index']],
                     ['label' => 'Usuarios', 'url' => ['/usuario/index']],
+                    ['label' => 'Evaluación Docente', 'url' => ['/evaluaciondocente/index']],
                 ]
             ]),
             Yii::$app->user->isGuest ? (
