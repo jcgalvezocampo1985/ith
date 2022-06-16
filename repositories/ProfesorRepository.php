@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\profesor\Profesor;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class ProfesorRepository extends BaseRepository
 {

@@ -4,7 +4,7 @@ namespace app\repositories;
 use Yii;
 use yii\db\Query;
 use yii\data\Pagination;
-use app\Repositories\RepositoryBaseInterface;
+use app\repositories\RepositoryBaseInterface;
 
 abstract class BaseRepository implements RepositoryBaseInterface
 {

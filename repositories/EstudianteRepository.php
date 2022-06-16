@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\estudiante\Estudiante;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class EstudianteRepository extends BaseRepository
 {

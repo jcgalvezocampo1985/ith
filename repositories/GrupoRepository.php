@@ -5,7 +5,7 @@ use yii\db\Query;
 
 use app\models\grupo\Grupo;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class GrupoRepository extends BaseRepository
 {

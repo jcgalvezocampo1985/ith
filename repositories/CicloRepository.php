@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\ciclo\Ciclo;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class CicloRepository extends BaseRepository
 {

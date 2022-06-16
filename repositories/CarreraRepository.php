@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\carrera\Carrera;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class CarreraRepository extends BaseRepository
 {

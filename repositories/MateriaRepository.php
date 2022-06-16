@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\materia\Materia;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class MateriaRepository extends BaseRepository
 {

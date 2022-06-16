@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\actacalificacion\ActaCalificacion;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class ActaCalificacionRepository extends BaseRepository
 {
