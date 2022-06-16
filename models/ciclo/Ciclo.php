@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models\ciclo;
+
 use Yii;
 use yii\db\ActiveRecord;
 
