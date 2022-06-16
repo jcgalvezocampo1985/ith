@@ -361,7 +361,7 @@ class ReporteController extends Controller
     #endregion
 
     #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 EstudianteRepository $estudianteRepository,
                                 ProfesorRepository $profesorRepository,
                                 CarreraRepository $carreraRepository,
@@ -369,7 +369,7 @@ class ReporteController extends Controller
                                 MateriaRepository $materiaRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->estudianteRepository = $estudianteRepository;
         $this->profesorRepository = $profesorRepository;
         $this->carreraRepository = $carreraRepository;
@@ -384,31 +384,9 @@ class ReporteController extends Controller
         $idestudiante = Html::encode($_REQUEST['id']);
         $idciclo = Html::encode($_REQUEST['idciclo']);
 
-        $sql_encabezado = "SELECT
-                               *
-                           FROM
-                                boleta_estudiante_encabezado
-                           WHERE
-                                idestudiante = :idestudiante
-                           AND
-                                idciclo = :idciclo";
-        $encabezado = Yii::$app->db->createCommand($sql_encabezado)
-                                   ->bindValue(':idestudiante', $idestudiante)
-                                   ->bindValue(':idciclo', $idciclo)
-                                   ->queryOne();
+        $encabezado = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante, $idciclo);
 
-        $sql_materias = "SELECT
-                            *
-                         FROM
-                            boleta_detalle_v
-                         WHERE
-                            idestudiante = :idestudiante
-                         AND
-                            idciclo = :idciclo";
-        $cuerpo = Yii::$app->db->createCommand($sql_materias)
-                               ->bindValue(':idestudiante', $idestudiante)
-                               ->bindValue(':idciclo', $idciclo)
-                               ->queryAll();
+        $cuerpo = $this->estudianteRepository->viewEstudianteBoletaDetalle($idestudiante, $idciclo);
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
@@ -524,33 +502,9 @@ class ReporteController extends Controller
         $idestudiante = Html::encode($_REQUEST['id']);
         $idciclo = Html::encode($_REQUEST['idciclo']);
 
-        $sql_encabezado = "SELECT
-                                *
-                           FROM
-                                boleta_estudiante_encabezado
-                           WHERE
-                                idestudiante = :idestudiante
-                           AND
-                                idciclo = :idciclo";
-        $encabezado = Yii::$app->db->createCommand($sql_encabezado)
-                                   ->bindValue(':idestudiante', $idestudiante)
-                                   ->bindValue(':idciclo', $idciclo)
-                                   ->queryOne();
+        $encabezado = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante, $idciclo);
 
-        $sql_materias = "SELECT
-                            *
-                         FROM
-                            horario_estudiante_v
-                         WHERE
-                            idestudiante =:idestudiante
-                         AND
-                            idciclo = :idciclo
-                         ORDER BY
-                            lunes, viernes, sabado";
-        $cuerpo = Yii::$app->db->createCommand($sql_materias)
-                               ->bindValue(':idestudiante', $idestudiante)
-                               ->bindValue(':idciclo', $idciclo)
-                               ->queryAll();
+        $cuerpo = $this->estudianteRepository->viewHorarioEstudiante($idestudiante, $idciclo);
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
@@ -652,34 +606,9 @@ class ReporteController extends Controller
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
         $idciclo = (Html::encode($_REQUEST['idciclo']) != "") ? Html::encode($_REQUEST['idciclo']) : Ciclo::find()->max("idciclo");
 
-        $encabezado = (new \yii\db\Query())->from(["cat_carreras"])
-                                           ->select(["ciclo.desc_ciclo",
-                                                    "cat_carreras.desc_carrera",
-                                                    "cat_carreras.plan_estudios",
-                                                    "grupos.desc_grupo",
-                                                    "grupos.desc_grupo_corto",
-                                                    "cat_materias.desc_materia"
-                                           ])
-                                           ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                                           ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
-                                           ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                                           ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                                           ->one();
+        $encabezado = $this->estudianteRepository->listaAlumnosEncabezado($idgrupo, $idciclo);
 
-        $cuerpo = (new \yii\db\Query())->from(["estudiantes"])
-                                     ->select(["estudiantes.idestudiante",
-                                               "estudiantes.nombre_estudiante",
-                                               "estudiantes.sexo",
-                                               "cat_opcion_curso.desc_opcion_curso",
-                                               "cat_materias.desc_materia"
-                                     ])
-                                     ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                                     ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                                     ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                                     ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                                     ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                                     ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                                     ->all();
+        $cuerpo = $this->estudianteRepository->listaAlumnosCuerpo($idgrupo, $idciclo);
 
         $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
@@ -749,66 +678,22 @@ class ReporteController extends Controller
     #endregion
 
     #region public function actionListaalumnoscalificacion($idgrupo, $idciclo)
-    public function actionListaalumnoscalificacion($idgrupo, $idciclo)
+    public function actionListaalumnoscalificacion($idgrupo, $idciclo)//Reporte de calificaciones
     {
         $idgrupo = Html::encode($idgrupo);
         $idciclo = Html::encode($idciclo);
 
-        $materia = (new \yii\db\Query())
-                            ->from(["grupos"])
-                            ->select(["cat_materias.desc_materia"])
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->one();
+        $encabezado = $this->carreraRepository->datosEncabezadoPorGrupoCiclo($idgrupo, $idciclo);
 
-        $encabezado = (new \yii\db\Query())
-                            ->from(["cat_carreras"])
-                            ->select([
-                                "ciclo.desc_ciclo",
-                            	"cat_carreras.desc_carrera",
-	                            "cat_carreras.plan_estudios",
-	                            "grupos.desc_grupo",
-	                            "grupos.desc_grupo_corto",
-	                            "cat_materias.desc_materia",
-                                "CONCAT(profesores.apaterno, ' ', profesores.amaterno, ' ', profesores.nombre_profesor) AS profesor"
-                            ])
-                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                            ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
-                            ->where(["grupos.idgrupo" => $idgrupo, "ciclo.idciclo" => $idciclo])
-                            ->all();
+        $cuerpo = $this->estudianteRepository->calificacionesPorGrupoCiclo($idgrupo, $idciclo);
 
-        $cuerpo = (new \yii\db\Query())
-                            ->from(["estudiantes"])
-                            ->select([
-                                "estudiantes.idestudiante",
-    	                        "estudiantes.nombre_estudiante",
-                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3",
-                                "grupos_estudiantes.p4", "grupos_estudiantes.p5", "grupos_estudiantes.p6",
-                                "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
-                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
-                                "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9",
-                                "grupos_estudiantes.sp1", "grupos_estudiantes.sp2", "grupos_estudiantes.sp3",
-                                "grupos_estudiantes.sp4", "grupos_estudiantes.sp5", "grupos_estudiantes.sp6",
-                                "grupos_estudiantes.sp7", "grupos_estudiantes.sp8", "grupos_estudiantes.sp9"
-                            ])
-                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->all();
-
-        $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
+        $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
-        $carrera = $encabezado[0]['desc_carrera'];
-        $plan = $encabezado[0]['plan_estudios'];
-        $materia = $materia['desc_materia'];
-        $grupo = $encabezado[0]['desc_grupo'];
-        $profesor = utf8_decode($encabezado[0]['profesor']);
+        $carrera = $encabezado['desc_carrera'];
+        $plan = $encabezado['plan_estudios'];
+        $materia = $encabezado['desc_materia'];
+        $grupo = $encabezado['desc_grupo'];
+        $profesor = utf8_decode($encabezado['profesor']);
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -824,15 +709,16 @@ class ReporteController extends Controller
         $pdf->AddFont('Montserrat-Regular', '', 'Montserrat-Regular.php');
 
         $this->generarEncabezadoCalificaciones($pdf, 
-                                              array("periodo" => $periodo,
+                                                array("periodo" => $periodo,
                                                     "carrera" => $carrera,
                                                     "plan" => $plan,
                                                     "profesor" => $profesor,
                                                     "materia" => $materia,
                                                     "grupo" => $grupo,
                                                     "fecha" => $fecha,
-                                                    "seguimiento" => ""),
-                                              "Vertical1"
+                                                    "seguimiento" => ""
+                                                ),
+                                                "Vertical1"
                                             );
 
         $x_encabezado = 5;
@@ -915,61 +801,17 @@ class ReporteController extends Controller
         $idgrupo = Html::encode($idgrupo);
         $idciclo = Html::encode($idciclo);
 
-        $materia = (new \yii\db\Query())
-                            ->from(["grupos"])
-                            ->select(["cat_materias.desc_materia"])
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->one();
+        $encabezado = $this->carreraRepository->datosEncabezadoPorGrupoCiclo($idgrupo, $idciclo);
 
-        $encabezado = (new \yii\db\Query())
-                            ->from(["cat_carreras"])
-                            ->select([
-                                "ciclo.desc_ciclo",
-                            	"cat_carreras.desc_carrera",
-	                            "cat_carreras.plan_estudios",
-	                            "grupos.desc_grupo",
-	                            "grupos.desc_grupo_corto",
-	                            "cat_materias.desc_materia",
-                                "CONCAT(profesores.apaterno, ' ', profesores.amaterno, ' ', profesores.nombre_profesor) AS profesor"
-                            ])
-                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                            ->innerJoin(["ciclo"], "ciclo.idciclo = grupos.idciclo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
-                            ->where(["grupos.idgrupo" => $idgrupo, "ciclo.idciclo" => $idciclo])
-                            ->all();
+        $cuerpo = $this->estudianteRepository->calificacionesPorGrupoCiclo($idgrupo, $idciclo);
 
-        $cuerpo = (new \yii\db\Query())
-                            ->from(["estudiantes"])
-                            ->select([
-                                "estudiantes.idestudiante",
-    	                        "estudiantes.nombre_estudiante",
-                                "grupos_estudiantes.p1", "grupos_estudiantes.p2", "grupos_estudiantes.p3",
-                                "grupos_estudiantes.p4", "grupos_estudiantes.p5", "grupos_estudiantes.p6",
-                                "grupos_estudiantes.p7", "grupos_estudiantes.p8", "grupos_estudiantes.p9",
-                                "grupos_estudiantes.s1", "grupos_estudiantes.s2", "grupos_estudiantes.s3",
-                                "grupos_estudiantes.s4", "grupos_estudiantes.s5", "grupos_estudiantes.s6",
-                                "grupos_estudiantes.s7", "grupos_estudiantes.s8", "grupos_estudiantes.s9",
-                                "grupos_estudiantes.sp1", "grupos_estudiantes.sp2", "grupos_estudiantes.sp3",
-                                "grupos_estudiantes.sp4", "grupos_estudiantes.sp5", "grupos_estudiantes.sp6",
-                                "grupos_estudiantes.sp7", "grupos_estudiantes.sp8", "grupos_estudiantes.sp9"
-                            ])
-                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->all();
-
-        $periodo = utf8_decode($encabezado[0]['desc_ciclo']);
+        $periodo = utf8_decode($encabezado['desc_ciclo']);
         $fecha = date('Y-m-d');
-        $carrera = $encabezado[0]['desc_carrera'];
-        $plan = $encabezado[0]['plan_estudios'];
-        $materia = $materia['desc_materia'];
-        $grupo = $encabezado[0]['desc_grupo'];
-        $profesor = utf8_decode($encabezado[0]['profesor']);
+        $carrera = $encabezado['desc_carrera'];
+        $plan = $encabezado['plan_estudios'];
+        $materia = $encabezado['desc_materia'];
+        $grupo = $encabezado['desc_grupo'];
+        $profesor = utf8_decode($encabezado['profesor']);
 
         header('Content-type: application/pdf');
         $pdf = new PDF();
@@ -1869,6 +1711,7 @@ class ReporteController extends Controller
     }
     #endregion
 
+    #region public function actionReportefinalprofesor($idprofesor, $idciclo)
     /*
     public function actionHorarioprofesor()
     {
@@ -2073,8 +1916,11 @@ class ReporteController extends Controller
         $pdf->Cell(20, 5, "", 1, 0, 'C');
         
         $pdf->Output('I', 'horario.pdf');
-    }*/
+    }
+    */
+    #endregion
 
+    #region public function actionDalu($idciclo)
     public function actionDalu($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2118,7 +1964,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDcat($idciclo)
     public function actionDcat($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2152,7 +2000,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDdep($idciclo)
     public function actionDdep($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2178,7 +2028,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDesp($idciclo)
     public function actionDesp($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2212,7 +2064,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDgau($idciclo)
     public function actionDgau($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2254,7 +2108,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDlis($idciclo)
     public function actionDlis($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2263,7 +2119,7 @@ class ReporteController extends Controller
         $sheet->setCellValue('B1', 'LIS_MAT');
         $sheet->setCellValue('C1', 'LIS_GPO');
 
-        $model = $this->estudianteRepository->listadoAlumnosGrupoCiclo($idciclo);
+        $model = $this->estudianteRepository->listadoAlumnosCiclo($idciclo);
 
         $i = 2;
         foreach($model as $row)
@@ -2288,7 +2144,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 
+    #region public function actionDret($idciclo)
     public function actionDret($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -2321,4 +2179,5 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
+    #endregion
 }

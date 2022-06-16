@@ -455,7 +455,7 @@ class EstudianteController extends Controller
             if($form->validate())
             {
                 $idestudiante = Html::encode($form->buscar);
-                $model = $this->estudianteRepository->viewEstudiante($idestudiante);
+                $model = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante);
                 $status = 1;
             }
             else
@@ -481,7 +481,7 @@ class EstudianteController extends Controller
             if($form->validate())
             {
                 $idestudiante = Html::encode($form->buscar);
-                $model = $this->estudianteRepository->viewEstudiante($idestudiante);
+                $model = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante);
                 $status = 1;
             }
             else
@@ -507,7 +507,7 @@ class EstudianteController extends Controller
             if($form->validate())
             {
                 $idestudiante = Html::encode($form->buscar);
-                $model = $this->estudianteRepository->viewEstudiante($idestudiante);
+                $model = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante);
                 $status = 1;
             }
             else
@@ -560,7 +560,7 @@ class EstudianteController extends Controller
         $this->layout = 'main2';
 
         $idestudiante = Html::encode($_GET['idestudiante']);
-        $model = $this->estudianteRepository->viewEstudiante($idestudiante);
+        $model = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante);
 
         return $this->render('boleta_calificacion', compact('model'));
     }
@@ -572,7 +572,7 @@ class EstudianteController extends Controller
         $this->layout = 'main2';
         $idestudiante = Html::encode($_GET['idestudiante']);
 
-        $model = $this->estudianteRepository->viewEstudiante($idestudiante);
+        $model = $this->estudianteRepository->viewEstudianteEncabezado($idestudiante);
 
         return $this->render('horario_alumno', compact('model'));
     }

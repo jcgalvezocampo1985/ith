@@ -100,9 +100,9 @@ class EvaluaciondocenteController extends Controller
     }
     #endregion
 
-    public function __construct($id, $module, $config = [], CicloRepository $cicloRepository)
+    public function __construct($id, $module, CicloRepository $cicloRepository)
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
     }
 
