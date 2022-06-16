@@ -7,9 +7,9 @@ interface RepositoryBaseInterface
 
     public function allQuery($where = false);
 
-    public function getQuery($tabla = '', array $select, array $joins, array $where, array $orderBy, array $groupBy, $paginate = false);
+    public function getQuery($tabla = '', array $select = [], array $joins  = [], array $where  = [], array $orderBy  = [], array $groupBy  = [], $paginate = false, $registers = 'all');
 
-    public function getView($query, array $where);
+    public function getView($query = '', array $where = [], $registers = 'all');
 
     public function get($id);
 
@@ -19,7 +19,7 @@ interface RepositoryBaseInterface
 
     public function destroy($id);
 
-    public function listaRegistros(array $where);
+    public function listaRegistros(array $where = []);
 
     public function maxId();
 

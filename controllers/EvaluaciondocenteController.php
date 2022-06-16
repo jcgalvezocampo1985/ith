@@ -7,7 +7,6 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 use app\models\ciclo\CicloEvaluacionDocenteSearch;
@@ -100,9 +99,9 @@ class EvaluaciondocenteController extends Controller
     }
     #endregion
 
-    public function __construct($id, $module, $config = [], CicloRepository $cicloRepository)
+    public function __construct($id, $module, CicloRepository $cicloRepository)
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
     }
 
