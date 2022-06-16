@@ -120,8 +120,8 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false)
-    public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false)
+    #region public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
+    public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
     {
         if($table != '' && count($select) == 0)
         {
@@ -185,15 +185,15 @@ abstract class BaseRepository implements RepositoryBaseInterface
         }
         else
         {
-            $query = $query->all();
+            $query = $query->$registers();
         }
 
         return $query;
     }
     #endregion
 
-    #region public function getView($query, array $where)
-    public function getView($query, array $where)
+    #region public function getView($query, array $where, $registers = 'all')
+    public function getView($query = '', array $where = [], $registers = 'all')
     {
         $model = Yii::$app->db->createCommand($query);
 
@@ -202,7 +202,13 @@ abstract class BaseRepository implements RepositoryBaseInterface
             $model = $model->bindValue(':'.$campo, $value);
         }
 
-        $model = $model->queryAll();
+        if($registers == 'all'){
+            $tipo = 'queryAll';
+        }else if($registers == 'one'){
+            $tipo = 'queryOne';
+        }
+
+        $model = $model->$tipo();
 
         return $model;
     }

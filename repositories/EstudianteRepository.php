@@ -2,8 +2,6 @@
 
 namespace app\repositories;
 
-use yii\db\Query;
-use yii\data\Pagination;
 use app\models\estudiante\Estudiante;
 
 use app\Repositories\BaseRepository;
@@ -13,11 +11,11 @@ class EstudianteRepository extends BaseRepository
     protected $table = ['estudiantes'];
     public $campos = ['idestudiante', 'idcarrera', 'nombre_estudiante', 'email', 'sexo', 'num_semestre', 'fecha_registro', 'fecha_actualizacion', 'cve_estatus'];
     protected $select = [
-        'estudiantes.idestudiante', 
-        'estudiantes.nombre_estudiante', 
-        'estudiantes.email', 
-        'estudiantes.sexo', 
-        'estudiantes.num_semestre', 
+        'estudiantes.idestudiante',
+        'estudiantes.nombre_estudiante',
+        'estudiantes.email',
+        'estudiantes.sexo',
+        'estudiantes.num_semestre',
         'estudiantes.cve_estatus',
         'cat_carreras.desc_carrera'
     ];
@@ -75,15 +73,17 @@ class EstudianteRepository extends BaseRepository
         $groupBy = [
             'estudiantes.nombre_estudiante'
         ];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
     #endregion
 
-    #region public function listadoAlumnosGrupoCiclo($idciclo)
-    public function listadoAlumnosGrupoCiclo($idciclo)
+    #region public function listadoAlumnosCiclo($idciclo)
+    public function listadoAlumnoCiclo($idciclo)
     {
         $table = 'estudiantes';
         $select = [
@@ -104,39 +104,87 @@ class EstudianteRepository extends BaseRepository
             'estudiantes.idestudiante' => SORT_ASC,
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
     #endregion
 
-    #region public function viewEstudiante(int $idestudiante)
-    public function viewEstudiante(int $idestudiante)
+    #region public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0)
+    public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0)
     {
-        $query = 'SELECT
-                    *
-                  FROM
-                    boleta_estudiante_encabezado
-                  WHERE
-                    idestudiante = :idestudiante
-                  GROUP BY idciclo
-                  ORDER BY idciclo DESC';
+        if ($idciclo != 0) {
+            $query = 'SELECT
+                        *
+                      FROM
+                        boleta_estudiante_encabezado
+                      WHERE
+                        idestudiante = :idestudiante
+                      AND
+                        idciclo = :idciclo';
 
-        $where = [
-            'idestudiante' => $idestudiante
-        ];
+            $where = [
+                'idestudiante' => $idestudiante,
+                'idciclo' => $idciclo
+            ];
+            $registers = 'one';
+        } else {
+            $query = 'SELECT
+                        *
+                      FROM
+                        boleta_estudiante_encabezado
+                      WHERE
+                        idestudiante = :idestudiante
+                      GROUP BY idciclo
+                      ORDER BY idciclo DESC';
 
-        $result = $this->getView($query, $where);
+            $where = [
+                'idestudiante' => $idestudiante
+            ];
+
+            $registers = 'all';
+        }
+
+        $result = $this->getView($query, $where, $registers);
 
         return $result;
     }
     #endregion
 
-    #region public function viewEstudiante(int $idestudiante)
+    #region public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo)
+    public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo)
+    {
+        $query = "SELECT
+                    *
+                  FROM
+                    boleta_detalle_v
+                  WHERE
+                    idestudiante = :idestudiante
+                  AND
+                    idciclo = :idciclo
+                  ORDER BY
+                    desc_materia ASC";
+
+        $where = [
+            'idestudiante' => $idestudiante,
+            'idciclo' => $idciclo
+        ];
+
+        $registers = 'all';
+
+        $result = $this->getView($query, $where, $registers);
+
+        return $result;
+    }
+    #endregion
+
+    #region public function viewHorarioEstudiante(int $idestudiante)
     public function viewHorarioEstudiante(int $idestudiante, int $idciclo)
     {
-        $query = 'SELECT
+        $query = "SELECT
                     *
                   FROM
                     horario_estudiante_v
@@ -145,21 +193,23 @@ class EstudianteRepository extends BaseRepository
                   AND
                     idciclo = :idciclo
                   ORDER BY
-                    lunes, viernes, sabado';
+                    lunes, viernes, sabado";
 
         $where = [
             'idestudiante' => $idestudiante,
             'idciclo' => $idciclo
         ];
 
-        $result = $this->getView($query, $where);
+        $registers = 'all';
+
+        $result = $this->getView($query, $where, $registers);
 
         return $result;
     }
     #endregion
 
     #region public function listadoAlumnosGrupoCiclo($idciclo)
-    public function listadoAlumnosGrupoCiclos($idciclo)
+    public function listadoAlumnosCiclos($idciclo)
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -180,8 +230,116 @@ class EstudianteRepository extends BaseRepository
             'estudiantes.idestudiante' => SORT_ASC,
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function listaAlumnosEncabezadoCiclo(int $idgrupo, int $idciclo)
+    public function listaAlumnosEncabezado(int $idgrupo, int $idciclo)
+    {
+        $table = 'cat_carreras';
+        $select = [
+            'ciclo.desc_ciclo',
+            'cat_carreras.desc_carrera',
+            'cat_carreras.plan_estudios',
+            'grupos.desc_grupo',
+            'grupos.desc_grupo_corto',
+            'cat_materias.desc_materia'
+        ];
+        $joins = [
+            ['grupos', 'cat_carreras.idcarrera = grupos.idcarrera'],
+            ['ciclo', 'ciclo.idciclo = grupos.idciclo'],
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'one';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function listaAlumnosCuerpo(int $idgrupo, int $idciclo)
+    public function listaAlumnosCuerpo(int $idgrupo, int $idciclo)
+    {
+        $table = 'estudiantes';
+        $select = [
+            'estudiantes.idestudiante',
+            'estudiantes.nombre_estudiante',
+            'estudiantes.sexo',
+            'cat_opcion_curso.desc_opcion_curso',
+            'cat_materias.desc_materia'
+        ];
+        $joins = [
+            ['grupos_estudiantes', 'estudiantes.idestudiante = grupos_estudiantes.idestudiante'],
+            ['cat_opcion_curso', 'grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso'],
+            ['grupos', 'grupos_estudiantes.idgrupo = grupos.idgrupo'],
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos_estudiantes.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [
+            'estudiantes.nombre_estudiante' => SORT_ASC
+        ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    {
+        $table = 'estudiantes';
+        $select = [
+            'estudiantes.idestudiante',
+            'estudiantes.nombre_estudiante',
+            'grupos_estudiantes.p1', 'grupos_estudiantes.p2', 'grupos_estudiantes.p3',
+            'grupos_estudiantes.p4', 'grupos_estudiantes.p5', 'grupos_estudiantes.p6',
+            'grupos_estudiantes.p7', 'grupos_estudiantes.p8', 'grupos_estudiantes.p9',
+            'grupos_estudiantes.s1', 'grupos_estudiantes.s2', 'grupos_estudiantes.s3',
+            'grupos_estudiantes.s4', 'grupos_estudiantes.s5', 'grupos_estudiantes.s6',
+            'grupos_estudiantes.s7', 'grupos_estudiantes.s8', 'grupos_estudiantes.s9',
+            'grupos_estudiantes.sp1', 'grupos_estudiantes.sp2', 'grupos_estudiantes.sp3',
+            'grupos_estudiantes.sp4', 'grupos_estudiantes.sp5', 'grupos_estudiantes.sp6',
+            'grupos_estudiantes.sp7', 'grupos_estudiantes.sp8', 'grupos_estudiantes.sp9'
+        ];
+        $joins = [
+            ['grupos_estudiantes', 'estudiantes.idestudiante = grupos_estudiantes.idestudiante'],
+            ['cat_opcion_curso', 'grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso'],
+            ['grupos', 'grupos_estudiantes.idgrupo = grupos.idgrupo'],
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos_estudiantes.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [
+            'estudiantes.nombre_estudiante' => SORT_ASC
+        ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
