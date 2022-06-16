@@ -72,7 +72,7 @@ class EvaluaciondocenteController extends Controller
                         ],
                         [
                             //División de estudios tiene permisos sobre las siguientes acciones
-                            "actions" => [""],//Especificar que acciones tiene permitidas este usuario
+                            "actions" => ["index"],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             "allow" => true,
                             //Usuarios autenticados, el signo ? es para invitados
