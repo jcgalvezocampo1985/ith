@@ -2263,7 +2263,7 @@ class ReporteController extends Controller
         $sheet->setCellValue('B1', 'LIS_MAT');
         $sheet->setCellValue('C1', 'LIS_GPO');
 
-        $model = $this->estudianteRepository->listadoAlumnosGrupoCiclo($idciclo);
+        $model = $this->estudianteRepository->listadoAlumnosGruposPorCiclo($idciclo);
 
         $i = 2;
         foreach($model as $row)
