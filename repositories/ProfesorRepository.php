@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\profesor\Profesor;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class ProfesorRepository extends BaseRepository
 {
@@ -26,8 +26,21 @@ class ProfesorRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
+    #region public function __construct(Profesor $model)
     public function __construct(Profesor $model)
     {
         parent::__construct($model);
     }
+    #endregion
+
+    #region public function totalProfesor($idprofesor)
+    public function totalProfesor(int $idprofesor)
+    {
+        $total = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor])
+                             ->count();
+
+        return $total;
+    }
+    #endregion
 }

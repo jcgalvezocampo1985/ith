@@ -104,12 +104,12 @@ class CicloController extends Controller
     #endregion
 
     #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 CicloRepository $cicloRepository,
                                 GrupoRepository $grupoRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
         $this->grupoRepository = $grupoRepository;
     }

@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\actacalificacion\ActaCalificacion;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class ActaCalificacionRepository extends BaseRepository
 {
@@ -25,7 +25,7 @@ class ActaCalificacionRepository extends BaseRepository
     }
     #endregion
 
-    #region public function listadoAlumnosGrupoCiclo($idciclo)
+    #region public function getEstudianteCalificacionesCiclo($idestudiante, $idciclo)
     public function getEstudianteCalificacionesCiclo($idestudiante, $idciclo)
     {
         $table = 'actas_calificaciones';
@@ -57,19 +57,90 @@ class ActaCalificacionRepository extends BaseRepository
             'ciclo.idciclo' => SORT_DESC
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
     #endregion
 
-    #region public function totalRelacionEstudiantes($id)
+    #region public function totalRelacionEstudianteGrupo($idestudiante, $idgrupo)
     public function totalRelacionEstudianteGrupo($idestudiante, $idgrupo)
     {
         $total = $this->model->find()
                              ->where(['idestudiante' => $idestudiante, 'idgrupo' => $idgrupo])
                              ->count();
+        return $total;
+    }
+    #endregion
+
+    #region public function datosCuerpoActasCalificaciones(int $idgrupo)
+    public function datosCuerpoActasCalificaciones(int $idgrupo)
+    {
+        $table = 'actas_calificaciones';
+        $select = [
+            'estudiantes.sexo',
+            'actas_calificaciones.idestudiante',
+            'estudiantes.nombre_estudiante',
+            'actas_calificaciones.pri_opt', 
+            'actas_calificaciones.seg_opt',
+            '(CASE
+                WHEN actas_calificaciones.idopcion_curso = 2 THEN
+                "REP"
+                WHEN actas_calificaciones.idopcion_curso = 3 THEN
+                "ESP"
+                WHEN actas_calificaciones.idopcion_curso = 4 THEN
+                "DUAL"
+                WHEN actas_calificaciones.idopcion_curso = 5 THEN
+                "AUT" ELSE "ORD"
+            END) AS opc_curso',
+            '(SELECT lunes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS lunes',
+            '(SELECT martes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS martes',
+            '(SELECT miercoles FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS miercoles',
+            '(SELECT jueves FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS jueves',
+            '(SELECT viernes FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS viernes',
+            '(SELECT sabado FROM grupos WHERE idgrupo = actas_calificaciones.idgrupo) AS sabado'
+        ];
+        $joins = [
+            ['estudiantes', 'estudiantes.idestudiante = actas_calificaciones.idestudiante']
+        ];
+        $where = [
+            ['=', 'actas_calificaciones.idgrupo', $idgrupo]
+        ];
+        $orderBy = [
+            'estudiantes.nombre_estudiante' => SORT_ASC
+        ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function totalRelacionGrupos($id)
+    public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    {
+        $total = $this->model->find()
+                             ->where(['idgrupo' => $idgrupo, 'idestudiante' => $idestudiante])
+                             ->count();
+
+        return $total;
+    }
+    #endregion
+
+    #region public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    {
+        $total = $this->model->find()
+                             ->select('idacta_cal')
+                             ->where(['idgrupo' => $idgrupo, 'idestudiante' => $idestudiante])
+                             ->one();
+
         return $total;
     }
     #endregion

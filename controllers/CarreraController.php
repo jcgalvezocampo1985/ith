@@ -8,7 +8,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\data\Pagination;
 
 use app\models\User;
 use app\models\carrera\CarreraForm;
@@ -107,13 +106,13 @@ class CarreraController extends Controller
     #endregion
 
     #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 CarreraRepository $carreraRepository,
                                 GrupoRepository $grupoRepository,
                                 EstudianteRepository $estudianteRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->carreraRepository = $carreraRepository;
         $this->grupoRepository = $grupoRepository;
         $this->estudianteRepository = $estudianteRepository;

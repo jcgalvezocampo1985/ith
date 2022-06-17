@@ -8,7 +8,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
-//use app\helpers\MyGlobalFunctions;
 
 use app\models\User;
 use app\models\grupo\GrupoForm;
@@ -113,7 +112,7 @@ class GrupoController extends Controller
     #endregion
 
     #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module, 
                                 GrupoRepository $grupoRepository,
                                 CicloRepository $cicloRepository,
                                 GrupoEstudianteRepository $grupoEstudianteRepository,
@@ -122,7 +121,7 @@ class GrupoController extends Controller
                                 ProfesorRepository $profesorRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->grupoRepository = $grupoRepository;
         $this->cicloRepository = $cicloRepository;
         $this->grupoEstudianteRepository = $grupoEstudianteRepository;

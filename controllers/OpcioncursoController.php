@@ -8,11 +8,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\data\Pagination;
 
 use app\models\User;
-use app\models\grupoestudiante\GrupoEstudiante;
-use app\models\opcioncurso\OpcionCurso;
 use app\models\opcioncurso\OpcionCursoForm;
 use app\models\opcioncurso\OpcionCursoSearch;
 

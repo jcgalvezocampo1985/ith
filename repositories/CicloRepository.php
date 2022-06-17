@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\ciclo\Ciclo;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class CicloRepository extends BaseRepository
 {
@@ -23,8 +23,21 @@ class CicloRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
+    #region public function __construct(Ciclo $model)
     public function __construct(Ciclo $model)
     {
         parent::__construct($model);
     }
+    #endregion
+
+    #region public function totalCiclo(int $idciclo)
+    public function totalCiclo(int $idciclo)
+    {
+        $total = $this->model->find()
+                             ->where(['idciclo' => $idciclo])
+                             ->count();
+
+        return $total;
+    }
+    #endregion
 }

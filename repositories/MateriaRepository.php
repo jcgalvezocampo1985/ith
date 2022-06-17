@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\materia\Materia;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class MateriaRepository extends BaseRepository
 {
@@ -51,8 +51,10 @@ class MateriaRepository extends BaseRepository
         $groupBy = [
             'cat_materias.idmateria'
         ];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }

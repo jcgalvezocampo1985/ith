@@ -8,7 +8,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\data\Pagination;
 
 use app\models\User;
 use app\models\materia\MateriaForm;
@@ -105,12 +104,12 @@ class MateriaController extends Controller
     #endregion
 
     #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 MateriaRepository $materiaRepository,
                                 GrupoRepository $grupoRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->materiaRepository = $materiaRepository;
         $this->grupoRepository = $grupoRepository;
     }

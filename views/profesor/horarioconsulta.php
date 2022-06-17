@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php endif ?>
                                             <?php endif ?>
                                             <li><?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
-                                            <li><?= Html::a("Generar Acta", ["actacalificacion/generaracta?idgrupo=".$row["idgrupo"]."&idprofesor=".$idprofesor]) ?></li>
+                                            <li><?= Html::a("Generar Acta", ["actacalificacion/generaracta?idgrupo=".$row["idgrupo"]]) ?></li>
                                             <li><?= Html::a("Reporte Acta Calificaciones", ["reporte/actacalificaciones?idgrupo=".$row["idgrupo"]]) ?></li>
                                         </ul>
                                     </div>

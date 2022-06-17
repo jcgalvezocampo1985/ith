@@ -11,7 +11,6 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
-use app\models\estudiante\Estudiante;
 use app\models\estudiante\EstudianteForm;
 use app\models\estudiante\EstudianteSearch;
 use app\models\estudiante\EstudianteHorarioSearch;
@@ -252,8 +251,8 @@ class EstudianteController extends Controller
         {
             $idestudiante = $model->idestudiante;
             $email = $model->email;
-            $existe_idestudiante = Estudiante::find()->where(["idestudiante" => $idestudiante])->count();
-            $existe_email = Estudiante::find()->where(["email" => $email])->count();
+            $existe_idestudiante = $this->estudianteRepository->totalRegistros($idestudiante);// Estudiante::find()->where(["idestudiante" => $idestudiante])->count();
+            $existe_email = $this->estudianteRepository->existeEmail($email);//Estudiante::find()->where(["email" => $email])->count();
 
             if ($model->validate())
             {
@@ -313,21 +312,21 @@ class EstudianteController extends Controller
     #region public function actionEdit($idestudiante, $msg = '', $error = '')
     public function actionEdit($idestudiante, $msg = '', $error = '')
     {
-        $idestudiante = Html::encode($idestudiante);
-        $msg = Html::encode($msg);
-        $error = Html::encode($error);
-        $status = 1;
-
         if(Yii::$app->request->get())
         {
-            $model = new EstudianteForm;
-            $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
-            $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
-            $clave_estatus = ['VIG' => 'VIGENTE', 'BT' => 'BAJA TEMPORAL', 'BD' => 'BAJA DEFINITIVA', 'DES' => 'DESERTOR'];
-            $carrera = \MyGlobalFunctions::dropDownList($this->carreraRepository->listaRegistros(['desc_carrera' => SORT_ASC]), 'idcarrera', ['desc_carrera']);
+            $idestudiante = Html::encode($idestudiante);
+            $msg = Html::encode($msg);
+            $error = Html::encode($error);
+            $status = 1;
 
             if($idestudiante)
             {
+                $model = new EstudianteForm;
+                $sexo = ['M' => 'Masculino', 'F' => 'Femenino'];
+                $num_semestre = ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'];
+                $clave_estatus = ['VIG' => 'VIGENTE', 'BT' => 'BAJA TEMPORAL', 'BD' => 'BAJA DEFINITIVA', 'DES' => 'DESERTOR'];
+                $carrera = \MyGlobalFunctions::dropDownList($this->carreraRepository->listaRegistros(['desc_carrera' => SORT_ASC]), 'idcarrera', ['desc_carrera']);
+
                 $table = $this->estudianteRepository->get($idestudiante);
 
                 if($table)
@@ -367,11 +366,11 @@ class EstudianteController extends Controller
 
         if($model->load(Yii::$app->request->post()))
         {
-            $idestudiante = $model->idestudiante;
-            $msg = false;
-
             if($model->validate())
             {
+                $idestudiante = $model->idestudiante;
+                $msg = false;
+
                 $table = $this->estudianteRepository->get($idestudiante);
 
                 if ($table)

@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\profesorseguimiento\ProfesorSeguimiento;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class ProfesorSeguimientoRepository extends BaseRepository
 {
@@ -49,8 +49,10 @@ class ProfesorSeguimientoRepository extends BaseRepository
             'profesores.nombre_profesor' => SORT_ASC
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, true);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }

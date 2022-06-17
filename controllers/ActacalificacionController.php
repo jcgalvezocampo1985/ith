@@ -5,15 +5,19 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 
 use app\models\actacalificacion\ActaCalificacion;
-use app\models\grupoestudiante\GrupoEstudiante;
+
+use app\repositories\GrupoEstudianteRepository;
+use app\repositories\ActaCalificacionRepository;
 
 class ActacalificacionController extends Controller
 {
+    private $grupoEstudianteRepository;
+    private $actaCalificacionRepository;
+
     #region public function behaviors()
     public function behaviors()
     {
@@ -96,10 +100,22 @@ class ActacalificacionController extends Controller
     }
     #endregion
 
-    #region public function actionGeneraracta($idgrupo, $idprofesor)
-    public function actionGeneraracta($idgrupo, $idprofesor)
+    #region public function __construct()
+    public function __construct($id, $module,
+                                GrupoEstudianteRepository $grupoEstudianteRepository,
+                                ActacalificacionRepository $actaCalificacionRepository
+                                )
     {
-        $sql = GrupoEstudiante::find()->select("idestudiante,idopcion_curso,cve_estatus,idciclo,p1,p2,p3,p4,p5,p6,p7,p8,p9,s1,s2,s3,s4,s5,s6,s7,s8,s9")->where(["idgrupo" => $idgrupo])->all();
+        parent::__construct($id, $module);
+        $this->grupoEstudianteRepository = $grupoEstudianteRepository;
+        $this->actaCalificacionRepository = $actaCalificacionRepository;
+    }
+    #endregion
+
+    #region public function actionGeneraracta($idgrupo)
+    public function actionGeneraracta($idgrupo)
+    {
+        $sql = $this->grupoEstudianteRepository->consultarCalificacionesPorGrupo($idgrupo);
         $status = "";
         $msg = "";
 
@@ -151,7 +167,8 @@ class ActacalificacionController extends Controller
             //Identifica los parciales reprobados con NA, con este valor se discretiza si el promedio final es para primera o segunda oportunidad
             $verificar_oportunidad_calificacion = $this->vertificarOportunidadCalificacion($calificaciones_primera_oportunidad, $calificaciones_segunda_oportunidad, 1);
 
-            $existe = ActaCalificacion::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->count();
+            //$existe = ActaCalificacion::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->count();
+            $existe = $this->actaCalificacionRepository->totalRegistrosPorGrupoEstudiante($idgrupo, $idestudiante);
 
             if($existe == 0)
             {
@@ -171,7 +188,7 @@ class ActacalificacionController extends Controller
             }
             else
             {
-                $sql = ActaCalificacion::find()->select("idacta_cal")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->one();
+                $sql = $this->actaCalificacionRepository->selectIdPorGrupoEstudiante($idgrupo, $idestudiante);
                 $idacta_cal = $sql->idacta_cal;
 
                 $table = ActaCalificacion::findOne($idacta_cal);

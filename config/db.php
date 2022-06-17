@@ -1,7 +1,7 @@
 <?php
 
 //Local
-/* return [
+return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=ithuimanguillo',
     'username' => 'root',
@@ -12,13 +12,13 @@
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
-]; */
+];
 
 //Producción-Remoto
-return [
+/* return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=35.236.255.86;dbname=ithuimanguillo',
     'username' => 'ithuimanguillo',
     'password' => 'ithui$21',
     'charset' => 'utf8',
-];
+]; */

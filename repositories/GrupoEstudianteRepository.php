@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\grupoestudiante\GrupoEstudiante;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class GrupoEstudianteRepository extends BaseRepository
 {
@@ -107,8 +107,10 @@ class GrupoEstudianteRepository extends BaseRepository
             'cat_materias.desc_materia' => SORT_ASC
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
@@ -131,8 +133,10 @@ class GrupoEstudianteRepository extends BaseRepository
         ];
         $orderBy = [];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
@@ -144,6 +148,17 @@ class GrupoEstudianteRepository extends BaseRepository
         $total = $this->model->deleteAll(['idestudiante' => $idestudiante, 'idgrupo' => $idgrupo]);
 
         return $total;
+    }
+    #endregion
+
+    #region public function consultarCalificacionesPorGrupo($idgrupo)
+    public function consultarCalificacionesPorGrupo($idgrupo)
+    {
+        $query = $this->model->find()
+                             ->where(['idgrupo' => $idgrupo])
+                             ->all();
+
+        return $query;
     }
     #endregion
 }

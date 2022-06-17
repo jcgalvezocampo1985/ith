@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\opcioncurso\OpcionCurso;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class OpcionCursoRepository extends BaseRepository
 {

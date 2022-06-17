@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\estudiante\Estudiante;
 
-use app\Repositories\BaseRepository;
+use app\repositories\BaseRepository;
 
 class EstudianteRepository extends BaseRepository
 {
@@ -342,6 +342,68 @@ class EstudianteRepository extends BaseRepository
         $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
+    }
+    #endregion
+
+    #region public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    public function listaAlumnosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    {
+        $table = 'estudiantes';
+        $select = [
+            'estudiantes.idestudiante',
+            'estudiantes.nombre_estudiante',
+            'cat_materias.desc_materia',
+            'grupos_estudiantes.p1', 'grupos_estudiantes.p2', 'grupos_estudiantes.p3',
+            'grupos_estudiantes.p4', 'grupos_estudiantes.p5', 'grupos_estudiantes.p6',
+            'grupos_estudiantes.p7', 'grupos_estudiantes.p8', 'grupos_estudiantes.p9',
+            'grupos_estudiantes.s1', 'grupos_estudiantes.s2', 'grupos_estudiantes.s3',
+            'grupos_estudiantes.s4', 'grupos_estudiantes.s5', 'grupos_estudiantes.s6',
+            'grupos_estudiantes.s7', 'grupos_estudiantes.s8', 'grupos_estudiantes.s9',
+            'grupos_estudiantes.sp1', 'grupos_estudiantes.sp2', 'grupos_estudiantes.sp3',
+            'grupos_estudiantes.sp4', 'grupos_estudiantes.sp5', 'grupos_estudiantes.sp6',
+            'grupos_estudiantes.sp7', 'grupos_estudiantes.sp8', 'grupos_estudiantes.sp9'
+        ];
+        $joins = [
+            ['grupos_estudiantes', 'estudiantes.idestudiante = grupos_estudiantes.idestudiante'],
+            ['grupos', 'grupos_estudiantes.idgrupo = grupos.idgrupo'],
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos_estudiantes.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [
+            'estudiantes.nombre_estudiante' => SORT_ASC
+        ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function totalRegistros($idestudiante)
+    public function totalRegistros(int $idestudiante)
+    {
+        $total = $this->model->find()
+                             ->where(['idestudiante' => $idestudiante])
+                             ->count();
+
+        return $total;
+    }
+    #endregion
+
+    #region public function existeEmail(string $email)
+    public function existeEmail(string $email)
+    {
+        $total = $this->model->find()
+                             ->where(['email' => $email])
+                             ->count();
+
+        return $total;
     }
     #endregion
 }
