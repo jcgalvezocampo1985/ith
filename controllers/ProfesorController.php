@@ -443,7 +443,7 @@ class ProfesorController extends Controller
                     $table1 = Usuario::findOne($usuario->idusuario);
                     $table1->email = $model->email;
                     $table1->password = crypt($model->password, Yii::$app->params['salt']);
-                    $table1->update()
+                    $table1->update();
 
                     if($this->profesorRepository->update($model, $idprofesor))
                     {
