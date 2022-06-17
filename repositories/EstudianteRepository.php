@@ -208,7 +208,7 @@ class EstudianteRepository extends BaseRepository
     }
     #endregion
 
-    #region public function listadoAlumnosGruposCiclo($idciclo)
+    #region public function listadoAlumnosGruposPorCiclo(int $idciclo)
     public function listadoAlumnosGruposPorCiclo(int $idciclo)
     {
         $table = 'grupos_estudiantes';
