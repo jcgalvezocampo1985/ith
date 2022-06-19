@@ -134,3 +134,33 @@ $idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
         <b><?= $msg ?></b>
     </div>
 <?php endif ?>
+
+<?php
+$this->registerJs('
+    $("#horario_agregar").on("click", function(e) {
+        e.preventDefault();
+
+        var valor_url = $(this).attr("href");
+        var url = valor_url.split("=")[0];
+        var idestudiante = valor_url.split("=")[1];
+        var idciclo = valor_url.split("=")[2];
+        var idcarrera = valor_url.split("=")[3];
+alert(url);
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                "idcarrera": idcarrera,
+                "idestudiante": idestudiante,
+                "idciclo": idciclo
+            },
+            beforeSend: function() {
+                $("#alumno_horario_agregar").empty();
+            },
+            success: function(respuesta) {
+                $("#alumno_horario_agregar").html(respuesta);
+            }
+        });
+    });
+');
+?>

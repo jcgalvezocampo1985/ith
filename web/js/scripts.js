@@ -8,7 +8,7 @@ $(".eliminar_materia").on("click", function(e) {
     }
 });
 
-$("#horario_agregar").on("click", function(e) {
+/* $("#horario_agregar").on("click", function(e) {
     e.preventDefault();
 
     var valor_url = $(this).attr("href");
@@ -32,7 +32,7 @@ $("#horario_agregar").on("click", function(e) {
             $('#alumno_horario_agregar').html(respuesta);
         }
     });
-});
+}); */
 
 $('#materias').on('hidden.bs.modal', function(e) {
     e.preventDefault;
@@ -105,6 +105,7 @@ $("#refrecar_lista_materia").on("click", function(e) {
             $('#alumno_horario_agregar').empty();
         },
         success: function(data) {
+
             $('#alumno_horario_agregar').html(data);
         }
     });
