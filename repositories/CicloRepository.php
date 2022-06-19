@@ -40,4 +40,13 @@ class CicloRepository extends BaseRepository
         return $total;
     }
     #endregion
+
+    #region public function listaAlumnosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    public function consultaDatosCiclo(int $idciclo)
+    {
+        return $this->model->find()
+                           ->where(['idciclo' => $idciclo])
+                           ->one();
+    }
+    #endregion
 }

@@ -33,7 +33,7 @@ class ProfesorRepository extends BaseRepository
     }
     #endregion
 
-    #region public function totalProfesor($idprofesor)
+    #region public function totalProfesor(int $idprofesor)
     public function totalProfesor(int $idprofesor)
     {
         $total = $this->model->find()
@@ -41,6 +41,66 @@ class ProfesorRepository extends BaseRepository
                              ->count();
 
         return $total;
+    }
+    #endregion
+
+    #region public function datosProfesorPorCurp(string $curp)
+    public function datosProfesorPorCurp(string $curp)
+    {
+        $total = $this->model->find()
+                             ->where(['curp' => $curp])
+                             ->One();
+
+        return $total;
+    }
+    #endregion
+
+    #region public function viewHorarioProfesorPorCiclo(int $idprofesor, int $idciclo)
+    public function viewHorarioProfesorPorCiclo(int $idprofesor, int $idciclo)
+    {
+        $query = "SELECT
+                    *
+                  FROM
+                    horario_profesor_v
+                  WHERE
+                    idprofesor = :idprofesor
+                  AND
+	                idciclo = :idciclo
+                  ORDER BY
+                    lunes, viernes, sabado";
+
+        $where = [
+            'idprofesor' => $idprofesor,
+            'idciclo' => $idciclo
+        ];
+
+        $registers = 'all';
+
+        $result = $this->getView($query, $where, $registers);
+
+        return $result;
+    }
+    #endregion
+
+    #region public function viewHorarioProfesor()
+    public function viewHorarioProfesor()
+    {
+        $query = "SELECT
+                    *
+                  FROM
+                    horario_profesor_v
+                  WHERE
+                    idprofesor = null
+                  ORDER BY
+                    lunes, viernes, sabado";
+
+        $where = [];
+
+        $registers = 'all';
+
+        $result = $this->getView($query, $where, $registers);
+
+        return $result;
     }
     #endregion
 }

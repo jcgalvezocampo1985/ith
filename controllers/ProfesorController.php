@@ -3,35 +3,39 @@
 namespace app\controllers;
 
 use Yii;
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\web\Response;
+use yii\web\Controller;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\web\Controller;
-use yii\web\Response;
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
-use yii\data\Pagination;
-
 use Carbon\Carbon;
 
+use app\models\User;
+use app\models\login\RolUsuario;
 use app\models\profesor\Profesor;
-use app\models\profesor\ProfesorForm;
-use app\models\profesor\ProfesorSearch;
 use app\models\ciclo\Ciclo;
-use app\models\ciclo\CicloSearch;
-use app\models\ciclo\CicloProfesorSearch;
 use app\models\grupo\Grupo;
 use app\models\grupoestudiante\GrupoEstudiante;
 use app\models\profesorseguimiento\ProfesorSeguimiento;
-use app\models\login\Usuario;
-use app\models\login\RolUsuario;
-use app\models\User;
 
-use app\repositories\ProfesorRepository;
+use app\models\ciclo\CicloSearch;
+use app\models\profesor\ProfesorForm;
+use app\models\profesor\ProfesorSearch;
+use app\models\ciclo\CicloProfesorSearch;
+
 use app\repositories\CicloRepository;
+use app\repositories\GrupoRepository;
+use app\repositories\CarreraRepository;
 use app\repositories\UsuarioRepository;
+use app\repositories\ProfesorRepository;
+use app\repositories\EstudianteRepository;
 use app\repositories\RolUsuarioRepository;
+use app\repositories\ProfesorSeguimientoRepository;
+use app\repositories\GrupoEstudianteRepository;
 
 class ProfesorController extends Controller
 {
@@ -39,6 +43,11 @@ class ProfesorController extends Controller
     private $cicloRepository;
     private $usuarioRepository;
     private $rolUsuarioRepository;
+    private $grupoRepository;
+    private $profesorSeguimientoRepository;
+    private $estudianteRepository;
+    private $carreraRepository;
+    private $grupoEstudianteRepository;
 
     #region public function behaviors()
     public function behaviors()
@@ -187,7 +196,12 @@ class ProfesorController extends Controller
                                 ProfesorRepository $profesorRepository,
                                 CicloRepository $cicloRepository,
                                 UsuarioRepository $usuarioRepository,
-                                RolUsuarioRepository $rolUsuarioRepository
+                                RolUsuarioRepository $rolUsuarioRepository,
+                                GrupoRepository $grupoRepository,
+                                ProfesorSeguimientoRepository $profesorSeguimientoRepository,
+                                EstudianteRepository $estudianteRepository,
+                                CarreraRepository $carreraRepository,
+                                GrupoEstudianteRepository $grupoEstudianteRepository
                                 )
     {
         parent::__construct($id, $module);
@@ -195,6 +209,11 @@ class ProfesorController extends Controller
         $this->cicloRepository = $cicloRepository;
         $this->usuarioRepository = $usuarioRepository;
         $this->rolUsuarioRepository = $rolUsuarioRepository;
+        $this->grupoRepository = $grupoRepository;
+        $this->profesorSeguimientoRepository = $profesorSeguimientoRepository;
+        $this->estudianteRepository = $estudianteRepository;
+        $this->carreraRepository = $carreraRepository;
+        $this->grupoEstudianteRepository = $grupoEstudianteRepository;
     }
     #endregion
 
@@ -304,8 +323,8 @@ class ProfesorController extends Controller
                             'accessToken' => '',
                             'activate' => 1,
                             'curp' => $model->curp,
-                            'fecha_registro' => Carbon::parse(strtotime($model->fecha_registro))->format('Y-m-d'),
-                            'fecha_actualizacion' => Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d'),
+                            'fecha_registro' => $model->fecha_registro,
+                            'fecha_actualizacion' => $model->fecha_actualizacion,
                             'verification_code' => ''                           
                         ];
 
@@ -318,45 +337,45 @@ class ProfesorController extends Controller
 
                             if($this->rolUsuarioRepository->store($model2))
                             {
-                                $msg = "Profesor agregado";
+                                $msg = 'Profesor agregado';
                                 $error = 1;
                             }
                             else
                             {
-                                $msg = "Ocurrió un error al intentar agregar el profesor, intenta nuevamente";
+                                $msg = 'Ocurrió un error al intentar agregar el profesor, intenta nuevamente';
                                 $error = 3;
                             }
                         }
                         else
                         {
-                            $msg = "Ocurrió un error al intentar agregar el profesor, intenta nuevamente";
+                            $msg = 'Ocurrió un error al intentar agregar el profesor, intenta nuevamente';
                             $error = 3;
                         }
                     }
                     else
                     {
-                        $msg = "Ocurrió un error al intentar agregar el profesor, intenta nuevamente";
+                        $msg = 'Ocurrió un error al intentar agregar el profesor, intenta nuevamente';
                         $error = 3;
                     }
                 }
                 else
                 {
-                    $msg = "Usuario ya existe";
+                    $msg = 'Usuario ya existe';
                     $error = 3;
                 }
 
                 $modelo = [
-                    "idprofesor" => $model->idprofesor,
-                    "curp" => $model->curp,
-                    "nombre_profesor" => $model->nombre_profesor,
-                    "apaterno" => $model->apaterno,
-                    "amaterno" => $model->amaterno,
-                    "fecha_registro" => $model->fecha_registro,
-                    "fecha_actualizacion" => $model->fecha_actualizacion,
-                    "cve_estatus" => $model->cve_estatus
+                    'idprofesor' => $model->idprofesor,
+                    'curp' => $model->curp,
+                    'nombre_profesor' => $model->nombre_profesor,
+                    'apaterno' => $model->apaterno,
+                    'amaterno' => $model->amaterno,
+                    'fecha_registro' => $model->fecha_registro,
+                    'fecha_actualizacion' => $model->fecha_actualizacion,
+                    'cve_estatus' => $model->cve_estatus
                 ];
 
-                return $this->redirect(["profesor/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
+                return $this->redirect(['profesor/create', 'msg' => $msg, 'error' => $error, 'modelo' => $modelo]);
             }
             else
             {
@@ -365,7 +384,7 @@ class ProfesorController extends Controller
         }
         else
         {
-            return $this->redirect(["profesor/index"]);
+            return $this->redirect(['profesor/index']);
         }
     }
     #endregion
@@ -415,7 +434,6 @@ class ProfesorController extends Controller
     public function actionUpdate()
     {
         $model = new ProfesorForm;
-        
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax)
         {
@@ -437,40 +455,43 @@ class ProfesorController extends Controller
                 {
                     $error = 1;
 
-                    //$idusuario = Usuario::find()->select("idusuario")->where(["curp" => $model->curp])->one();
                     $usuario = $this->usuarioRepository->consultarUsuarioPorCurp($model->curp);
+                    $idusuario = $usuario->idusuario;
 
-                    $table1 = Usuario::findOne($usuario->idusuario);
-                    $table1->email = $model->email;
-                    $table1->password = crypt($model->password, Yii::$app->params['salt']);
-                    $table1->update();
+                    $model1 = [
+                        'idusuario' => $idusuario,
+                        'nombre_usuario' => $model->curp,
+                        'email' => $model->email,
+                        'password' => crypt($model->password, Yii::$app->params['salt']),
+                        'cve_estatus' => $model->cve_estatus,
+                        'authKey' => '',
+                        'accessToken' => '',
+                        'activate' => 1,
+                        'curp' => $model->curp,
+                        'fecha_registro' => $model->fecha_registro,
+                        'fecha_actualizacion' => $model->fecha_actualizacion,
+                        'verification_code' => ''                           
+                    ];
 
                     if($this->profesorRepository->update($model, $idprofesor))
                     {
-                        if($table->update() || $table1->update())
+                        if($this->usuarioRepository->update($model1, $idusuario))
                         {
-                            $msg = "Registro actualizado";
+                            $msg = 'Registro actualizado';
                         }
                         else
                         {
-                            $msg = "No detectaron cambios en el registro";
+                            $msg = 'No detectaron cambios en el registro';
                         }
                     }
                     else
                     {
-                        $msg = "No detectaron cambios en el registro";
+                        $msg = 'No detectaron cambios en el registro';
                     }
-
-                    /* s$table->curp = $model->curp;
-                    $table->nombre_profesor = $model->nombre_profesor;
-                    $table->apaterno = $model->apaterno;
-                    $table->amaterno = $model->amaterno;
-                    $table->fecha_actualizacion = $model->fecha_actualizacion; //Carbon::parse(strtotime($model->fecha_actualizacion))->format('Y-m-d');
-                    $table->cve_estatus = $model->cve_estatus; */
                 }
                 else
                 {
-                    $msg = "Profesor no encontrado";
+                    $msg = 'Profesor no encontrado';
                     $error = 2;
                 }
             }
@@ -478,11 +499,11 @@ class ProfesorController extends Controller
             {
                 return $this->getErrors();
             }
-            return $this->redirect(["profesor/edit", "idprofesor" => $idprofesor, "msg" => $msg, "error" => $error]);
+            return $this->redirect(['profesor/edit', 'idprofesor' => $idprofesor, 'msg' => $msg, 'error' => $error]);
         }
         else
         {
-            return $this->redirect(["profesor/index"]);
+            return $this->redirect(['profesor/index']);
         }
     }
     #endregion
@@ -494,52 +515,50 @@ class ProfesorController extends Controller
         {
             $idprofesor = Html::encode($_POST["idprofesor"]);
 
-            $total_relacion = Grupo::find()
-                                    ->where(["idprofesor" => $idprofesor])
-                                    ->count();
+            $total_relacion = $this->grupoRepository->totalRelacionProfesores($idprofesor);
 
             if($total_relacion == 0)
             {
-                if(Profesor::deleteAll("idprofesor=:idprofesor", [":idprofesor" => $idprofesor]))
+                if($this->profesorRepository->destroy($idprofesor))
                 {
                     $error = 1;
-                    $msg = "Registro eliminado";
+                    $msg = 'Registro eliminado';
                 }
                 else
                 {
                     $error = 3;
-                    $msg = "Error al eliminar el registro";
+                    $msg = 'Error al eliminar el registro';
                 }
             }
             else
             {
                 $error = 3;
-                $msg = "El registro no puede ser eliminado, debido a que contiene información relacionada";
+                $msg = 'El registro no puede ser eliminado, debido a que contiene información relacionada';
             }
-            header("Location: ".Url::toRoute("/profesor/index?msg=$msg&error=$error"));
+            header('Location: '.Url::toRoute('/profesor/index?msg='.$msg.'&error='.$error));
             exit;
         }
         else
         {
-            return $this->redirect(["profesor/index"]);
+            return $this->redirect(['profesor/index']);
         }
     }
     #endregion
 
-    #region public function actionHorario()
+    #region public function actionHorario()//Este método lo utiliza el profesor logueado
     public function actionHorario()
     {
         $form = new CicloSearch;
-        $idciclo = Ciclo::find()->max("idciclo");
+        $idciclo = $this->cicloRepository->maxId();
         $ultimo_ciclo = $idciclo;
-        $ciclo = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+        $ciclo = $this->cicloRepository->consultaDatosCiclo($idciclo);
 
         $curp = Html::encode(Yii::$app->user->identity->curp);
-        $sql_profesor = Profesor::find()->where(["curp" => $curp])->One();
+        $sql_profesor = $this->profesorRepository->datosProfesorPorCurp($curp);
         $idprofesor = $sql_profesor->idprofesor;
 
-        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), "idciclo", "desc_ciclo");
- 
+        $ciclos = \MyGlobalFunctions::dropDownList($this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]), 'idciclo', ['desc_ciclo']);
+
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
@@ -552,84 +571,36 @@ class ProfesorController extends Controller
             }
         }
 
-        $sql = "SELECT
-                    *
-                FROM
-                    horario_profesor_v
-                WHERE
-                    idprofesor = :idprofesor
-                AND
-	                idciclo = :idciclo
-                ORDER BY
-                    lunes, viernes, sabado";
-        $model = Yii::$app->db->createCommand($sql)
-                              ->bindValue(":idprofesor", $idprofesor)
-                              ->bindValue(":idciclo", $idciclo)
-                              ->queryAll();
+        $model = $this->profesorRepository->viewHorarioProfesorPorCiclo($idprofesor, $idciclo);
 
         $ciclo_actual = ($idciclo) ? ((count($model) > 0) ? $model[0]["desc_ciclo"] : $ciclo["desc_ciclo"]) : $ciclo->desc_ciclo;
-        $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
-        $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
-        $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
-        $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
-        $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
 
-        return $this->render("horario", ["model" => $model,
-                             "form" => $form,
-                             "ciclos" => $ciclos,
-                             "idciclo" => $idciclo,
-                             "idprofesor" => $idprofesor,
-                             "ciclo_actual" => $ciclo_actual,
-                             "ultimo_ciclo" => $ultimo_ciclo,
-                             "regularizacion_status" => $regularizacion_status,
-                             "seguimiento1" => $seguimiento1,
-                             "seguimiento2" => $seguimiento2,
-                             "seguimiento3" => $seguimiento3,
-                             "seguimiento4" => $seguimiento4
-                             ]);
+        $regularizacion_status = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($idciclo, $idprofesor, 5, 1);
+        $seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($idciclo, $idprofesor, 1, 1);
+        $seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($idciclo, $idprofesor, 2, 1);
+        $seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($idciclo, $idprofesor, 3, 1);
+        $seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($idciclo, $idprofesor, 4, 1);
+
+        return $this->render('horario', compact('model', 'form', 'ciclos', 'idciclo', 'idprofesor', 'ciclo_actual', 'ultimo_ciclo', 'regularizacion_status', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4'));
     }
     #endregion
 
     #region public function actionListaalumnos()
-    public function actionListaalumnos()
+    public function actionListaalumnos()//Imprime la lista de alumnos en pantalla
     {
         $this->layout = 'main1';//Cambio de layout
 
-        if(Yii::$app->request->get("idgrupo"))
+        if(Yii::$app->request->get('idgrupo'))
         {
 
-            $idgrupo = Html::encode($_GET["idgrupo"]);
-            $idciclo = (Html::encode($_GET["idciclo"]) == "") ? Ciclo::find()->max("idciclo") : Html::encode($_GET["idciclo"]);
+            $idgrupo = Html::encode($_GET['idgrupo']);
+            $idciclo = (Html::encode($_GET['idciclo']) == "") ? $this->cicloRepository->maxId() : Html::encode($_GET['idciclo']);
 
-            $model = (new \yii\db\Query())
-                            ->from(["estudiantes"])
-                            ->select([
-                                "estudiantes.idestudiante",
-    	                        "estudiantes.nombre_estudiante",
-	                            "estudiantes.sexo",
-	                            "cat_opcion_curso.desc_opcion_curso"
-                            ])
-                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->all();
+            $model = $this->estudianteRepository->listaAlumnosCuerpo($idgrupo, $idciclo);
 
-            $model1 = (new \yii\db\Query())
-                            ->from(["cat_carreras"])
-                            ->select([
-                                    "cat_materias.desc_materia",
-    	                            "cat_carreras.desc_carrera"
-                            ])
-                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
-                            ->where(["grupos.idgrupo" => $idgrupo])
-                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
-                            ->all();
+            $model1 = $this->carreraRepository->datosMateriasCarreraPorGrupoCiclo($idgrupo, $idciclo);
 
-            return $this->render("listaAlumnos", ["model" => $model, "model1" => $model1, "idciclo" => $idciclo, "idgrupo" => $idgrupo]);
+            return $this->render('listaAlumnos', compact('model', 'model1', 'idciclo', 'idgrupo'));
         }
     }
     #endregion
@@ -638,112 +609,49 @@ class ProfesorController extends Controller
     public function actionHorarioconsulta()
     {
         $form = new CicloProfesorSearch;
-        $ciclo = null;
+
+        $ciclo_actual = null;
         $idciclo = null;
         $idprofesor = null;
-        $profesores = ArrayHelper::map(Profesor::find()->orderBy(["apaterno" => SORT_ASC, "amaterno" => SORT_ASC, "nombre_profesor" => SORT_ASC])->asArray()->all(),'idprofesor', function($model){
-            return $model['apaterno']." ".$model['amaterno']." ".$model['nombre_profesor'];
-        });
-        $ciclos = ArrayHelper::map(Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all(), 'idciclo', 'desc_ciclo');
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
         $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
 
-        if($form->load(Yii::$app->request->get()))
+        $profesores = \MyGlobalFunctions::dropDownList($this->profesorRepository->listaRegistros(['apaterno' => SORT_ASC, 'amaterno' => SORT_ASC, 'nombre_profesor' => SORT_ASC]), 'idprofesor', ['apaterno', 'amaterno', 'nombre_profesor']);
+        $ciclos = \MyGlobalFunctions::dropDownList($this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]), 'idciclo', ['desc_ciclo']);
+        $model = $this->profesorRepository->viewHorarioProfesor();
+
+        if($form->load(Yii::$app->request->get()) || Yii::$app->request->get())
         {
             if($form->validate())
             {
                 $idciclo = Html::encode($form->idciclo);
                 $idprofesor = Html::encode($form->idprofesor);
 
-                $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
-                $ciclo = $sql['desc_ciclo'];
+                $sql = $this->cicloRepository->consultaDatosCiclo($idciclo);
+                $ciclo_actual = $sql['desc_ciclo'];
 
-                $sql = "SELECT
-                            *
-                        FROM
-                            horario_profesor_v
-                        WHERE
-                            idprofesor = :idprofesor
-                        AND
-                            idciclo = :idciclo
-                        ORDER BY
-                            lunes, viernes, sabado";
-                $model = Yii::$app->db->createCommand($sql)
-                                      ->bindValue(':idprofesor', $idprofesor)
-                                      ->bindValue(':idciclo', $idciclo)
-                                      ->queryAll();
+                $model = $this->profesorRepository->viewHorarioProfesorPorCiclo($idprofesor, $idciclo);
             }
             else
             {
                 $form->getErrors();
             }
         }
-        else if(Yii::$app->request->get())
-        {
-            $idciclo = Html::encode($_GET["idciclo"]);
-            $idprofesor = Html::encode($_GET["idprofesor"]);
 
-            $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
-            $ciclo = $sql['desc_ciclo'];
+        $ultimo_ciclo = $this->cicloRepository->maxId();
 
-                $sql = "SELECT
-                            *
-                        FROM
-                            horario_profesor_v
-                        WHERE
-                            idprofesor = :idprofesor
-                        AND
-                            idciclo = :idciclo
-                        ORDER BY
-                            lunes, viernes, sabado";
-                $model = Yii::$app->db->createCommand($sql)
-                                      ->bindValue(':idprofesor', $idprofesor)
-                                      ->bindValue(':idciclo', $idciclo)
-                                      ->queryAll();
-        }
-        else
-        {
-            $sql = "SELECT
-                        *
-                    FROM
-                        horario_profesor_v
-                    WHERE
-                        idprofesor = null
-                    ORDER BY
-                        lunes, viernes, sabado";
-            $model = Yii::$app->db->createCommand($sql)
-                                  ->queryAll();
-        }
+        $regularizacion_status = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 5, 1);
+        $seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 1, 1);
+        $seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 2, 1);
+        $seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 3, 1);
+        $seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 4, 1);
 
-        $ultimo_ciclo = Ciclo::find()->max("idciclo");
-        $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
-
-        $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
-        $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
-        $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
-        $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count();
-
-        return $this->render("horarioconsulta", ["model" => $model,
-                                                "form" => $form,
-                                                "ciclos" => $ciclos,
-                                                "idciclo" => $idciclo,
-                                                "ciclo_actual" => $ciclo,
-                                                "idprofesor" => $idprofesor,
-                                                "profesores" => $profesores,
-                                                "ultimo_ciclo" => $ultimo_ciclo,
-                                                "regularizacion_status" => $regularizacion_status,
-                                                "seguimiento1" => $seguimiento1,
-                                                "seguimiento2" => $seguimiento2,
-                                                "seguimiento3" => $seguimiento3,
-                                                "seguimiento4" => $seguimiento4,
-                                                "msg" => $msg,
-                                                "error" => $error
-                                            ]);
+        return $this->render('horarioconsulta', compact('model', 'form', 'msg', 'error', 'ciclos', 'idciclo', 'ciclo_actual', 'idprofesor', 'profesores', 'ultimo_ciclo', 'regularizacion_status', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4'));
     }
     #endregion
 
     #region public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
-    public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    /* public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
         {
@@ -823,101 +731,11 @@ class ProfesorController extends Controller
                                                               "ultimo_ciclo" => $ultimo_ciclo,
                                                               "ultimo_seguimiento" => $ultimo_seguimiento]);
         }
-    }
-    #endregion
-
-    #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
-    public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
-    {
-        if(isset($idgrupo))
-        {
-            $idgrupo = Html::encode($idgrupo);
-            $idprofesor = Html::encode($idprofesor);
-            $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
-            $ultimo_ciclo = Html::encode($ultimo_ciclo);
-
-            $model = (new \yii\db\Query())
-                            ->from(["estudiantes"])
-                            ->select([
-                                "estudiantes.idestudiante",
-    	                        "estudiantes.nombre_estudiante",
-	                            "estudiantes.sexo",
-	                            "cat_opcion_curso.desc_opcion_curso",
-                                "grupos_estudiantes.p1",
-	                            "grupos_estudiantes.p2",
-	                            "grupos_estudiantes.p3",
-	                            "grupos_estudiantes.p4",
-	                            "grupos_estudiantes.p5",
-	                            "grupos_estudiantes.p6",
-	                            "grupos_estudiantes.p7",
-	                            "grupos_estudiantes.p8",
-	                            "grupos_estudiantes.p9",
-	                            "grupos_estudiantes.s1",
-	                            "grupos_estudiantes.s2",
-	                            "grupos_estudiantes.s3",
-	                            "grupos_estudiantes.s4",
-	                            "grupos_estudiantes.s5",
-	                            "grupos_estudiantes.s6",
-	                            "grupos_estudiantes.s7",
-	                            "grupos_estudiantes.s8",
-	                            "grupos_estudiantes.s9",
-                                "grupos_estudiantes.sp1",
-	                            "grupos_estudiantes.sp2",
-	                            "grupos_estudiantes.sp3",
-	                            "grupos_estudiantes.sp4",
-	                            "grupos_estudiantes.sp5",
-	                            "grupos_estudiantes.sp6",
-	                            "grupos_estudiantes.sp7",
-	                            "grupos_estudiantes.sp8",
-	                            "grupos_estudiantes.sp9"
-                            ])
-                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->all();
-
-            $model1 = (new \yii\db\Query())
-                            ->from(["cat_carreras"])
-                            ->select([
-                                    "cat_materias.desc_materia",
-    	                            "cat_carreras.desc_carrera",
-                                    "grupos.num_semestre",
-                                    "grupos.desc_grupo",
-                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
-                            ])
-                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
-                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
-                            ->where(["grupos.idgrupo" => $idgrupo])
-                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
-                            ->all();
-
-            //$regular = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
-
-            $seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 1, "bandera" => 1])->count();
-            $seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 2, "bandera" => 1])->count();
-            $seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 3, "bandera" => 1])->count();
-            $seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 4, "bandera" => 1])->count(); 
-
-            return $this->render("listaAlumnosCalificacionSeguimientos", ["model" => $model,
-                                                                          "model1" => $model1,
-                                                                          "idciclo" => $idciclo,
-                                                                          "idgrupo" => $idgrupo,
-                                                                          "idprofesor" => $idprofesor,
-                                                                          "seguimiento1" => $seguimiento1,
-                                                                          "seguimiento2" => $seguimiento2,
-                                                                          "seguimiento3" => $seguimiento3,
-                                                                          "seguimiento4" => $seguimiento4,
-                                                                          "ultimo_ciclo" => $ultimo_ciclo]);
-        }
-    }
+    } */
     #endregion
 
     #region public function actionGuardarcalificacion()
-    public function actionGuardarcalificacion()
+    /* public function actionGuardarcalificacion()
     {
         if(Yii::$app->request->post())
         {
@@ -1003,7 +821,7 @@ class ProfesorController extends Controller
                     $table->sp8 = $sp8;
                     $table->sp9 = $sp9;
 
-                    /** Asigna calificaciones para calificaciones de repetición */
+                    // Asigna calificaciones para calificaciones de repetición
                     $table->s1 = ($p1 == "NA") ? $p1 : "";
                     $table->s2 = ($p2 == "NA") ? $p2 : "";
                     $table->s3 = ($p3 == "NA") ? $p3 : "";
@@ -1021,6 +839,30 @@ class ProfesorController extends Controller
             header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
             exit;
         }
+    } */
+    #endregion
+
+    #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
+    {
+        if(isset($idgrupo))
+        {
+            $idgrupo = Html::encode($idgrupo);
+            $idprofesor = Html::encode($idprofesor);
+            $idciclo = (Html::encode($idciclo) == '') ? $this->cicloRepository->maxId() : Html::encode($idciclo);
+            $ultimo_ciclo = Html::encode($ultimo_ciclo);
+
+            $model = $this->estudianteRepository->calificacionesPorGrupoCiclo((int)$idgrupo, (int)$idciclo);
+
+            $model1 = $this->carreraRepository->datosCalificacionesPorGrupoCiclo((int)$idgrupo, (int)$idciclo);
+            
+            $seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($ultimo_ciclo, $idprofesor, 1, 1);
+            $seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($ultimo_ciclo, $idprofesor, 2, 1);
+            $seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($ultimo_ciclo, $idprofesor, 3, 1);
+            $seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera($ultimo_ciclo, $idprofesor, 4, 1);
+
+            return $this->render('listaAlumnosCalificacionSeguimientos', compact('model', 'model1', 'idciclo', 'idgrupo', 'idprofesor', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4', 'ultimo_ciclo'));
+        }
     }
     #endregion
 
@@ -1029,30 +871,30 @@ class ProfesorController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $idgrupo = Html::encode($_POST["idgrupo"]);
-            $idciclo = Html::encode($_POST["idciclo"]);
-            $idprofesor = Html::encode($_POST["idprofesor"]);
-            $ultimo_ciclo = Ciclo::find()->max("idciclo");
-            $r = Html::encode($_POST["r"]);
-            $seguimiento = Html::encode($_POST["seguimiento"]);
+            $idgrupo = Html::encode($_POST['idgrupo']);
+            $idciclo = Html::encode($_POST['idciclo']);
+            $idprofesor = Html::encode($_POST['idprofesor']);
+            $ultimo_ciclo = $this->cicloRepository->maxId();
+            $r = Html::encode($_POST['r']);
+            $seguimiento = Html::encode($_POST['seguimiento']);
 
-            $total = count($_POST["p1"]);
+            $total = count($_POST['p1']);
 
             for($i = 0; $i < $total; $i++)
             {
-                $idestudiante = Html::encode($_POST["idestudiante"][$i]);
+                $idestudiante = Html::encode($_POST['idestudiante'][$i]);
 
-                $p1 = Html::encode($_POST["p1"][$i]);
-                $p2 = Html::encode($_POST["p2"][$i]);
-                $p3 = Html::encode($_POST["p3"][$i]);
-                $p4 = Html::encode($_POST["p4"][$i]);
-                $p5 = Html::encode($_POST["p5"][$i]);
-                $p6 = Html::encode($_POST["p6"][$i]);
-                $p7 = Html::encode($_POST["p7"][$i]);
-                $p8 = Html::encode($_POST["p8"][$i]);
-                $p9 = Html::encode($_POST["p9"][$i]);
+                $p1 = Html::encode($_POST['p1'][$i]);
+                $p2 = Html::encode($_POST['p2'][$i]);
+                $p3 = Html::encode($_POST['p3'][$i]);
+                $p4 = Html::encode($_POST['p4'][$i]);
+                $p5 = Html::encode($_POST['p5'][$i]);
+                $p6 = Html::encode($_POST['p6'][$i]);
+                $p7 = Html::encode($_POST['p7'][$i]);
+                $p8 = Html::encode($_POST['p8'][$i]);
+                $p9 = Html::encode($_POST['p9'][$i]);
 
-                $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
+                $table = $this->grupoEstudianteRepository->consultaDatoGrupoEstudiante((int)$idgrupo, (int)$idestudiante);
 
                 if($table)
                 {
@@ -1066,35 +908,35 @@ class ProfesorController extends Controller
                     $table->p8 = $p8;
                     $table->p9 = $p9;
 
-                    $sp1_sql = GrupoEstudiante::find()->select("sp1")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp1", [1, 2, 3, 4]])->one();
-                    $sp2_sql = GrupoEstudiante::find()->select("sp2")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->one();
-                    $sp3_sql = GrupoEstudiante::find()->select("sp3")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->one();
-                    $sp4_sql = GrupoEstudiante::find()->select("sp4")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->one();
-                    $sp5_sql = GrupoEstudiante::find()->select("sp5")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->one();
-                    $sp6_sql = GrupoEstudiante::find()->select("sp6")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->one();
-                    $sp7_sql = GrupoEstudiante::find()->select("sp7")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->one();
-                    $sp8_sql = GrupoEstudiante::find()->select("sp8")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->one();
-                    $sp9_sql = GrupoEstudiante::find()->select("sp9")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->one();
+                    $sp1_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp1');//GrupoEstudiante::find()->select("sp1")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp1", [1, 2, 3, 4]])->one();
+                    $sp2_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp2');//GrupoEstudiante::find()->select("sp2")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->one();
+                    $sp3_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp3');//GrupoEstudiante::find()->select("sp3")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->one();
+                    $sp4_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp4');//GrupoEstudiante::find()->select("sp4")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->one();
+                    $sp5_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp5');//GrupoEstudiante::find()->select("sp5")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->one();
+                    $sp6_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp6');//GrupoEstudiante::find()->select("sp6")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->one();
+                    $sp7_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp7');//GrupoEstudiante::find()->select("sp7")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->one();
+                    $sp8_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp8');//GrupoEstudiante::find()->select("sp8")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->one();
+                    $sp9_sql = $this->grupoEstudianteRepository->oneSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp9');//GrupoEstudiante::find()->select("sp9")->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->one();
 
-                    $sp1_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp1", [1, 2, 3, 4]])->count();
-                    $sp2_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->count();
-                    $sp3_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->count();
-                    $sp4_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->count();
-                    $sp5_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->count();
-                    $sp6_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->count();
-                    $sp7_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->count();
-                    $sp8_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->count();
-                    $sp9_sql_total = GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->count();
+                    $sp1_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp1');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp1", [1, 2, 3, 4]])->count();
+                    $sp2_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp2');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp2", [1, 2, 3, 4]])->count();
+                    $sp3_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp3');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp3", [1, 2, 3, 4]])->count();
+                    $sp4_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp4');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp4", [1, 2, 3, 4]])->count();
+                    $sp5_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp5');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp5", [1, 2, 3, 4]])->count();
+                    $sp6_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp6');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp6", [1, 2, 3, 4]])->count();
+                    $sp7_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp7');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp7", [1, 2, 3, 4]])->count();
+                    $sp8_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp8');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp8", [1, 2, 3, 4]])->count();
+                    $sp9_sql_total = $this->grupoEstudianteRepository->countSeguimientoParcialPorGrupoEstudiante((int)$idgrupo, (int)$idestudiante, 'sp9');//GrupoEstudiante::find()->where(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante])->andWhere(["in", "sp9", [1, 2, 3, 4]])->count();
 
-                    $sp1 = ($p1 != "") ? (($sp1_sql_total > 0) ? $sp1_sql->sp1 : $seguimiento) : "";
-                    $sp2 = ($p2 != "") ? (($sp2_sql_total > 0) ? $sp2_sql->sp2 : $seguimiento) : "";
-                    $sp3 = ($p3 != "") ? (($sp3_sql_total > 0) ? $sp3_sql->sp3 : $seguimiento) : "";
-                    $sp4 = ($p4 != "") ? (($sp4_sql_total > 0) ? $sp4_sql->sp4 : $seguimiento) : "";
-                    $sp5 = ($p5 != "") ? (($sp5_sql_total > 0) ? $sp5_sql->sp5 : $seguimiento) : "";
-                    $sp6 = ($p6 != "") ? (($sp6_sql_total > 0) ? $sp6_sql->sp6 : $seguimiento) : "";
-                    $sp7 = ($p7 != "") ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : $seguimiento) : "";
-                    $sp8 = ($p8 != "") ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : $seguimiento) : "";
-                    $sp9 = ($p9 != "") ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : $seguimiento) : "";
+                    $sp1 = ($p1 != '') ? (($sp1_sql_total > 0) ? $sp1_sql->sp1 : $seguimiento) : '';
+                    $sp2 = ($p2 != '') ? (($sp2_sql_total > 0) ? $sp2_sql->sp2 : $seguimiento) : '';
+                    $sp3 = ($p3 != '') ? (($sp3_sql_total > 0) ? $sp3_sql->sp3 : $seguimiento) : '';
+                    $sp4 = ($p4 != '') ? (($sp4_sql_total > 0) ? $sp4_sql->sp4 : $seguimiento) : '';
+                    $sp5 = ($p5 != '') ? (($sp5_sql_total > 0) ? $sp5_sql->sp5 : $seguimiento) : '';
+                    $sp6 = ($p6 != '') ? (($sp6_sql_total > 0) ? $sp6_sql->sp6 : $seguimiento) : '';
+                    $sp7 = ($p7 != '') ? (($sp7_sql_total > 0) ? $sp7_sql->sp7 : $seguimiento) : '';
+                    $sp8 = ($p8 != '') ? (($sp8_sql_total > 0) ? $sp8_sql->sp8 : $seguimiento) : '';
+                    $sp9 = ($p9 != '') ? (($sp9_sql_total > 0) ? $sp9_sql->sp9 : $seguimiento) : '';
 
                     $table->sp1 = $sp1;
                     $table->sp2 = $sp2;
@@ -1107,21 +949,21 @@ class ProfesorController extends Controller
                     $table->sp9 = $sp9;
 
                     /** Asigna calificaciones para calificaciones de repetición */
-                    $table->s1 = ($p1 == "NA") ? "" : "";
-                    $table->s2 = ($p2 == "NA") ? "" : "";
-                    $table->s3 = ($p3 == "NA") ? "" : "";
-                    $table->s4 = ($p4 == "NA") ? "" : "";
-                    $table->s5 = ($p5 == "NA") ? "" : "";
-                    $table->s6 = ($p6 == "NA") ? "" : "";
-                    $table->s7 = ($p7 == "NA") ? "" : "";
-                    $table->s8 = ($p8 == "NA") ? "" : "";
-                    $table->s9 = ($p9 == "NA") ? "" : "";
+                    $table->s1 = ($p1 == 'NA') ? '' : '';
+                    $table->s2 = ($p2 == 'NA') ? '' : '';
+                    $table->s3 = ($p3 == 'NA') ? '' : '';
+                    $table->s4 = ($p4 == 'NA') ? '' : '';
+                    $table->s5 = ($p5 == 'NA') ? '' : '';
+                    $table->s6 = ($p6 == 'NA') ? '' : '';
+                    $table->s7 = ($p7 == 'NA') ? '' : '';
+                    $table->s8 = ($p8 == 'NA') ? '' : '';
+                    $table->s9 = ($p9 == 'NA') ? '' : '';
 
                     $table->update();
                 }    
             }
 
-            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacionseguimientos?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r&seguimiento=$seguimiento"));
+            header('Location: '.Url::toRoute('/profesor/listaalumnoscalificacionseguimientos?idgrupo='.$idgrupo.'&idciclo='.$idciclo.'&idprofesor='.$idprofesor.'&ultimo_ciclo='.$ultimo_ciclo.'&r='.$r.'&seguimiento='.$seguimiento));
             exit;
         }
     }
@@ -1134,68 +976,15 @@ class ProfesorController extends Controller
         {
             $idgrupo = Html::encode($idgrupo);
             $idprofesor = Html::encode($idprofesor);
-            $idciclo = (Html::encode($idciclo) == "") ? Ciclo::find()->max("idciclo") : Html::encode($idciclo);
+            $idciclo = (Html::encode($idciclo) == '') ? $this->cicloRepository->maxId() : Html::encode($idciclo);
             $ultimo_ciclo = Html::encode($ultimo_ciclo);
-            $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
+            $regularizacion_status = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$idciclo, (int)$idprofesor, 5, 1);
 
-            $model = (new \yii\db\Query())
-                            ->from(["estudiantes"])
-                            ->select([
-                                "estudiantes.idestudiante",
-    	                        "estudiantes.nombre_estudiante",
-	                            "estudiantes.sexo",
-	                            "cat_opcion_curso.desc_opcion_curso",
-                                "grupos_estudiantes.p1",
-	                            "grupos_estudiantes.p2",
-	                            "grupos_estudiantes.p3",
-	                            "grupos_estudiantes.p4",
-	                            "grupos_estudiantes.p5",
-	                            "grupos_estudiantes.p6",
-	                            "grupos_estudiantes.p7",
-	                            "grupos_estudiantes.p8",
-	                            "grupos_estudiantes.p9",
-	                            "grupos_estudiantes.s1",
-	                            "grupos_estudiantes.s2",
-	                            "grupos_estudiantes.s3",
-	                            "grupos_estudiantes.s4",
-	                            "grupos_estudiantes.s5",
-	                            "grupos_estudiantes.s6",
-	                            "grupos_estudiantes.s7",
-	                            "grupos_estudiantes.s8",
-	                            "grupos_estudiantes.s9"
-                            ])
-                            ->orderBy(["estudiantes.nombre_estudiante" => SORT_ASC])
-                            ->innerJoin(["grupos_estudiantes"], "estudiantes.idestudiante = grupos_estudiantes.idestudiante")
-                            ->innerJoin(["cat_opcion_curso"], "grupos_estudiantes.idopcion_curso = cat_opcion_curso.idopcion_curso")
-                            ->innerJoin(["grupos"], "grupos_estudiantes.idgrupo = grupos.idgrupo")
-                            ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                            ->where(["grupos_estudiantes.idgrupo" => $idgrupo, "grupos.idciclo" => $idciclo])
-                            ->all();
+            $model = $this->estudianteRepository->calificacionesPorGrupoCiclo((int)$idgrupo, (int)$idciclo);
 
-            $model1 = (new \yii\db\Query())
-                            ->from(["cat_carreras"])
-                            ->select([
-                                    "cat_materias.desc_materia",
-    	                            "cat_carreras.desc_carrera",
-                                    "grupos.num_semestre",
-                                    "grupos.desc_grupo",
-                                    "CONCAT( profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor"
-                            ])
-                            ->innerJoin(["grupos"], "cat_carreras.idcarrera = grupos.idcarrera")
-                            ->innerJoin(["cat_materias"], "cat_materias.idmateria = grupos.idmateria")
-                            ->innerJoin(["profesores"], "profesores.idprofesor = grupos.idprofesor")
-                            ->where(["grupos.idgrupo" => $idgrupo])
-                            ->andFilterWhere(["grupos.idciclo" => $idciclo])
-                            ->all();
+            $model1 = $this->carreraRepository->datosCalificacionesPorGrupoCiclo((int)$idgrupo, (int)$idciclo);
 
-            return $this->render("listaAlumnosCalificacionRepeticion", ["model" => $model,
-                                                              "model1" => $model1,
-                                                              "idciclo" => $idciclo,
-                                                              "idgrupo" => $idgrupo,
-                                                              "idprofesor" => $idprofesor,
-                                                              "ultimo_ciclo" => $ultimo_ciclo,
-                                                              "regularizacion_status" => $regularizacion_status
-                                                            ]);
+            return $this->render('listaAlumnosCalificacionRepeticion', compact('model', 'model1', 'idciclo', 'idgrupo', 'idprofesor', 'ultimo_ciclo', 'regularizacion_status'));
         }
     }
     #endregion
@@ -1205,37 +994,36 @@ class ProfesorController extends Controller
     {
         if(Yii::$app->request->post())
         {
-            $idgrupo = Html::encode($_POST["idgrupo"]);
-            $idciclo = Html::encode($_POST["idciclo"]);
-            $idprofesor = Html::encode($_POST["idprofesor"]);
-            $ultimo_ciclo = Ciclo::find()->max("idciclo");
-            $r = Html::encode($_POST["r"]);
+            $idgrupo = Html::encode($_POST['idgrupo']);
+            $idciclo = Html::encode($_POST['idciclo']);
+            $idprofesor = Html::encode($_POST['idprofesor']);
+            $ultimo_ciclo = $this->cicloRepository->maxId();
+            $r = Html::encode($_POST['r']);
 
-            $regularizacion_status = ProfesorSeguimiento::find()->where(["idciclo" => $ultimo_ciclo, "idprofesor" => $idprofesor, "seguimiento" => 5, "bandera" => 1])->count();
+            $regularizacion_status = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesorBandera((int)$ultimo_ciclo, (int)$idprofesor, 5, 1);
 
             if($regularizacion_status == 1)
             {
-                $total = count($_POST["s1"]);
+                $total = count($_POST['s1']);
 
                 for($i = 0; $i < $total; $i++)
                 {
-                    $idestudiante = Html::encode($_POST["idestudiante"][$i]);
+                    $idestudiante = Html::encode($_POST['idestudiante'][$i]);
 
-                    $s1 = Html::encode($_POST["s1"][$i]);
-                    $s2 = Html::encode($_POST["s2"][$i]);
-                    $s3 = Html::encode($_POST["s3"][$i]);
-                    $s4 = Html::encode($_POST["s4"][$i]);
-                    $s5 = Html::encode($_POST["s5"][$i]);
-                    $s6 = Html::encode($_POST["s6"][$i]);
-                    $s7 = Html::encode($_POST["s7"][$i]);
-                    $s8 = Html::encode($_POST["s8"][$i]);
-                    $s9 = Html::encode($_POST["s9"][$i]);
+                    $s1 = Html::encode($_POST['s1'][$i]);
+                    $s2 = Html::encode($_POST['s2'][$i]);
+                    $s3 = Html::encode($_POST['s3'][$i]);
+                    $s4 = Html::encode($_POST['s4'][$i]);
+                    $s5 = Html::encode($_POST['s5'][$i]);
+                    $s6 = Html::encode($_POST['s6'][$i]);
+                    $s7 = Html::encode($_POST['s7'][$i]);
+                    $s8 = Html::encode($_POST['s8'][$i]);
+                    $s9 = Html::encode($_POST['s9'][$i]);
 
-                    $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
+                    /* $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
 
                     if($table)
                     {
-
                         $table->s1 = $s1;
                         $table->s2 = $s2;
                         $table->s3 = $s3;
@@ -1246,10 +1034,29 @@ class ProfesorController extends Controller
                         $table->s8 = $s8;
                         $table->s9 = $s9;
                         $table->update();
-                    }    
+                    } */
+
+                    $id = [
+                        'idgrupo' => $idgrupo,
+                        'idestudiante' => $idestudiante
+                    ];
+
+                    $datos = [
+                        's1' => $s1,
+                        's2' => $s2,
+                        's3' => $s3,
+                        's4' => $s4,
+                        's5' => $s5,
+                        's6' => $s6,
+                        's7' => $s7,
+                        's8' => $s8,
+                        's9' => $s9
+                    ];
+
+                    $table = $this->grupoEstudianteRepository->update($datos, $id);
                 }
             }
-            header("Location: ".Url::toRoute("/profesor/listaalumnoscalificacionregularizacion?idgrupo=$idgrupo&idciclo=$idciclo&idprofesor=$idprofesor&ultimo_ciclo=$ultimo_ciclo&r=$r"));
+            header('Location: '.Url::toRoute('/profesor/listaalumnoscalificacionregularizacion?idgrupo='.$idgrupo.'&idciclo='.$idciclo.'&idprofesor='.$idprofesor.'&ultimo_ciclo='.$ultimo_ciclo.'&r='.$r));
             exit;
         }
     }

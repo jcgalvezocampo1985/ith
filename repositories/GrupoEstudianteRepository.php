@@ -29,38 +29,38 @@ class GrupoEstudianteRepository extends BaseRepository
     }
     #endregion
 
-    #region public function totalRelacionGrupos($id)
-    public function totalRelacionGrupos($id)
+    #region public function totalRelacionGrupos(int $idgrupo)
+    public function totalRelacionGrupos(int $idgrupo)
     {
         $total = $this->model->find()
-                             ->where(['idgrupo' => $id])
+                             ->where(['idgrupo' => $idgrupo])
                              ->count();
         return $total;
     }
     #endregion
 
-    #region public function totalRelacionOpcionCurso($id)
-    public function totalRelacionOpcionCurso($id)
+    #region public function totalRelacionOpcionCurso(int $idopcion_curso)
+    public function totalRelacionOpcionCurso(int $idopcion_curso)
     {
         $total = $this->model->find()
-                             ->where(['idopcion_curso' => $id])
+                             ->where(['idopcion_curso' => $idopcion_curso])
                              ->count();
         return $total;
     }
     #endregion
 
-    #region public function totalRelacionEstudiantes($id)
-    public function totalRelacionEstudiantes($id)
+    #region public function totalRelacionEstudiantes(int $idestudiante)
+    public function totalRelacionEstudiantes(int $idestudiante)
     {
         $total = $this->model->find()
-                             ->where(['idestudiante' => $id])
+                             ->where(['idestudiante' => $idestudiante])
                              ->count();
         return $total;
     }
     #endregion
 
-    #region public function getEstudianteCalificacionesCiclo($idestudiante, $idciclo)
-    public function getEstudianteCalificacionesCiclo($idestudiante, $idciclo)
+    #region public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo)
+    public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo)
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -151,12 +151,47 @@ class GrupoEstudianteRepository extends BaseRepository
     }
     #endregion
 
-    #region public function consultarCalificacionesPorGrupo($idgrupo)
-    public function consultarCalificacionesPorGrupo($idgrupo)
+    #region public function consultarCalificacionesPorGrupo(int $idgrupo)
+    public function consultarCalificacionesPorGrupo(int $idgrupo)
     {
         $query = $this->model->find()
                              ->where(['idgrupo' => $idgrupo])
                              ->all();
+
+        return $query;
+    }
+    #endregion
+
+    #region public function consultaDatoGrupoEstudiante(int $idgrupo, int $idestudiante)
+    public function consultaDatoGrupoEstudiante(int $idgrupo, int $idestudiante)
+    {
+        $query = $this->model->findOne(['idgrupo' => $idgrupo, "idestudiante" => $idestudiante]);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function oneSeguimientoParcialPorGrupoEstudiante(int $idgrupo, int $idestudiante, string $campo)
+    public function oneSeguimientoParcialPorGrupoEstudiante(int $idgrupo, int $idestudiante, string $campo)
+    {
+        $query = $this->model->find()
+                             ->select($campo)
+                             ->where(['idgrupo' => $idgrupo, 'idestudiante' => $idestudiante])
+                             ->andWhere(['in', $campo, [1, 2, 3, 4]])
+                             ->one();
+
+        return $query;
+    }
+    #endregion
+
+    #region public function countSeguimientoParcialPorGrupoEstudiante(int $idgrupo, int $idestudiante, string $campo)
+    public function countSeguimientoParcialPorGrupoEstudiante(int $idgrupo, int $idestudiante, string $campo)
+    {
+        $query = $this->model->find()
+                             ->select($campo)
+                             ->where(['idgrupo' => $idgrupo, 'idestudiante' => $idestudiante])
+                             ->andWhere(['in', $campo, [1, 2, 3, 4]])
+                             ->count();
 
         return $query;
     }

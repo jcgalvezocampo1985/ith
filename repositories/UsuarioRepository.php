@@ -33,10 +33,12 @@ class UsuarioRepository extends BaseRepository
     }
     #endregion
 
-    public function consultarUsuarioPorCurp($curp)
+    #region public function consultarUsuarioPorCurp(string $curp)
+    public function consultarUsuarioPorCurp(string $curp)
     {
         return $this->model->find()
                     ->where(['curp' => $curp])
                     ->one();
     }
+    #endregion
 }

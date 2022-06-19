@@ -27,7 +27,7 @@ class CarreraRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    #region public function listadoAlumnosGrupoCiclo($idciclo)
+    #region public function getCarreraEstudiante(int $idestudiante)
     public function getCarreraEstudiante(int $idestudiante)
     {
         $table = 'cat_carreras';
@@ -149,6 +149,64 @@ class CarreraRepository extends BaseRepository
         $groupBy = [];
         $paginate = false;
         $registers = 'one';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function datosMateriasCarreraPorGrupoCiclo(int $idgrupo, int $idciclo)
+    public function datosMateriasCarreraPorGrupoCiclo(int $idgrupo, int $idciclo)
+    {
+        $table = 'cat_carreras';
+        $select = [
+            'cat_materias.desc_materia',
+            'cat_carreras.desc_carrera'
+        ];
+        $joins = [
+            ['grupos', 'cat_carreras.idcarrera = grupos.idcarrera'],
+            ['cat_materias', 'cat_materias.idmateria = grupos.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    #endregion
+
+    #region public function datosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    public function datosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    {
+        $table = 'cat_carreras';
+        $select = [
+            'cat_materias.desc_materia',
+            'cat_carreras.desc_carrera',
+            'grupos.num_semestre',
+            'grupos.desc_grupo',
+            'CONCAT(profesores.apaterno," ",profesores.amaterno," ",profesores.nombre_profesor) AS profesor'
+        ];
+        $joins = [
+            ['grupos', 'cat_carreras.idcarrera = grupos.idcarrera'],
+            ['cat_materias', 'cat_materias.idmateria = grupos.idmateria'],
+            ['profesores', 'profesores.idprofesor = grupos.idprofesor']
+        ];
+        $where = [
+            ['=', 'grupos.idgrupo', $idgrupo],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
         $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 

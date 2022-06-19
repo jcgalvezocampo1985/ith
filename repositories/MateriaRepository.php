@@ -31,8 +31,8 @@ class MateriaRepository extends BaseRepository
     }
     #endregion
 
-    #region public function __construct(Materia $model)
-    public function listadoMateriaCiclo($idciclo)
+    #region public function listadoMateriaCiclo(int $idciclo)
+    public function listadoMateriaCiclo(int $idciclo)
     {
         $table = 'cat_materias';
         $select = [

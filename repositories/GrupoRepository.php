@@ -60,41 +60,52 @@ class GrupoRepository extends BaseRepository
     }
     #endregion
 
-    #region public function totalRelacionCiclos($id)
-    public function totalRelacionCiclos($id)
+    #region public function totalRelacionCiclos(int $idciclo)
+    public function totalRelacionCiclos(int $idciclo)
     {
         $total = $this->model->find()
-                             ->where(['idciclo' => $id])
+                             ->where(['idciclo' => $idciclo])
                              ->count();
 
         return $total;
     }
     #endregion
 
-    #region public function totalRelacionCarreras($id)
-    public function totalRelacionCarreras($id)
+    #region public function totalRelacionCarreras(int $idcarrera)
+    public function totalRelacionCarreras(int $idcarrera)
     {
         $total = $this->model->find()
-                             ->where(['idcarrera' => $id])
+                             ->where(['idcarrera' => $idcarrera])
                              ->count();
 
         return $total;
     }
     #endregion
 
-    #region public function totalRelacionMaterias($id)
-    public function totalRelacionMaterias($id)
+    #region public function totalRelacionMaterias(int $idmateria)
+    public function totalRelacionMaterias(int $idmateria)
     {
         $total = $this->model->find()
-                             ->where(['idmateria' => $id])
+                             ->where(['idmateria' => $idmateria])
                              ->count();
 
         return $total;
     }
     #endregion
 
-    #region public function queryGrupoAlumnos($idgrupo)
-    public function queryGrupoAlumnos($idgrupo)
+    #region public function totalRelacionProfesores(int $idprofesor)
+    public function totalRelacionProfesores(int $idprofesor)
+    {
+        $total = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor])
+                             ->count();
+
+        return $total;
+    }
+    #endregion
+
+    #region public function queryGrupoAlumnos(int $idgrupo)
+    public function queryGrupoAlumnos(int $idgrupo)
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -133,8 +144,8 @@ class GrupoRepository extends BaseRepository
     }
     #endregion
 
-    #region public function queryCicloCarreraEstudiante($idciclo, $idcarrera, $idestudiante, $desc_materia = '')
-    public function queryCicloCarreraEstudiante($idciclo, $idcarrera, $idestudiante, $desc_materia = '')
+    #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '')
+    public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '')
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -147,7 +158,7 @@ class GrupoRepository extends BaseRepository
             ['=', 'grupos_estudiantes.idestudiante', $idestudiante]
         ];
         $orderBy = [
-            
+            ''
         ];
         $groupBy = [
             
@@ -201,8 +212,8 @@ class GrupoRepository extends BaseRepository
     }
     #endregion
 
-    #region public function listadoGrupo($idciclo)
-    public function listadoGrupo($idciclo)
+    #region public function listadoGrupo(int $idciclo)
+    public function listadoGrupo(int $idciclo)
     {
         $table = 'grupos';
         $select = [
@@ -280,7 +291,7 @@ class GrupoRepository extends BaseRepository
     }
     #endregion
 
-    #region public function totalGrupoAtentidoPorProfesorCiclo(int $idprofesor, int $idciclo)
+    #region public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo)
     public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo)
     {
         $total = $this->model->find()

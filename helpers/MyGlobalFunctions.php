@@ -70,4 +70,11 @@ class MyGlobalFunctions
 
         return $datos;
     }
+
+    public static function dd($valor)
+    {
+        echo "<pre>";
+        print_r($valor);
+        exit;
+    }
 }

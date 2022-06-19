@@ -200,7 +200,7 @@ class ProfesorseguimientoController extends Controller
         $ciclos = \MyGlobalFunctions::dropDownList($this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]), 'idciclo', ['desc_ciclo']);
         $profesores = \MyGlobalFunctions::dropDownList($this->profesorRepository->listaRegistros(['apaterno' => SORT_ASC, 'amaterno' => SORT_ASC, 'nombre_profesor' => SORT_ASC]), 'idprofesor', ['apaterno', 'amaterno', 'nombre_profesor']);
 
-        $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);
+        $model = $this->profesorSeguimientoRepository->querySeguimientos((int)$idciclo);
 
         if($form->load(Yii::$app->request->get()))
         {
@@ -208,7 +208,7 @@ class ProfesorseguimientoController extends Controller
             {
                 $idciclo = Html::encode($form->idciclo);
 
-                $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);//Se ejecuta consulta de todos los registgros
+                $model = $this->profesorSeguimientoRepository->querySeguimientos((int)$idciclo);//Se ejecuta consulta de todos los registgros
             }
             else
             {
@@ -228,11 +228,11 @@ class ProfesorseguimientoController extends Controller
         $ciclo_actual = $sql['desc_ciclo'];
 
         $total_profesores = Profesor::find()->count();
-        $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 1, 1);
-        $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 2, 1);
-        $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 3, 1);
-        $total_seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 4, 1);
-        $total_seguimiento5 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 5, 1);
+        $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 1, 1);
+        $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 2, 1);
+        $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 3, 1);
+        $total_seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 4, 1);
+        $total_seguimiento5 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 5, 1);
 
         $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
         $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;

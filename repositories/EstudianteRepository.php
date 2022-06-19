@@ -39,10 +39,10 @@ class EstudianteRepository extends BaseRepository
     #endregion
 
     #region public function totalRelacionCarreras($id)
-    public function totalRelacionCarreras($id)
+    public function totalRelacionCarreras(int $idcarrera)
     {
         $total = $this->model->find()
-                             ->where(['idcarrera' => $id])
+                             ->where(['idcarrera' => $idcarrera])
                              ->count();
 
         return $total;
@@ -50,7 +50,7 @@ class EstudianteRepository extends BaseRepository
     #endregion
 
     #region public function listadoAlumnosCiclo($idciclo)
-    public function listadoAlumnosCiclo($idciclo)
+    public function listadoAlumnosCiclo(int $idciclo)
     {
         $table = 'estudiantes';
         $select = [
@@ -83,7 +83,7 @@ class EstudianteRepository extends BaseRepository
     #endregion
 
     #region public function listadoAlumnosCiclo($idciclo)
-    public function listadoAlumnoCiclo($idciclo)
+    public function listadoAlumnoCiclo(int $idciclo)
     {
         $table = 'estudiantes';
         $select = [
@@ -311,6 +311,8 @@ class EstudianteRepository extends BaseRepository
         $select = [
             'estudiantes.idestudiante',
             'estudiantes.nombre_estudiante',
+            'estudiantes.sexo',
+            'cat_opcion_curso.desc_opcion_curso',
             'grupos_estudiantes.p1', 'grupos_estudiantes.p2', 'grupos_estudiantes.p3',
             'grupos_estudiantes.p4', 'grupos_estudiantes.p5', 'grupos_estudiantes.p6',
             'grupos_estudiantes.p7', 'grupos_estudiantes.p8', 'grupos_estudiantes.p9',
