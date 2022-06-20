@@ -208,17 +208,16 @@ class EstudianteRepository extends BaseRepository
     }
     #endregion
 
-    #region public function listadoAlumnosGrupoCiclo($idciclo)
-    public function listadoAlumnosCiclos($idciclo)
+    #region public function listadoAlumnosGruposPorCiclo(int $idciclo)
+    public function listadoAlumnosGruposPorCiclo(int $idciclo)
     {
         $table = 'grupos_estudiantes';
         $select = [
-            'estudiantes.idestudiante',
-            'cat_materias.cve_materia',
-            'grupos.idgrupo'
+            'grupos_estudiantes.idestudiante',
+	        'cat_materias.cve_materia',
+	        'grupos.idgrupo'
         ];
         $joins = [
-            ['grupos_estudiantes', 'estudiantes.idestudiante = grupos_estudiantes.idestudiante'],
             ['grupos', 'grupos_estudiantes.idgrupo = grupos.idgrupo'],
             ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
         ];
@@ -227,7 +226,7 @@ class EstudianteRepository extends BaseRepository
         ];
         $orderBy = [
             'grupos.idgrupo' => SORT_ASC,
-            'estudiantes.idestudiante' => SORT_ASC,
+            'grupos_estudiantes.idestudiante' => SORT_ASC,
         ];
         $groupBy = [];
         $paginate = false;
