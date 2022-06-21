@@ -16,8 +16,8 @@ class ProfesorSeguimientoForm extends Model
     public function rules()
     {
         return [
-            [["idseguimiento", "idciclo", "creditos", "idprofesor", "seguimiento", "bandera"], "required"],
-            [["idseguimiento", "idciclo", "creditos", "idprofesor", "seguimiento", "bandera"], "integer"]
+            [["idseguimiento", "idciclo", "idprofesor", "seguimiento", "bandera"], "required"],
+            [["idseguimiento", "idciclo", "idprofesor", "seguimiento", "bandera"], "integer"]
         ];
     }
 

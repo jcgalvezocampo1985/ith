@@ -145,7 +145,7 @@ class GrupoRepository extends BaseRepository
     #endregion
 
     #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '')
-    public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '')
+    public function queryCicloCarreraEstudiante(int $idcarrera, int $idestudiante, string $desc_materia = '')
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -157,12 +157,8 @@ class GrupoRepository extends BaseRepository
         $where = [
             ['=', 'grupos_estudiantes.idestudiante', $idestudiante]
         ];
-        $orderBy = [
-            ''
-        ];
-        $groupBy = [
-            
-        ];
+        $orderBy = [];
+        $groupBy = [];
         $paginate = false;
         $registers = 'all';
 
@@ -186,12 +182,14 @@ class GrupoRepository extends BaseRepository
             'cat_materias.creditos',
             'grupos.num_semestre',
             'ciclo.desc_ciclo',
-            'grupos.desc_grupo'
+            'grupos.desc_grupo',
+            'CONCAT(profesores.nombre_profesor, " ",profesores.apaterno," ",profesores.amaterno) AS profesor'
         ];
         $joins1 = [
             ['cat_materias', 'grupos.idmateria = cat_materias.idmateria'],
             ['cat_carreras', 'grupos.idcarrera = cat_carreras.idcarrera'],
-            ['ciclo', 'grupos.idciclo = ciclo.idciclo']
+            ['ciclo', 'grupos.idciclo = ciclo.idciclo'],
+            ['profesores', 'grupos.idprofesor = profesores.idprofesor']
         ];
         $where1 = [
             ['=', 'cat_carreras.idcarrera', $idcarrera],

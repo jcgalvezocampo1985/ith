@@ -83,7 +83,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
             $query = $query->orderBy($this->orderBy);
         }
 
-       if(count($this->joins) > 0)
+        if(count($this->joins) > 0)
         {
             foreach($this->joins as $item => $key)
             {
@@ -224,9 +224,22 @@ abstract class BaseRepository implements RepositoryBaseInterface
     #region public function store($request)
     public function store($request)
     {
-        foreach($this->campos as $row)
+        if(is_object($request))
         {
-            $this->model->$row = $request[$row];
+            foreach($this->campos as $row)
+            {
+                $this->model->$row = $request[$row];
+            }
+        }
+        else
+        {
+            foreach($this->campos as $row)
+            {
+                if(array_key_exists($row, $request))
+                {
+                    $this->model->$row = $request[$row];
+                }
+            }
         }
 
         return $this->model->insert();
@@ -238,9 +251,22 @@ abstract class BaseRepository implements RepositoryBaseInterface
     {
         $query = $this->model->findOne($id);
 
-        foreach($this->campos as $row)
+        if(is_object($request))
         {
-            $query->$row = $request[$row];
+            foreach($this->campos as $row)
+            {
+                $query->$row = $request[$row];
+            }
+        }
+        else
+        {
+            foreach($this->campos as $row)
+            {
+                if(array_key_exists($row, $request))
+                {
+                    $query->$row = $request[$row];
+                }
+            }
         }
 
         return $query->update();

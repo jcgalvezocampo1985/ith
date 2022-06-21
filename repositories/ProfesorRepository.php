@@ -44,14 +44,43 @@ class ProfesorRepository extends BaseRepository
     }
     #endregion
 
+    #region public function totalProfesores()
+    public function totalProfesores()
+    {
+        $total = $this->model->find()->count();
+
+        return $total;
+    }
+    #endregion
+
+    #region public function registrosProfesores()
+    public function registrosProfesores()
+    {
+        $total = $this->model->find()->all();
+
+        return $total;
+    }
+    #endregion
+
     #region public function datosProfesorPorCurp(string $curp)
     public function datosProfesorPorCurp(string $curp)
     {
-        $total = $this->model->find()
+        $query = $this->model->find()
                              ->where(['curp' => $curp])
-                             ->One();
+                             ->one();
 
-        return $total;
+        return $query;
+    }
+    #endregion
+
+    #region public function datosProfesorPorId(int $idprofesor)
+    public function datosProfesorPorId(int $idprofesor)
+    {
+        $query = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor])
+                             ->one();
+
+        return $$query;
     }
     #endregion
 
@@ -101,6 +130,32 @@ class ProfesorRepository extends BaseRepository
         $result = $this->getView($query, $where, $registers);
 
         return $result;
+    }
+    #endregion
+
+    #region public function profesorSeguimiento(int $idciclo, string $curp)
+    public function profesorSeguimiento(int $idciclo, string $curp)
+    {
+        $table = 'profesores';
+        $select = [
+            'profesores_seguimientos.idseguimiento'
+        ];
+        $joins = [
+            ['profesores_seguimientos', 'profesores.idprofesor = profesores_seguimientos.idprofesor']
+        ];
+        $where = [
+            ['=', 'profesores.curp', $curp],
+            ['=', 'profesores_seguimientos.idciclo', $idciclo],
+            ['=', 'profesores_seguimientos.bandera', '1']
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'count';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
     }
     #endregion
 }

@@ -8,32 +8,6 @@ $(".eliminar_materia").on("click", function(e) {
     }
 });
 
-/* $("#horario_agregar").on("click", function(e) {
-    e.preventDefault();
-
-    var valor_url = $(this).attr("href");
-    var url = valor_url.split('=')[0];
-    var idestudiante = valor_url.split('=')[1];
-    var idciclo = valor_url.split('=')[2];
-    var idcarrera = valor_url.split('=')[3];
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        data: {
-            "idcarrera": idcarrera,
-            "idestudiante": idestudiante,
-            "idciclo": idciclo
-        },
-        beforeSend: function() {
-            $('#alumno_horario_agregar').empty();
-        },
-        success: function(respuesta) {
-            $('#alumno_horario_agregar').html(respuesta);
-        }
-    });
-}); */
-
 $('#materias').on('hidden.bs.modal', function(e) {
     e.preventDefault;
     location.reload();

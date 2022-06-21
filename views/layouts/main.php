@@ -30,6 +30,32 @@ if(!Yii::$app->user->isGuest){
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php
+    $this->registerJs('
+        let ancho = screen.width;
+        let alto = screen.height;
+
+        let ancho_total = (ancho / 100) * 90;
+        let alto_total = (alto / 100) * 40;
+        let alto_overflow = (alto / 100) * 60;
+
+        $(document).ready(function(){
+            $(".modal_ancho").css({
+                width: ancho_total
+            });
+            $(".modal_alto").css({
+                "height": alto_total+"px"
+            });
+            $(".modal_alto_overflow").css({
+                "height": alto_overflow+"px"
+            });
+            $(".modal_overflow").css({
+                "overflow-x": "hidden",
+                "overflow-y": "visible"
+            });
+        })
+    ');
+    ?>
     <style>
         .container{
             width: auto;

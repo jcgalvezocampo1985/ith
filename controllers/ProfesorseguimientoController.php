@@ -224,10 +224,10 @@ class ProfesorseguimientoController extends Controller
             $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
-        $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+        $sql = $this->cicloRepository->consultaDatosCiclo((int)$idciclo);
         $ciclo_actual = $sql['desc_ciclo'];
 
-        $total_profesores = Profesor::find()->count();
+        $total_profesores = $this->profesorRepository->totalProfesores();
         $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 1, 1);
         $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 2, 1);
         $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 3, 1);
@@ -258,21 +258,25 @@ class ProfesorseguimientoController extends Controller
 
             if ($total_registro == 0)
             {
-                $table = new ProfesorSeguimiento();
-                $table->idciclo = $idciclo;
-                $table->idprofesor = $idprofesor;
-                $table->seguimiento = $seguimiento;
-                $table->bandera = $bandera;
-                $table->insert();
+                $model = [
+                    'idciclo' => $idciclo,
+                    'idprofesor' => $idprofesor,
+                    'seguimiento' => $seguimiento,
+                    'bandera' => $bandera              
+                ];
+
+                $this->profesorSeguimientoRepository->store($model);
             }
             else
             {
-                $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
+                $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor((int)$idciclo, (int)$idprofesor, (int)$seguimiento);
                 $idseguimiento = $total_registro->idseguimiento;
 
-                $table = ProfesorSeguimiento::findOne($idseguimiento);
-                $table->bandera = $bandera;
-                $table->update();
+                $model = [
+                    'bandera' => $bandera
+                ];
+
+                $this->profesorSeguimientoRepository->update($model, $idseguimiento);
             }
         }
     }
@@ -287,42 +291,33 @@ class ProfesorseguimientoController extends Controller
 
         if($bandera != '' && $seguimiento != '' && $idciclo != '')
         {
-            $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor"])
-                            ->all();
+            $table = $this->profesorRepository->registrosProfesores();
 
             foreach($table as $row)
             {
                 $idprofesor = $row['idprofesor'];
-                $total_registro = ProfesorSeguimiento::find()
-                                                    ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                    ->count();
+
+                $total_registro = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
 
                 if($total_registro == 0)
                 {
-                    $table = new ProfesorSeguimiento();
+                    $table = new ProfesorSeguimiento;
                     $table->idciclo = $idciclo;
                     $table->idprofesor = $idprofesor;
                     $table->seguimiento = $seguimiento;
-                    $table->bandera = $bandera;
+                    $table->bandera = $bandera; 
                     $table->insert();
                 }
                 else
                 {
-                    $total_registro = ProfesorSeguimiento::find()
-                                                        ->select('idseguimiento')
-                                                        ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                        ->one();
-
+                    $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
                     $idseguimiento = $total_registro->idseguimiento;
 
-                    $table = ProfesorSeguimiento::findOne($idseguimiento);
-                    $table->bandera = $bandera;
-                    $table->update();
+                    $model = ['bandera' => $bandera];
+
+                    $this->profesorSeguimientoRepository->update($model, $idseguimiento);
                 }
             }
-            
         }
     }
     #endregion
@@ -331,13 +326,9 @@ class ProfesorseguimientoController extends Controller
     public function actionSeguimientosactivos()
     {
         $curp = Yii::$app->user->identity->curp;
-        $idciclo = Ciclo::find()->max("idciclo");
+        $idciclo = $this->cicloRepository->maxId();
 
-        $model = (new \yii\db\Query())
-            ->from(["profesores"])
-            ->innerJoin(["profesores_seguimientos"], "profesores.idprofesor = profesores_seguimientos.idprofesor")
-            ->where(["profesores.curp" => $curp, "profesores_seguimientos.idciclo" => $idciclo, "profesores_seguimientos.bandera" => "1"])
-            ->count();
+        $model = $this->profesorRepository->profesorSeguimiento($idciclo, $curp);
 
         return $model;
     }

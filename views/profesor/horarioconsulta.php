@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $viernes = $viernes1[0]."-<br />".$viernes1[1];
                             }
                         ?>
-                            <tr>
+                            <tr style="font-size: 12px;">
                                 <td><?= $row["desc_carrera"] ?></td>
                                 <td><?= $row["desc_grupo"] ?></td>
                                 <td><?= $row["desc_materia"] ?></td>
@@ -111,22 +111,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <ul class="dropdown-menu  pull-right">
                                             <li><?= Html::a("Lista Alumnos", ["profesor/listaalumnos=".$row["idgrupo"]], ["class" => "idgrupo", "data-toggle" => "modal", "data-target" => "#grupos"]) ?></li>
                                             <?php if($idciclo == $ultimo_ciclo): ?>
-                                            <?php //Html::a("Capturar Calificaciones", ["profesor/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?>
-                                            <?php if($seguimiento1 == 1): ?>
-                                            <li><?= Html::a("Capturar Seguimiento1", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=1"], ["target" => "_parent"]) ?></li>
-                                            <?php endif ?>
-                                            <?php if($seguimiento2 == 1): ?>
-                                            <li><?= Html::a("Capturar Seguimiento2", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=2"], ["target" => "_parent"]) ?></li>
-                                            <?php endif ?>
-                                            <?php if($seguimiento3 == 1): ?>
-                                            <li><?= Html::a("Capturar Seguimiento3", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=3"], ["target" => "_parent"]) ?></li>
-                                            <?php endif ?>
-                                            <?php if($seguimiento4 == 1): ?>
-                                            <li><?= Html::a("Capturar Seguimiento4", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=4"], ["target" => "_parent"]) ?></li>
-                                            <?php endif ?>
-                                            <?php if($regularizacion_status == 1): ?>
-                                            <li><?= Html::a("Capturar 2da. Opción", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
-                                            <?php endif ?>
+                                                <?php if($seguimiento1 == 1): ?>
+                                                    <li><?= Html::a("Capturar Seguimiento1", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=1"], ["target" => "_parent"]) ?></li>
+                                                <?php endif ?>
+                                                <?php if($seguimiento2 == 1): ?>
+                                                    <li><?= Html::a("Capturar Seguimiento2", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=2"], ["target" => "_parent"]) ?></li>
+                                                <?php endif ?>
+                                                <?php if($seguimiento3 == 1): ?>
+                                                    <li><?= Html::a("Capturar Seguimiento3", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=3"], ["target" => "_parent"]) ?></li>
+                                                <?php endif ?>
+                                                <?php if($seguimiento4 == 1): ?>
+                                                    <li><?= Html::a("Capturar Seguimiento4", ["profesor/listaalumnoscalificacionseguimientos?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false&seguimiento=4"], ["target" => "_parent"]) ?></li>
+                                                <?php endif ?>
+                                                <?php if($regularizacion_status == 1): ?>
+                                                    <li><?= Html::a("Capturar 2da. Opción", ["profesor/listaalumnoscalificacionregularizacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo."&idprofesor=".$idprofesor."&ultimo_ciclo=".$ultimo_ciclo."&r=false"], ["target" => "_parent"]) ?></li>
+                                                <?php endif ?>
                                             <?php endif ?>
                                             <li><?= Html::a("Reporte Calificaciones", ["reporte/listaalumnoscalificacion?idgrupo=".$row["idgrupo"]."&idciclo=".$idciclo], ["target" => "_parent"]) ?></li>
                                             <li><?= Html::a("Generar Acta", ["actacalificacion/generaracta?idgrupo=".$row["idgrupo"]]) ?></li>
@@ -144,13 +143,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <div class="modal fade" id="grupos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal_ancho">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="classModalLabel">Lista de alumnos</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal_alto_overflow modal_overflow">
                 <div id="lista_alumnos"></div>
             </div>
             <div class="modal-footer">

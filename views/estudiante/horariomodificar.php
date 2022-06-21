@@ -57,6 +57,7 @@ $idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
                             <th>Materia</th>
                             <th>REP</th>
                             <th>CR</th>
+                            <th>Profesor</th>
                             <th>Lunes</th>
                             <th>Martes</th>
                             <th>Miércoles</th>
@@ -68,10 +69,11 @@ $idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
                     </thead>
                     <tbody>
                         <?php foreach($model as $row): ?>
-                        <tr>
+                        <tr style="font-size:12px;">
                             <td><?= $row['desc_materia'] ?></td>
                             <td><?= $row['desc_opcion_curso_corto'] ?></td>
                             <td><?= $row['creditos'] ?></td>
+                            <td><?= $row['profesor'] ?></td>
                             <td><?= $row['lunes'] ?></td>
                             <td><?= $row['martes'] ?></td>
                             <td><?= $row['miercoles'] ?></td>
@@ -93,7 +95,7 @@ $idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
     </div>
 </div>
 <div class="modal fade" id="materias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="width: 85% !important;">
+    <div class="modal-dialog modal-lg modal_ancho">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -114,7 +116,7 @@ $idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row modal_alto modal_overflow">
                     <div class="col-md-12">
                         <span id="alumno_horario_agregar"></span>
                     </div>
@@ -145,7 +147,7 @@ $this->registerJs('
         var idestudiante = valor_url.split("=")[1];
         var idciclo = valor_url.split("=")[2];
         var idcarrera = valor_url.split("=")[3];
-alert(url);
+
         $.ajax({
             url: url,
             type: "GET",

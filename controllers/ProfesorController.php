@@ -319,13 +319,10 @@ class ProfesorController extends Controller
                             'email' => $model->email,
                             'password' => crypt($model->password, Yii::$app->params['salt']),
                             'cve_estatus' => 'VIG',
-                            'authKey' => '',
-                            'accessToken' => '',
                             'activate' => 1,
                             'curp' => $model->curp,
                             'fecha_registro' => $model->fecha_registro,
-                            'fecha_actualizacion' => $model->fecha_actualizacion,
-                            'verification_code' => ''                           
+                            'fecha_actualizacion' => $model->fecha_actualizacion,                        
                         ];
 
                         if($this->usuarioRepository->store($model1))
@@ -1020,22 +1017,6 @@ class ProfesorController extends Controller
                     $s8 = Html::encode($_POST['s8'][$i]);
                     $s9 = Html::encode($_POST['s9'][$i]);
 
-                    /* $table = GrupoEstudiante::findOne(["idgrupo" => $idgrupo, "idestudiante" => $idestudiante]);
-
-                    if($table)
-                    {
-                        $table->s1 = $s1;
-                        $table->s2 = $s2;
-                        $table->s3 = $s3;
-                        $table->s4 = $s4;
-                        $table->s5 = $s5;
-                        $table->s6 = $s6;
-                        $table->s7 = $s7;
-                        $table->s8 = $s8;
-                        $table->s9 = $s9;
-                        $table->update();
-                    } */
-
                     $id = [
                         'idgrupo' => $idgrupo,
                         'idestudiante' => $idestudiante
@@ -1053,7 +1034,7 @@ class ProfesorController extends Controller
                         's9' => $s9
                     ];
 
-                    $table = $this->grupoEstudianteRepository->update($datos, $id);
+                    $this->grupoEstudianteRepository->update($datos, $id);
                 }
             }
             header('Location: '.Url::toRoute('/profesor/listaalumnoscalificacionregularizacion?idgrupo='.$idgrupo.'&idciclo='.$idciclo.'&idprofesor='.$idprofesor.'&ultimo_ciclo='.$ultimo_ciclo.'&r='.$r));
@@ -1067,27 +1048,13 @@ class ProfesorController extends Controller
     {
         $this->layout = 'main2';
 
-        $idciclo = Ciclo::find()->max("idciclo");
-        $idprofesor = Html::encode($_GET["idprofesor"]);
-        $ciclos = Ciclo::find()->orderBy(["idciclo" => SORT_DESC])->all();
+        $idciclo = $this->cicloRepository->maxId();
+        $idprofesor = Html::encode($_GET['idprofesor']);
+        $ciclos = $this->cicloRepository->consultarCiclos(); //Ciclo::find()->orderBy(['idciclo' => SORT_DESC])->all();
 
-        $sql = "SELECT
-                    *
-                FROM
-                    horario_profesor_v
-                WHERE
-                    idprofesor = :idprofesor
-                AND
-	                idciclo = :idciclo
-                ORDER BY
-                    lunes, viernes, sabado";
+        $model = $this->profesorRepository->viewHorarioProfesorPorCiclo((int)$idprofesor, (int)$idciclo);
 
-        $model = Yii::$app->db->createCommand($sql)
-                              ->bindValue(":idprofesor", $idprofesor)
-                              ->bindValue(":idciclo", $idciclo)
-                              ->queryAll();
-
-        return $this->render("horario_profesor", ["model" => $model, "ciclos" => $ciclos, "idciclo" => $idciclo, "idprofesor" => $idprofesor]);
+        return $this->render('horario_profesor', compact('model', 'ciclos', 'idciclo', 'idprofesor'));
     }
     #endregion
 
@@ -1096,234 +1063,22 @@ class ProfesorController extends Controller
     {
         $this->layout = 'main2';
 
-        $idciclo = Html::encode($_GET["idciclo"]);
-        $idprofesor = Html::encode($_GET["idprofesor"]);
+        $idciclo = Html::encode($_GET['idciclo']);
+        $idprofesor = Html::encode($_GET['idprofesor']);
 
-        $sql = "SELECT
-                    *
-                FROM
-                    horario_profesor_v
-                WHERE
-                    idprofesor = :idprofesor
-                AND
-	                idciclo = :idciclo
-                ORDER BY
-                    lunes, viernes, sabado";
+        $model = $this->profesorRepository->viewHorarioProfesorPorCiclo((int)$idprofesor, (int)$idciclo);
 
-        $model = Yii::$app->db->createCommand($sql)
-                              ->bindValue(":idprofesor", $idprofesor)
-                              ->bindValue(":idciclo", $idciclo)
-                              ->queryAll();
-
-        return $this->render("horario_profesor", ["model" => $model, "idciclo" => $idciclo]);
+        return $this->render('horario_profesor', compact('model', 'idciclo'));
     }
     #endregion
 
     #region public function actionConsultarprofesor()
     public function actionConsultarprofesor()
     {
-        $idprofesor = Html::encode($_GET["idprofesor"]);
-        $profesor = Profesor::find()->where(["idprofesor" => $idprofesor])->one();
+        $idprofesor = Html::encode($_GET['idprofesor']);
+        $profesor = $this->profesorRepository->datosProfesorPorId((int)$idprofesor);// Profesor::find()->where(["idprofesor" => $idprofesor])->one();
 
-        return $profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor;
-    }
-    #endregion
-
-    #region public function actionSeguimientos()
-    public function actionSeguimientos()
-    {
-        $form = new ProfesorSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
-        $idciclo = Ciclo::find()->max("idciclo");
-
-        $total_profesores = Profesor::find()->count();
-        $total_seguimiento1 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 1, "bandera" => 1])->count();
-        $total_seguimiento2 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 2, "bandera" => 1])->count();
-        $total_seguimiento3 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 3, "bandera" => 1])->count();
-        $total_seguimiento4 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 4, "bandera" => 1])->count();
-        $total_seguimiento5 = ProfesorSeguimiento::find()->where(["idciclo" => $idciclo, "seguimiento" => 5, "bandera" => 1])->count();
-
-        $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
-        $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;
-        $ts3 = ($total_seguimiento3 == $total_profesores) ? 1 : 0;
-        $ts4 = ($total_seguimiento4 == $total_profesores) ? 1 : 0;
-        $regular = ($total_seguimiento5 == $total_profesores) ? 1 : 0;
-
-        if($form->load(Yii::$app->request->get()))
-        {
-            if($form->validate())
-            {
-                $search = Html::encode($form->buscar);
-                $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor",
-                                       "profesores.nombre_profesor",
-                                       "profesores.apaterno",
-                                       "profesores.amaterno",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
-                            ->where(["like", "curp", $search])
-                            ->orWhere(["like", "nombre_profesor", $search])
-                            ->orWhere(["like", "apaterno", $search])
-                            ->orWhere(["like", "amaterno", $search])
-                            ->orWhere(["like", "cve_estatus", $search])
-                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
-            }
-            else
-            {
-                $form->getErrors();
-            }
-        }
-        else
-        {
-            $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor",
-                                       "profesores.nombre_profesor",
-                                       "profesores.apaterno",
-                                       "profesores.amaterno",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 1) AS seguimiento1",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 2) AS seguimiento2",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 3) AS seguimiento3",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 4) AS seguimiento4",
-                                       "(SELECT bandera FROM profesores_seguimientos WHERE idprofesor = profesores.idprofesor AND seguimiento = 5) AS seguimiento5"])
-                            ->orderBy(["profesores.apaterno" => SORT_ASC, "profesores.amaterno" => SORT_ASC, "profesores.nombre_profesor" => SORT_ASC]);
-        }
-
-        $count = clone $table;
-        $pages = new Pagination([
-                    "pageSize" => 10,
-                    "totalCount" => $count->count(),
-                ]);
-        $model = $table->offset($pages->offset)
-                       ->limit($pages->limit)
-                       ->all();
-
-        if(count($model) == 0){
-            $error = 2;
-            $msg = "No se encontró información relacionada con el criterio de búsqueda";
-        }
-
-        return $this->render("seguimientos", ["model" => $model,
-                                              "form" => $form,
-                                              "msg" => $msg,
-                                              "error" => $error,
-                                              "pages" => $pages,
-                                              "ts1" => $ts1,
-                                              "ts2" => $ts2,
-                                              "ts3" => $ts3,
-                                              "ts4" => $ts4,
-                                              "regular" => $regular
-                                            ]);
-    }
-    #endregion
-
-    #region public function actionAsignarseguimiento()
-    public function actionAsignarseguimiento()
-    {
-        $idprofesor = (Html::encode(isset($_GET["idprofesor"]))) ? Html::encode($_GET["idprofesor"]) : null;
-        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
-        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
-        $idciclo = Ciclo::find()->max("idciclo");
-
-        if($bandera != "" && $idprofesor != "" && $seguimiento != "")
-        {
-            $total_registro = ProfesorSeguimiento::find()
-                                                 ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                 ->count();
-
-            if($total_registro == 0)
-            {
-                $table = new ProfesorSeguimiento();
-                $table->idciclo = $idciclo;
-                $table->idprofesor = $idprofesor;
-                $table->seguimiento = $seguimiento;
-                $table->bandera = $bandera;
-                $table->insert();
-            }
-            else
-            {
-                $total_registro = ProfesorSeguimiento::find()
-                                                     ->select('idseguimiento')
-                                                     ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                     ->one();
-
-                $idseguimiento = $total_registro->idseguimiento;
-
-                $table = ProfesorSeguimiento::findOne($idseguimiento);
-                $table->bandera = $bandera;
-                $table->update();
-            }
-        }
-    }
-    #endregion
-
-    #region public function actionAsignarseguimientos()
-    public function actionAsignarseguimientos()
-    {
-        $idciclo = Ciclo::find()->max("idciclo");
-        $bandera = (Html::encode(isset($_GET["bandera"]))) ? Html::encode($_GET["bandera"]) : null;
-        $seguimiento = (Html::encode(isset($_GET["seguimiento"]))) ? Html::encode($_GET["seguimiento"]) : null;
-
-        if($bandera != "" && $seguimiento != "")
-        {
-            $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor"])
-                            ->all();
-
-            foreach($table as $row)
-            {
-                $idprofesor = $row['idprofesor'];
-                $total_registro = ProfesorSeguimiento::find()
-                                                    ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                    ->count();
-
-                if($total_registro == 0)
-                {
-                    $table = new ProfesorSeguimiento();
-                    $table->idciclo = $idciclo;
-                    $table->idprofesor = $idprofesor;
-                    $table->seguimiento = $seguimiento;
-                    $table->bandera = $bandera;
-                    $table->insert();
-                }
-                else
-                {
-                    $total_registro = ProfesorSeguimiento::find()
-                                                        ->select('idseguimiento')
-                                                        ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                        ->one();
-
-                    $idseguimiento = $total_registro->idseguimiento;
-
-                    $table = ProfesorSeguimiento::findOne($idseguimiento);
-                    $table->bandera = $bandera;
-                    $table->update();
-                }
-            }
-            
-        }
-    }
-    #endregion
-
-    #region public function actionSeguimientosactivos()
-    public function actionSeguimientosactivos()
-    {
-        $curp = Yii::$app->user->identity->curp;
-        $idciclo = Ciclo::find()->max("idciclo");
-
-        $model = (new \yii\db\Query())
-            ->from(["profesores"])
-            ->innerJoin(["profesores_seguimientos"], "profesores.idprofesor = profesores_seguimientos.idprofesor")
-            ->where(["profesores.curp" => $curp, "profesores_seguimientos.idciclo" => $idciclo, "profesores_seguimientos.bandera" => "1"])
-            ->count();
-
-        return $model;
+        return $profesor->apaterno.' '.$profesor->amaterno.' '.$profesor->nombre_profesor;
     }
     #endregion
 }

@@ -8,17 +8,12 @@ use app\repositories\BaseRepository;
 
 class GrupoEstudianteRepository extends BaseRepository
 {
-    protected $table = ['ciclos'];
-    public $campos = ['idciclo', 'desc_ciclo', 'semestre', 'anio', 'fecha_registro', 'fecha_actualizacion', 'cve_estatus'];
+    protected $table = ['grupos_estudiantes'];
+    public $campos = ['idgrupo', 'idestudiante', 'idopcion_curso', 'p1', 'p2','p3','p4','p5','p6','p7','p8', 'p9', 'sp1', 'sp2', 'sp3', 'sp4', 'sp5', 'sp6', 'sp7', 'sp8', 'sp9', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 'fecha_registro', 'fecha_actualizacion', 'cve_estatus', 'idciclo', 'idgrupoidestudiante'];
     protected $select = [];
     protected $joins = [];
-    protected $where = [
-        'desc_ciclo',
-        'semestre',
-        'anio',
-        'cve_estatus'
-    ];
-    protected $orderBy = ['idciclo' => SORT_DESC];//SORT_DESC o SORT_ASC
+    protected $where = [];
+    protected $orderBy = [];//SORT_DESC o SORT_ASC
     protected $paginate = 15;
     public $search;
 

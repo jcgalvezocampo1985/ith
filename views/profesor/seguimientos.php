@@ -115,11 +115,14 @@ $(document).ready(function(){
         });
     });
 
-    $("#seguimientos1, #seguimientos2, #seguimientos3, #seguimientos4, #seguimientos5").on("click", function(){
-        let id = $(this).attr("id");
+    $("#seguimientos1").on("click", function(e){
+        e.preventDefault();
+        alert("hola");
+
+        /*let id = $(this).attr("id");
         let bandera = "0";
         let seguimiento = "1";
-
+alert(id);
         if(id === "seguimientos1"){
             seguimiento = "1";
             $(".seguimiento1").attr("checked", false);
@@ -164,7 +167,7 @@ $(document).ready(function(){
                 "seguimiento": seguimiento,
                 "bandera": bandera
             }
-        });
+        });*/
     });
 })');
 ?>

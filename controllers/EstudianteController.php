@@ -661,13 +661,13 @@ class EstudianteController extends Controller
     #region public function actionHorarioagregar()
     public function actionHorarioagregar()
     {
-        //$this->layout = 'main2';//Cambio de layout
+        $this->layout = 'main2';//Cambio de layout
 
-        //if(Yii::$app->request->get())
-        //{
-            $idestudiante = 151240020;//Html::encode($_GET['idestudiante']);
-            $idciclo = 3;//Html::encode($_GET['idciclo']);
-            $idcarrera = 2;//Html::encode($_GET['idcarrera']);
+        if(Yii::$app->request->get())
+        {
+            $idestudiante = Html::encode($_GET['idestudiante']);
+            $idciclo = Html::encode($_GET['idciclo']);
+            $idcarrera = Html::encode($_GET['idcarrera']);
             $desc_materia = '';
 
             $opcion_curso = $this->opcionCursoRepository->all();
@@ -677,10 +677,10 @@ class EstudianteController extends Controller
                 $desc_materia = Html::encode($_GET['desc_materia']);
             }
 
-            $materias = $this->grupoRepository->queryCicloCarreraEstudiante($idciclo, $idcarrera, $idestudiante, $desc_materia);
+            $materias = $this->grupoRepository->queryCicloCarreraEstudiante($idcarrera, $idestudiante, $desc_materia);
 
             return $this->render('horarioagregar', compact('materias', 'opcion_curso', 'idestudiante', 'idciclo', 'idcarrera'));
-        //}
+        }
     }
     #endregion
 

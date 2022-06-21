@@ -8,15 +8,15 @@ use app\repositories\BaseRepository;
 
 class ProfesorSeguimientoRepository extends BaseRepository
 {
-    protected $table = ['ciclos'];
-    public $campos = [];
+    protected $table = ['profesores_seguimientos'];
+    protected $primaryKey = 'idseguimiento';
+    protected $campos = ['idciclo', 'idprofesor', 'seguimiento', 'bandera'];
     protected $select = [];
     protected $joins = [];
     protected $where = [];
     protected $orderBy = [];//SORT_DESC o SORT_ASC
     protected $paginate = 15;
     public $search;
-    public $pages;
     public $model;
 
     #region public function __construct(ProfesorSeguimiento $model)
