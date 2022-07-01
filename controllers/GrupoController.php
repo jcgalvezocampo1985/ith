@@ -29,7 +29,7 @@ class GrupoController extends Controller
     private $materiaRepository;
     private $profesorRepository;
 
-    #region public function behaviors()
+    #region(collapsed) [public function behaviors()]
     public function behaviors()
     {
         return [
@@ -111,7 +111,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function __construct()
+    #region(collapsed) public function __construct()]
     public function __construct($id, $module, 
                                 GrupoRepository $grupoRepository,
                                 CicloRepository $cicloRepository,
@@ -131,7 +131,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionIndex()
+    #region(collapsed) public function actionIndex()]
     public function actionIndex()
     {
         $form = new GrupoSearch;
@@ -166,7 +166,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionCreate($msg = '', $error = '')
+    #region(collapsed) public function actionCreate($msg = '', $error = '')]
     public function actionCreate($msg = '', $error = '')
     {
 
@@ -190,7 +190,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionStore()
+    #region(collapsed) public function actionStore()]
     public function actionStore()
     {
         $model = new GrupoForm();
@@ -242,7 +242,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionEdit($id, $msg = '', $error = '')
+    #region(collapsed) public function actionEdit($id, $msg = '', $error = '')]
     public function actionEdit($id, $msg = '', $error ='')
     {
         $idgrupo = Html::encode($id);
@@ -285,7 +285,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionUpdate()
+    #region(collapsed) public function actionUpdate()]
     public function actionUpdate()
     {
         $model = new GrupoForm;
@@ -329,7 +329,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionDelete()
+    #region(collapsed) public function actionDelete()]
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -366,7 +366,7 @@ class GrupoController extends Controller
     }
     #endregion
 
-    #region public function actionGrupoalumnos()
+    #region(collapsed) public function actionGrupoalumnos()]
     public function actionGrupoalumnos()
     {
         $this->layout = 1;

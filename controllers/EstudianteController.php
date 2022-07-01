@@ -35,7 +35,7 @@ class EstudianteController extends Controller
     private $opcionCursoRepository;
     private $grupoRepository;
 
-    #region public function behaviors()
+    #region(collapsed) [public function behaviors()]
     public function behaviors()
     {
         return [
@@ -157,7 +157,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function __construct()
+    #region(collapsed) [public function __construct()]
     public function __construct($id, $module, $config = [],
                                 EstudianteRepository $estudianteRepository,
                                 CicloRepository $cicloRepository,
@@ -179,7 +179,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionIndex()
+    #region(collapsed) [public function actionIndex()]
     public function actionIndex()
     {
         $form = new EstudianteSearch;
@@ -216,7 +216,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionCreate($msg = '', $error = '')
+    #region(collapsed) [public function actionCreate($msg = '', $error = '')]
     public function actionCreate($msg = '', $error = '')
     {
         $model = new EstudianteForm;
@@ -235,7 +235,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionStore()
+    #region(collapsed) [public function actionStore()]
     public function actionStore()
     {
         $model = new EstudianteForm;
@@ -309,7 +309,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionEdit($idestudiante, $msg = '', $error = '')
+    #region(collapsed) [public function actionEdit($idestudiante, $msg = '', $error = '')]
     public function actionEdit($idestudiante, $msg = '', $error = '')
     {
         if(Yii::$app->request->get())
@@ -352,7 +352,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionUpdate()
+    #region(collapsed) [public function actionUpdate()]
     public function actionUpdate()
     {
         $model = new EstudianteForm;
@@ -404,7 +404,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionDelete()
+    #region(collapsed) [public function actionDelete()]
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -441,7 +441,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionHorario()
+    #region(collapsed) [public function actionHorario()]
     public function actionHorario()
     {
         $model = [];
@@ -467,7 +467,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionBoleta()
+    #region(collapsed) [public function actionBoleta()]
     public function actionBoleta()
     {
         $model = [];
@@ -493,7 +493,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionCalificaciones()
+    #region(collapsed) [public function actionCalificaciones()]
     public function actionCalificaciones()
     {
         $model = [];
@@ -519,7 +519,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionCalificacionesporciclo()
+    #region(collapsed) [public function actionCalificacionesporciclo()]
     public function actionCalificacionesporciclo()
     {
         $this->layout = 1;
@@ -553,7 +553,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionBoletacalificacion()
+    #region(collapsed) [public function actionBoletacalificacion()]
     public function actionBoletacalificacion()
     {
         $this->layout = 'main2';
@@ -565,7 +565,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionHorarioalumnos()s
+    #region(collapsed) [public function actionHorarioalumnos()]
     public function actionHorarioalumnos()
     {
         $this->layout = 'main2';
@@ -577,7 +577,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionHorariomodificar()
+    #region(collapsed) [public function actionHorariomodificar()]
     public function actionHorariomodificar()
     {
         $idciclo_actual = $this->cicloRepository->maxId();
@@ -625,7 +625,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionDeletehorarioestudiante()
+    #region(collapsed) [public function actionDeletehorarioestudiante()]
     public function actionDeletehorarioestudiante()
     {
         if(Yii::$app->request->get())
@@ -658,7 +658,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionHorarioagregar()
+    #region(collapsed) [public function actionHorarioagregar()]
     public function actionHorarioagregar()
     {
         $this->layout = 'main2';//Cambio de layout
@@ -684,7 +684,7 @@ class EstudianteController extends Controller
     }
     #endregion
 
-    #region public function actionAgregarmateria()
+    #region(collapsed) [public function actionAgregarmateria()]
     public function actionAgregarmateria()
     {
         if (Yii::$app->request->get())

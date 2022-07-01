@@ -113,7 +113,7 @@ class ProfesorseguimientoController extends Controller
                         ],
                         [
                             //El profesor tiene permisos sobre las siguientes acciones
-                            'actions' => ['index',
+                            'actions' => [
                                           'horario',
                                           'listaalumnos',
                                           'listaalumnoscalificacion',

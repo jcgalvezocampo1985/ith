@@ -17,7 +17,7 @@ AppAsset::register($this);
 
 if(!Yii::$app->user->isGuest){
     $profesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
-    $link = ($profesor == 1) ? '/profesor/' : '/profesor/horarioconsulta';
+    $link = ($profesor) ? '/profesor/horario' : '/profesor/horarioconsulta';
 }
 ?>
 <?php $this->beginPage() ?>

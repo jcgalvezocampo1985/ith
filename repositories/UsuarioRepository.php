@@ -10,7 +10,7 @@ class UsuarioRepository extends BaseRepository
 {
     protected $table = ['ciclos'];
     protected $primaryKey = 'idusuario';
-    protected $campos = ['idusuario', 'nombre_usuario', 'email', 'password', 'cve_estatus', 'authKey', 'accessToken', 'activate', 'curp', 'fecha_registro', 'fecha_actualizacion', 'verification_code'];
+    protected $campos = ['idusuario', 'nombre_usuario', 'email', 'password', 'cve_estatus', 'activate', 'curp', 'fecha_registro', 'fecha_actualizacion'];
     protected $select = [];
     protected $joins = [];
     protected $where = [
@@ -26,14 +26,14 @@ class UsuarioRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Usuario $model)
+    #region(collapsed) [public function __construct(Usuario $model)]
     public function __construct(Usuario $model)
     {
         parent::__construct($model);
     }
     #endregion
 
-    #region public function consultarUsuarioPorCurp(string $curp)
+    #region(collapsed) [public function consultarUsuarioPorCurp(string $curp)]
     public function consultarUsuarioPorCurp(string $curp)
     {
         return $this->model->find()

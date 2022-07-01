@@ -9,54 +9,60 @@ use app\models\login\Usuario;
 class UsuarioFormCRUD extends Model
 {
     public $idusuario;
+    public $nombre_usuario;
     public $email;
+    public $password;
     public $cve_estatus;
+    public $activate;
     public $curp;
     public $fecha_registro;
     public $fecha_actualizacion;
+    public $idrol;
     public $estado;
 
     public function rules()
     {
         return [
-            [["estado", "email", "cve_estatus", "curp"], "required", "message" => "Requerido"],
-            ["email", "string", "min" => 8, "max" => 100, "tooShort" => "Mínimo 8 caracteres", "tooLong" => "Máximo 100 caracteres"],
-            ["email", "email", "message" => "Formato no válido"],
-            ["email", "email_existe"],
-            ["curp", "string", "min" => 3, "max" => 20, "tooShort" => "Mínimo 3 caracteres", "tooLong" => "Máximo 20 caracteres"],
-            ["curp", "curp_existe"],
-            ["idusuario", "integer"]
+            [['estado',  'idrol', 'email', 'cve_estatus', 'curp'], 'required', 'message' => 'Requerido'],
+            ['email', 'string', 'min' => 8, 'max' => 100, 'tooShort' => 'Mínimo 8 caracteres', 'tooLong' => 'Máximo 100 caracteres'],
+            ['email', 'email', 'message' => 'Formato no válido'],
+            ['email', 'email_existe'],
+            ['curp', 'string', 'min' => 3, 'max' => 20, 'tooShort' => 'Mínimo 3 caracteres', 'tooLong' => 'Máximo 20 caracteres'],
+            ['curp', 'curp_existe'],
+            ['idusuario', 'integer'],
+            [['nombre_usuario', 'activate'], 'string']
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            "curp" => "CURP",
-            "email" => "Email",
-            "cve_estatus" => "Estatus",
-            "fecha_registro" => "Fecha Registro",
-            "fecha_actualizacion" => "Fecha Actualización"
+            'curp' => 'CURP',
+            'email' => 'Email',
+            'cve_estatus' => 'Estatus',
+            'fecha_registro' => 'Fecha Registro',
+            'fecha_actualizacion' => 'Fecha Actualización',
+            'idrol' => 'Roles'
         ];
     }
 
     public function email_existe($attribute, $params)
     {
-        $table = Usuario::find()->where("email=:email", [":email" => $this->email]);
+        $table = Usuario::find()->where('email=:email', [':email' => $this->email]);
 
         if ($table->count() >= 1 && $this->estado == 0)
         {
-            $this->addError($attribute, "El email ingresado ya existe");
+            $this->addError($attribute, 'El email ingresado ya existe');
         }
     }
 
     public function curp_existe($attribute, $params)
     {
-        $table = Usuario::find()->where("curp=:curp", [":curp" => $this->curp]);
+        $table = Usuario::find()->where('curp=:curp', [':curp' => $this->curp]);
 
         if ($table->count() >= 1 && $this->estado == 0)
         {
-            $this->addError($attribute, "CURP ya existe");
+            $this->addError($attribute, 'CURP ya existe');
         }
     }
 }

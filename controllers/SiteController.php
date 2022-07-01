@@ -149,44 +149,44 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(["site/index"]);
-            /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+            //return $this->redirect(["site/index"]);
+            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horario"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
-            if(User::isUserAdministrador(Yii::$app->user->identity->idusuario))
+            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 5))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["site/index"]);;
             }
             else
             {
                 return $this->redirect(["site/index"]);
-            }*/
+            }
         }
  
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             if (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horario"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
         } else {
             return $this->render("login", ["model" => $model]);

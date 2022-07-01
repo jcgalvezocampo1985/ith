@@ -17,9 +17,17 @@ use app\models\login\Usuario;
 use app\models\login\UsuarioFormCRUD;
 use app\models\login\UsuarioSearch;
 
+use app\repositories\UsuarioRepository;
+use app\repositories\RolRepository;
+use app\repositories\RolUsuarioRepository;
+
 class UsuarioController extends Controller
 {
-    #region public function behaviors()
+    private $usuarioRepository;
+    private $rolRepository;
+    private $rolUsuarioRepository;
+
+    #region(collapsed) [public function behaviors()]
     public function behaviors()
     {
         return [
@@ -56,39 +64,36 @@ class UsuarioController extends Controller
     }
     #endregion
 
-    #region public function actionIndex()
+    #region(collapsed) [public function __construct()]
+    public function __construct($id, $module,
+                                UsuarioRepository $usuarioRepository,
+                                RolRepository $rolRepository,
+                                RolUsuarioRepository $rolUsuarioRepository
+                                )
+    {
+        parent::__construct($id, $module);
+        $this->usuarioRepository = $usuarioRepository;
+        $this->rolRepository = $rolRepository;
+        $this->rolUsuarioRepository = $rolUsuarioRepository;;
+    }
+    #endregion
+
+    #region(collapsed) [public function actionIndex()]
     public function actionIndex()
     {
         $form = new UsuarioSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
+        $msg = (Html::encode(isset($_GET['msg']))) ? Html::encode($_GET['msg']) : null;
+        $error = (Html::encode(isset($_GET['error']))) ? Html::encode($_GET['error']) : null;
 
-        $table = new \yii\db\Query();
-        $model = $table->from(["usuarios"])
-                       ->select(["idusuario",
-                                 "nombre_usuario",
-	                             "email", 
-	                             "cve_estatus", 
-                                 "activate",
-                                 "curp",
-	                             "fecha_registro", 
-	                             "fecha_actualizacion"
-                        ])
-                       ->orderBy(["nombre_usuario" => SORT_ASC]);
+        $model = $this->usuarioRepository->all();//Se ejecuta consulta de todos los registgros
 
         if($form->load(Yii::$app->request->get()))
         {
             if($form->validate())
             {
-                $search = Html::encode($form->idusuario);
-                $model = $table->where(["like", "idusuario", $search])
-                               ->orWhere(["like", "nombre_usuario", $search])
-                               ->orWhere(["like", "email", $search])
-                               ->orWhere(["like", "cve_estatus", $search])
-                               ->orWhere(["like", "activate", $search])
-                               ->orWhere(["like", "curp", $search])
-                               ->orWhere(["like", "fecha_registro", $search])
-                               ->orWhere(["like", "fecha_actualizacion", $search]);
+                $this->usuarioRepository->search = Html::encode($form->idusuario);//Pasamos parámetro para la búsqueda
+
+                $model = $this->usuarioRepository->all(true);//Se ejecuta consulta con parámetro de búsqueda
             }
             else
             {
@@ -96,45 +101,36 @@ class UsuarioController extends Controller
             }
         }
 
-        $count = clone $table;
-        $pages = new Pagination([
-                    "pageSize" => 10,
-                    "totalCount" => $count->count(),
-                ]);
+        $pages = $this->usuarioRepository->getPages();
 
-        $model = $table->offset($pages->offset)
-                       ->limit($pages->limit)
-                       ->all();
-
-        if(count($model) == 0){
+        if(count($model) == 0)
+        {
             $error = 2;
-            $msg = "No se encontró información relacionada con el criterio de búsqueda";
+            $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
-        return $this->render("index", ["model" => $model, "form" => $form, "msg" => $msg, "error" => $error, "pages" => $pages]);
+        return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
     #endregion
 
-    #region public function actionCreate($msg = "", $error = "")
-    public function actionCreate($msg = "", $error = "")
+    #region(collapsed) [public function actionCreate($msg = "", $error = "")]
+    public function actionCreate($msg = '', $error = '')
     {
-        $model = new UsuarioFormCRUD();
-        $clave_estatus = ["VIG" => "VIG"];
+        $model = new UsuarioFormCRUD;
+        $clave_estatus = ['VIG' => 'VIGENTE'];
+        $roles = \MyGlobalFunctions::dropDownList($this->rolRepository->listaRegistros(['idrol' => SORT_DESC]), 'idrol', ['desc_rol']);
+        $status = 0;
 
         if(Yii::$app->request->get() && $error != 1)
         {
-            $modelo = $_GET["modelo"];
-            $model->desc_ciclo = $modelo["desc_ciclo"];
-            $model->semestre = $modelo["semestre"];
-            $model->anio = $modelo["anio"];
-            $model->cve_estatus = $modelo["cve_estatus"];
+            $model->attributes = $_GET['modelo'];
         }
 
-        return $this->render("form", ["model" => $model, "status" => 0, "msg" => $msg, "error" => $error, "clave_estatus" => $clave_estatus]);
+        return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus', 'roles'));
     }
     #endregion
 
-    #region public function actionStore()
+    #region(collapsed) [public function actionStore()]
     public function actionStore()
     {
         $model = new UsuarioFormCRUD;
@@ -150,35 +146,42 @@ class UsuarioController extends Controller
         {
             if ($model->validate())
             {
-                $table = new Usuario();
-                $table->nombre_usuario = $model->curp;
-                $table->email = $model->email;
-                $table->password = $model->curp;
-                $table->cve_estatus = $model->cve_estatus;
-                $table->activate = 1;
-                $table->curp = $model->curp;
-                $table->fecha_registro = $model->fecha_registro;
-                $table->fecha_actualizacion = "";
+                $idusuario = $this->usuarioRepository->maxId() + 1;
+                $model->idusuario = $idusuario;
+                $model->nombre_usuario = $model->curp;
+                $model->password = crypt($model->curp, Yii::$app->params['salt']);
+                $model->activate = 1;
+                $model->fecha_registro = date('Y-m-d h:i:s');
 
-                if ($table->insert())
+                if ($this->usuarioRepository->store($model))
                 {
-                    $msg = "Usuario agregado";
+                    $model1 = [
+                        'idusuario' => $idusuario,
+                        'idrol' => $model->idrol
+                    ];
+
+                    $idrolusuario = $this->rolUsuarioRepository->store($model1);
+
+                    $msg = 'Usuario agregado';
                     $error = 1;
                 }
                 else
                 {
-                    $msg = "Ocurrió un error al intentar agregar el usuairo, intenta nuevamente";
+                    $msg = 'Ocurrió un error al intentar agregar el usuario, intenta nuevamente';
                     $error = 3;
                 }
 
                 $modelo = [
-                    "email" => $model->desc_ciclo,
-                    "curp" => $model->semestre,
-                    "fecha_registro" => $model->anio,
-                    "cve_estatus" => $model->cve_estatus
+                    'idusuario' => $model->idusuario,
+                    'email' => $model->email,
+                    'cve_estatus' => $model->cve_estatus,
+                    'curp' => $model->curp,
+                    'fecha_registro' => $model->fecha_registro,
+                    'fecha_actualizacion' => $model->fecha_actualizacion,
+                    'idrol' => $model->idrol
                 ];
 
-                return $this->redirect(["usuario/create", "msg" => $msg, "error" => $error, "modelo" => $modelo]);
+                return $this->redirect(['usuario/create', 'msg' => $msg, 'error' => $error, 'modelo' => $modelo]);
             }
             else
             {
@@ -187,54 +190,53 @@ class UsuarioController extends Controller
         }
         else
         {
-            return $this->redirect(["usuario/index"]);
+            return $this->redirect(['usuario/index']);
         }
     }
     #endregion
 
-    #region public function actionEdit($id, $msg = "", $error = "")
-    public function actionEdit($id, $msg = "", $error = "")
-    {/*
-        $idciclo = Html::encode($id);
-        $msg = Html::encode($msg);
-        $error = Html::encode($error);
-
+    #region(collapsed) [public function actionEdit($id, $msg = "", $error = "")]
+    public function actionEdit($idusuario, $msg = "", $error = "")
+    {
         if(Yii::$app->request->get())
         {
-            $model = new CicloForm;
+            $idusuario = Html::encode($idusuario);
+            $msg = Html::encode($msg);
+            $error = Html::encode($error);
+            $model = new UsuarioFormCRUD;
+            $status = 1;
 
-            if($idciclo)
+            if($idusuario)
             {
-                $table = Ciclo::findOne($idciclo);
+                $table = $this->usuarioRepository->get($idusuario);
+                $clave_estatus = ["VIG" => "VIGENTE", "BT" => "BAJA TEMPORAL", "BD" => "BAJA DEFINITIVA"];
+                $roles = \MyGlobalFunctions::dropDownList($this->rolRepository->listaRegistros(['idrol' => SORT_DESC]), 'idrol', ['desc_rol']);
 
                 if($table)
                 {
-                    $model->idciclo = $table->idciclo;
-                    $model->desc_ciclo = $table->desc_ciclo;
-                    $model->semestre = $table->semestre;
-                    $model->anio = $table->anio;
-                    $model->cve_estatus = $table->cve_estatus;
+                    $model->idrol = 1;
+                    $model->attributes = $table->attributes;
                 }
                 else
                 {
-                    return $this->redirect(["ciclo/index"]);
+                    return $this->redirect(['usuario/index']);
                 }
             }
             else
             {
-                return $this->redirect(["ciclo/index"]);
+                return $this->redirect(['usuario/index']);
             }
         }
         else
         {
-            return $this->redirect(["ciclo/index"]);
+            return $this->redirect(['usuario/index']);
         }
-
-        return $this->render("form", ["model" => $model, "status" => 1, "msg" => $msg, "error" => $error]);*/
+\MyGlobalFunctions::dd($model);
+        return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus', 'idusuario', 'roles'));
     }
     #endregion
 
-    #region public function actionUpdate()
+    #region(collapsed) [public function actionUpdate()]
     public function actionUpdate()
     {/*
         $model = new CicloForm;
@@ -284,7 +286,7 @@ class UsuarioController extends Controller
     }
     #endregion
 
-    #region public function actionDelete()
+    #region(collapsed) [public function actionDelete()]
     public function actionDelete()
     {/*
         if(Yii::$app->request->post())

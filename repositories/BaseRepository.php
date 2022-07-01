@@ -19,14 +19,14 @@ abstract class BaseRepository implements RepositoryBaseInterface
     protected $paginate = 5;
     public $search;
 
-    #region public function __construct($model)
+    #region(collapsed) [public function __construct($model)]
     public function __construct($model)
     {
         $this->model = $model;
     }
     #endregion
 
-    #region public function all($where = false)
+    #region(collapsed) [public function all($where = false)]
     public function all($where = false)
     {
         $query = $this->model->find();
@@ -65,7 +65,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function allQuery($where = false)
+    #region(collapsed) [public function allQuery($where = false)]
     public function allQuery($where = false)
     {
         if(count($this->table) == 0 && count($this->select) == 0)
@@ -120,7 +120,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
+    #region(collapsed) [public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')]
     public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
     {
         if($table != '' && count($select) == 0)
@@ -192,7 +192,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function getView($query, array $where, $registers = 'all')
+    #region(collapsed) [public function getView($query, array $where, $registers = 'all')]
     public function getView($query = '', array $where = [], $registers = 'all')
     {
         $model = Yii::$app->db->createCommand($query);
@@ -214,14 +214,14 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function get($id)
+    #region(collapsed) [public function get($id)]
     public function get($id)
     {
         return $this->model->findOne($id);
     }
     #endregion
 
-    #region public function store($request)
+    #region(collapsed) [public function store($request)]
     public function store($request)
     {
         if(is_object($request))
@@ -246,7 +246,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function update($request, $id)
+    #region(collapsed) [public function update($request, $id)]
     public function update($request, $id)
     {
         $query = $this->model->findOne($id);
@@ -273,7 +273,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function destroy($id)
+    #region(collapsed) [public function destroy($id)]
     public function destroy($id)
     {
         $query = $this->model->findOne($id);
@@ -282,7 +282,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function listaRegistros(array $orderBy = [])
+    #region(collapsed) [public function listaRegistros(array $orderBy = [])]
     public function listaRegistros(array $orderBy = [])
     {
         $query = $this->model->find();
@@ -298,7 +298,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function maxId()
+    #region(collapsed) [public function maxId()]
     public function maxId()
     {
         $query = $this->model->find()->max($this->primaryKey);
@@ -307,14 +307,14 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     #endregion
 
-    #region public function setPages($pages)
+    #region(collapsed) [public function setPages($pages)]
     public function setPages($pages)
     {
         $this->pages = $pages;
     }
     #endregion
 
-    #region public function getPages()
+    #region(collapsed) [public function getPages()]
     public function getPages()
     {
         return $this->pages;
