@@ -158,7 +158,7 @@ class EstudianteController extends Controller
     #endregion
 
     #region(collapsed) [public function __construct()]
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 EstudianteRepository $estudianteRepository,
                                 CicloRepository $cicloRepository,
                                 CarreraRepository $carreraRepository,
@@ -168,7 +168,7 @@ class EstudianteController extends Controller
                                 GrupoRepository $grupoRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->estudianteRepository = $estudianteRepository;
         $this->cicloRepository = $cicloRepository;
         $this->carreraRepository = $carreraRepository;
