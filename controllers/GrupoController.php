@@ -39,7 +39,7 @@ class GrupoController extends Controller
         return [
                 "access" => [
                     "class" => AccessControl::className(),
-                    "only" => ["index", "create", "store", "edit", "update", "delete", "grupoalumnos"],//Especificar que acciones se van proteger
+                    "only" => ["index", "create", "store", "edit", "update", "delete", "grupoalumnos", "guardarestudiantesgrupo"],//Especificar que acciones se van proteger
                     "rules" => [
                         [
                             //El administrador tiene permisos sobre las siguientes acciones
@@ -58,7 +58,7 @@ class GrupoController extends Controller
                         ],
                         [
                             //Servicios escolares tiene permisos sobre las siguientes acciones
-                            "actions" => ["index", "create", "store", "edit", "update", "delete"],//Especificar que acciones tiene permitidas este usuario
+                            "actions" => ["index", "create", "store", "edit", "update", "delete", "grupoalumnos", "guardarestudiantesgrupo"],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             "allow" => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -88,7 +88,7 @@ class GrupoController extends Controller
                         ],
                         [
                             //División de estudios tiene permisos sobre las siguientes acciones
-                            "actions" => [""],//Especificar que acciones tiene permitidas este usuario
+                            "actions" => ["index", "create", "store", "edit", "update", "delete", "grupoalumnos", "guardarestudiantesgrupo"],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             "allow" => true,
                             //Usuarios autenticados, el signo ? es para invitados
