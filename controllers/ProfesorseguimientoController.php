@@ -32,7 +32,7 @@ class ProfesorseguimientoController extends Controller
     private $cicloRepository;
     private $profesorRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -172,23 +172,23 @@ class ProfesorseguimientoController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    /* #region public function __construct() */
+    public function __construct($id, $module,
                                 profesorSeguimientoRepository $profesorSeguimientoRepository,
                                 cicloRepository $cicloRepository,
                                 ProfesorRepository $profesorRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->profesorSeguimientoRepository = $profesorSeguimientoRepository;
         $this->cicloRepository = $cicloRepository;
         $this->profesorRepository = $profesorRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionIndex()
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new CicloSearch;
@@ -242,9 +242,9 @@ class ProfesorseguimientoController extends Controller
 
         return $this->render('seguimientos', compact('model', 'form', 'msg', 'error', 'pages', 'ts1', 'ts2', 'ts3','ts4', 'regular', 'profesores', 'ciclos', 'ciclo_actual'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionAsignarseguimiento()
+    /* #region public function actionAsignarseguimiento() */
     public function actionAsignarseguimiento()
     {
         $idprofesor = (Html::encode(isset($_GET['idprofesor']))) ? Html::encode($_GET['idprofesor']) : null;
@@ -280,9 +280,9 @@ class ProfesorseguimientoController extends Controller
             }
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionAsignarseguimientos()
+    /* #region public function actionAsignarseguimientos() */
     public function actionAsignarseguimientos()
     {
         $idciclo = (Html::encode(isset($_GET['idciclo']))) ? Html::encode($_GET['idciclo']) : null;
@@ -320,9 +320,9 @@ class ProfesorseguimientoController extends Controller
             }
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionSeguimientosactivos()
+    /* #region public function actionSeguimientosactivos() */
     public function actionSeguimientosactivos()
     {
         $curp = Yii::$app->user->identity->curp;
@@ -332,5 +332,5 @@ class ProfesorseguimientoController extends Controller
 
         return $model;
     }
-    #endregion
+    /* #endregion */
 }

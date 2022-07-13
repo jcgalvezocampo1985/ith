@@ -18,14 +18,14 @@ class ActaCalificacionRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(ActaCalificacion $model)
+    /* #region public function __construct(ActaCalificacion $model) */
     public function __construct(ActaCalificacion $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo)
+    /* #region public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo) */
     public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo)
     {
         $table = 'actas_calificaciones';
@@ -64,9 +64,9 @@ class ActaCalificacionRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionEstudianteGrupo(int $idestudiante, int $idgrupo)
+    /* #region public function totalRelacionEstudianteGrupo(int $idestudiante, int $idgrupo) */
     public function totalRelacionEstudianteGrupo(int $idestudiante, int $idgrupo)
     {
         $total = $this->model->find()
@@ -74,9 +74,9 @@ class ActaCalificacionRepository extends BaseRepository
                              ->count();
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function datosCuerpoActasCalificaciones(int $idgrupo)
+    /* #region public function datosCuerpoActasCalificaciones(int $idgrupo) */
     public function datosCuerpoActasCalificaciones(int $idgrupo)
     {
         $table = 'actas_calificaciones';
@@ -120,9 +120,9 @@ class ActaCalificacionRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    /* #region public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante) */
     public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante)
     {
         $total = $this->model->find()
@@ -131,9 +131,9 @@ class ActaCalificacionRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    /* #region public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante) */
     public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante)
     {
         $total = $this->model->find()
@@ -143,5 +143,5 @@ class ActaCalificacionRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 }

@@ -19,14 +19,14 @@ abstract class BaseRepository implements RepositoryBaseInterface
     protected $paginate = 5;
     public $search;
 
-    #region(collapsed) [public function __construct($model)]
+    /* #regionpublic function __construct($model) */
     public function __construct($model)
     {
         $this->model = $model;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function all($where = false)]
+    /* #regionpublic function all($where = false) */
     public function all($where = false)
     {
         $query = $this->model->find();
@@ -63,9 +63,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function allQuery($where = false)]
+    /* #regionpublic function allQuery($where = false) */
     public function allQuery($where = false)
     {
         if(count($this->table) == 0 && count($this->select) == 0)
@@ -118,9 +118,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')]
+    /* #regionpublic function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all') */
     public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
     {
         if($table != '' && count($select) == 0)
@@ -190,9 +190,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function getView($query, array $where, $registers = 'all')]
+    /* #regionpublic function getView($query, array $where, $registers = 'all') */
     public function getView($query = '', array $where = [], $registers = 'all')
     {
         $model = Yii::$app->db->createCommand($query);
@@ -212,16 +212,16 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $model;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function get($id)]
+    /* #regionpublic function get($id) */
     public function get($id)
     {
         return $this->model->findOne($id);
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function store($request)]
+    /* #regionpublic function store($request) */
     public function store($request)
     {
         if(is_object($request))
@@ -244,9 +244,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $this->model->insert();
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function update($request, $id)]
+    /* #regionpublic function update($request, $id) */
     public function update($request, $id)
     {
         $query = $this->model->findOne($id);
@@ -271,18 +271,18 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query->update();
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function destroy($id)]
+    /* #regionpublic function destroy($id) */
     public function destroy($id)
     {
         $query = $this->model->findOne($id);
 
         return $query->delete();
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function listaRegistros(array $orderBy = [])]
+    /* #regionpublic function listaRegistros(array $orderBy = []) */
     public function listaRegistros(array $orderBy = [])
     {
         $query = $this->model->find();
@@ -296,28 +296,28 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function maxId()]
+    /* #regionpublic function maxId() */
     public function maxId()
     {
         $query = $this->model->find()->max($this->primaryKey);
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function setPages($pages)]
+    /* #regionpublic function setPages($pages) */
     public function setPages($pages)
     {
         $this->pages = $pages;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function getPages()]
+    /* #regionpublic function getPages() */
     public function getPages()
     {
         return $this->pages;
     }
-    #endregion    
+    /* #endregion */    
 }

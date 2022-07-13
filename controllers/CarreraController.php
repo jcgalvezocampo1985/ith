@@ -23,7 +23,7 @@ class CarreraController extends Controller
     private $grupoRepository;
     private $estudianteRepository;
 
-    #region(collapsed) [public function behaviors()]
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -103,9 +103,9 @@ class CarreraController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function __construct()]
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 CarreraRepository $carreraRepository,
                                 GrupoRepository $grupoRepository,
@@ -117,9 +117,9 @@ class CarreraController extends Controller
         $this->grupoRepository = $grupoRepository;
         $this->estudianteRepository = $estudianteRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionIndex()]
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new CarreraSearch;
@@ -152,9 +152,9 @@ class CarreraController extends Controller
         
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCreate($msg = '', $error = '')]
+    /* #region public function actionCreate($msg = '', $error = '') */
     public function actionCreate($msg = '', $error = '')
     {
         $model = new CarreraForm();
@@ -167,9 +167,9 @@ class CarreraController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionStore()]
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new CarreraForm;
@@ -208,9 +208,9 @@ class CarreraController extends Controller
             return $this->redirect(['carrera/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionEdit($id, $msg = '', $error = '')]
+    /* #region public function actionEdit($id, $msg = '', $error = '') */
     public function actionEdit($id, $msg = '', $error = '')
     {
         $idcarrera = Html::encode($id);
@@ -247,9 +247,9 @@ class CarreraController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionUpdate()]
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new CarreraForm;
@@ -291,9 +291,9 @@ class CarreraController extends Controller
             return $this->redirect(["carrera/index"]);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionDelete()]
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -329,5 +329,5 @@ class CarreraController extends Controller
             return $this->redirect(['carrera/index']);
         }
     }
-    #endregion
+    /* #endregion */
 }

@@ -43,7 +43,7 @@ class ProfesorController extends Controller
     private $carreraRepository;
     private $grupoEstudianteRepository;
 
-    #region(collapsed) [public function behaviors()]
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -183,9 +183,9 @@ class ProfesorController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function __construct()]
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 ProfesorRepository $profesorRepository,
                                 CicloRepository $cicloRepository,
@@ -209,9 +209,9 @@ class ProfesorController extends Controller
         $this->carreraRepository = $carreraRepository;
         $this->grupoEstudianteRepository = $grupoEstudianteRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionIndex()]
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new ProfesorSearch;
@@ -246,9 +246,9 @@ class ProfesorController extends Controller
 
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages', 'ciclos', 'ultimo_ciclo'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCreate($msg = "", $error = "")]
+    /* #region public function actionCreate($msg = "", $error = "") */
     public function actionCreate($msg = "", $error = "")
     {
         $model = new ProfesorForm;
@@ -262,9 +262,9 @@ class ProfesorController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionStore()]
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new ProfesorForm;
@@ -359,9 +359,9 @@ class ProfesorController extends Controller
             return $this->redirect(['profesor/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionEdit($idprofesor, $msg = "", $error = "")]
+    /* #region public function actionEdit($idprofesor, $msg = "", $error = "") */
     public function actionEdit($idprofesor, $msg = "", $error = "")
     {
         if(Yii::$app->request->get())
@@ -400,9 +400,9 @@ class ProfesorController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus', 'usuario'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionUpdate()]
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new ProfesorForm;
@@ -478,9 +478,9 @@ class ProfesorController extends Controller
             return $this->redirect(['profesor/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionDelete()]
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -515,9 +515,10 @@ class ProfesorController extends Controller
             return $this->redirect(['profesor/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorario()]//Este método lo utiliza el profesor logueado
+    /* #region public function actionHorario() */
+    //Este método lo utiliza el profesor logueado
     public function actionHorario()
     {
         $form = new CicloSearch;
@@ -555,9 +556,9 @@ class ProfesorController extends Controller
 
         return $this->render('horario', compact('model', 'form', 'ciclos', 'idciclo', 'idprofesor', 'ciclo_actual', 'ultimo_ciclo', 'regularizacion_status', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionListaalumnos()]
+    /* #region public function actionListaalumnos() */
     public function actionListaalumnos()//Imprime la lista de alumnos en pantalla
     {
         $this->layout = 'main1';//Cambio de layout
@@ -575,9 +576,9 @@ class ProfesorController extends Controller
             return $this->render('listaAlumnos', compact('model', 'model1', 'idciclo', 'idgrupo'));
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorarioconsulta()]
+    /* #region public function actionHorarioconsulta() */
     public function actionHorarioconsulta()
     {
         $form = new CicloProfesorSearch;
@@ -620,9 +621,9 @@ class ProfesorController extends Controller
 
         return $this->render('horarioconsulta', compact('model', 'form', 'msg', 'error', 'ciclos', 'idciclo', 'ciclo_actual', 'idprofesor', 'profesores', 'ultimo_ciclo', 'regularizacion_status', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)]
+    /* #region public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo) */
     /* public function actionListaalumnoscalificacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -704,9 +705,9 @@ class ProfesorController extends Controller
                                                               "ultimo_seguimiento" => $ultimo_seguimiento]);
         }
     } */
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionGuardarcalificacion()]
+    /* #region public function actionGuardarcalificacion() */
     /* public function actionGuardarcalificacion()
     {
         if(Yii::$app->request->post())
@@ -812,9 +813,9 @@ class ProfesorController extends Controller
             exit;
         }
     } */
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)]
+    /* #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo) */
     public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -836,9 +837,9 @@ class ProfesorController extends Controller
             return $this->render('listaAlumnosCalificacionSeguimientos', compact('model', 'model1', 'idciclo', 'idgrupo', 'idprofesor', 'seguimiento1', 'seguimiento2', 'seguimiento3', 'seguimiento4', 'ultimo_ciclo'));
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionGuardarcalificacionseguimientos()]
+    /* #region public function actionGuardarcalificacionseguimientos() */
     public function actionGuardarcalificacionseguimientos()
     {
         if(Yii::$app->request->post())
@@ -939,9 +940,9 @@ class ProfesorController extends Controller
             exit;
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)]
+    /* #region public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo) */
     public function actionListaalumnoscalificacionregularizacion($idgrupo, $idciclo, $idprofesor, $ultimo_ciclo)
     {
         if(isset($idgrupo))
@@ -959,9 +960,9 @@ class ProfesorController extends Controller
             return $this->render('listaAlumnosCalificacionRepeticion', compact('model', 'model1', 'idciclo', 'idgrupo', 'idprofesor', 'ultimo_ciclo', 'regularizacion_status'));
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionGuardarcalificacionregularizacion()]
+    /* #region public function actionGuardarcalificacionregularizacion() */
     public function actionGuardarcalificacionregularizacion()
     {
         if(Yii::$app->request->post())
@@ -1016,9 +1017,9 @@ class ProfesorController extends Controller
             exit;
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorarioprofesor()]
+    /* #region public function actionHorarioprofesor() */
     public function actionHorarioprofesor()
     {
         $this->layout = 'main2';
@@ -1031,9 +1032,9 @@ class ProfesorController extends Controller
 
         return $this->render('horario_profesor', compact('model', 'ciclos', 'idciclo', 'idprofesor'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorarioprofesorconsulta()]
+    /* #region public function actionHorarioprofesorconsulta() */
     public function actionHorarioprofesorconsulta()
     {
         $this->layout = 'main2';
@@ -1045,9 +1046,9 @@ class ProfesorController extends Controller
 
         return $this->render('horario_profesor', compact('model', 'idciclo'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionConsultarprofesor()]
+    /* #region public function actionConsultarprofesor() */
     public function actionConsultarprofesor()
     {
         $idprofesor = Html::encode($_GET['idprofesor']);
@@ -1055,5 +1056,5 @@ class ProfesorController extends Controller
 
         return $profesor->apaterno.' '.$profesor->amaterno.' '.$profesor->nombre_profesor;
     }
-    #endregion
+    /* #endregion */
 }

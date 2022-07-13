@@ -27,7 +27,7 @@ class UsuarioController extends Controller
     private $rolRepository;
     private $rolUsuarioRepository;
 
-    #region(collapsed) [public function behaviors()]
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -62,9 +62,9 @@ class UsuarioController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function __construct()]
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 UsuarioRepository $usuarioRepository,
                                 RolRepository $rolRepository,
@@ -76,9 +76,9 @@ class UsuarioController extends Controller
         $this->rolRepository = $rolRepository;
         $this->rolUsuarioRepository = $rolUsuarioRepository;;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionIndex()]
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new UsuarioSearch;
@@ -111,9 +111,9 @@ class UsuarioController extends Controller
 
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCreate($msg = "", $error = "")]
+    /* #region public function actionCreate($msg = "", $error = "") */
     public function actionCreate($msg = '', $error = '')
     {
         $model = new UsuarioFormCRUD;
@@ -128,9 +128,9 @@ class UsuarioController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus', 'roles'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionStore()]
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new UsuarioFormCRUD;
@@ -193,9 +193,9 @@ class UsuarioController extends Controller
             return $this->redirect(['usuario/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionEdit($id, $msg = "", $error = "")]
+    /* #region public function actionEdit($id, $msg = "", $error = "") */
     public function actionEdit($idusuario, $msg = "", $error = "")
     {
         if(Yii::$app->request->get())
@@ -234,9 +234,9 @@ class UsuarioController extends Controller
 \MyGlobalFunctions::dd($model);
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'clave_estatus', 'idusuario', 'roles'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionUpdate()]
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {/*
         $model = new CicloForm;
@@ -284,9 +284,9 @@ class UsuarioController extends Controller
             return $this->redirect(["ciclo/index"]);
         }*/
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionDelete()]
+    /* #region public function actionDelete() */
     public function actionDelete()
     {/*
         if(Yii::$app->request->post())
@@ -322,5 +322,5 @@ class UsuarioController extends Controller
             return $this->redirect(["ciclo/index"]);
         }*/
     }
-    #endregion
+    /* #endregion */
 }

@@ -29,33 +29,8 @@ if(!Yii::$app->user->isGuest){
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <?= Yii::$app->view->renderFile("@app/views/layouts/styles.php") ?>
     <?php $this->head() ?>
-    <?php
-    $this->registerJs('
-        let ancho = screen.width;
-        let alto = screen.height;
-
-        let ancho_total = (ancho / 100) * 90;
-        let alto_total = (alto / 100) * 40;
-        let alto_overflow = (alto / 100) * 60;
-
-        $(document).ready(function(){
-            $(".modal_ancho").css({
-                width: ancho_total
-            });
-            $(".modal_alto").css({
-                "height": alto_total+"px"
-            });
-            $(".modal_alto_overflow").css({
-                "height": alto_overflow+"px"
-            });
-            $(".modal_overflow").css({
-                "overflow-x": "hidden",
-                "overflow-y": "visible"
-            });
-        })
-    ');
-    ?>
     <style>
         .container{
             width: auto;
@@ -129,6 +104,7 @@ if(!Yii::$app->user->isGuest){
 </footer>
 
 <?php $this->endBody() ?>
+<?= Yii::$app->view->renderFile("@app/views/layouts/scripts.php") ?>
 </body>
 </html>
 <?php $this->endPage() ?>

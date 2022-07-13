@@ -26,14 +26,14 @@ class ProfesorRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region(collapsed) [public function __construct(Profesor $model)]
+    /* #region public function __construct(Profesor $model) */
     public function __construct(Profesor $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function totalProfesor(int $idprofesor)]
+    /* #region public function totalProfesor(int $idprofesor) */
     public function totalProfesor(int $idprofesor)
     {
         $total = $this->model->find()
@@ -42,27 +42,27 @@ class ProfesorRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function totalProfesores()]
+    /* #region public function totalProfesores() */
     public function totalProfesores()
     {
         $total = $this->model->find()->count();
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function registrosProfesores()]
+    /* #region public function registrosProfesores() */
     public function registrosProfesores()
     {
         $total = $this->model->find()->all();
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function datosProfesorPorCurp(string $curp)]
+    /* #region public function datosProfesorPorCurp(string $curp) */
     public function datosProfesorPorCurp(string $curp)
     {
         $query = $this->model->find()
@@ -71,9 +71,9 @@ class ProfesorRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function datosProfesorPorId(int $idprofesor)]
+    /* #region public function datosProfesorPorId(int $idprofesor) */
     public function datosProfesorPorId(int $idprofesor)
     {
         $query = $this->model->find()
@@ -82,9 +82,9 @@ class ProfesorRepository extends BaseRepository
 
         return $$query;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function viewHorarioProfesorPorCiclo(int $idprofesor, int $idciclo)]
+    /* #region public function viewHorarioProfesorPorCiclo(int $idprofesor, int $idciclo) */
     public function viewHorarioProfesorPorCiclo(int $idprofesor, int $idciclo)
     {
         $query = "SELECT
@@ -109,9 +109,9 @@ class ProfesorRepository extends BaseRepository
 
         return $result;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function viewHorarioProfesor()]
+    /* #region public function viewHorarioProfesor() */
     public function viewHorarioProfesor()
     {
         $query = "SELECT
@@ -131,9 +131,9 @@ class ProfesorRepository extends BaseRepository
 
         return $result;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function profesorSeguimiento(int $idciclo, string $curp)]
+    /* #region public function profesorSeguimiento(int $idciclo, string $curp) */
     public function profesorSeguimiento(int $idciclo, string $curp)
     {
         $table = 'profesores';
@@ -157,5 +157,5 @@ class ProfesorRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 }

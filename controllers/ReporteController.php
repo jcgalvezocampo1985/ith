@@ -34,63 +34,63 @@ class PDF extends FPDF
     public $profesor;
     public $noControl;
 
-    #region public function setNoControl($noControl)
+    /* #region public function setNoControl($noControl) */
     public function setNoControl($noControl)
     {
         $this->noControl = $noControl;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function getNoControl()
+    /* #region public function getNoControl() */
     public function getNoControl()
     {
         return $this->noControl;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function setHeader($header)
+    /* #region public function setHeader($header) */
     public function setHeader($header)
     {
         $this->header = $header;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function getHeader()
+    /* #region public function getHeader() */
     public function getHeader()
     {
         return $this->header;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function setFooter($footer)
+    /* #region public function setFooter($footer) */
     public function setFooter($footer)
     {
         $this->footer = $footer;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function getFooter()
+    /* #region public function getFooter() */
     public function getFooter()
     {
         return $this->footer;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function setProfesor($profesor)
+    /* #region public function setProfesor($profesor) */
     public function setProfesor($profesor)
     {
         $this->profesor = $profesor;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function getProfesor()
+    /* #region public function getProfesor() */
     public function getProfesor()
     {
         return $this->profesor;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function Header()
+    /* #region public function Header() */
     public function Header()
     {
         if($this->getHeader() == 'Boleta')
@@ -203,9 +203,9 @@ class PDF extends FPDF
             $this->Text(220, 45, utf8_decode('TNM'));
         }*/
     }
-    #endregion
+    /* #endregion */
 
-    #region public function Footer()
+    /* #region public function Footer() */
     public function Footer()
     {
         //Imprime el número de páginas en el pie de cada página
@@ -269,7 +269,7 @@ class PDF extends FPDF
             $this->Text(190, 265, 'Rev. O');
         }
     }
-    #endregion
+    /* #endregion */
 }
 
 class ReporteController extends Controller
@@ -282,7 +282,7 @@ class ReporteController extends Controller
     private $actaCalificacionRepository;
     private $cicloRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -362,9 +362,9 @@ class ReporteController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 EstudianteRepository $estudianteRepository,
                                 ProfesorRepository $profesorRepository,
@@ -384,9 +384,9 @@ class ReporteController extends Controller
         $this->actaCalificacionRepository = $actaCalificacionRepository;
         $this->cicloRepository = $cicloRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionBoleta()
+    /* #region public function actionBoleta() */
     public function actionBoleta()
     {
         $idestudiante = Html::encode($_REQUEST['id']);
@@ -502,9 +502,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', $estudiante.'_'.$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionHorario()
+    /* #region public function actionHorario() */
     public function actionHorario()
     {
         $idestudiante = Html::encode($_REQUEST['id']);
@@ -606,9 +606,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', $idestudiante.'_'.$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionListaalumnos()
+    /* #region public function actionListaalumnos() */
     public function actionListaalumnos()
     {
         $idgrupo = Html::encode($_REQUEST['idgrupo']);
@@ -683,9 +683,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($encabezado['desc_grupo'])."_".$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionListaalumnoscalificacion($idgrupo, $idciclo)
+    /* #region public function actionListaalumnoscalificacion($idgrupo, $idciclo) */
     public function actionListaalumnoscalificacion($idgrupo, $idciclo)//Reporte de calificaciones
     {
         $idgrupo = Html::encode($idgrupo);
@@ -801,9 +801,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento)
+    /* #region public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento) */
     public function actionListaalumnoscalificacionseguimientos($idgrupo, $idciclo, $seguimiento)
     {
         $idgrupo = Html::encode($idgrupo);
@@ -927,9 +927,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
+    /* #region public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo) */
     public function actionListaalumnoscalificacionprofesor($idprofesor, $idciclo)
     {
         $idciclo = Html::encode($idciclo);
@@ -1049,9 +1049,9 @@ class ReporteController extends Controller
         }
         $pdf->Output('D', "Calificaciones ".utf8_decode($periodo).'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionActacalificaciones($idgrupo)
+    /* #region public function actionActacalificaciones($idgrupo) */
     public function actionActacalificaciones($idgrupo)
     {
         $idgrupo = Html::encode($idgrupo);
@@ -1235,9 +1235,9 @@ class ReporteController extends Controller
 
         $pdf->Output('D', utf8_decode($carrera."_".$materia."_".$grupo)."_".$periodo.'.pdf');
     }
-    #endregion
+    /* #endregion */
 
-    #region private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "")
+    /* #region private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "") */
     private function generarEncabezadoTablaCalificaciones($pdf, $x, $y, $parciales, $seguimiento = "")
     {
         $x_encabezado = $x;
@@ -1315,9 +1315,9 @@ class ReporteController extends Controller
 
         return 45 + $disminuir;
     }
-    #endregion
+    /* #endregion */
 
-    #region private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "")
+    /* #region private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "") */
     private function generarEncabezadoCalificaciones($pdf, $datos = array(), $orientacion_hoja = "")
     {
         $pdf->SetFont('Montserrat-SemiBold', '', 7);
@@ -1397,9 +1397,9 @@ class ReporteController extends Controller
             }
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionReportefinalprofesor($idprofesor, $idciclo)
+    /* #region public function actionReportefinalprofesor($idprofesor, $idciclo) */
     public function actionReportefinalprofesor($idprofesor, $idciclo)
     {
         $idprofesor = Html::encode($idprofesor);
@@ -1598,9 +1598,9 @@ class ReporteController extends Controller
             throw new \yii\web\HttpException(404,'Oops. Not logged in.');
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDalu($idciclo)
+    /* #region public function actionDalu($idciclo) */
     public function actionDalu($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1644,9 +1644,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDcat($idciclo)
+    /* #region public function actionDcat($idciclo) */
     public function actionDcat($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1680,9 +1680,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDdep($idciclo)
+    /* #region public function actionDdep($idciclo) */
     public function actionDdep($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1708,9 +1708,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDesp($idciclo)
+    /* #region public function actionDesp($idciclo) */
     public function actionDesp($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1744,9 +1744,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDgau($idciclo)
+    /* #region public function actionDgau($idciclo) */
     public function actionDgau($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1788,9 +1788,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDlis($idciclo)
+    /* #region public function actionDlis($idciclo) */
     public function actionDlis($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1824,9 +1824,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDret($idciclo)
+    /* #region public function actionDret($idciclo) */
     public function actionDret($idciclo)
     {
         $spreadsheet = new Spreadsheet();
@@ -1859,9 +1859,9 @@ class ReporteController extends Controller
         $writer->save('php://output');
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionReportefinalprofesor($idprofesor, $idciclo)
+    /* #region public function actionReportefinalprofesor($idprofesor, $idciclo) */
     /*
     public function actionHorarioprofesor()
     {
@@ -2068,5 +2068,5 @@ class ReporteController extends Controller
         $pdf->Output('I', 'horario.pdf');
     }
     */
-    #endregion
+    /* #endregion */
 }

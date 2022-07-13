@@ -21,7 +21,7 @@ class OpcioncursoController extends Controller
     private $opcionCursoRepository;
     private $grupoEstudianteRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -101,9 +101,9 @@ class OpcioncursoController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
+    /* #region public function __construct() */
     public function __construct($id, $module, $config = [],
                                 OpcionCursoRepository $opcionCursoRepository,
                                 GrupoEstudianteRepository $grupoEstudianteRepository
@@ -113,9 +113,9 @@ class OpcioncursoController extends Controller
         $this->opcionCursoRepository = $opcionCursoRepository;
         $this->grupoEstudianteRepository = $grupoEstudianteRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionIndex()
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new OpcionCursoSearch;
@@ -148,9 +148,9 @@ class OpcioncursoController extends Controller
 
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionCreate($msg = '', $error = '')
+    /* #region public function actionCreate($msg = '', $error = '') */
     public function actionCreate($msg = '', $error = '')
     {
         $model = new OpcionCursoForm();
@@ -163,9 +163,9 @@ class OpcioncursoController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionStore()
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new OpcionCursoForm;
@@ -202,9 +202,9 @@ class OpcioncursoController extends Controller
             return $this->redirect(['opcioncurso/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionEdit($id, $msg = '', $error = '')
+    /* #region public function actionEdit($id, $msg = '', $error = '') */
     public function actionEdit($id, $msg = '', $error = '')
     {
         $idopcion_curso = Html::encode($id);
@@ -241,9 +241,9 @@ class OpcioncursoController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionUpdate()
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new OpcionCursoForm;
@@ -285,9 +285,9 @@ class OpcioncursoController extends Controller
             return $this->redirect(['opcioncurso/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDelete()
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if (Yii::$app->request->post())
@@ -322,5 +322,5 @@ class OpcioncursoController extends Controller
             return $this->redirect(["opcioncurso/index"]);
         }
     }
-    #endregion
+    /* #endregion */
 }

@@ -22,12 +22,14 @@ class CarreraRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
+    /* #region public function __construct(Carrera $model) */
     public function __construct(Carrera $model)
     {
         parent::__construct($model);
     }
+    /* #endregion */
 
-    #region public function getCarreraEstudiante(int $idestudiante)
+    /* #region public function getCarreraEstudiante(int $idestudiante) */
     public function getCarreraEstudiante(int $idestudiante)
     {
         $table = 'cat_carreras';
@@ -51,9 +53,9 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function datosEncabezadoPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function datosEncabezadoPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function datosEncabezadoPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'cat_carreras';
@@ -85,9 +87,9 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaMateriasPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function listaMateriasPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function listaMateriasPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'cat_carreras';
@@ -119,9 +121,9 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function datosEncabezadoActasCalificaciones(int $idgrupo)
+    /* #region public function datosEncabezadoActasCalificaciones(int $idgrupo) */
     public function datosEncabezadoActasCalificaciones(int $idgrupo)
     {
         $table = 'cat_carreras';
@@ -154,9 +156,9 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function datosMateriasCarreraPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function datosMateriasCarreraPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function datosMateriasCarreraPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'cat_carreras';
@@ -181,9 +183,9 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function datosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function datosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function datosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'cat_carreras';
@@ -212,5 +214,5 @@ class CarreraRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 }

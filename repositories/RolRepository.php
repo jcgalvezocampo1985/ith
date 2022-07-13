@@ -21,10 +21,10 @@ class RolRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region(collapsed) [public function __construct(Rol $model)]
+    /* #region public function __construct(Rol $model) */
     public function __construct(Rol $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 }

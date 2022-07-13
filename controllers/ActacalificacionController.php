@@ -18,7 +18,7 @@ class ActacalificacionController extends Controller
     private $grupoEstudianteRepository;
     private $actaCalificacionRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -98,9 +98,9 @@ class ActacalificacionController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 GrupoEstudianteRepository $grupoEstudianteRepository,
                                 ActacalificacionRepository $actaCalificacionRepository
@@ -110,9 +110,9 @@ class ActacalificacionController extends Controller
         $this->grupoEstudianteRepository = $grupoEstudianteRepository;
         $this->actaCalificacionRepository = $actaCalificacionRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionGeneraracta($idgrupo)
+    /* #region public function actionGeneraracta($idgrupo) */
     public function actionGeneraracta($idgrupo)
     {
         $sql = $this->grupoEstudianteRepository->consultarCalificacionesPorGrupo($idgrupo);
@@ -206,9 +206,9 @@ class ActacalificacionController extends Controller
         //header("Location: ".Url::toRoute("/profesor/horarioconsulta?idciclo=$idciclo&idprofesor=$idprofesor&error=1&msg=$msg"));
         exit;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function promedioTotal(array $parciales)
+    /* #region public function promedioTotal(array $parciales) */
     private function promedioTotal(array $parciales)
     {
         $total_parciales = 0;
@@ -236,9 +236,9 @@ class ActacalificacionController extends Controller
 
         return $promedio_p;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad)
+    /* #region public function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad) */
     private function vertificarOportunidadCalificacion(array $calificaciones_primera_oportunidad, array $calificaciones_segunda_oportunidad)
     {
         $total_reprobados_primera = 0;
@@ -276,5 +276,5 @@ class ActacalificacionController extends Controller
 
         return $opcion;
     }
-    #endregion
+    /* #endregion */
 }

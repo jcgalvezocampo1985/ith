@@ -21,7 +21,7 @@ class CicloController extends Controller
     private $cicloRepository;
     private $grupoRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -101,9 +101,9 @@ class CicloController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 CicloRepository $cicloRepository,
                                 GrupoRepository $grupoRepository
@@ -113,9 +113,9 @@ class CicloController extends Controller
         $this->cicloRepository = $cicloRepository;
         $this->grupoRepository = $grupoRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionIndex()
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new CicloSearch;
@@ -148,9 +148,9 @@ class CicloController extends Controller
 
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionCreate($msg = '', $error = '')
+    /* #region public function actionCreate($msg = '', $error = '') */
     public function actionCreate($msg = '', $error = '')
     {
         $model = new CicloForm();
@@ -163,9 +163,9 @@ class CicloController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionStore()
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new CicloForm;
@@ -204,9 +204,9 @@ class CicloController extends Controller
             return $this->redirect(['ciclo/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionEdit($id, $msg = '', $error = ')
+    /* #region public function actionEdit($id, $msg = '', $error = ') */
     public function actionEdit($id, $msg = '', $error = '')
     {
         $idciclo = Html::encode($id);
@@ -243,9 +243,9 @@ class CicloController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionUpdate()
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new CicloForm;
@@ -287,9 +287,9 @@ class CicloController extends Controller
             return $this->redirect(['ciclo/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionDelete()
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -324,5 +324,5 @@ class CicloController extends Controller
             return $this->redirect(['ciclo/index']);
         }
     }
-    #endregion
+    /* #endregion */
 }

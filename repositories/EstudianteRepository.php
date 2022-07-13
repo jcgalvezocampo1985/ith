@@ -31,14 +31,14 @@ class EstudianteRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Estudiante $model)
+    /* #region public function __construct(Estudiante $model) */
     public function __construct(Estudiante $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionCarreras($id)
+    /* #region public function totalRelacionCarreras($id) */
     public function totalRelacionCarreras(int $idcarrera)
     {
         $total = $this->model->find()
@@ -47,9 +47,9 @@ class EstudianteRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoAlumnosCiclo($idciclo)
+    /* #region public function listadoAlumnosCiclo($idciclo) */
     public function listadoAlumnosCiclo(int $idciclo)
     {
         $table = 'estudiantes';
@@ -80,9 +80,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoAlumnosCiclo($idciclo)
+    /* #region public function listadoAlumnosCiclo($idciclo) */
     public function listadoAlumnoCiclo(int $idciclo)
     {
         $table = 'estudiantes';
@@ -111,9 +111,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0)
+    /* #region public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0) */
     public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0)
     {
         if ($idciclo != 0) {
@@ -152,9 +152,9 @@ class EstudianteRepository extends BaseRepository
 
         return $result;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo)
+    /* #region public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo) */
     public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo)
     {
         $query = "SELECT
@@ -179,9 +179,9 @@ class EstudianteRepository extends BaseRepository
 
         return $result;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function viewHorarioEstudiante(int $idestudiante)
+    /* #region public function viewHorarioEstudiante(int $idestudiante) */
     public function viewHorarioEstudiante(int $idestudiante, int $idciclo)
     {
         $query = "SELECT
@@ -206,9 +206,9 @@ class EstudianteRepository extends BaseRepository
 
         return $result;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoAlumnosGruposPorCiclo(int $idciclo)
+    /* #region public function listadoAlumnosGruposPorCiclo(int $idciclo) */
     public function listadoAlumnosGruposPorCiclo(int $idciclo)
     {
         $table = 'grupos_estudiantes';
@@ -236,9 +236,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaAlumnosEncabezado(int $idgrupo, int $idciclo)
+    /* #region public function listaAlumnosEncabezado(int $idgrupo, int $idciclo) */
     public function listaAlumnosEncabezado(int $idgrupo, int $idciclo)
     {
         $table = 'cat_carreras';
@@ -268,9 +268,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaAlumnosCuerpo(int $idgrupo, int $idciclo)
+    /* #region public function listaAlumnosCuerpo(int $idgrupo, int $idciclo) */
     public function listaAlumnosCuerpo(int $idgrupo, int $idciclo)
     {
         $table = 'estudiantes';
@@ -302,9 +302,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function calificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'estudiantes';
@@ -344,9 +344,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaAlumnosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
+    /* #region public function listaAlumnosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo) */
     public function listaAlumnosCalificacionesPorGrupoCiclo(int $idgrupo, int $idciclo)
     {
         $table = 'estudiantes';
@@ -384,9 +384,9 @@ class EstudianteRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRegistros($idestudiante)
+    /* #region public function totalRegistros($idestudiante) */
     public function totalRegistros(int $idestudiante)
     {
         $total = $this->model->find()
@@ -395,9 +395,9 @@ class EstudianteRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function existeEmail(string $email)
+    /* #region public function existeEmail(string $email) */
     public function existeEmail(string $email)
     {
         $total = $this->model->find()
@@ -406,5 +406,52 @@ class EstudianteRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
+
+    /* #region public function getAlumnosNoExistentesPorGrupo(int $idgrupo) */
+    public function getEstudiantesNoExistentesPorGrupo(int $idcarrera, int $idgrupo)
+    {
+        $table = 'grupos_estudiantes';
+        $select = [
+            'grupos_estudiantes.idestudiante'
+        ];
+        $joins = [];
+        $where = [
+            ['=', 'grupos_estudiantes.idgrupo', $idgrupo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        $estudiantes = [];
+        foreach($query as $row)
+        {
+            $estudiantes[] = $row['idestudiante'];
+        }
+
+        $table1 = 'estudiantes';
+        $select1 = [
+            'estudiantes.idestudiante', 
+            'estudiantes.nombre_estudiante'
+        ];
+        $joins1 = [];
+        $where1 = [
+            ['=', 'estudiantes.idcarrera', $idcarrera],
+            ['NOT IN', 'estudiantes.idestudiante', $estudiantes]
+        ];
+        $orderBy1 = [
+            'estudiantes.nombre_estudiante' => SORT_ASC
+        ];
+        $groupBy1 = [];
+        $paginate1 = false;
+        $registers1 = 'all';
+
+        $query1 = $this->getQuery($table1, $select1, $joins1, $where1, $orderBy1, $groupBy1, $paginate1, $registers1);
+
+        return $query1;
+    }
+    /* #endregion */
 }

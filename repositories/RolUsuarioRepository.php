@@ -18,10 +18,10 @@ class RolUsuarioRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(RolUsuario $model)
+    /* #region public function __construct(RolUsuario $model) */
     public function __construct(RolUsuario $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 }

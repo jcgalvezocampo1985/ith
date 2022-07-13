@@ -19,6 +19,8 @@ use app\repositories\GrupoEstudianteRepository;
 use app\repositories\CarreraRepository;
 use app\repositories\MateriaRepository;
 use app\repositories\ProfesorRepository;
+use app\repositories\EstudianteRepository;
+use app\repositories\OpcionCursoRepository;
 
 class GrupoController extends Controller
 {
@@ -28,8 +30,10 @@ class GrupoController extends Controller
     private $carreraRepository;
     private $materiaRepository;
     private $profesorRepository;
+    private $estudianteRepository;
+    private $opcionCursoRepository;
 
-    #region(collapsed) [public function behaviors()]
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -109,16 +113,18 @@ class GrupoController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function __construct()]
+    /* #region public function __construct() */
     public function __construct($id, $module, 
                                 GrupoRepository $grupoRepository,
                                 CicloRepository $cicloRepository,
                                 GrupoEstudianteRepository $grupoEstudianteRepository,
                                 CarreraRepository $carreraRepository,
                                 MateriaRepository $materiaRepository,
-                                ProfesorRepository $profesorRepository
+                                ProfesorRepository $profesorRepository,
+                                EstudianteRepository $estudianteRepository,
+                                OpcionCursoRepository $opcionCursoRepository
                                 )
     {
         parent::__construct($id, $module);
@@ -128,10 +134,12 @@ class GrupoController extends Controller
         $this->carreraRepository = $carreraRepository;
         $this->materiaRepository = $materiaRepository;
         $this->profesorRepository = $profesorRepository;
+        $this->estudianteRepository = $estudianteRepository;
+        $this->opcionCursoRepository = $opcionCursoRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionIndex()]
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new GrupoSearch;
@@ -164,9 +172,9 @@ class GrupoController extends Controller
 
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionCreate($msg = '', $error = '')]
+    /* #region public function actionCreate($msg = '', $error = '') */
     public function actionCreate($msg = '', $error = '')
     {
 
@@ -188,9 +196,9 @@ class GrupoController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'ciclos', 'idprofesor', 'idciclo', 'idcarrera', 'idmateria', 'carreras', 'materias', 'profesores'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionStore()]
+    /* #region public function actionStore()] */
     public function actionStore()
     {
         $model = new GrupoForm();
@@ -240,9 +248,9 @@ class GrupoController extends Controller
             return $this->redirect(["carrera/index"]);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionEdit($id, $msg = '', $error = '')]
+    /* #region public function actionEdit($id, $msg = '', $error = '') */
     public function actionEdit($id, $msg = '', $error ='')
     {
         $idgrupo = Html::encode($id);
@@ -283,9 +291,9 @@ class GrupoController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'ciclos', 'carreras', 'materias', 'profesores'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionUpdate()]
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new GrupoForm;
@@ -327,9 +335,9 @@ class GrupoController extends Controller
             return $this->redirect(['grupo/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionDelete()]
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -364,21 +372,54 @@ class GrupoController extends Controller
             return $this->redirect(['grupo/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) public function actionGrupoalumnos()]
+    /* #region public function actionGrupoalumnos() */
     public function actionGrupoalumnos()
     {
-        $this->layout = 1;
+        $this->layout = 'main2';
 
         if(Yii::$app->request->get())
         {
+            $idcarrera = Html::encode($_GET["idcarrera"]);
             $idgrupo = Html::encode($_GET["idgrupo"]);
+
+            $estudiantes = $this->estudianteRepository->getEstudiantesNoExistentesPorGrupo($idcarrera, $idgrupo);
+            $opcion_cursos = $this->opcionCursoRepository->listaRegistros(['idopcion_curso' => SORT_ASC]);
 
             $model = $this->grupoRepository->queryGrupoAlumnos($idgrupo);
 
-            return $this->render('grupo_alumnos', compact('model'));
+            return $this->render('grupo_alumnos', compact('model', 'estudiantes', 'opcion_cursos', 'idgrupo'));
         }
     }
-    #endregion
+    /* #endregion */
+
+    public function actionGuardarestudiantesgrupo()
+    {
+        $idestudiante = Html::encode($_POST["idestudiante"]);
+        $idgrupo = Html::encode($_POST["idgrupo"]);
+        $idopcioncurso = Html::encode($_POST["idopcioncurso"]);
+
+        $data = [
+            'idgrupo' => $idgrupo,
+            'idestudiante' => $idestudiante,
+            'idopcion_curso' => $idopcioncurso,
+            'fecha_registro' => date('Y-m-d h:i:s'),
+            'cve_estatus' => 'VIG',
+            'idciclo' => $this->cicloRepository->maxId(),
+            'idgrupoidestudiante' => $idgrupo.$idestudiante
+        ];
+
+        $resultado = $this->grupoEstudianteRepository->store($data);
+        $estudiante = $this->estudianteRepository->get($idestudiante);
+        $nombre = $estudiante['nombre_estudiante'];
+
+        $response = [
+            'resultado' => $resultado,
+            'nombre' => $nombre,
+            'idestudiante' => $idestudiante
+        ];
+
+        return $this->asJson($response);
+    }
 }

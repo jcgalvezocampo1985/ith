@@ -21,8 +21,10 @@ class OpcionCursoRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
+    /* #region public function __construct(OpcionCurso $model) */
     public function __construct(OpcionCurso $model)
     {
         parent::__construct($model);
     }
+    /* #endregion */
 }

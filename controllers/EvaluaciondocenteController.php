@@ -18,7 +18,7 @@ class EvaluaciondocenteController extends Controller
 {
     private $cicloRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -98,14 +98,17 @@ class EvaluaciondocenteController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
+    /* #region public function __construct() */
     public function __construct($id, $module, CicloRepository $cicloRepository)
     {
         parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
     }
+    /* #endregion */
 
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
@@ -146,4 +149,5 @@ class EvaluaciondocenteController extends Controller
 
         return $this->render("index", compact('form', 'ciclos', 'idciclo', 'reporte', 'reportes', 'msg', 'error'));
     }
+    /* #endregion */
 }

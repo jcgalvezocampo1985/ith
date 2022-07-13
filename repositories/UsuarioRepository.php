@@ -26,19 +26,19 @@ class UsuarioRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region(collapsed) [public function __construct(Usuario $model)]
+    /* #region public function __construct(Usuario $model) */
     public function __construct(Usuario $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function consultarUsuarioPorCurp(string $curp)]
+    /* #region public function consultarUsuarioPorCurp(string $curp) */
     public function consultarUsuarioPorCurp(string $curp)
     {
         return $this->model->find()
                     ->where(['curp' => $curp])
                     ->one();
     }
-    #endregion
+    /* #endregion */
 }

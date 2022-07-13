@@ -35,7 +35,7 @@ class EstudianteController extends Controller
     private $opcionCursoRepository;
     private $grupoRepository;
 
-    #region(collapsed) [public function behaviors()]
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -155,9 +155,9 @@ class EstudianteController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function __construct()]
+    /* #region public function __construct() */
     public function __construct($id, $module,
                                 EstudianteRepository $estudianteRepository,
                                 CicloRepository $cicloRepository,
@@ -177,9 +177,9 @@ class EstudianteController extends Controller
         $this->opcionCursoRepository = $opcionCursoRepository;
         $this->grupoRepository = $grupoRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionIndex()]
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new EstudianteSearch;
@@ -214,9 +214,9 @@ class EstudianteController extends Controller
         
         return $this->render('index', compact('model', 'form', 'msg', 'error', 'pages'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCreate($msg = '', $error = '')]
+    /* #region public function actionCreate($msg = '', $error = '') */
     public function actionCreate($msg = '', $error = '')
     {
         $model = new EstudianteForm;
@@ -233,9 +233,9 @@ class EstudianteController extends Controller
 
         return $this->render('form', compact('model', 'msg', 'error', 'sexo', 'num_semestre', 'status', 'carrera', 'clave_estatus'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionStore()]
+    /* #region public function actionStore() */
     public function actionStore()
     {
         $model = new EstudianteForm;
@@ -307,9 +307,9 @@ class EstudianteController extends Controller
             return $this->redirect(['estudiante/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionEdit($idestudiante, $msg = '', $error = '')]
+    /* #region public function actionEdit($idestudiante, $msg = '', $error = '') */
     public function actionEdit($idestudiante, $msg = '', $error = '')
     {
         if(Yii::$app->request->get())
@@ -350,9 +350,9 @@ class EstudianteController extends Controller
 
         return $this->render('form', compact('model', 'status', 'msg', 'error', 'sexo', 'num_semestre', 'carrera', 'clave_estatus'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionUpdate()]
+    /* #region public function actionUpdate() */
     public function actionUpdate()
     {
         $model = new EstudianteForm;
@@ -402,9 +402,9 @@ class EstudianteController extends Controller
             return $this->redirect(['estudiante/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionDelete()]
+    /* #region public function actionDelete() */
     public function actionDelete()
     {
         if(Yii::$app->request->post())
@@ -439,9 +439,9 @@ class EstudianteController extends Controller
             return $this->redirect(['estudiante/index']);
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorario()]
+    /* #region public function actionHorario() */
     public function actionHorario()
     {
         $model = [];
@@ -465,9 +465,9 @@ class EstudianteController extends Controller
 
         return $this->render('horario', compact('model', 'form', 'status'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionBoleta()]
+    /* #region public function actionBoleta() */
     public function actionBoleta()
     {
         $model = [];
@@ -491,9 +491,9 @@ class EstudianteController extends Controller
 
         return $this->render('boleta', compact('model', 'form', 'status'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCalificaciones()]
+    /* #region public function actionCalificaciones() */
     public function actionCalificaciones()
     {
         $model = [];
@@ -517,9 +517,9 @@ class EstudianteController extends Controller
 
         return $this->render('calificaciones', compact('model', 'form', 'status'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionCalificacionesporciclo()]
+    /* #region public function actionCalificacionesporciclo() */
     public function actionCalificacionesporciclo()
     {
         $this->layout = 1;
@@ -551,9 +551,9 @@ class EstudianteController extends Controller
             throw new \yii\web\HttpException(404,'Oops. Not logged in.');
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionBoletacalificacion()]
+    /* #region public function actionBoletacalificacion() */
     public function actionBoletacalificacion()
     {
         $this->layout = 'main2';
@@ -563,9 +563,9 @@ class EstudianteController extends Controller
 
         return $this->render('boleta_calificacion', compact('model'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorarioalumnos()]
+    /* #region public function actionHorarioalumnos() */
     public function actionHorarioalumnos()
     {
         $this->layout = 'main2';
@@ -575,9 +575,9 @@ class EstudianteController extends Controller
 
         return $this->render('horario_alumno', compact('model'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorariomodificar()]
+    /* #region public function actionHorariomodificar() */
     public function actionHorariomodificar()
     {
         $idciclo_actual = $this->cicloRepository->maxId();
@@ -623,9 +623,9 @@ class EstudianteController extends Controller
 
         return $this->render('horariomodificar', compact('model', 'form', 'ciclos', 'idestudiante', 'estudiante', 'idciclo', 'idciclo_actual', 'creditos', 'idcarrera', 'carrera', 'status', 'msg'));
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionDeletehorarioestudiante()]
+    /* #region public function actionDeletehorarioestudiante() */
     public function actionDeletehorarioestudiante()
     {
         if(Yii::$app->request->get())
@@ -656,9 +656,9 @@ class EstudianteController extends Controller
             exit;
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionHorarioagregar()]
+    /* #region public function actionHorarioagregar() */
     public function actionHorarioagregar()
     {
         $this->layout = 'main2';//Cambio de layout
@@ -682,9 +682,9 @@ class EstudianteController extends Controller
             return $this->render('horarioagregar', compact('materias', 'opcion_curso', 'idestudiante', 'idciclo', 'idcarrera'));
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function actionAgregarmateria()]
+    /* #region public function actionAgregarmateria() */
     public function actionAgregarmateria()
     {
         if (Yii::$app->request->get())
@@ -718,5 +718,5 @@ class EstudianteController extends Controller
 
         return $status;
     }
-    #endregion
+    /* #endregion */
 }

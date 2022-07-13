@@ -15,6 +15,7 @@ class GrupoRepository extends BaseRepository
         'grupos.idgrupo',
         'ciclo.idciclo',
         'ciclo.desc_ciclo AS ciclo',
+        'grupos.idcarrera',
         'cat_carreras.desc_carrera AS carrera',
         'cat_materias.desc_materia AS materia',
         'cat_materias.creditos',
@@ -53,14 +54,14 @@ class GrupoRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Grupo $model)
+    /* #region public function __construct(Grupo $model) */
     public function __construct(Grupo $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionCiclos(int $idciclo)
+    /* #region public function totalRelacionCiclos(int $idciclo) */
     public function totalRelacionCiclos(int $idciclo)
     {
         $total = $this->model->find()
@@ -69,9 +70,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionCarreras(int $idcarrera)
+    /* #region public function totalRelacionCarreras(int $idcarrera) */
     public function totalRelacionCarreras(int $idcarrera)
     {
         $total = $this->model->find()
@@ -80,9 +81,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionMaterias(int $idmateria)
+    /* #region public function totalRelacionMaterias(int $idmateria) */
     public function totalRelacionMaterias(int $idmateria)
     {
         $total = $this->model->find()
@@ -91,9 +92,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionProfesores(int $idprofesor)
+    /* #region public function totalRelacionProfesores(int $idprofesor) */
     public function totalRelacionProfesores(int $idprofesor)
     {
         $total = $this->model->find()
@@ -102,9 +103,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function queryGrupoAlumnos(int $idgrupo)
+    /* #region public function queryGrupoAlumnos(int $idgrupo) */
     public function queryGrupoAlumnos(int $idgrupo)
     {
         $table = 'grupos_estudiantes';
@@ -132,7 +133,7 @@ class GrupoRepository extends BaseRepository
             ['=', 'grupos_estudiantes.idgrupo', $idgrupo]
         ];
         $orderBy = [
-            'estudiantes.idestudiante' => SORT_DESC
+            'estudiantes.nombre_estudiante' => SORT_ASC
         ];
         $groupBy = [];
         $paginate = false;
@@ -142,9 +143,9 @@ class GrupoRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '')
+    /* #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '') */
     public function queryCicloCarreraEstudiante(int $idcarrera, int $idestudiante, string $desc_materia = '')
     {
         $table = 'grupos_estudiantes';
@@ -208,9 +209,9 @@ class GrupoRepository extends BaseRepository
 
         return $query1;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoGrupo(int $idciclo)
+    /* #region public function listadoGrupo(int $idciclo) */
     public function listadoGrupo(int $idciclo)
     {
         $table = 'grupos';
@@ -236,9 +237,9 @@ class GrupoRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaGruposProfesorCiclo(int $idprofesor, int $idciclo)
+    /* #region public function listaGruposProfesorCiclo(int $idprofesor, int $idciclo) */
     public function listaGruposProfesorCiclo(int $idprofesor, int $idciclo)
     {
         $table = 'grupos';
@@ -263,9 +264,9 @@ class GrupoRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaMateriasPorIdgrupo(int $idgrupo)
+    /* #region public function listaMateriasPorIdgrupo(int $idgrupo) */
     public function listaMateriasPorIdgrupo(int $idgrupo)
     {
         $table = 'grupos';
@@ -287,9 +288,9 @@ class GrupoRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo)
+    /* #region public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo) */
     public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo)
     {
         $total = $this->model->find()
@@ -299,9 +300,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalMateriasAtendidasPorProfesorCiclo(int $idprofesor, int $idciclo)
+    /* #region public function totalMateriasAtendidasPorProfesorCiclo(int $idprofesor, int $idciclo) */
     public function totalMateriasAtendidasPorProfesorCiclo(int $idprofesor, int $idciclo)
     {
         $total = $this->model->find()
@@ -310,9 +311,9 @@ class GrupoRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listaMateriasPorProfesorCiclo(int $idprofesor, int $idciclo)
+    /* #region public function listaMateriasPorProfesorCiclo(int $idprofesor, int $idciclo) */
     public function listaMateriasPorProfesorCiclo(int $idprofesor, int $idciclo)
     {
         $table = 'grupos';
@@ -355,5 +356,5 @@ class GrupoRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 }

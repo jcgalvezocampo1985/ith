@@ -24,14 +24,14 @@ class MateriaRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Materia $model)
+    /* #region public function __construct(Materia $model) */
     public function __construct(Materia $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoMateriaCiclo(int $idciclo)
+    /* #region public function listadoMateriaCiclo(int $idciclo) */
     public function listadoMateriaCiclo(int $idciclo)
     {
         $table = 'cat_materias';
@@ -58,5 +58,5 @@ class MateriaRepository extends BaseRepository
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 }

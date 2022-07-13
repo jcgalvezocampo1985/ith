@@ -23,14 +23,14 @@ class CicloRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region(collapsed) [public function __construct(Ciclo $model)]
+    /* #region public function __construct(Ciclo $model */
     public function __construct(Ciclo $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function totalCiclo(int $idciclo)]
+    /* #region public function totalCiclo(int $idciclo */
     public function totalCiclo(int $idciclo)
     {
         $total = $this->model->find()
@@ -39,23 +39,23 @@ class CicloRepository extends BaseRepository
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function consultaDatosCiclo(int $idciclo)]
+    /* #region public function consultaDatosCiclo(int $idciclo */
     public function consultaDatosCiclo(int $idciclo)
     {
         return $this->model->find()
                            ->where(['idciclo' => $idciclo])
                            ->one();
     }
-    #endregion
+    /* #endregion */
 
-    #region(collapsed) [public function consultarCiclos()]
+    /* #region public function consultarCiclos( */
     public function consultarCiclos()
     {
         return $this->model->find()
                            ->orderBy(['idciclo' => SORT_DESC])
                            ->all();
     }
-    #endregion
+    /* #endregion */
 }
