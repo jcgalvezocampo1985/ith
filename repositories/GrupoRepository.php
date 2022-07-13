@@ -15,6 +15,7 @@ class GrupoRepository extends BaseRepository
         'grupos.idgrupo',
         'ciclo.idciclo',
         'ciclo.desc_ciclo AS ciclo',
+        'grupos.idcarrera',
         'cat_carreras.desc_carrera AS carrera',
         'cat_materias.desc_materia AS materia',
         'cat_materias.creditos',
@@ -53,48 +54,59 @@ class GrupoRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Grupo $model)
+    /* #region public function __construct(Grupo $model) */
     public function __construct(Grupo $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionCiclos($id)
-    public function totalRelacionCiclos($id)
+    /* #region public function totalRelacionCiclos(int $idciclo) */
+    public function totalRelacionCiclos(int $idciclo)
     {
         $total = $this->model->find()
-                             ->where(['idciclo' => $id])
+                             ->where(['idciclo' => $idciclo])
                              ->count();
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionCarreras($id)
-    public function totalRelacionCarreras($id)
+    /* #region public function totalRelacionCarreras(int $idcarrera) */
+    public function totalRelacionCarreras(int $idcarrera)
     {
         $total = $this->model->find()
-                             ->where(['idcarrera' => $id])
+                             ->where(['idcarrera' => $idcarrera])
                              ->count();
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function totalRelacionMaterias($id)
-    public function totalRelacionMaterias($id)
+    /* #region public function totalRelacionMaterias(int $idmateria) */
+    public function totalRelacionMaterias(int $idmateria)
     {
         $total = $this->model->find()
-                             ->where(['idmateria' => $id])
+                             ->where(['idmateria' => $idmateria])
                              ->count();
 
         return $total;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function queryGrupoAlumnos($idgrupo)
-    public function queryGrupoAlumnos($idgrupo)
+    /* #region public function totalRelacionProfesores(int $idprofesor) */
+    public function totalRelacionProfesores(int $idprofesor)
+    {
+        $total = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor])
+                             ->count();
+
+        return $total;
+    }
+    /* #endregion */
+
+    /* #region public function queryGrupoAlumnos(int $idgrupo) */
+    public function queryGrupoAlumnos(int $idgrupo)
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -121,18 +133,20 @@ class GrupoRepository extends BaseRepository
             ['=', 'grupos_estudiantes.idgrupo', $idgrupo]
         ];
         $orderBy = [
-            'estudiantes.idestudiante' => SORT_DESC
+            'estudiantes.nombre_estudiante' => SORT_ASC
         ];
         $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, false);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function queryGrupoAlumnos($idgrupo)
-    public function queryCicloCarreraEstudiante($idciclo, $idcarrera, $idestudiante, $desc_materia = '')
+    /* #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '') */
+    public function queryCicloCarreraEstudiante(int $idcarrera, int $idestudiante, string $desc_materia = '')
     {
         $table = 'grupos_estudiantes';
         $select = [
@@ -144,14 +158,12 @@ class GrupoRepository extends BaseRepository
         $where = [
             ['=', 'grupos_estudiantes.idestudiante', $idestudiante]
         ];
-        $orderBy = [
-            
-        ];
-        $groupBy = [
-            
-        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         $materias = [];
         foreach($query as $row)
@@ -171,12 +183,14 @@ class GrupoRepository extends BaseRepository
             'cat_materias.creditos',
             'grupos.num_semestre',
             'ciclo.desc_ciclo',
-            'grupos.desc_grupo'
+            'grupos.desc_grupo',
+            'CONCAT(profesores.nombre_profesor, " ",profesores.apaterno," ",profesores.amaterno) AS profesor'
         ];
         $joins1 = [
             ['cat_materias', 'grupos.idmateria = cat_materias.idmateria'],
             ['cat_carreras', 'grupos.idcarrera = cat_carreras.idcarrera'],
-            ['ciclo', 'grupos.idciclo = ciclo.idciclo']
+            ['ciclo', 'grupos.idciclo = ciclo.idciclo'],
+            ['profesores', 'grupos.idprofesor = profesores.idprofesor']
         ];
         $where1 = [
             ['=', 'cat_carreras.idcarrera', $idcarrera],
@@ -188,15 +202,17 @@ class GrupoRepository extends BaseRepository
             'cat_materias.desc_materia' => SORT_ASC
         ];
         $groupBy1 = ['cat_materias.idmateria'];
+        $paginate1 = false;
+        $registers1 = 'all';
 
-        $query1 = $this->getQuery($table1, $select1, $joins1, $where1, $orderBy1, $groupBy1);
+        $query1 = $this->getQuery($table1, $select1, $joins1, $where1, $orderBy1, $groupBy1, $paginate1, $registers1);
 
         return $query1;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function listadoGrupo($idciclo)
-    public function listadoGrupo($idciclo)
+    /* #region public function listadoGrupo(int $idciclo) */
+    public function listadoGrupo(int $idciclo)
     {
         $table = 'grupos';
         $select = [
@@ -213,10 +229,132 @@ class GrupoRepository extends BaseRepository
         $orderBy = [
             'cat_materias.idmateria' => SORT_DESC
         ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, []);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
-    #endregion
+    /* #endregion */
+
+    /* #region public function listaGruposProfesorCiclo(int $idprofesor, int $idciclo) */
+    public function listaGruposProfesorCiclo(int $idprofesor, int $idciclo)
+    {
+        $table = 'grupos';
+        $select = [
+            "grupos.idgrupo",
+            "grupos.idciclo",
+            "cat_materias.desc_materia"
+        ];
+        $joins = [
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos.idprofesor', $idprofesor],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    /* #endregion */
+
+    /* #region public function listaMateriasPorIdgrupo(int $idgrupo) */
+    public function listaMateriasPorIdgrupo(int $idgrupo)
+    {
+        $table = 'grupos';
+        $select = [
+            'cat_materias.desc_materia'
+        ];
+        $joins = [
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria']
+        ];
+        $where = [
+            ['=', 'grupos.idgrupo', $idgrupo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'one';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    /* #endregion */
+
+    /* #region public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo) */
+    public function totalGruposAtentidosPorProfesorCiclo(int $idprofesor, int $idciclo)
+    {
+        $total = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor, 'idciclo' => $idciclo])
+                             ->groupBy('desc_grupo')
+                             ->count();
+
+        return $total;
+    }
+    /* #endregion */
+
+    /* #region public function totalMateriasAtendidasPorProfesorCiclo(int $idprofesor, int $idciclo) */
+    public function totalMateriasAtendidasPorProfesorCiclo(int $idprofesor, int $idciclo)
+    {
+        $total = $this->model->find()
+                             ->where(['idprofesor' => $idprofesor, 'idciclo' => $idciclo])
+                             ->count();
+
+        return $total;
+    }
+    /* #endregion */
+
+    /* #region public function listaMateriasPorProfesorCiclo(int $idprofesor, int $idciclo) */
+    public function listaMateriasPorProfesorCiclo(int $idprofesor, int $idciclo)
+    {
+        $table = 'grupos';
+        $select = [
+            'cat_materias.desc_materia',
+            'cat_carreras.cve_carrera',
+            '(SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo) AS total_estudiantes',
+            '(SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE pri_opt <> "NA" AND pri_opt <> "" AND idgrupo = grupos.idgrupo) AS po',
+            'ROUND(((SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE pri_opt <> "NA" AND pri_opt <> "" AND idgrupo = grupos.idgrupo) / (SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo)) * 100)  AS po_porcentaje',
+            '(SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE seg_opt <> "NA" AND seg_opt <> "" AND idgrupo = grupos.idgrupo) AS so',
+            'ROUND(((SELECT COUNT(idacta_cal) FROM actas_calificaciones WHERE seg_opt <> "NA" AND seg_opt <> "" AND idgrupo = grupos.idgrupo) / (SELECT COUNT(idestudiante) FROM grupos_estudiantes WHERE idgrupo = grupos.idgrupo)) * 100)  AS so_porcentaje',
+            '(SELECT
+                COUNT(estudiantes.idestudiante) 
+              FROM
+                estudiantes
+              INNER JOIN grupos_estudiantes ON estudiantes.idestudiante = grupos_estudiantes.idestudiante
+              WHERE
+                grupos_estudiantes.idgrupo = grupos.idgrupo
+              AND
+                estudiantes.cve_estatus = "DES"
+            ) AS bajas'
+        ];
+        $joins = [
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria'],
+            ['cat_carreras', 'grupos.idcarrera = cat_carreras.idcarrera']
+        ];
+        $where = [
+            ['=', 'grupos.idprofesor', $idprofesor],
+            ['=', 'grupos.idciclo', $idciclo]
+        ];
+        $orderBy = [
+            'cat_carreras.desc_carrera' => SORT_ASC,
+            'cat_materias.desc_materia' => SORT_ASC
+        ];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    /* #endregion */
 }

@@ -8,26 +8,26 @@ use app\repositories\BaseRepository;
 
 class ProfesorSeguimientoRepository extends BaseRepository
 {
-    protected $table = ['ciclos'];
-    public $campos = [];
+    protected $table = ['profesores_seguimientos'];
+    protected $primaryKey = 'idseguimiento';
+    protected $campos = ['idciclo', 'idprofesor', 'seguimiento', 'bandera'];
     protected $select = [];
     protected $joins = [];
     protected $where = [];
     protected $orderBy = [];//SORT_DESC o SORT_ASC
     protected $paginate = 15;
     public $search;
-    public $pages;
     public $model;
 
-    #region public function __construct(ProfesorSeguimiento $model)
+    /* #region public function __construct(ProfesorSeguimiento $model) */
     public function __construct(ProfesorSeguimiento $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function querySeguimientos($idciclo)
-    public function querySeguimientos($idciclo)
+    /* #region public function querySeguimientos($idciclo) */
+    public function querySeguimientos(int $idciclo)
     {
         $table = 'profesores';
         $select = [
@@ -49,31 +49,47 @@ class ProfesorSeguimientoRepository extends BaseRepository
             'profesores.nombre_profesor' => SORT_ASC
         ];
         $groupBy = [];
+        $paginate = true;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, true);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function countSeguimientoCicloBandera($idciclo, $seguimiento, $bandera)
-    public function countSeguimientoCicloBandera($idciclo, $seguimiento, $bandera)
+    /* #region public function countSeguimientoCicloBandera(int $idciclo, int $seguimiento, int $bandera) */
+    public function countSeguimientoCicloBandera(int $idciclo, int $seguimiento, int $bandera)
     {
         return $this->model->find()->where(['idciclo' => $idciclo, 'seguimiento' => $seguimiento, 'bandera' => $bandera])->count();
     }
-    #endregion
+    /* #endregion */
 
-    #region public function countSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento)
-    public function countSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento)
+    /* #region public function countSeguimientoCicloProfesor(int $idciclo, int $idprofesor, int $seguimiento) */
+    public function countSeguimientoCicloProfesor(int $idciclo, int $idprofesor, int $seguimiento)
     {
         return $this->model->find()->where(['idciclo' => $idciclo, 'idprofesor' => $idprofesor, 'seguimiento' => $seguimiento])->count();
     }
-    #endregion
+    /* #endregion */
 
-    #region public function oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento)
-    public function oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento)
+    /* #region public function oneSeguimientoCicloProfesor(int $idciclo, int $idprofesor, int $seguimiento) */
+    public function oneSeguimientoCicloProfesor(int $idciclo, int $idprofesor, int $seguimiento)
     {
         return $this->model->find()->where(['idciclo' => $idciclo, 'idprofesor' => $idprofesor, 'seguimiento' => $seguimiento])->one();
     }
-    #endregion
+    /* #endregion */
+
+    /* #region public function countSeguimientoCicloProfesorBandera(int $idciclo, int $idprofesor, int $seguimiento, int $bandera) */
+    public function countSeguimientoCicloProfesorBandera(int $idciclo, int $idprofesor, int $seguimiento, int $bandera)
+    {
+        return $this->model->find()
+                           ->where([
+                                'idciclo' => $idciclo,
+                                'idprofesor' => $idprofesor,
+                                'seguimiento' => $seguimiento,
+                                'bandera' => $bandera
+                           ])
+                           ->count();
+    }
+    /* #endregion */
 }

@@ -24,15 +24,15 @@ class MateriaRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
-    #region public function __construct(Materia $model)
+    /* #region public function __construct(Materia $model) */
     public function __construct(Materia $model)
     {
         parent::__construct($model);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct(Materia $model)
-    public function listadoMateriaCiclo($idciclo)
+    /* #region public function listadoMateriaCiclo(int $idciclo) */
+    public function listadoMateriaCiclo(int $idciclo)
     {
         $table = 'cat_materias';
         $select = [
@@ -51,10 +51,12 @@ class MateriaRepository extends BaseRepository
         $groupBy = [
             'cat_materias.idmateria'
         ];
+        $paginate = false;
+        $registers = 'all';
 
-        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy);
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
 
         return $query;
     }
-    #endregion
+    /* #endregion */
 }
