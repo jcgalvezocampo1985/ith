@@ -19,7 +19,7 @@ $this->registerJs('
             success: function(data){
                 if(data.resultado == 1){
                     $("#idestudiante option:selected").remove();
-                    $("#tabla-estudiantes>tbody").append("<tr><td>"+data.idestudiante+"</td><td>"+data.nombre+"</td><td></td></tr>");
+                    $("#tabla-estudiantes>tbody").append("<tr><td>"+data.idestudiante+"</td><td>"+data.nombre+"</td></tr>");
                     $("#idestudiante, #idopcioncurso").val("");
                 }else{
                     alert("Error");

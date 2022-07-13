@@ -72,7 +72,6 @@ $this->params["breadcrumbs"][] = $this->title;
                     <tr>
                         <th class="text-center">No. Control</th>
                         <th class="text-center">Nombre</th>
-                        <th class="text-center">Promedio</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,7 +82,6 @@ $this->params["breadcrumbs"][] = $this->title;
                     <tr class="tr_clone">
                         <td><?= $row["idestudiante"] ?></td>
                         <td><?= $row["nombre_estudiante"] ?></td>
-                        <td class="text-center <?= ($promedio >= 70) ? "bg-success text-success" : "bg-danger text-danger" ?>"><?= $row["promedio"] ?></td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>
