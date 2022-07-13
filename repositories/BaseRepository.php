@@ -19,24 +19,14 @@ abstract class BaseRepository implements RepositoryBaseInterface
     protected $paginate = 5;
     public $search;
 
-<<<<<<< HEAD
     #region public function __construct($model)
-=======
-    /* #regionpublic function __construct($model) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function __construct($model)
     {
         $this->model = $model;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function all($where = false)
-=======
-    /* #endregion */
-
-    /* #regionpublic function all($where = false) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function all($where = false)
     {
         $query = $this->model->find();
@@ -73,15 +63,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function allQuery($where = false)
-=======
-    /* #endregion */
-
-    /* #regionpublic function allQuery($where = false) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function allQuery($where = false)
     {
         if(count($this->table) == 0 && count($this->select) == 0)
@@ -99,11 +83,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
             $query = $query->orderBy($this->orderBy);
         }
 
-<<<<<<< HEAD
        if(count($this->joins) > 0)
-=======
-        if(count($this->joins) > 0)
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
         {
             foreach($this->joins as $item => $key)
             {
@@ -138,15 +118,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
-=======
-    /* #endregion */
-
-    /* #regionpublic function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all') */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function getQuery($table = '', $select = [], $joins = [], $where = [], $orderBy = [], $groupBy = [], $paginate = false, $registers = 'all')
     {
         if($table != '' && count($select) == 0)
@@ -216,15 +190,9 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function getView($query, array $where, $registers = 'all')
-=======
-    /* #endregion */
-
-    /* #regionpublic function getView($query, array $where, $registers = 'all') */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function getView($query = '', array $where = [], $registers = 'all')
     {
         $model = Yii::$app->db->createCommand($query);
@@ -244,20 +212,13 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $model;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function get($id)
-=======
-    /* #endregion */
-
-    /* #regionpublic function get($id) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function get($id)
     {
         return $this->model->findOne($id);
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function store($request)
@@ -266,96 +227,36 @@ abstract class BaseRepository implements RepositoryBaseInterface
         foreach($this->campos as $row)
         {
             $this->model->$row = $request[$row];
-=======
-    /* #endregion */
-
-    /* #regionpublic function store($request) */
-    public function store($request)
-    {
-        if(is_object($request))
-        {
-            foreach($this->campos as $row)
-            {
-                $this->model->$row = $request[$row];
-            }
-        }
-        else
-        {
-            foreach($this->campos as $row)
-            {
-                if(array_key_exists($row, $request))
-                {
-                    $this->model->$row = $request[$row];
-                }
-            }
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
         }
 
         return $this->model->insert();
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function update($request, $id)
-=======
-    /* #endregion */
-
-    /* #regionpublic function update($request, $id) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function update($request, $id)
     {
         $query = $this->model->findOne($id);
 
-<<<<<<< HEAD
         foreach($this->campos as $row)
         {
             $query->$row = $request[$row];
-=======
-        if(is_object($request))
-        {
-            foreach($this->campos as $row)
-            {
-                $query->$row = $request[$row];
-            }
-        }
-        else
-        {
-            foreach($this->campos as $row)
-            {
-                if(array_key_exists($row, $request))
-                {
-                    $query->$row = $request[$row];
-                }
-            }
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
         }
 
         return $query->update();
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function destroy($id)
-=======
-    /* #endregion */
-
-    /* #regionpublic function destroy($id) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function destroy($id)
     {
         $query = $this->model->findOne($id);
 
         return $query->delete();
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function listaRegistros(array $orderBy = [])
-=======
-    /* #endregion */
-
-    /* #regionpublic function listaRegistros(array $orderBy = []) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function listaRegistros(array $orderBy = [])
     {
         $query = $this->model->find();
@@ -369,50 +270,28 @@ abstract class BaseRepository implements RepositoryBaseInterface
 
         return $query;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function maxId()
-=======
-    /* #endregion */
-
-    /* #regionpublic function maxId() */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function maxId()
     {
         $query = $this->model->find()->max($this->primaryKey);
 
         return $query;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function setPages($pages)
-=======
-    /* #endregion */
-
-    /* #regionpublic function setPages($pages) */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function setPages($pages)
     {
         $this->pages = $pages;
     }
-<<<<<<< HEAD
     #endregion
 
     #region public function getPages()
-=======
-    /* #endregion */
-
-    /* #regionpublic function getPages() */
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function getPages()
     {
         return $this->pages;
     }
-<<<<<<< HEAD
     #endregion    
-=======
-    /* #endregion */    
->>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
 }
