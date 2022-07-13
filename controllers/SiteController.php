@@ -24,7 +24,7 @@ use app\models\login\UsuarioRol;
 
 class SiteController extends Controller
 {
-    /*
+    /* #region public function behaviors() */
     public function behaviors()
     {
        return [
@@ -104,13 +104,9 @@ class SiteController extends Controller
                ],
        ];
     }
-*/
-    /**
-    * {
-    @inheritdoc}
-    */
+    /* #endregion */
 
-    #region public function actions()
+    /* #region public function actions() */
     public function actions()
     {
         return [
@@ -123,93 +119,75 @@ class SiteController extends Controller
             ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    /**
-    * Displays homepage.
-    *
-    * @return string
-    */
-
-    #region public function actionIndex()
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         //return $this->render('index');
         return $this->redirect(["profesor/index"]);
     }
-    #endregion
+    /* #endregion */
 
-    /**
-    * Login action.
-    *
-    * @return Response|string
-    */
-
-    #region public function actionLogin()
+    /* #region public function actionLogin() */
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->redirect(["site/index"]);
-            /*if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
+            //return $this->redirect(["site/index"]);
+            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horario"]);
             }
             else if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
-            if(User::isUserAdministrador(Yii::$app->user->identity->idusuario))
+            if(User::isUserAutenticado(Yii::$app->user->identity->idusuario, 5))
             {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["site/index"]);;
             }
             else
             {
                 return $this->redirect(["site/index"]);
-            }*/
+            }
         }
  
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             if (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 1)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 2)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 3)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horario"]);
             } elseif (User::isUserAutenticado(Yii::$app->user->identity->idusuario, 4)) {
-                return $this->redirect(["site/index"]);
+                return $this->redirect(["profesor/horarioconsulta"]);
             }
         } else {
             return $this->render("login", ["model" => $model]);
         }
     }
-    #endregion
+    /* #endregion */
 
-    /**
-    * Logout action.
-    *
-    * @return Response
-    */
-
-    #region public function actionLogout()
+    /* #region public function actionLogout() */
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
-    #endregion
+    /* #endregion */
 
-    #region public function randKey($str = '', $long = 0)
+    /* #region public function randKey($str = '', $long = 0) */
     private function randKey($str = '', $long = 0)
     {
         $key = null;
@@ -223,9 +201,9 @@ class SiteController extends Controller
 
         return $key;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionRegister()
+    /* #region public function actionRegister() */
     public function actionRegister()
     {
         //Creamos la instancia con el model de validación
@@ -299,9 +277,9 @@ class SiteController extends Controller
 
         return $this->render('registro', ['model' => $model, 'msg' => $msg]);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionConfirm()
+    /* #region public function actionConfirm() */
     public function actionConfirm()
     {
         $table = new Usuario;
@@ -339,9 +317,9 @@ class SiteController extends Controller
             }
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionRecoverpass()
+    /* #region public function actionRecoverpass() */
     public function actionRecoverpass()
     {
         //Instancia para validar el formulario
@@ -409,9 +387,9 @@ class SiteController extends Controller
         }
         return $this->render("recoverpass", ["model" => $model, "msg" => $msg]);
     }
-    #endregion
+    /* #endregion */
  
-    #region public function actionResetpass()
+    /* #region public function actionResetpass() */
     public function actionResetpass()
     {
         //Instancia para validar el formulario
@@ -486,9 +464,9 @@ class SiteController extends Controller
 
         return $this->render("resetpass", ["model" => $model, "msg" => $msg]);
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionGenerarpassword()
+    /* #region public function actionGenerarpassword() */
     public function actionGenerarpassword()
     {
         //Creamos la instancia con el model de validación
@@ -576,5 +554,5 @@ class SiteController extends Controller
 
         return $this->render('generarpassword', ['model' => $model, 'msg' => $msg, 'password' => $password]);
     }
-    #endregion
+    /* #endregion */
 }

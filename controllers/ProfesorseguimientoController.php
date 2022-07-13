@@ -32,7 +32,7 @@ class ProfesorseguimientoController extends Controller
     private $cicloRepository;
     private $profesorRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -113,7 +113,7 @@ class ProfesorseguimientoController extends Controller
                         ],
                         [
                             //El profesor tiene permisos sobre las siguientes acciones
-                            'actions' => ['index',
+                            'actions' => [
                                           'horario',
                                           'listaalumnos',
                                           'listaalumnoscalificacion',
@@ -172,23 +172,23 @@ class ProfesorseguimientoController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
-    #region public function __construct()
-    public function __construct($id, $module, $config = [],
+    /* #region public function __construct() */
+    public function __construct($id, $module,
                                 profesorSeguimientoRepository $profesorSeguimientoRepository,
                                 cicloRepository $cicloRepository,
                                 ProfesorRepository $profesorRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->profesorSeguimientoRepository = $profesorSeguimientoRepository;
         $this->cicloRepository = $cicloRepository;
         $this->profesorRepository = $profesorRepository;
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionIndex()
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $form = new CicloSearch;
@@ -200,7 +200,7 @@ class ProfesorseguimientoController extends Controller
         $ciclos = \MyGlobalFunctions::dropDownList($this->cicloRepository->listaRegistros(['idciclo' => SORT_DESC]), 'idciclo', ['desc_ciclo']);
         $profesores = \MyGlobalFunctions::dropDownList($this->profesorRepository->listaRegistros(['apaterno' => SORT_ASC, 'amaterno' => SORT_ASC, 'nombre_profesor' => SORT_ASC]), 'idprofesor', ['apaterno', 'amaterno', 'nombre_profesor']);
 
-        $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);
+        $model = $this->profesorSeguimientoRepository->querySeguimientos((int)$idciclo);
 
         if($form->load(Yii::$app->request->get()))
         {
@@ -208,7 +208,7 @@ class ProfesorseguimientoController extends Controller
             {
                 $idciclo = Html::encode($form->idciclo);
 
-                $model = $this->profesorSeguimientoRepository->querySeguimientos($idciclo);//Se ejecuta consulta de todos los registgros
+                $model = $this->profesorSeguimientoRepository->querySeguimientos((int)$idciclo);//Se ejecuta consulta de todos los registgros
             }
             else
             {
@@ -224,15 +224,15 @@ class ProfesorseguimientoController extends Controller
             $msg = 'No se encontró información relacionada con el criterio de búsqueda';
         }
 
-        $sql = Ciclo::find()->where(["idciclo" => $idciclo])->one();
+        $sql = $this->cicloRepository->consultaDatosCiclo((int)$idciclo);
         $ciclo_actual = $sql['desc_ciclo'];
 
-        $total_profesores = Profesor::find()->count();
-        $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 1, 1);
-        $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 2, 1);
-        $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 3, 1);
-        $total_seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 4, 1);
-        $total_seguimiento5 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera($idciclo, 5, 1);
+        $total_profesores = $this->profesorRepository->totalProfesores();
+        $total_seguimiento1 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 1, 1);
+        $total_seguimiento2 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 2, 1);
+        $total_seguimiento3 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 3, 1);
+        $total_seguimiento4 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 4, 1);
+        $total_seguimiento5 = $this->profesorSeguimientoRepository->countSeguimientoCicloBandera((int)$idciclo, 5, 1);
 
         $ts1 = ($total_seguimiento1 == $total_profesores) ? 1 : 0;
         $ts2 = ($total_seguimiento2 == $total_profesores) ? 1 : 0;
@@ -242,9 +242,9 @@ class ProfesorseguimientoController extends Controller
 
         return $this->render('seguimientos', compact('model', 'form', 'msg', 'error', 'pages', 'ts1', 'ts2', 'ts3','ts4', 'regular', 'profesores', 'ciclos', 'ciclo_actual'));
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionAsignarseguimiento()
+    /* #region public function actionAsignarseguimiento() */
     public function actionAsignarseguimiento()
     {
         $idprofesor = (Html::encode(isset($_GET['idprofesor']))) ? Html::encode($_GET['idprofesor']) : null;
@@ -258,27 +258,31 @@ class ProfesorseguimientoController extends Controller
 
             if ($total_registro == 0)
             {
-                $table = new ProfesorSeguimiento();
-                $table->idciclo = $idciclo;
-                $table->idprofesor = $idprofesor;
-                $table->seguimiento = $seguimiento;
-                $table->bandera = $bandera;
-                $table->insert();
+                $model = [
+                    'idciclo' => $idciclo,
+                    'idprofesor' => $idprofesor,
+                    'seguimiento' => $seguimiento,
+                    'bandera' => $bandera              
+                ];
+
+                $this->profesorSeguimientoRepository->store($model);
             }
             else
             {
-                $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
+                $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor((int)$idciclo, (int)$idprofesor, (int)$seguimiento);
                 $idseguimiento = $total_registro->idseguimiento;
 
-                $table = ProfesorSeguimiento::findOne($idseguimiento);
-                $table->bandera = $bandera;
-                $table->update();
+                $model = [
+                    'bandera' => $bandera
+                ];
+
+                $this->profesorSeguimientoRepository->update($model, $idseguimiento);
             }
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionAsignarseguimientos()
+    /* #region public function actionAsignarseguimientos() */
     public function actionAsignarseguimientos()
     {
         $idciclo = (Html::encode(isset($_GET['idciclo']))) ? Html::encode($_GET['idciclo']) : null;
@@ -287,59 +291,46 @@ class ProfesorseguimientoController extends Controller
 
         if($bandera != '' && $seguimiento != '' && $idciclo != '')
         {
-            $table = (new \yii\db\Query())
-                            ->from(["profesores"])
-                            ->select(["profesores.idprofesor"])
-                            ->all();
+            $table = $this->profesorRepository->registrosProfesores();
 
             foreach($table as $row)
             {
                 $idprofesor = $row['idprofesor'];
-                $total_registro = ProfesorSeguimiento::find()
-                                                    ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                    ->count();
+
+                $total_registro = $this->profesorSeguimientoRepository->countSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
 
                 if($total_registro == 0)
                 {
-                    $table = new ProfesorSeguimiento();
+                    $table = new ProfesorSeguimiento;
                     $table->idciclo = $idciclo;
                     $table->idprofesor = $idprofesor;
                     $table->seguimiento = $seguimiento;
-                    $table->bandera = $bandera;
+                    $table->bandera = $bandera; 
                     $table->insert();
                 }
                 else
                 {
-                    $total_registro = ProfesorSeguimiento::find()
-                                                        ->select('idseguimiento')
-                                                        ->where(["idciclo" => $idciclo, "idprofesor" => $idprofesor, "seguimiento" => $seguimiento])
-                                                        ->one();
-
+                    $total_registro = $this->profesorSeguimientoRepository->oneSeguimientoCicloProfesor($idciclo, $idprofesor, $seguimiento);
                     $idseguimiento = $total_registro->idseguimiento;
 
-                    $table = ProfesorSeguimiento::findOne($idseguimiento);
-                    $table->bandera = $bandera;
-                    $table->update();
+                    $model = ['bandera' => $bandera];
+
+                    $this->profesorSeguimientoRepository->update($model, $idseguimiento);
                 }
             }
-            
         }
     }
-    #endregion
+    /* #endregion */
 
-    #region public function actionSeguimientosactivos()
+    /* #region public function actionSeguimientosactivos() */
     public function actionSeguimientosactivos()
     {
         $curp = Yii::$app->user->identity->curp;
-        $idciclo = Ciclo::find()->max("idciclo");
+        $idciclo = $this->cicloRepository->maxId();
 
-        $model = (new \yii\db\Query())
-            ->from(["profesores"])
-            ->innerJoin(["profesores_seguimientos"], "profesores.idprofesor = profesores_seguimientos.idprofesor")
-            ->where(["profesores.curp" => $curp, "profesores_seguimientos.idciclo" => $idciclo, "profesores_seguimientos.bandera" => "1"])
-            ->count();
+        $model = $this->profesorRepository->profesorSeguimiento($idciclo, $curp);
 
         return $model;
     }
-    #endregion
+    /* #endregion */
 }

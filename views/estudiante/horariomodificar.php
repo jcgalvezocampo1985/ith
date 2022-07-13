@@ -5,8 +5,9 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 $this->title = 'Horario';
-
 $this->params['breadcrumbs'][] = $this->title;
+
+$idestudiante = $idestudiante != 999999999999 ? $idestudiante : ''
 ?>
 
 <div class="panel panel-primary">
@@ -31,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="col-md-12">
                     <?= Html::submitButton("Buscar", ["class" => "btn btn-primary"]) ?>
+                    <?= Html::a('Refrescar', ['estudiante/horariomodificar'], ['class' => 'btn btn-info']) ?>
             <?php $f->end() ?>
                 <?php if($idciclo_actual == $idciclo): ?>
                 <a href="<?= Yii::$app->request->hostInfo.Yii::$app->homeUrl."estudiante/horarioagregar=".$idestudiante."=".$idciclo."=".$idcarrera ?>" id="horario_agregar" class="btn btn-info" data-toggle="modal" data-target="#materias">Asignar Materia</a>
@@ -55,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>Materia</th>
                             <th>REP</th>
                             <th>CR</th>
+                            <th>Profesor</th>
                             <th>Lunes</th>
                             <th>Martes</th>
                             <th>Miércoles</th>
@@ -66,10 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                         <?php foreach($model as $row): ?>
-                        <tr>
+                        <tr style="font-size:12px;">
                             <td><?= $row['desc_materia'] ?></td>
                             <td><?= $row['desc_opcion_curso_corto'] ?></td>
                             <td><?= $row['creditos'] ?></td>
+                            <td><?= $row['profesor'] ?></td>
                             <td><?= $row['lunes'] ?></td>
                             <td><?= $row['martes'] ?></td>
                             <td><?= $row['miercoles'] ?></td>
@@ -91,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <div class="modal fade" id="materias" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="width: 85% !important;">
+    <div class="modal-dialog modal-lg modal_ancho">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -112,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row modal_alto modal_overflow">
                     <div class="col-md-12">
                         <span id="alumno_horario_agregar"></span>
                     </div>
@@ -132,3 +136,33 @@ $this->params['breadcrumbs'][] = $this->title;
         <b><?= $msg ?></b>
     </div>
 <?php endif ?>
+
+<?php
+$this->registerJs('
+    $("#horario_agregar").on("click", function(e) {
+        e.preventDefault();
+
+        var valor_url = $(this).attr("href");
+        var url = valor_url.split("=")[0];
+        var idestudiante = valor_url.split("=")[1];
+        var idciclo = valor_url.split("=")[2];
+        var idcarrera = valor_url.split("=")[3];
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                "idcarrera": idcarrera,
+                "idestudiante": idestudiante,
+                "idciclo": idciclo
+            },
+            beforeSend: function() {
+                $("#alumno_horario_agregar").empty();
+            },
+            success: function(respuesta) {
+                $("#alumno_horario_agregar").html(respuesta);
+            }
+        });
+    });
+');
+?>

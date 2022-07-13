@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
                                 <th>Ciclo</th>
                                 <th>Grupo</th>
                                 <th>Materia</th>
+                                <th>Profesor</th>
                                 <th>Créditos</th>
                                 <th>Semestre</th>
                                 <th>Opción</th>
@@ -23,10 +24,11 @@ use yii\widgets\ActiveForm;
                         <tbody>
                             <div class="lista_materias">
                             <?php foreach($materias as $row): ?>
-                            <tr id="fila-<?= $row['idgrupo'].$idestudiante ?>">
+                            <tr id="fila-<?= $row['idgrupo'].$idestudiante ?>" style="font-size: 12px">
                                 <td><?= $row['desc_ciclo'] ?></td>
                                 <td><?= $row['desc_grupo'] ?></td>
                                 <td><?= $row['desc_materia'] ?></td>
+                                <td><?= $row['profesor'] ?></td>
                                 <td><?= $row['creditos'] ?></td>
                                 <td><?= $row['num_semestre'] ?></td>
                                 <td>

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
 
+
 $this->title = ($status == 1) ? "Modificar Materia" : "Nueva Materia";
 $this->params["breadcrumbs"][] = ["label" => "Materia", "url" => ["index"]];
 $this->params["breadcrumbs"][] = $this->title;
@@ -54,4 +55,6 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <?= $form->field($model, "idmateria")->hiddenInput(["value"=> $model->idmateria, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_registro")->input("hidden", ["value"=> ($model->fecha_registro == '') ? date('Y-m-d h:i:s') : $model->fecha_registro, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_actualizacion")->input("hidden", ["value"=> ($model->idmateria != '') ? date('Y-m-d h:i:s') : $model->fecha_actualizacion, "readonly" => true])->label(false) ?>
 <?php $form->end() ?>

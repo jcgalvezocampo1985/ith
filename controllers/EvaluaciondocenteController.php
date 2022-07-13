@@ -104,7 +104,6 @@ class EvaluaciondocenteController extends Controller
         parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
     }
-
     public function actionIndex()
     {
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;

@@ -9,7 +9,6 @@ use app\models\login\UsuarioRol;
 
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
-    
     public $idusuario;
     public $curp;
     public $nombre_usuario;

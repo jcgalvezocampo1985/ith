@@ -17,7 +17,7 @@ AppAsset::register($this);
 
 if(!Yii::$app->user->isGuest){
     $profesor = Usuario::isUserAutenticado(Yii::$app->user->identity->idusuario, 3);
-    $link = ($profesor == 1) ? '/profesor/' : '/profesor/horarioconsulta';
+    $link = ($profesor) ? '/profesor/horario' : '/profesor/horarioconsulta';
 }
 ?>
 <?php $this->beginPage() ?>
@@ -29,6 +29,7 @@ if(!Yii::$app->user->isGuest){
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <?= Yii::$app->view->renderFile("@app/views/layouts/styles.php") ?>
     <?php $this->head() ?>
     <style>
         .container{
@@ -103,6 +104,7 @@ if(!Yii::$app->user->isGuest){
 </footer>
 
 <?php $this->endBody() ?>
+<?= Yii::$app->view->renderFile("@app/views/layouts/scripts.php") ?>
 </body>
 </html>
 <?php $this->endPage() ?>

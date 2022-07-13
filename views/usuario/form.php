@@ -39,20 +39,7 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <?php
-                    $fecha_registro = ($model->idusuario != "") ? $model->fecha_registro : $fecha = date("Y-m-d");
-
-                    echo $form->field($model, "fecha_registro")->input("text", ["maxlength" => 10, "autocomplete" => "off", "value" => $fecha_registro, "readonly" => true])
-                    ?>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <?php
-                    $fecha_actualizacion = ($model->idusuario != "") ? $fecha = date("Y-m-d") : "";
-
-                    echo $form->field($model, "fecha_actualizacion")->input("text", ["maxlength" => 10, "autocomplete" => "off", "value" => $fecha_actualizacion, "readonly" => true])
-                    ?>
+                <?= $form->field($model, "idrol")->dropDownList($roles)?>
                 </div>
             </div>
         </div>
@@ -67,5 +54,6 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <?= $form->field($model, "estado")->hiddenInput(["value"=> $status, "readonly" => true])->label(false) ?>
-<?= $form->field($model, "idusuario")->hiddenInput(["value"=> $model->idusuario, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_registro")->hiddenInput(["value" => ($model->fecha_registro != '') ? $model->fecha_registro : '', "readonly" => true])->label(false) ?>
+<?= $form->field($model, "fecha_actualizacion")->hiddenInput(["value" => ($model->idusuario != '') ? '' : $model->fecha_actualizacion, "readonly" => true])->label(false) ?>
 <?php $form->end() ?>

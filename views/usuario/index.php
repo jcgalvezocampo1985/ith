@@ -61,7 +61,7 @@ $this->params["breadcrumbs"][] = $this->title;
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><?= Html::a("Modificar", ["/usuario/edit?id=".$row["idusuario"]]) ?></li>
+                                        <li><?= Html::a("Modificar", ["/usuario/edit?idusuario=".$row["idusuario"]]) ?></li>
                                         <li><?= Html::a("Eliminar", ["#"], ["data-toggle" => "modal", "data-target" => "#idusuario_".$row["idusuario"].""]) ?></li>
                                         <li><?= Html::a("Restablecer Contraseña", ["#"], ["data-toggle" => "modal", "data-target" => "#idusuario_".$row["idusuario"].""]) ?></li>
                                     </ul>

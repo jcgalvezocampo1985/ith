@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
@@ -9,6 +8,24 @@ $this->params["breadcrumbs"][] = ["label" => "Grupo", "url" => ["index"]];
 $this->params["breadcrumbs"][] = $this->title;
 
 $action = ($status == 1) ? "update" : "store";
+
+$lunes = $model->lunes == '' ? '""-""' : $model->lunes;
+$lunes = explode("-", $lunes);
+
+$martes = $model->martes == '' ? '""-""' : $model->martes;
+$martes = explode("-", $martes);
+
+$miercoles = $model->miercoles == '' ? '""-""' : $model->miercoles;
+$miercoles = explode("-", $miercoles);
+
+$jueves = $model->jueves == '' ? '""-""' : $model->jueves;
+$jueves = explode("-", $jueves);
+
+$viernes = $model->viernes == '' ? '""-""' : $model->viernes;
+$viernes = explode("-", $viernes);
+
+$sabado = $model->sabado == '' ? '""-""' : $model->sabado;
+$sabado = explode("-", $sabado);
 
 $form = ActiveForm::begin([
     "method" => "post",
@@ -73,36 +90,66 @@ $form = ActiveForm::begin([
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "lunes")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "lunes_inicio")->input("time", ["value" => $lunes[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "martes")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "lunes_fin")->input("time", ["value" => $lunes[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "miercoles")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "martes_inicio")->input("time", ["value" => $martes[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "martes_fin")->input("time", ["value" => $martes[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "miercoles_inicio")->input("time", ["value" => $miercoles[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "miercoles_fin")->input("time", ["value" => $miercoles[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "jueves")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "jueves_inicio")->input("time", ["value" => $jueves[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "viernes")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "jueves_fin")->input("time", ["value" => $jueves[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <?= $form->field($model, "sabado")->input("time", ["maxlength" => 45, "autocomplete" => "off"]) ?>
+                    <?= $form->field($model, "viernes_inicio")->input("time", ["value" => $viernes[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "viernes_fin")->input("time", ["value" => $viernes[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "sabado_inicio")->input("time", ["value" => $sabado[0], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <?= $form->field($model, "sabado_fin")->input("time", ["value" => $sabado[1], "maxlength" => 45, "class" => "form-control horario", "autocomplete" => "off"]) ?>
                 </div>
             </div>
         </div>
@@ -117,4 +164,38 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <?= $form->field($model, "idgrupo")->hiddenInput(["value"=> $model->idgrupo, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "lunes")->hiddenInput(["value"=> $model->lunes, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "martes")->hiddenInput(["value"=> $model->lunes, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "miercoles")->hiddenInput(["value"=> $model->miercoles, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "jueves")->hiddenInput(["value"=> $model->jueves, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "viernes")->hiddenInput(["value"=> $model->viernes, "readonly" => true])->label(false) ?>
+<?= $form->field($model, "sabado")->hiddenInput(["value"=> $model->sabado, "readonly" => true])->label(false) ?>
 <?php $form->end() ?>
+
+<?php
+$this->registerJs("
+    $('.horario').on('change', function(e) {
+        e.preventDefault();
+
+        var id = $(this).attr('id');
+
+        var diaCompleto = id.split('-')[1];
+        var dia = diaCompleto.split('_')[0];
+
+        if(id == 'grupoform-' + dia + '_inicio')
+        {
+            var inicio = $('#'+id).val();
+            var fin = $('#grupoform-' + dia + '_fin').val();
+
+            $('#grupoform-' + dia).val(inicio + '-' + fin);
+        }
+        else if(id == 'grupoform-' + dia + '_fin')
+        {
+            var inicio = $('#grupoform-' + dia + '_inicio').val();
+            var fin = $('#'+id).val();
+
+            $('#grupoform-' + dia).val(inicio + '-' + fin);
+        }
+    });
+");
+?>
