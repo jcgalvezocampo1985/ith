@@ -23,8 +23,45 @@ class CicloRepository extends BaseRepository
     protected $paginate = 15;
     public $search;
 
+<<<<<<< HEAD
+=======
+    /* #region public function __construct(Ciclo $model */
+>>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
     public function __construct(Ciclo $model)
     {
         parent::__construct($model);
     }
+<<<<<<< HEAD
+=======
+    /* #endregion */
+
+    /* #region public function totalCiclo(int $idciclo */
+    public function totalCiclo(int $idciclo)
+    {
+        $total = $this->model->find()
+                             ->where(['idciclo' => $idciclo])
+                             ->count();
+
+        return $total;
+    }
+    /* #endregion */
+
+    /* #region public function consultaDatosCiclo(int $idciclo */
+    public function consultaDatosCiclo(int $idciclo)
+    {
+        return $this->model->find()
+                           ->where(['idciclo' => $idciclo])
+                           ->one();
+    }
+    /* #endregion */
+
+    /* #region public function consultarCiclos( */
+    public function consultarCiclos()
+    {
+        return $this->model->find()
+                           ->orderBy(['idciclo' => SORT_DESC])
+                           ->all();
+    }
+    /* #endregion */
+>>>>>>> cc7f7fd22cc42b0f8b1bd5bf5b73511280e9f569
 }

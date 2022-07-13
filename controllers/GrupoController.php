@@ -143,35 +143,10 @@ class GrupoController extends Controller
     public function actionIndex()
     {
         $form = new GrupoSearch;
-        $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
-        $error = (Html::encode(isset($_GET["error"]))) ? Html::encode($_GET["error"]) : null;
+        $msg = (Html::encode(isset($_GET['msg']))) ? Html::encode($_GET['msg']) : null;
+        $error = (Html::encode(isset($_GET['error']))) ? Html::encode($_GET['error']) : null;
 
-        $table = new \yii\db\Query();
-        $model = $table->from(["grupos"])
-                       ->select(["grupos.idgrupo",
-                                 "ciclo.idciclo",
-                                 "ciclo.desc_ciclo AS ciclo",
-                                 "cat_carreras.desc_carrera AS carrera",
-                                 "cat_materias.desc_materia AS materia",
-                                 "cat_materias.creditos",
-                                 "CONCAT(profesores.apaterno,' ',profesores.amaterno,' ',profesores.nombre_profesor) AS profesor",
-                                 "grupos.num_semestre",
-                                 "grupos.desc_grupo_corto",
-                                 "grupos.desc_grupo",
-                                 "grupos.aula",
-                                 "grupos.fecha_envio_acta",
-                                 "grupos.horario",
-                                 "grupos.lunes",
-                                 "grupos.martes",
-                                 "grupos.miercoles",
-                                 "grupos.jueves",
-                                 "grupos.viernes",
-                                 "grupos.sabado"])
-                       ->innerJoin(["ciclo"], "grupos.idciclo = ciclo.idciclo")
-                       ->innerJoin(["cat_carreras"], "grupos.idcarrera = cat_carreras.idcarrera")
-                       ->innerJoin(["cat_materias"], "grupos.idmateria = cat_materias.idmateria")
-                       ->innerJoin(["profesores"], "grupos.idprofesor = profesores.idprofesor")
-                       ->orderBy(["ciclo.idciclo" => SORT_DESC, "carrera" => SORT_ASC, "num_semestre" => SORT_DESC, "materia" => SORT_ASC]);
+        $model = $this->grupoRepository->allQuery();//Se ejecuta consulta de todos los registgros
 
         if($form->load(Yii::$app->request->get()))
         {

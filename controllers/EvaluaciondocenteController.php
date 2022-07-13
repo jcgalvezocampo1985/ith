@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 use app\models\ciclo\CicloEvaluacionDocenteSearch;
@@ -17,7 +18,7 @@ class EvaluaciondocenteController extends Controller
 {
     private $cicloRepository;
 
-    #region public function behaviors()
+    /* #region public function behaviors() */
     public function behaviors()
     {
         return [
@@ -72,7 +73,7 @@ class EvaluaciondocenteController extends Controller
                         ],
                         [
                             //División de estudios tiene permisos sobre las siguientes acciones
-                            "actions" => ["index"],//Especificar que acciones tiene permitidas este usuario
+                            "actions" => [""],//Especificar que acciones tiene permitidas este usuario
                             //Esta propiedad establece que tiene permisos
                             "allow" => true,
                             //Usuarios autenticados, el signo ? es para invitados
@@ -97,13 +98,17 @@ class EvaluaciondocenteController extends Controller
                 ],
         ];
     }
-    #endregion
+    /* #endregion */
 
+    /* #region public function __construct() */
     public function __construct($id, $module, CicloRepository $cicloRepository)
     {
         parent::__construct($id, $module);
         $this->cicloRepository = $cicloRepository;
     }
+    /* #endregion */
+
+    /* #region public function actionIndex() */
     public function actionIndex()
     {
         $msg = (Html::encode(isset($_GET["msg"]))) ? Html::encode($_GET["msg"]) : null;
@@ -144,4 +149,5 @@ class EvaluaciondocenteController extends Controller
 
         return $this->render("index", compact('form', 'ciclos', 'idciclo', 'reporte', 'reportes', 'msg', 'error'));
     }
+    /* #endregion */
 }
