@@ -26,7 +26,7 @@ abstract class BaseRepository implements RepositoryBaseInterface
     }
     /* #endregion */
 
-    /* #regionpublic function all($where = false) */
+    /* #region public function all($where = false) */
     public function all($where = false)
     {
         $query = $this->model->find();
