@@ -22,7 +22,7 @@ use app\repositories\CicloRepository;
 use app\repositories\CarreraRepository;
 use app\repositories\GrupoEstudianteRepository;
 use app\repositories\ActaCalificacionRepository;
-use app\repositories\opcionCursoRepository;
+use app\repositories\OpcionCursoRepository;
 use app\repositories\GrupoRepository;
 
 class EstudianteController extends Controller
