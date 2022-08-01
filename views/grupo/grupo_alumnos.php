@@ -18,17 +18,20 @@ $this->params["breadcrumbs"][] = $this->title;
     }
 </style>
 <div class="row">
-    <div class="col-md-3">
-        <h4>Ciclo: <small><?= $model[0]["desc_ciclo"] ?></small></h4>
+    <div class="col-md-2">
+        <h4>Ciclo: <small><?= $datos_grupo[0]["desc_ciclo"] ?></small></h4>
+    </div>
+    <div class="col-md-2">
+        <h4>Carrera: <small><?= $datos_grupo[0]["profesor"] ?></small></h4>
     </div>
     <div class="col-md-3">
-        <h4>Carrera: <small><?= $model[0]["desc_carrera"] ?></small></h4>
+        <h4>Carrera: <small><?= $datos_grupo[0]["desc_carrera"] ?></small></h4>
     </div>
     <div class="col-md-3">
-        <h4>Materia: <small><?= $model[0]["desc_materia"] ?></small></h4>
+        <h4>Materia: <small><?= $datos_grupo[0]["desc_materia"] ?></small></h4>
     </div>
-    <div class="col-md-3">
-        <h4>Grupo: <small><?= $model[0]["desc_grupo"] ?></small></h4>
+    <div class="col-md-2">
+        <h4>Grupo: <small><?= $datos_grupo[0]["desc_grupo"] ?></small></h4>
     </div>
 </div>
 <div class="row">
