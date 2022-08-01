@@ -179,6 +179,7 @@ class GrupoRepository extends BaseRepository
         $select1 = [
             'grupos.idgrupo',
             'grupos.idmateria',
+            'grupos.idciclo',
             'cat_materias.desc_materia',
             'cat_materias.creditos',
             'grupos.num_semestre',
@@ -194,14 +195,14 @@ class GrupoRepository extends BaseRepository
         ];
         $where1 = [
             ['=', 'cat_carreras.idcarrera', $idcarrera],
-            ['NOT IN', 'grupos.idmateria', $materias],
+            //['NOT IN', 'grupos.idmateria', $materias],
             $filtro_materia
         ];
         $orderBy1 = [
             'ciclo.idciclo' => SORT_DESC,
             'cat_materias.desc_materia' => SORT_ASC
         ];
-        $groupBy1 = ['cat_materias.idmateria'];
+        $groupBy1 = [];
         $paginate1 = false;
         $registers1 = 'all';
 
