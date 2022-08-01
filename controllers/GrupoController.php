@@ -386,14 +386,15 @@ class GrupoController extends Controller
 
             $estudiantes = $this->estudianteRepository->getEstudiantesNoExistentesPorGrupo($idcarrera, $idgrupo);
             $opcion_cursos = $this->opcionCursoRepository->listaRegistros(['idopcion_curso' => SORT_ASC]);
-
+            $datos_grupo = $this->grupoRepository->consultarDatosPorIdGrupo($idgrupo);
             $model = $this->grupoRepository->queryGrupoAlumnos($idgrupo);
 
-            return $this->render('grupo_alumnos', compact('model', 'estudiantes', 'opcion_cursos', 'idgrupo'));
+            return $this->render('grupo_alumnos', compact('model', 'estudiantes', 'opcion_cursos', 'datos_grupo', 'idgrupo'));
         }
     }
     /* #endregion */
 
+    /* #region public function actionGuardarestudiantesgrupo() */
     public function actionGuardarestudiantesgrupo()
     {
         $idestudiante = Html::encode($_POST["idestudiante"]);
@@ -422,4 +423,5 @@ class GrupoController extends Controller
 
         return $this->asJson($response);
     }
+    /* #endregion */
 }

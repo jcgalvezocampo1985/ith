@@ -358,4 +358,38 @@ class GrupoRepository extends BaseRepository
         return $query;
     }
     /* #endregion */
+
+    /* #region public function consultarDatosPorIdGrupo(int $idgrupo) */
+    public function consultarDatosPorIdGrupo(int $idgrupo)
+    {
+        $table = 'grupos';
+        $select = [
+            'grupos.idgrupo',
+            'ciclo.desc_ciclo',
+            'cat_materias.cve_materia',
+            'cat_carreras.desc_carrera',
+            'cat_carreras.cve_carrera',
+            'cat_materias.desc_materia',
+            'grupos.desc_grupo',
+            'CONCAT(profesores.apaterno," ",profesores.amaterno," ",profesores.nombre_profesor) AS profesor'
+        ];
+        $joins = [
+            ['ciclo', 'grupos.idciclo = ciclo.idciclo'],
+            ['cat_materias', 'grupos.idmateria = cat_materias.idmateria'],
+            ['cat_carreras', 'grupos.idcarrera = cat_carreras.idcarrera'],
+            ['profesores', 'grupos.idprofesor = profesores.idprofesor']
+        ];
+        $where = [
+            ['=', 'grupos.idgrupo', $idgrupo]
+        ];
+        $orderBy = [];
+        $groupBy = [];
+        $paginate = false;
+        $registers = 'all';
+
+        $query = $this->getQuery($table, $select, $joins, $where, $orderBy, $groupBy, $paginate, $registers);
+
+        return $query;
+    }
+    /* #endregion */
 }
