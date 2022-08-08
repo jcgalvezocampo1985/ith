@@ -114,7 +114,7 @@ class EstudianteRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0) */
-    public function viewEstudianteEncabezado(int $idestudiante, int $idciclo = 0)
+    public function viewEstudianteEncabezado($idestudiante, int $idciclo = 0)
     {
         if ($idciclo != 0) {
             $query = 'SELECT
@@ -155,7 +155,7 @@ class EstudianteRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo) */
-    public function viewEstudianteBoletaDetalle(int $idestudiante, int $idciclo)
+    public function viewEstudianteBoletaDetalle($idestudiante, int $idciclo)
     {
         $query = "SELECT
                     *
@@ -182,7 +182,7 @@ class EstudianteRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function viewHorarioEstudiante(int $idestudiante) */
-    public function viewHorarioEstudiante(int $idestudiante, int $idciclo)
+    public function viewHorarioEstudiante($idestudiante, $idciclo)
     {
         $query = "SELECT
                     *
@@ -387,7 +387,7 @@ class EstudianteRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function totalRegistros($idestudiante) */
-    public function totalRegistros(int $idestudiante)
+    public function totalRegistros($idestudiante)
     {
         $total = $this->model->find()
                              ->where(['idestudiante' => $idestudiante])
