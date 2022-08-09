@@ -30,7 +30,7 @@ class CarreraRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function getCarreraEstudiante(int $idestudiante) */
-    public function getCarreraEstudiante(int $idestudiante)
+    public function getCarreraEstudiante($idestudiante)
     {
         $table = 'cat_carreras';
         $select = [
