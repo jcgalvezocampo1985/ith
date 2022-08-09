@@ -146,7 +146,7 @@ class GrupoRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function queryCicloCarreraEstudiante(int $idciclo, int $idcarrera, int $idestudiante, string $desc_materia = '') */
-    public function queryCicloCarreraEstudiante(int $idcarrera, int $idestudiante, string $desc_materia = '')
+    public function queryCicloCarreraEstudiante(int $idcarrera, $idestudiante, string $desc_materia = '')
     {
         $table = 'grupos_estudiantes';
         $select = [

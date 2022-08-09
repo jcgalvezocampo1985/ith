@@ -26,7 +26,7 @@ class ActaCalificacionRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo) */
-    public function getEstudianteCalificacionesCiclo(int $idestudiante, int $idciclo)
+    public function getEstudianteCalificacionesCiclo($idestudiante, int $idciclo)
     {
         $table = 'actas_calificaciones';
         $select = [
@@ -67,7 +67,7 @@ class ActaCalificacionRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function totalRelacionEstudianteGrupo(int $idestudiante, int $idgrupo) */
-    public function totalRelacionEstudianteGrupo(int $idestudiante, int $idgrupo)
+    public function totalRelacionEstudianteGrupo($idestudiante, int $idgrupo)
     {
         $total = $this->model->find()
                              ->where(['idestudiante' => $idestudiante, 'idgrupo' => $idgrupo])
@@ -123,7 +123,7 @@ class ActaCalificacionRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante) */
-    public function totalRegistrosPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    public function totalRegistrosPorGrupoEstudiante(int $idgrupo, $idestudiante)
     {
         $total = $this->model->find()
                              ->where(['idgrupo' => $idgrupo, 'idestudiante' => $idestudiante])
@@ -134,7 +134,7 @@ class ActaCalificacionRepository extends BaseRepository
     /* #endregion */
 
     /* #region public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante) */
-    public function selectIdPorGrupoEstudiante(int $idgrupo, int $idestudiante)
+    public function selectIdPorGrupoEstudiante(int $idgrupo, $idestudiante)
     {
         $total = $this->model->find()
                              ->select('idacta_cal')
