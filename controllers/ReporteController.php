@@ -33,6 +33,7 @@ class PDF extends FPDF
     public $footer;
     public $profesor;
     public $noControl;
+    public $jefeDep;
 
     /* #region public function setNoControl($noControl) */
     public function setNoControl($noControl)
@@ -87,6 +88,20 @@ class PDF extends FPDF
     public function getProfesor()
     {
         return $this->profesor;
+    }
+    /* #endregion */
+
+    /* #region public function setjJefeDep($jefeDep) */
+    public function setjJefeDep($jefeDep)
+    {
+        $this->jefeDep = $jefeDep;
+    }
+    /* #endregion */
+
+    /* #region public function getJefeDep() */
+    public function getJefeDep()
+    {
+        return $this->jefeDep;
     }
     /* #endregion */
 
@@ -263,7 +278,7 @@ class PDF extends FPDF
             $this->Cell(80, 5, $this->getProfesor(), 0, 0, 'C');
             $this->Line(120, 245, 190, 245);
             $this->Text(130, 225, utf8_decode('JEFE DEL ÁREA ACADÉMICA'));
-            $this->Text(135, 240, utf8_decode('ALEXIS PIÑA MARCIAL'));
+            $this->Text(135, 240, $this->getJefeDep());
             $this->SetTextColor(125, 125, 125);
             $this->Text(12, 265, '181240065');
             $this->Text(190, 265, 'Rev. O');
@@ -1227,7 +1242,7 @@ class ReporteController extends Controller
         $pdf->Cell(174, 4, utf8_decode("Aut.(curso global o autodidacta) Rep. (curso de repeticion) Esp.(curso especial)"), 0, 0, 'L');
         $pdf->Ln(5);
         $pdf->SetX(5);
-        $pdf->Cell(174, 4, utf8_decode("Carretera del Golfo Malpaso – El Bellote, Km. 98.1, R/A Libertad, Huimanguillo, Tabasco, México. A 14 de julio de 2021"), 0, 0, 'L');
+        $pdf->Cell(174, 4, utf8_decode("Carretera del Golfo Malpaso – El Bellote, Km. 98.1, R/A Libertad, Huimanguillo, Tabasco, México."), 0, 0, 'L');
 
         $pdf->Ln(15);
         $pdf->SetX(60);
@@ -1411,6 +1426,7 @@ class ReporteController extends Controller
         if($total_profesor == 1 && $total_ciclo == 1)
         {
             $profesor = $this->profesorRepository->get($idprofesor);
+            $jefeDep = utf8_decode($profesor->jefe_dep);
             $profesor = utf8_decode($profesor->apaterno." ".$profesor->amaterno." ".$profesor->nombre_profesor);
 
             $ciclo = $this->cicloRepository->get($idciclo);
@@ -1430,6 +1446,7 @@ class ReporteController extends Controller
             $pdf->setHeader('Reporte Final Profesor');
             $pdf->setFooter('Reporte Final Profesor');
             $pdf->setProfesor($profesor);
+            $pdf->setjJefeDep($jefeDep);
             $pdf->AliasNbPages();
             $pdf->AddPage('P', 'Letter');
             $pdf->AddFont('Montserrat-SemiBold', '', 'Montserrat-SemiBold.php');
