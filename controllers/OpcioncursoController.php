@@ -104,12 +104,12 @@ class OpcioncursoController extends Controller
     /* #endregion */
 
     /* #region public function __construct() */
-    public function __construct($id, $module, $config = [],
+    public function __construct($id, $module,
                                 OpcionCursoRepository $opcionCursoRepository,
                                 GrupoEstudianteRepository $grupoEstudianteRepository
                                 )
     {
-        parent::__construct($id, $module, $config);
+        parent::__construct($id, $module);
         $this->opcionCursoRepository = $opcionCursoRepository;
         $this->grupoEstudianteRepository = $grupoEstudianteRepository;
     }

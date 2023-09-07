@@ -1245,73 +1245,84 @@ class ReporteController extends Controller
         $disminuir = $x;
         $aumentar_encabezado = $x;
 
-        for($i = 1; $i <= 9; $i++)
+        if(count($parciales) == 0)
         {
-            $parcial = $parciales[0]['p'.$i];
-            $sp = $parciales[0]['sp'.$i];
+            $pdf->SetFont('Montserrat-Bold', '', 8);
+            $pdf->SetXY(50, 80);
+            $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
+            $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
+            $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
+        }
+        else
+        {
+            for($i = 1; $i <= 9; $i++)
+            {
+                $parcial = $parciales[0]['p'.$i];
+                $sp = $parciales[0]['sp'.$i];
 
-            if($seguimiento == "")
-            {
-                if ($parcial > 0 || $parcial == "NA")
-                {
-                    $x_encabezado = $x_encabezado + 5;
-                    if($i > 1)
-                    {
-                        $aumentar = $aumentar - 10;
-                        $disminuir = $disminuir - 5;
-                    }
-                }
-            }
-            else
-            {
-                if ($sp == $seguimiento)
+                if($seguimiento == "")
                 {
                     if ($parcial > 0 || $parcial == "NA")
                     {
                         $x_encabezado = $x_encabezado + 5;
-                        if ($i > 1)
+                        if($i > 1)
                         {
                             $aumentar = $aumentar - 10;
                             $disminuir = $disminuir - 5;
                         }
                     }
                 }
-            }
-        }
-        
-        $adicional = ($seguimiento > 1) ? 5 : 0;
-
-        $pdf->SetXY($x_encabezado + $aumentar + $adicional, $y);
-
-        for($j = 1; $j <= 9; $j++)
-        {
-            $parcial = $parciales[0]['p'.$j];
-            $sp = $parciales[0]['sp'.$j];
-
-            if($seguimiento == "")
-            {
-                if ($parcial > 0 || $parcial == "NA")
+                else
                 {
-                    $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+                    if ($sp == $seguimiento)
+                    {
+                        if ($parcial > 0 || $parcial == "NA")
+                        {
+                            $x_encabezado = $x_encabezado + 5;
+                            if ($i > 1)
+                            {
+                                $aumentar = $aumentar - 10;
+                                $disminuir = $disminuir - 5;
+                            }
+                        }
+                    }
                 }
             }
-            else
+
+            $adicional = ($seguimiento > 1) ? 5 : 0;
+
+            $pdf->SetXY($x_encabezado + $aumentar + $adicional, $y);
+
+            for($j = 1; $j <= 9; $j++)
             {
-                if ($sp == $seguimiento)
+                $parcial = $parciales[0]['p'.$j];
+                $sp = $parciales[0]['sp'.$j];
+
+                if($seguimiento == "")
                 {
                     if ($parcial > 0 || $parcial == "NA")
                     {
                         $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
                     }
                 }
+                else
+                {
+                    if ($sp == $seguimiento)
+                    {
+                        if ($parcial > 0 || $parcial == "NA")
+                        {
+                            $pdf->Cell(8, 5, 'T'.$j, 1, 0, 'C');
+                        }
+                    }
+                }
             }
-        }
 
-        $pdf->SetFont('Montserrat-Bold', '', 8);
-        $pdf->SetXY((45 + $disminuir), $y);
-        $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
-        $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
-        $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
+            $pdf->SetFont('Montserrat-Bold', '', 8);
+            $pdf->SetXY((45 + $disminuir), $y);
+            $pdf->Cell(8, 5, 'NO.', 1, 0, 'C');
+            $pdf->Cell(25, 5, 'NO. CONTROL', 1, 0, 'C');
+            $pdf->Cell(75, 5, 'ESTUDIANTE', 1, 0, 'C');
+        }
 
         return 45 + $disminuir;
     }
